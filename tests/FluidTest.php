@@ -22,4 +22,21 @@ final class FluidTest extends ParserTest
         $this->shouldParse($parser, "abc", "AB");
     }
 
+    /** @test */
+    public function intoNew()
+    {
+        $parser = char('a')
+            ->seq(char('b'))
+            ->intoNew(__NAMESPACE__.'\\MyType2');
+        $this->shouldParse($parser, "abc", new MyType2("ab"));
+    }
+}
+
+class MyType2 {
+    private $x;
+
+    function __construct($x)
+    {
+        $this->x = $x;
+    }
 }

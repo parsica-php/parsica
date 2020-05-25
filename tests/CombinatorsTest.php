@@ -2,7 +2,7 @@
 
 namespace Tests\Mathias\ParserCombinators;
 
-use function Mathias\ParserCombinators\{char, either, into, seq};
+use function Mathias\ParserCombinators\{char, either, into, intoNew, seq};
 
 final class CombinatorsTest extends ParserTest
 {
@@ -32,7 +32,21 @@ final class CombinatorsTest extends ParserTest
     {
         $parser = into(
             seq(char('a'), char('b')),
-            fn($x) => new MyType($x)
+            'strtoupper'
+        );
+
+        $expected = "AB";
+
+        $this->shouldParse($parser, "abc", $expected);
+    }
+    
+    
+    /** @test */
+    public function intoNew()
+    {
+        $parser = intoNew(
+            seq(char('a'), char('b')),
+            __NAMESPACE__.'\\MyType'
         );
 
         $expected = new MyType("ab");

@@ -49,3 +49,16 @@ function into(Parser $parser, callable $transform): Parser
         return $r;
     });
 }
+
+
+
+function intoNew(Parser $parser, string $className): Parser
+{
+    return parser( function ($input) use ($parser, $className) : ParseResult {
+        $r = $parser($input);
+        if ($r->isSuccess()) {
+            return succeed(new $className($r->parsed()), $r->output());
+        }
+        return $r;
+    });
+}

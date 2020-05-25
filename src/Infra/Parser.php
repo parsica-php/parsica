@@ -5,6 +5,7 @@ namespace Mathias\ParserCombinators\Infra;
 /**
  * @method seq(Parser $char) : Parser
  * @method into(Parser $char) : Parser
+ * @method intoNew(Parser $char) : Parser
  */
 final class Parser
 {
