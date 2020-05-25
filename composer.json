@@ -10,7 +10,9 @@
       "email": "mathias@verraes.net"
     }
   ],
-  "require": {},
+  "require": {
+    "webmozart/assert": "^1.8"
+  },
   "autoload": {
     "psr-4": {
       "Mathias\\ParserCombinators\\": "src/"
