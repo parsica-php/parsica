@@ -8,9 +8,9 @@ use Mathias\ParserCombinators\Infra\ParseResult;
 /**
  * Transform the parsed string into something else using a callable
  */
-function into(Parser $parser, callable $transform): Parser
+function into1(Parser $parser, callable $transform): Parser
 {
-    return parser(function ($input) use ($parser, $transform) : ParseResult {
+    return parser(function (string $input) use ($parser, $transform) : ParseResult {
         $r = $parser($input);
         if ($r->isSuccess()) {
             return succeed($transform($r->parsed()), $r->remaining());
@@ -22,14 +22,10 @@ function into(Parser $parser, callable $transform): Parser
 /**
  * Transform the parsed string into an object of type $className
  */
-function intoNew(Parser $parser, string $className): Parser
+function intoNew1(Parser $parser, string $className): Parser
 {
-    return parser(function ($input) use ($parser, $className) : ParseResult {
-        $r = $parser($input);
-        if ($r->isSuccess()) {
-            return succeed(new $className($r->parsed()), $r->remaining());
-        }
-        return $r;
-    });
+    return $parser->into1(
+        fn(string $val) => new $className($val)
+    );
 }
 

@@ -4,9 +4,15 @@ namespace Mathias\ParserCombinators\Infra;
 
 final class ParseSuccess implements ParseResult
 {
+    /**
+     * @var mixed
+     */
     private $parsed;
     private string $remaining;
 
+    /**
+     * @param mixed $parsed
+     */
     public function __construct($parsed, string $remaining)
     {
         $this->parsed = $parsed;
@@ -26,5 +32,10 @@ final class ParseSuccess implements ParseResult
     public function isSuccess(): bool
     {
         return true;
+    }
+
+    public function expectation(): string
+    {
+        throw new \Exception("Can't read the expectation of a succeeded ParseResult.");
     }
 }

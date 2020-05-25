@@ -10,7 +10,7 @@ use Mathias\ParserCombinators\Infra\ParseResult;
  */
 function ignore(Parser $parser): Parser
 {
-    return $parser->into(fn($_) => "");
+    return $parser->into1(fn(string $_) => "");
 }
 
 /**
@@ -18,7 +18,7 @@ function ignore(Parser $parser): Parser
  */
 function optional(Parser $parser): Parser
 {
-    return parser(function ($input) use ($parser) : ParseResult {
+    return parser(function (string $input) use ($parser) : ParseResult {
         $r1 = $parser($input);
         if ($r1->isSuccess()) {
             return $r1;
@@ -33,7 +33,7 @@ function optional(Parser $parser): Parser
  */
 function seq(Parser $first, Parser $second): Parser
 {
-    return parser(function ($input) use ($first, $second) : ParseResult {
+    return parser(function (string $input) use ($first, $second) : ParseResult {
         $r1 = $first($input);
         if ($r1->isSuccess()) {
             $r2 = $second($r1->remaining());
@@ -51,7 +51,7 @@ function seq(Parser $first, Parser $second): Parser
  */
 function either(Parser $first, Parser $second): Parser
 {
-    return parser(function ($input) use ($first, $second) : ParseResult {
+    return parser(function (string $input) use ($first, $second) : ParseResult {
         $r1 = $first($input);
         if ($r1->isSuccess()) {
             return $r1;

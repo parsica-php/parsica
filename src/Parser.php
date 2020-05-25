@@ -12,6 +12,9 @@ function parser(callable $f): Parser
     return new Parser($f);
 }
 
+/**
+ * @param mixed $parsed
+ */
 function succeed($parsed, string $output): ParseResult
 {
     return new ParseSuccess($parsed, $output);
@@ -22,7 +25,10 @@ function fail(string $expectation): ParseResult
     return new ParserFailure($expectation);
 }
 
-function runparser(Parser $parser, $input)
+/**
+ * @return mixed
+ */
+function runparser(Parser $parser, string $input)
 {
     $result = $parser($input);
     return $result->parsed();

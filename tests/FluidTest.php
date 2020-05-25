@@ -14,20 +14,20 @@ final class FluidTest extends ParserTest
     }
 
     /** @test */
-    public function into()
+    public function into1()
     {
         $parser = char('a')
             ->seq(char('b'))
-            ->into('strtoupper');
+            ->into1('strtoupper');
         $this->shouldParse($parser, "abc", "AB");
     }
 
     /** @test */
-    public function intoNew()
+    public function intoNew1()
     {
         $parser = char('a')
             ->seq(char('b'))
-            ->intoNew(__NAMESPACE__.'\\MyType2');
+            ->intoNew1(__NAMESPACE__.'\\MyType2');
         $this->shouldParse($parser, "abc", new MyType2("ab"));
     }
 }
