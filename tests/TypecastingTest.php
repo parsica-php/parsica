@@ -25,17 +25,17 @@ final class TypecastingTest extends ParserTest
     {
         $parser = intoNew1(
             seq(char('a'), char('b')),
-            __NAMESPACE__.'\\MyType'
+            __NAMESPACE__.'\\MyType1'
         );
 
-        $expected = new MyType("ab");
+        $expected = new MyType1("ab");
 
         $this->shouldParse($parser, "abc", $expected);
     }
 
 }
 
-class MyType
+class MyType1
 {
     private $val;
 

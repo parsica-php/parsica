@@ -19,10 +19,8 @@
     },
     "files": [
       "src/BasicParsers.php",
-      "src/Combinators.php",
-      "src/Parser.php",
-      "src/Typecasting.php",
-      "src/Util.php"
+      "src/functions.php",
+      "src/Parser.php"
     ]
   },
   "autoload-dev": {
