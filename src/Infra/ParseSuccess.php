@@ -5,12 +5,12 @@ namespace Mathias\ParserCombinators\Infra;
 final class ParseSuccess implements ParseResult
 {
     private $parsed;
-    private string $output;
+    private string $remaining;
 
-    public function __construct($parsed, string $output)
+    public function __construct($parsed, string $remaining)
     {
         $this->parsed = $parsed;
-        $this->output = $output;
+        $this->remaining = $remaining;
     }
 
     public function parsed()
@@ -18,9 +18,9 @@ final class ParseSuccess implements ParseResult
         return $this->parsed;
     }
 
-    public function output(): string
+    public function remaining(): string
     {
-        return $this->output;
+        return $this->remaining;
     }
 
     public function isSuccess(): bool
