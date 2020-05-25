@@ -10,5 +10,7 @@ function head(string $s): string
 
 function tail(string $s): string
 {
-    return substr($s, 1);
+    return (strlen($s) > 1)
+        ? substr($s, 1)
+        : "";
 }

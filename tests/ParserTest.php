@@ -20,7 +20,7 @@ abstract class ParserTest extends TestCase
                 "Parser test failed."
                 ."\nInput: $input"
                 ."\nExpected: $expectedParsed"
-                ."\nMessage: {$actual->expectation()}"
+                ."\nParser expected: {$actual->expectation()}"
             );
         }
     }
