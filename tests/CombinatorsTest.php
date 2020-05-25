@@ -14,8 +14,8 @@ final class CombinatorsTest extends ParserTest
         $this->shouldParse($parser, "abc", "", "bc");
 
         $parser = string('abcd')
-            ->seq(ignore(char('-')))
-            ->seq(string('efgh'));
+            ->followedBy(ignore(char('-')))
+            ->followedBy(string('efgh'));
         $this->shouldParse($parser, "abcd-efgh", "abcdefgh");
     }
 
@@ -27,8 +27,8 @@ final class CombinatorsTest extends ParserTest
         $this->shouldParse($parser, "bc", "", "bc");
 
         $parser = string('abcd')
-            ->seq(optional(ignore(char('-'))))
-            ->seq(string('efgh'));
+            ->followedBy(optional(ignore(char('-'))))
+            ->followedBy(string('efgh'));
         $this->shouldParse($parser, "abcd-efgh", "abcdefgh");
         $this->shouldParse($parser, "abcdefgh", "abcdefgh");
     }
@@ -56,22 +56,23 @@ final class CombinatorsTest extends ParserTest
     /** @test */
     public function collect()
     {
-        $parser = collect(
-            string("Hello")
-                ->seq(
-                    optional(space())->ignore()
-                )
-                ->seq(
-                    char(',')->ignore()
-                )
-                ->seq(
-                    optional(space())->ignore()
-                ),
-            string("world")
-                ->seq(
-                    char('!')->ignore()
-                )
-        );
+        $parser =
+            collect(
+                string("Hello")
+                    ->followedBy(
+                        optional(space())->ignore()
+                    )
+                    ->followedBy(
+                        char(',')->ignore()
+                    )
+                    ->followedBy(
+                        optional(space())->ignore()
+                    ),
+                string("world")
+                    ->followedBy(
+                        char('!')->ignore()
+                    )
+            );
 
         $expected = ["Hello", "world"];
 

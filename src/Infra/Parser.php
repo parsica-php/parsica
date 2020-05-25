@@ -48,7 +48,7 @@ final class Parser
     /**
      * @see seq()
      */
-    public function seq(Parser $second): Parser
+    public function followedBy(Parser $second): Parser
     {
         return parser(function (string $input) use ($second) : ParseResult {
             $r1 = $this($input);

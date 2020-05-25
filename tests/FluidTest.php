@@ -7,9 +7,9 @@ use function Mathias\ParserCombinators\char;
 final class FluidTest extends ParserTest
 {
     /** @test */
-    public function seq()
+    public function followedBy()
     {
-        $parser = char('a')->seq(char('b'));
+        $parser = char('a')->followedBy(char('b'));
         $this->shouldParse($parser, "abc", "ab");
     }
 
@@ -17,7 +17,7 @@ final class FluidTest extends ParserTest
     public function into1()
     {
         $parser = char('a')
-            ->seq(char('b'))
+            ->followedBy(char('b'))
             ->into1('strtoupper');
         $this->shouldParse($parser, "abc", "AB");
     }
@@ -26,7 +26,7 @@ final class FluidTest extends ParserTest
     public function intoNew1()
     {
         $parser = char('a')
-            ->seq(char('b'))
+            ->followedBy(char('b'))
             ->intoNew1(__NAMESPACE__.'\\MyType2');
         $this->shouldParse($parser, "abc", new MyType2("ab"));
     }

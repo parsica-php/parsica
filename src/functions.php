@@ -6,6 +6,14 @@ use Mathias\ParserCombinators\Infra\Parser;
 use Mathias\ParserCombinators\Infra\ParseResult;
 
 /**
+ * Identity function, returns the Parser. Sometimes useful.
+ */
+function id(Parser $parser) : Parser
+{
+    return $parser;
+}
+
+/**
  * Parse something, strip it from the remaining string, but do not return anything
  */
 function ignore(Parser $parser): Parser
@@ -26,7 +34,7 @@ function optional(Parser $parser): Parser
  */
 function seq(Parser $first, Parser $second): Parser
 {
-   return $first->seq($second);
+   return $first->followedBy($second);
 }
 
 /**
