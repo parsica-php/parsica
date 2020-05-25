@@ -21,6 +21,7 @@
       "src/BasicParsers.php",
       "src/Combinators.php",
       "src/Parser.php",
+      "src/Typecasting.php",
       "src/Util.php"
     ]
   },
