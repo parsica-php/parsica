@@ -7,19 +7,12 @@ use Mathias\ParserCombinators\Infra\ParseResult;
 
 function ignore(Parser $parser): Parser
 {
-    return parser(function($input) use ($parser) : ParseResult {
-        $r1 = $parser($input);
-        if ($r1->isSuccess()) {
-            return succeed("", $r1->remaining());
-        } else {
-            return $r1;
-        }
-    });
+    return $parser->into(fn($_) => "");
 }
 
 function optional(Parser $parser): Parser
 {
-    return parser(function($input) use ($parser) : ParseResult {
+    return parser(function ($input) use ($parser) : ParseResult {
         $r1 = $parser($input);
         if ($r1->isSuccess()) {
             return $r1;
@@ -46,7 +39,7 @@ function seq(Parser $first, Parser $second): Parser
 
 function either($first, $second): Parser
 {
-    return parser (function ($input) use ($first, $second) : ParseResult {
+    return parser(function ($input) use ($first, $second) : ParseResult {
         $r1 = $first($input);
         if ($r1->isSuccess()) {
             return $r1;
@@ -65,7 +58,7 @@ function either($first, $second): Parser
 
 function into(Parser $parser, callable $transform): Parser
 {
-    return parser( function ($input) use ($parser, $transform) : ParseResult {
+    return parser(function ($input) use ($parser, $transform) : ParseResult {
         $r = $parser($input);
         if ($r->isSuccess()) {
             return succeed($transform($r->parsed()), $r->remaining());
@@ -75,10 +68,9 @@ function into(Parser $parser, callable $transform): Parser
 }
 
 
-
 function intoNew(Parser $parser, string $className): Parser
 {
-    return parser( function ($input) use ($parser, $className) : ParseResult {
+    return parser(function ($input) use ($parser, $className) : ParseResult {
         $r = $parser($input);
         if ($r->isSuccess()) {
             return succeed(new $className($r->parsed()), $r->remaining());
