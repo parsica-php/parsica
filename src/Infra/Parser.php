@@ -4,8 +4,10 @@ namespace Mathias\ParserCombinators\Infra;
 
 /**
  * @method seq(Parser $char) : Parser
- * @method into(Parser $char) : Parser
- * @method intoNew(Parser $char) : Parser
+ * @method into(callable $f) : Parser
+ * @method intoNew(callable $f) : Parser
+ * @method optional() : Parser
+ * @method ignore() : Parser
  */
 final class Parser
 {
