@@ -80,3 +80,38 @@ function intoNew1(Parser $parser, string $className): Parser
     return $parser->intoNew1($className);
 }
 
+/**
+ * Tries each parser one by one
+ */
+function any(Parser ...$parsers): Parser
+{
+    return parser(function ($input) use ($parsers): ParseResult {
+        foreach ($parsers as $parser) {
+            $r = $parser($input);
+            if ($r->isSuccess()) {
+                return $r;
+            }
+        }
+        return fail("@TODO failures for " . __METHOD__);
+    });
+}
+
+/**
+ * One or more repetitions of Parser
+ */
+function atLeastOne($parser) :Parser{
+    return parser(function ($input) use ($parser): ParseResult {
+        $r = $parser($input);
+        if(!$r->isSuccess()) return $r;
+        $parsed = $r->parsed();
+        while (true) {
+            $next = $parser($r->remaining());
+            if($next->isSuccess()) {
+                $parsed .= $next->parsed();
+                $r = $next;
+            } else {
+                return succeed($parsed, $r->remaining());
+            }
+        }
+    });
+}

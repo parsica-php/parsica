@@ -2,7 +2,20 @@
 
 namespace Tests\Mathias\ParserCombinators;
 
-use function Mathias\ParserCombinators\{char, collect, either, ignore, into1, intoNew1, optional, seq, space, string};
+use function Mathias\ParserCombinators\{any,
+    atLeastOne,
+    char,
+    collect,
+    digit,
+    either,
+    float,
+    ignore,
+    into1,
+    intoNew1,
+    optional,
+    seq,
+    space,
+    string};
 
 final class CombinatorsTest extends ParserTest
 {
@@ -89,5 +102,30 @@ final class CombinatorsTest extends ParserTest
                 string("world")
             );
         $this->shouldNotParse($parser, "Helloplanet");
+    }
+
+    /**
+     * @test
+     */
+    public function atLeastOne()
+    {
+        $parser = atLeastOne(char('a'));
+        $this->shouldParse($parser, "a", "a");
+        $this->shouldParse($parser, "aa", "aa");
+        $this->shouldParse($parser, "aabb", "aa");
+        $this->shouldNotParse($parser, "bb");
+    }
+
+    /** @test */
+    public function any_()
+    {
+        $parser =
+            collect(
+                any(char("€"), char("$")),
+                float()->into1('floatval')
+            );
+        $this->shouldParse($parser, "€15.23", ["€", 15.23]);
+        $this->shouldParse($parser, "$15", ["$", 15]);
+        $this->shouldNotParse($parser, "£12.13");
     }
 }

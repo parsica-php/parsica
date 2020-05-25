@@ -3,6 +3,8 @@
 namespace Tests\Mathias\ParserCombinators;
 
 use function Mathias\ParserCombinators\char;
+use function Mathias\ParserCombinators\digit;
+use function Mathias\ParserCombinators\float;
 use function Mathias\ParserCombinators\string;
 
 final class BasicParsersTest extends ParserTest
@@ -21,4 +23,18 @@ final class BasicParsersTest extends ParserTest
         $this->shouldNotParse(string('abc'), "babc");
     }
 
+    /** @test */
+    public function digit()
+    {
+        $this->shouldParse(digit(), "1ab", "1");
+    }
+
+    /** @test */
+    public function float()
+    {
+        $this->shouldParse(float(), "0", "0");
+        $this->shouldParse(float(), "0.1", "0.1");
+        $this->shouldParse(float(), "123.456", "123.456");
+        $this->shouldParse(float()->into1('floatval'), "123.456", 123.456);
+    }
 }
