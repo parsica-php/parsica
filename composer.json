@@ -1,13 +1,20 @@
 {
-    "name": "mathias/parsercombinators",
-    "require-dev": {
-        "phpunit/phpunit": "^9.1"
-    },
-    "authors": [
-        {
-            "name": "Mathias Verraes",
-            "email": "mathias@verraes.net"
-        }
-    ],
-    "require": {}
+  "name": "mathias/parsercombinators",
+  "require-dev": {
+    "phpunit/phpunit": "^9.1",
+    "vimeo/psalm": "^3.11"
+  },
+  "authors": [
+    {
+      "name": "Mathias Verraes",
+      "email": "mathias@verraes.net"
+    }
+  ],
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "Mathias\\ParserCombinators\\Tests\\": "tests/",
+      "Mathias\\ParserCombinators\\": "src/"
+    }
+  }
 }
