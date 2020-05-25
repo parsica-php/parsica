@@ -15,7 +15,8 @@ use function Mathias\ParserCombinators\{any,
     optional,
     seq,
     space,
-    string};
+    string
+};
 
 final class CombinatorsTest extends ParserTest
 {
@@ -119,13 +120,22 @@ final class CombinatorsTest extends ParserTest
     /** @test */
     public function any_()
     {
-        $parser =
-            collect(
-                any(char("€"), char("$")),
-                float()->into1('floatval')
-            );
-        $this->shouldParse($parser, "€15.23", ["€", 15.23]);
-        $this->shouldParse($parser, "$15", ["$", 15]);
-        $this->shouldNotParse($parser, "£12.13");
+        $symbol = any(string("€"), string("$"));
+        $amount = float()->into1('floatval');
+        $money = collect($symbol, $amount);
+
+        $this->shouldParse($symbol, "€", "€");
+        $this->shouldParse($amount, "15.23", 15.23);
+        $this->shouldParse($money, "€15.23", ["€", 15.23]);
+        $this->shouldParse($money, "$15", ["$", 15]);
+        $this->shouldNotParse($money, "£12.13");
+    }
+
+    /** @test */
+    public function bind()
+    {
+        $parser = digit()->bind(digit());
+        $this->shouldParse($parser, "ab", "ab");
+
     }
 }

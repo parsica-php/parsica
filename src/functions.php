@@ -86,13 +86,16 @@ function intoNew1(Parser $parser, string $className): Parser
 function any(Parser ...$parsers): Parser
 {
     return parser(function ($input) use ($parsers): ParseResult {
+        $expectations = [];
         foreach ($parsers as $parser) {
             $r = $parser($input);
             if ($r->isSuccess()) {
                 return $r;
+            } else {
+                $expectations[] = $r->expectation();
             }
         }
-        return fail("@TODO failures for " . __METHOD__);
+        return fail("any(".implode(", ", $expectations). ")");
     });
 }
 

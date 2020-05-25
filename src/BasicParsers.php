@@ -9,7 +9,8 @@ use Webmozart\Assert\Assert;
 use function Mathias\ParserCombinators\parser;
 
 /**
- * Parse a single character
+ * Parse a single character.
+ * @TODO Not safe for UTF-8
  */
 function char(string $char): Parser
 {

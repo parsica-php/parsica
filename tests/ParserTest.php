@@ -19,7 +19,7 @@ abstract class ParserTest extends TestCase
             $this->fail(
                 "Parser test failed."
                 . "\nInput: $input"
-                . "\nExpected: $expectedParsed"
+                . "\nExpected: ".var_Export($expectedParsed, true)
                 . "\nParser expected: {$actual->expectation()}"
             );
         }
@@ -32,7 +32,7 @@ abstract class ParserTest extends TestCase
             $actual->isSuccess(),
             "Parser succeeded but expected a failure.\nInput: $input"
         );
-        
+
         if (isset($expectedFailure)) {
             $this->assertEquals(
                 $expectedFailure,
