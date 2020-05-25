@@ -2,14 +2,13 @@
 
 namespace Tests\Mathias\ParserCombinators;
 
-use Mathias\ParserCombinators\ParseResult;
+use Mathias\ParserCombinators\Infra\Parser;
 use PHPUnit\Framework\TestCase;
 
 abstract class ParserTest extends TestCase
 {
-    protected function shouldParse($parser, string $input, $expected)
+    protected function shouldParse(Parser $parser, string $input, $expected)
     {
-        /** @var ParseResult $actual */
         $actual = $parser($input);
         if ($actual->isSuccess()) {
             $this->assertEquals($expected, $actual->parsed());
@@ -18,9 +17,8 @@ abstract class ParserTest extends TestCase
         }
     }
 
-    protected function shouldNotParse($parser, string $input, ?string $expectedFailure = null)
+    protected function shouldNotParse(Parser $parser, string $input, ?string $expectedFailure = null)
     {
-        /** @var ParseResult $actual */
         $actual = $parser($input);
         if ($actual->isSuccess()) {
             $this->fail("Parser succeeded but expected a failure.\nInput: $input");

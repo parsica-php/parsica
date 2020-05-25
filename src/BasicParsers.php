@@ -2,9 +2,13 @@
 
 namespace Mathias\ParserCombinators;
 
-function char(string $char)
+use Mathias\ParserCombinators\Infra\Parser;
+use Mathias\ParserCombinators\Infra\ParseResult;
+
+function char(string $char) : Parser
 {
-    return fn($input): ParseResult => (head($input[0]) === $char)
+    return parser(fn($input): ParseResult => (head($input[0]) === $char)
         ? succeed($char, tail($input))
-        : fail("char($char)");
+        : fail("char($char)")
+    );
 }

@@ -16,9 +16,9 @@
       "Mathias\\ParserCombinators\\": "src/"
     },
     "files": [
-      "src/ParseResult.php",
       "src/BasicParsers.php",
       "src/Combinators.php",
+      "src/Parser.php",
       "src/Util.php"
     ]
   },
