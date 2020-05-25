@@ -7,13 +7,21 @@ use PHPUnit\Framework\TestCase;
 
 abstract class ParserTest extends TestCase
 {
-    protected function shouldParse(Parser $parser, string $input, $expected)
+    protected function shouldParse(Parser $parser, string $input, $expectedParsed, $expectedRemaining = null)
     {
         $actual = $parser($input);
         if ($actual->isSuccess()) {
-            $this->assertEquals($expected, $actual->parsed());
+            $this->assertEquals($expectedParsed, $actual->parsed());
+            if($expectedRemaining) {
+                $this->assertEquals($expectedRemaining, $actual->remaining());
+            }
         } else {
-            $this->fail("Parser test failed.\nInput: $input\nExpected: $expected\nMessage: " . $actual->expectation());
+            $this->fail(
+                "Parser test failed."
+                ."\nInput: $input"
+                ."\nExpected: $expectedParsed"
+                ."\nMessage: {$actual->expectation()}"
+            );
         }
     }
 
