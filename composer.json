@@ -1,0 +1,13 @@
+{
+    "name": "mathias/parsercombinators",
+    "require-dev": {
+        "phpunit/phpunit": "^9.1"
+    },
+    "authors": [
+        {
+            "name": "Mathias Verraes",
+            "email": "mathias@verraes.net"
+        }
+    ],
+    "require": {}
+}
