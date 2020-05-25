@@ -1,14 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinators\Tests;
-require_once __DIR__ . '/../vendor/autoload.php';
+namespace Tests\Mathias\ParserCombinators;
 
-// @TODO fix, this should be autoloaded
-require_once __DIR__ . '/../src/Functions.php';
-
-use Mathias\ParserCombinators\Result;
-use PHPUnit\Framework\TestCase;
-use function Mathias\ParserCombinators\{either, char};
+use function Mathias\ParserCombinators\char;
 
 final class BasicParsersTest extends ParserTest
 {
@@ -16,7 +10,7 @@ final class BasicParsersTest extends ParserTest
     public function char()
     {
         $this->shouldParse(char('a'), "abc", "a");
-        $this->shouldFailWith(char('a'), "bc", "char(a)");
+        $this->shouldNotParse(char('a'), "bc", "char(a)");
     }
 
 }

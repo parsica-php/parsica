@@ -2,21 +2,14 @@
 
 namespace Mathias\ParserCombinators;
 
-require_once __DIR__ . '/../vendor/autoload.php';
-
 use Exception;
 
-final class Functions
-{
-}
-
-
-interface Result
+interface ParseResult
 {
     public function isSuccess(): bool;
 }
 
-final class Success implements Result
+final class Success implements ParseResult
 {
     private $parsed;
     private string $output;
@@ -43,7 +36,7 @@ final class Success implements Result
     }
 }
 
-final class ParserFailure extends Exception implements Result
+final class ParserFailure extends Exception implements ParseResult
 {
     private string $expectation;
 
@@ -64,13 +57,13 @@ final class ParserFailure extends Exception implements Result
     }
 }
 
-function succeed($parsed, string $output): Result
+function succeed($parsed, string $output): ParseResult
 {
     return new Success($parsed, $output);
 }
 
 
-function fail(string $expectation): Result
+function fail(string $expectation): ParseResult
 {
     return new ParserFailure($expectation);
 }
@@ -81,46 +74,4 @@ function runparser($parser, $input)
     $result = $parser($input);
     return $result->parsed();
 
-}
-
-// *** BASIC PARSERS
-
-function char(string $char)
-{
-    return fn($input): Result => (head($input[0]) === $char)
-        ? succeed($char, tail($input))
-        : fail("char($char)");
-}
-
-// ***  COMBINATORS
-
-function either($left, $right)
-{
-    return function ($input) use ($left, $right) : Result {
-        $leftr = $left($input);
-        if ($leftr->isSuccess()) {
-            return $leftr;
-        }
-
-        $rightr = $right($input);
-        if ($rightr->isSuccess()) {
-            return $rightr;
-        }
-
-        $expectation = "either (\n\t{$leftr->expectation()}\n\tor\n\t{$rightr->expectation()}\n)";
-        return fail($expectation);
-    };
-}
-
-// *** UTIL
-
-
-function head(string $s): string
-{
-    return $s[0];
-}
-
-function tail(string $s): string
-{
-    return substr($s, 1);
 }

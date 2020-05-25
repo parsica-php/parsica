@@ -13,8 +13,18 @@
   "require": {},
   "autoload": {
     "psr-4": {
-      "Mathias\\ParserCombinators\\Tests\\": "tests/",
       "Mathias\\ParserCombinators\\": "src/"
+    },
+    "files": [
+      "src/ParseResult.php",
+      "src/BasicParsers.php",
+      "src/Combinators.php",
+      "src/Util.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\Mathias\\ParserCombinators\\": "tests/"
     }
   }
 }
