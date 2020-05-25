@@ -12,15 +12,15 @@ abstract class ParserTest extends TestCase
         $actual = $parser($input);
         if ($actual->isSuccess()) {
             $this->assertEquals($expectedParsed, $actual->parsed());
-            if($expectedRemaining) {
+            if ($expectedRemaining) {
                 $this->assertEquals($expectedRemaining, $actual->remaining());
             }
         } else {
             $this->fail(
                 "Parser test failed."
-                ."\nInput: $input"
-                ."\nExpected: $expectedParsed"
-                ."\nParser expected: {$actual->expectation()}"
+                . "\nInput: $input"
+                . "\nExpected: $expectedParsed"
+                . "\nParser expected: {$actual->expectation()}"
             );
         }
     }
@@ -28,13 +28,17 @@ abstract class ParserTest extends TestCase
     protected function shouldNotParse(Parser $parser, string $input, ?string $expectedFailure = null)
     {
         $actual = $parser($input);
-        if ($actual->isSuccess()) {
-            $this->fail("Parser succeeded but expected a failure.\nInput: $input");
-        } else {
-            if (isset($expectedFailure)) {
-                $this->assertEquals($expectedFailure, $actual->expectation(), "The expected failure message is not the same as the actual one.");
-            }
+        $this->assertFalse(
+            $actual->isSuccess(),
+            "Parser succeeded but expected a failure.\nInput: $input"
+        );
+        
+        if (isset($expectedFailure)) {
+            $this->assertEquals(
+                $expectedFailure,
+                $actual->expectation(),
+                "The expected failure message is not the same as the actual one."
+            );
         }
     }
-
 }

@@ -79,4 +79,15 @@ final class CombinatorsTest extends ParserTest
         $this->shouldParse($parser, "Hello , world!", $expected);
         $this->shouldParse($parser, "Hello,world!", $expected);
     }
+
+    /** @test */
+    public function collectFails()
+    {
+        $parser =
+            collect(
+                string("Hello"),
+                string("world")
+            );
+        $this->shouldNotParse($parser, "Helloplanet");
+    }
 }

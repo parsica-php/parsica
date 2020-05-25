@@ -8,7 +8,7 @@ use Mathias\ParserCombinators\Infra\ParseResult;
 /**
  * Identity function, returns the Parser. Sometimes useful.
  */
-function id(Parser $parser) : Parser
+function id(Parser $parser): Parser
 {
     return $parser;
 }
@@ -34,7 +34,7 @@ function optional(Parser $parser): Parser
  */
 function seq(Parser $first, Parser $second): Parser
 {
-   return $first->followedBy($second);
+    return $first->followedBy($second);
 }
 
 /**
@@ -45,12 +45,22 @@ function either(Parser $first, Parser $second): Parser
     return $first->or($second);
 }
 
-function collect(Parser $first, Parser $second) : Parser {
+function collect(Parser $first, Parser $second): Parser
+{
     // @TODO ignoring failures for now
     return parser(function (string $input) use ($first, $second) : ParseResult {
-            $r1 = $first($input);
+        $r1 = $first($input);
+        if ($r1->isSuccess()) {
             $r2 = $second($r1->remaining());
-            return succeed([$r1->parsed(), $r2->parsed()], $r2->remaining());
+            if ($r2->isSuccess()) {
+                return succeed([$r1->parsed(), $r2->parsed()], $r2->remaining());
+            } else {
+                return $r2;
+            }
+        } else {
+            return $r1;
+        }
+
     });
 }
 
