@@ -2,6 +2,10 @@
 
 namespace Mathias\ParserCombinators\Infra;
 
+/**
+ * @method seq(Parser $char) : Parser
+ * @method into(Parser $char) : Parser
+ */
 final class Parser
 {
     private $parser;
@@ -15,5 +19,11 @@ final class Parser
     {
         $f = $this->parser;
         return $f($input);
+    }
+
+    public function __call($name, $arguments) : Parser
+    {
+        array_unshift($arguments, $this);
+        return call_user_func_array("Mathias\\ParserCombinators\\".$name, $arguments);
     }
 }

@@ -39,7 +39,7 @@ function either($first, $second): Parser
 }
 
 
-function into($parser, callable $transform): Parser
+function into(Parser $parser, callable $transform): Parser
 {
     return parser( function ($input) use ($parser, $transform) : ParseResult {
         $r = $parser($input);
