@@ -4,6 +4,10 @@ namespace Mathias\ParserCombinators\Infra;
 
 use Webmozart\Assert\Assert;
 
+/**
+ * String helper functions
+ * @TODO replace by something existing?
+ */
 final class Str
 {
     /**
