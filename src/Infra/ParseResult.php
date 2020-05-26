@@ -2,12 +2,15 @@
 
 namespace Mathias\ParserCombinators\Infra;
 
+/**
+ * @template T
+ */
 interface ParseResult
 {
     public function isSuccess(): bool;
 
     /**
-     * @return mixed
+     * @return T
      */
     public function parsed();
 

@@ -4,6 +4,9 @@ namespace Mathias\ParserCombinators\Infra;
 
 use Exception;
 
+/**
+ * @template T
+ */
 final class ParserFailure extends Exception implements ParseResult
 {
     private string $expectation;
@@ -24,6 +27,9 @@ final class ParserFailure extends Exception implements ParseResult
         return $this->expectation;
     }
 
+    /**
+     * @return T
+     */
     public function parsed()
     {
         throw new \Exception("Can't read the parsed value of a failed ParseResult.");

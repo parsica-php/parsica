@@ -2,15 +2,21 @@
 
 namespace Mathias\ParserCombinators\Infra;
 
-use function Mathias\ParserCombinators\{fail, parser, succeed};
+use function Mathias\ParserCombinators\{fail, into1, parser, succeed};
 
+/**
+ * @template T
+ */
 final class Parser
 {
     /**
-     * @var callable
+     * @psalm-param callable(string):ParseResult<T> $parser
      */
     private $parser;
 
+    /**
+     * @param callable(string):ParseResult<T> $parser
+     */
     function __construct(callable $parser)
     {
         $this->parser = $parser;
@@ -87,20 +93,22 @@ final class Parser
 
     /**
      * @see into1()
+     *
+     * @template T2
+     * @param callable(T):T2 $transform
+     * @return Parser<T2>
      */
     public function into1(callable $transform): Parser
     {
-        return parser(function (string $input) use ($transform) : ParseResult {
-            $r = $this($input);
-            if ($r->isSuccess()) {
-                return succeed($transform($r->parsed()), $r->remaining());
-            }
-            return $r;
-        });
+        return into1($this, $transform);
     }
 
     /**
      * @see intoNew1()
+     *
+     * @template T2
+     * @param class-string<T2> $className
+     * @return Parser<T2>
      */
     public function intoNew1(string $className): Parser
     {

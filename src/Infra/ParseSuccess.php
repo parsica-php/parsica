@@ -2,16 +2,20 @@
 
 namespace Mathias\ParserCombinators\Infra;
 
+/**
+ * @template T
+ */
 final class ParseSuccess implements ParseResult
 {
     /**
-     * @var mixed
+     * @var T
      */
     private $parsed;
+
     private string $remaining;
 
     /**
-     * @param mixed $parsed
+     * @param T $parsed
      */
     public function __construct($parsed, string $remaining)
     {
@@ -19,6 +23,9 @@ final class ParseSuccess implements ParseResult
         $this->remaining = $remaining;
     }
 
+    /**
+     * @return T
+     */
     public function parsed()
     {
         return $this->parsed;
