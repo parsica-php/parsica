@@ -9,10 +9,9 @@ final class TypecastingTest extends ParserTest
     /** @test */
     public function into1()
     {
-        $parser = into1(
-            seq(char('a'), char('b')),
-            'strtoupper'
-        );
+        $parser =
+            char('a')->followedBy(char('b'))
+                ->into1('strtoupper');
 
         $expected = "AB";
 
@@ -21,7 +20,7 @@ final class TypecastingTest extends ParserTest
     
     
     /** @test */
-    public function intoNew()
+    public function intoNew1()
     {
         $parser = intoNew1(
             seq(char('a'), char('b')),

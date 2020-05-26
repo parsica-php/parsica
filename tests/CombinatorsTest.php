@@ -131,11 +131,4 @@ final class CombinatorsTest extends ParserTest
         $this->shouldNotParse($money, "£12.13");
     }
 
-    /** @test */
-    public function bind()
-    {
-        $parser = digit()->bind(digit());
-        $this->shouldParse($parser, "ab", "ab");
-
-    }
 }
