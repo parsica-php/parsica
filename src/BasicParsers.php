@@ -6,7 +6,6 @@ use Mathias\ParserCombinators\Infra\Parser;
 use Mathias\ParserCombinators\Infra\ParseResult;
 use Mathias\ParserCombinators\Infra\Str;
 use Webmozart\Assert\Assert;
-use function Mathias\ParserCombinators\parser;
 
 /**
  * Parse a single character.
@@ -44,6 +43,10 @@ function space(): Parser
     return char(' ');
 }
 
+/**
+ * Parse 0-9. Like all parsers, this returns the digit as a string. Use into1('intval')
+ * or similar to cast it to a numeric type.
+ */
 function digit(): Parser
 {
     return any(
@@ -60,6 +63,10 @@ function digit(): Parser
     );
 }
 
+/**
+ * Parse a float. Like all parsers, this returns the float as a string. Use into1('floatval')
+ * or similar to cast it to a numeric type.
+ */
 function float(): Parser
 {
     return
