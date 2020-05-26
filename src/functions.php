@@ -95,21 +95,22 @@ function any(Parser ...$parsers): Parser
                 $expectations[] = $r->expectation();
             }
         }
-        return fail("any(".implode(", ", $expectations). ")");
+        return fail("any(" . implode(", ", $expectations) . ")");
     });
 }
 
 /**
  * One or more repetitions of Parser
  */
-function atLeastOne($parser) :Parser{
+function atLeastOne(Parser $parser): Parser
+{
     return parser(function ($input) use ($parser): ParseResult {
         $r = $parser($input);
-        if(!$r->isSuccess()) return $r;
+        if (!$r->isSuccess()) return $r;
         $parsed = $r->parsed();
         while (true) {
             $next = $parser($r->remaining());
-            if($next->isSuccess()) {
+            if ($next->isSuccess()) {
                 $parsed .= $next->parsed();
                 $r = $next;
             } else {
