@@ -107,15 +107,13 @@ function atLeastOne(Parser $parser): Parser
     return parser(function ($input) use ($parser): ParseResult {
         $r = $parser($input);
         if (!$r->isSuccess()) return $r;
-        $parsed = $r->parsed();
-        while (true) {
-            $next = $parser($r->remaining());
-            if ($next->isSuccess()) {
-                $parsed .= $next->parsed();
-                $r = $next;
-            } else {
-                return succeed($parsed, $r->remaining());
-            }
-        }
+        /** @psalm-var T $parsed */
+        $parsed = "";
+        do {
+            $parsed .= $r->parsed();
+            $remaining = $r->remaining();
+            $r = $parser($remaining);
+        } while ($r->isSuccess());
+        return succeed($parsed, $remaining);
     });
 }
