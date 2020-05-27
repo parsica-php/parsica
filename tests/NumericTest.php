@@ -8,16 +8,9 @@ use function Mathias\ParserCombinator\digit;
 use function Mathias\ParserCombinator\float;
 use function Mathias\ParserCombinator\string;
 
-final class BasicParsersTest extends ParserTest
+final class NumericTest extends ParserTest
 {
 
-
-    /** @test */
-    public function string()
-    {
-        $this->assertParse("abc", string('abc'), "abcde");
-        $this->assertNotParse(string('abc'), "babc");
-    }
 
     /** @test */
     public function digit()

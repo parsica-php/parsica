@@ -8,19 +8,6 @@ use function Mathias\ParserCombinator\ParseResult\{fail, parser, succeed};
 
 
 
-/**
- * Parse a non-empty string
- */
-function string(string $str): Parser
-{
-    Assert::minLength($str, 1);
-    $len = strlen($str);
-    return parser(
-        fn(string $input): ParseResult => substr($input, 0, $len) === $str
-            ? succeed($str, substr($input, $len))
-            : fail("string($str))", "@TODO")
-    );
-}
 
 function space(): Parser
 {

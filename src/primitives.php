@@ -17,10 +17,12 @@ use function Mathias\ParserCombinator\ParseResult\{fail, parser, succeed};
 function satisfy(callable $predicate, string $expected = "satisfy(predicate)"): Parser
 {
     return parser(function (string $input) use ($predicate, $expected) : ParseResult {
-        if ((strlen($input) === 0)) return fail($expected, "EOF");
-        $token = Str::head($input);
+        if (mb_strlen($input) === 0) {
+            return fail($expected, "EOF");
+        }
+        $token = mb_substr($input, 0, 1);
         return $predicate($token)
-            ? succeed($token, Str::tail($input))
+            ? succeed($token, mb_substr($input, 1))
             : fail($expected, $token);
     });
 }
@@ -30,7 +32,22 @@ function satisfy(callable $predicate, string $expected = "satisfy(predicate)"): 
  *
  * @return Parser<string>
  */
-function single() : Parser
+function single(): Parser
 {
-    return satisfy(fn($_) => true, 'single');
+    return satisfy(fn(string $_) => true, 'single');
+}
+
+
+/**
+ * Parse the end of the input
+ *
+ * @return Parser<string>
+ */
+function eof(): Parser
+{
+    return parser(function (string $input): ParseResult {
+        return mb_strlen($input) === 0
+            ? succeed("", "")
+            : fail("eof", $input);
+    });
 }

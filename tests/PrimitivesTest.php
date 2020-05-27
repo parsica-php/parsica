@@ -3,6 +3,7 @@
 namespace Tests\Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\PHPUnit\ParserTest;
+use function Mathias\ParserCombinator\eof;
 use function Mathias\ParserCombinator\equals;
 use function Mathias\ParserCombinator\satisfy;
 use function Mathias\ParserCombinator\single;
@@ -26,5 +27,13 @@ final class PrimitivesTest extends ParserTest
         $this->assertParse(":", single(), ":-)");
         $this->assertNotParse(single(), "", "single");
     }
+
+    /** @test */
+    public function eof()
+    {
+        $this->assertParse("", eof(), "");
+        $this->assertNotParse(eof(), "xyz", "eof");
+    }
+
 }
 
