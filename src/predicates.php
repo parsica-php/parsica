@@ -8,7 +8,7 @@ namespace Mathias\ParserCombinator;
  *
  * @template T
  *
- * @param T
+ * @param T $x
  *
  * @return callable(T) : bool
  */
