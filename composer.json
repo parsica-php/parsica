@@ -24,6 +24,7 @@
       "src/ParseResult/functions.php",
       "src/combinators.php",
       "src/parsers.php",
+      "src/predicates.php",
       "src/primitives.php",
       "src/runParser.php"
     ]
