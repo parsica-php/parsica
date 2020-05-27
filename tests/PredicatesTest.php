@@ -2,10 +2,10 @@
 
 namespace Tests\Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\PHPUnit\ParserTest;
+use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\equals;
 
-final class PredicatesTest extends ParserTest
+final class PredicatesTest extends ParserTestCase
 {
     /** @test */
     public function equals()

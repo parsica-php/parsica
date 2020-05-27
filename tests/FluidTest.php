@@ -2,10 +2,10 @@
 
 namespace Tests\Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\PHPUnit\ParserTest;
+use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\char;
 
-final class FluidTest extends ParserTest
+final class FluidTest extends ParserTestCase
 {
     /** @test */
     public function followedBy()

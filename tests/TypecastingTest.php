@@ -2,10 +2,10 @@
 
 namespace Tests\Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\PHPUnit\ParserTest;
+use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\{char, either, ignore, into1, intoNew1, optional, seq, string};
 
-final class TypecastingTest extends ParserTest
+final class TypecastingTest extends ParserTestCase
 {
     /** @test */
     public function into1()

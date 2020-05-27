@@ -2,13 +2,13 @@
 
 namespace Tests\Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\PHPUnit\ParserTest;
+use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\char;
 use function Mathias\ParserCombinator\digit;
 use function Mathias\ParserCombinator\float;
 use function Mathias\ParserCombinator\string;
 
-final class NumericTest extends ParserTest
+final class NumericTest extends ParserTestCase
 {
 
 

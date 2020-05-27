@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Convenience assertion methods. When writing tests for your own parsers, extend from this instead of PHPUnit's TestCase.
  */
-abstract class ParserTest extends TestCase
+abstract class ParserTestCase extends TestCase
 {
     /**
      * @param mixed $expectedParsed
