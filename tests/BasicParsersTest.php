@@ -2,10 +2,10 @@
 
 namespace Tests\Mathias\ParserCombinators;
 
-use function Mathias\ParserCombinators\char;
-use function Mathias\ParserCombinators\digit;
-use function Mathias\ParserCombinators\float;
-use function Mathias\ParserCombinators\string;
+use function Mathias\ParserCombinator\char;
+use function Mathias\ParserCombinator\digit;
+use function Mathias\ParserCombinator\float;
+use function Mathias\ParserCombinator\string;
 
 final class BasicParsersTest extends ParserTest
 {

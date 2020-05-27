@@ -2,7 +2,7 @@
 
 namespace Tests\Mathias\ParserCombinators;
 
-use function Mathias\ParserCombinators\{any,
+use function Mathias\ParserCombinator\{any,
     atLeastOne,
     char,
     collect,

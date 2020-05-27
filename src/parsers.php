@@ -1,11 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinators;
+namespace Mathias\ParserCombinator;
 
-use Mathias\ParserCombinators\Infra\Parser;
-use Mathias\ParserCombinators\Infra\ParseResult;
-use Mathias\ParserCombinators\Infra\Str;
+use Mathias\ParserCombinator\ParseResult\ParseResult;
 use Webmozart\Assert\Assert;
+use function Mathias\ParserCombinator\ParseResult\{fail, parser, succeed};
 
 /**
  * Parse a single character.

@@ -15,12 +15,13 @@
   },
   "autoload": {
     "psr-4": {
-      "Mathias\\ParserCombinators\\": "src/"
+      "Mathias\\ParserCombinator\\": "src/"
     },
     "files": [
-      "src/BasicParsers.php",
-      "src/functions.php",
-      "src/Parser.php"
+      "src/ParseResult/functions.php",
+      "src/combinators.php",
+      "src/parsers.php",
+      "src/runParser.php"
     ]
   },
   "autoload-dev": {

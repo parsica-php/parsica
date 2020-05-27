@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinators;
+namespace Mathias\ParserCombinator;
 
-use Mathias\ParserCombinators\Infra\Parser;
-use Mathias\ParserCombinators\Infra\ParseResult;
+use function Mathias\ParserCombinator\ParseResult\{fail, parser, succeed};
+use Mathias\ParserCombinator\ParseResult\ParseResult;
 
 /**
  * Identity function, returns the Parser. Sometimes useful.

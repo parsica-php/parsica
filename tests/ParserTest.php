@@ -2,7 +2,7 @@
 
 namespace Tests\Mathias\ParserCombinators;
 
-use Mathias\ParserCombinators\Infra\Parser;
+use Mathias\ParserCombinator\Parser;
 use PHPUnit\Framework\TestCase;
 
 abstract class ParserTest extends TestCase

@@ -1,8 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinators\Infra;
+namespace Mathias\ParserCombinator\ParseResult;
 
 use Exception;
+use Mathias\ParserCombinator\ParseResult\ParseResult;
+use Mathias\ParserCombinator\T;
 
 /**
  * @template T

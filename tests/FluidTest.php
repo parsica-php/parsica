@@ -2,7 +2,7 @@
 
 namespace Tests\Mathias\ParserCombinators;
 
-use function Mathias\ParserCombinators\char;
+use function Mathias\ParserCombinator\char;
 
 final class FluidTest extends ParserTest
 {

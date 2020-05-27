@@ -2,7 +2,7 @@
 
 namespace Tests\Mathias\ParserCombinators;
 
-use function Mathias\ParserCombinators\{char, either, ignore, into1, intoNew1, optional, seq, string};
+use function Mathias\ParserCombinator\{char, either, ignore, into1, intoNew1, optional, seq, string};
 
 final class TypecastingTest extends ParserTest
 {
