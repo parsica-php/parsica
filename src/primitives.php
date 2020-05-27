@@ -34,14 +34,3 @@ function single() : Parser
 {
     return satisfy(fn($_) => true, 'single');
 }
-
-/**
- * Parse a character
- *
- * @return Parser<string>
- */
-function char (string $c) : Parser
-{
-    Assert::length($c, 1, "char() expects a single character. Use string() if you want longer strings");
-    return satisfy(equals($c), "char($c)");
-}

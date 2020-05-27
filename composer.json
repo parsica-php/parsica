@@ -22,6 +22,7 @@
     },
     "files": [
       "src/ParseResult/functions.php",
+      "src/characters.php",
       "src/combinators.php",
       "src/parsers.php",
       "src/predicates.php",
