@@ -15,7 +15,7 @@ final class TypecastingTest extends ParserTest
 
         $expected = "AB";
 
-        $this->shouldParse($parser, "abc", $expected);
+        $this->assertParse($parser, "abc", $expected);
     }
     
     
@@ -29,7 +29,7 @@ final class TypecastingTest extends ParserTest
 
         $expected = new MyType1("ab");
 
-        $this->shouldParse($parser, "abc", $expected);
+        $this->assertParse($parser, "abc", $expected);
     }
 
 }

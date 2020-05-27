@@ -10,7 +10,7 @@ final class FluidTest extends ParserTest
     public function followedBy()
     {
         $parser = char('a')->followedBy(char('b'));
-        $this->shouldParse($parser, "abc", "ab");
+        $this->assertParse($parser, "abc", "ab");
     }
 
     /** @test */
@@ -19,7 +19,7 @@ final class FluidTest extends ParserTest
         $parser = char('a')
             ->followedBy(char('b'))
             ->into1('strtoupper');
-        $this->shouldParse($parser, "abc", "AB");
+        $this->assertParse($parser, "abc", "AB");
     }
 
     /** @test */
@@ -28,7 +28,7 @@ final class FluidTest extends ParserTest
         $parser = char('a')
             ->followedBy(char('b'))
             ->intoNew1(__NAMESPACE__.'\\MyType2');
-        $this->shouldParse($parser, "abc", new MyType2("ab"));
+        $this->assertParse($parser, "abc", new MyType2("ab"));
     }
 }
 

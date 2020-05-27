@@ -7,14 +7,15 @@ use PHPUnit\Framework\TestCase;
 
 abstract class ParserTest extends TestCase
 {
-    protected function shouldParse(Parser $parser, string $input, $expectedParsed, $expectedRemaining = null)
+    protected function assertParse(Parser $parser, string $input, $expectedParsed)
     {
         $actual = $parser($input);
         if ($actual->isSuccess()) {
-            $this->assertEquals($expectedParsed, $actual->parsed());
-            if ($expectedRemaining) {
-                $this->assertEquals($expectedRemaining, $actual->remaining());
-            }
+            $this->assertEquals(
+                $expectedParsed,
+                $actual->parsed(),
+                "The parser succeeded but the parsed value doesn't match."
+            );
         } else {
             $this->fail(
                 "Parser test failed."
@@ -25,7 +26,25 @@ abstract class ParserTest extends TestCase
         }
     }
 
-    protected function shouldNotParse(Parser $parser, string $input, ?string $expectedFailure = null)
+    protected function assertRemain(Parser $parser, string $input, $expectedRemaining)
+    {
+        $actual = $parser($input);
+        if ($actual->isSuccess()) {
+            $this->assertEquals(
+                $expectedRemaining,
+                $actual->remaining(),
+                "The parser succeeded but the expected remaining input doesn't match."
+            );
+        } else {
+            $this->fail(
+                "Parser test failed."
+                . "\nInput: $input"
+                . "\nExpected remaining: ".var_Export($expectedRemaining, true)
+            );
+        }
+    }
+
+    protected function assertNotParse(Parser $parser, string $input, ?string $expectedFailure = null)
     {
         $actual = $parser($input);
         $this->assertFalse(
