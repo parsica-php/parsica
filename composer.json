@@ -11,6 +11,8 @@
     }
   ],
   "require": {
+    "php": "^7.4",
+    "ext-mbstring": "*",
     "webmozart/assert": "^1.8"
   },
   "autoload": {
