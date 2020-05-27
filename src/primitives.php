@@ -6,9 +6,13 @@ use Mathias\ParserCombinator\ParseResult\ParseResult;
 use function Mathias\ParserCombinator\ParseResult\{fail, parser, succeed};
 
 /**
- * @since 0.2
+ * A parser that satisfies a predicate. Useful as a building block for writing things like char(), digit()...
+ *
+ * @param callable(string) : bool $predicate
+ *
+ * @return Parser<string>
  */
-function satisfy(callable $predicate) : Parser
+function satisfy(callable $predicate): Parser
 {
     return parser(function (string $input) use ($predicate) : ParseResult {
         if ((strlen($input) === 0)) return fail("input", "EOF");
