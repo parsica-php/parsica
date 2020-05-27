@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinators;
+namespace Tests\Mathias\ParserCombinator;
 
+use Mathias\ParserCombinator\PHPUnit\ParserTest;
 use function Mathias\ParserCombinator\char;
 use function Mathias\ParserCombinator\digit;
 use function Mathias\ParserCombinator\float;
@@ -12,30 +13,30 @@ final class BasicParsersTest extends ParserTest
     /** @test */
     public function char()
     {
-        $this->assertParse(char('a'), "abc", "a");
-        $this->assertRemain(char('a'), "abc", "bc");
+        $this->assertParse("a", char('a'), "abc");
+        $this->assertRemain("bc", char('a'), "abc");
         $this->assertNotParse(char('a'), "bc", "char(a)");
     }
 
     /** @test */
     public function string()
     {
-        $this->assertParse(string('abc'), "abcde", "abc");
+        $this->assertParse("abc", string('abc'), "abcde");
         $this->assertNotParse(string('abc'), "babc");
     }
 
     /** @test */
     public function digit()
     {
-        $this->assertParse(digit(), "1ab", "1");
+        $this->assertParse("1", digit(), "1ab");
     }
 
     /** @test */
     public function float()
     {
-        $this->assertParse(float(), "0", "0");
-        $this->assertParse(float(), "0.1", "0.1");
-        $this->assertParse(float(), "123.456", "123.456");
-        $this->assertParse(float()->into1('floatval'), "123.456", 123.456);
+        $this->assertParse("0", float(), "0");
+        $this->assertParse("0.1", float(), "0.1");
+        $this->assertParse("123.456", float(), "123.456");
+        $this->assertParse(123.456, float()->into1('floatval'), "123.456");
     }
 }

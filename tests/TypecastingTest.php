@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinators;
+namespace Tests\Mathias\ParserCombinator;
 
+use Mathias\ParserCombinator\PHPUnit\ParserTest;
 use function Mathias\ParserCombinator\{char, either, ignore, into1, intoNew1, optional, seq, string};
 
 final class TypecastingTest extends ParserTest
@@ -15,7 +16,7 @@ final class TypecastingTest extends ParserTest
 
         $expected = "AB";
 
-        $this->assertParse($parser, "abc", $expected);
+        $this->assertParse($expected, $parser, "abc");
     }
     
     
@@ -29,7 +30,7 @@ final class TypecastingTest extends ParserTest
 
         $expected = new MyType1("ab");
 
-        $this->assertParse($parser, "abc", $expected);
+        $this->assertParse($expected, $parser, "abc");
     }
 
 }

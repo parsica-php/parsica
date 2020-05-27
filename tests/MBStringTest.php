@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinators;
+namespace Tests\Mathias\ParserCombinator;
 
 use PHPUnit\Framework\TestCase;
 

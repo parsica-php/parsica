@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinators;
+namespace Tests\Mathias\ParserCombinator;
 
+use Mathias\ParserCombinator\PHPUnit\ParserTest;
 use function Mathias\ParserCombinator\char;
 
 final class FluidTest extends ParserTest
@@ -10,7 +11,7 @@ final class FluidTest extends ParserTest
     public function followedBy()
     {
         $parser = char('a')->followedBy(char('b'));
-        $this->assertParse($parser, "abc", "ab");
+        $this->assertParse("ab", $parser, "abc");
     }
 
     /** @test */
@@ -19,7 +20,7 @@ final class FluidTest extends ParserTest
         $parser = char('a')
             ->followedBy(char('b'))
             ->into1('strtoupper');
-        $this->assertParse($parser, "abc", "AB");
+        $this->assertParse("AB", $parser, "abc");
     }
 
     /** @test */
@@ -28,7 +29,7 @@ final class FluidTest extends ParserTest
         $parser = char('a')
             ->followedBy(char('b'))
             ->intoNew1(__NAMESPACE__.'\\MyType2');
-        $this->assertParse($parser, "abc", new MyType2("ab"));
+        $this->assertParse(new MyType2("ab"), $parser, "abc");
     }
 }
 

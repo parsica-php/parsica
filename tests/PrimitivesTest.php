@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinators;
+namespace Tests\Mathias\ParserCombinator;
 
+use Mathias\ParserCombinator\PHPUnit\ParserTest;
 use function Mathias\ParserCombinator\equals;
 use function Mathias\ParserCombinator\satisfy;
 
@@ -11,8 +12,8 @@ final class PrimitivesTest extends ParserTest
     public function satisfy()
     {
         $parser = satisfy(equals('x'));
-        $this->assertParse($parser, "xyz", "x");
-        $this->assertRemain($parser, "xyz", "yz");
+        $this->assertParse("x", $parser, "xyz");
+        $this->assertRemain("yz", $parser, "xyz");
         $this->assertNotParse($parser, "yz");
     }
 }
