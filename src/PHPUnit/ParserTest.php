@@ -10,6 +10,9 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class ParserTest extends TestCase
 {
+    /**
+     * @param mixed $expectedParsed
+     */
     protected function assertParse($expectedParsed, Parser $parser, string $input, string $message = ""): void
     {
         $result = $parser($input);
@@ -31,7 +34,7 @@ abstract class ParserTest extends TestCase
         }
     }
 
-    protected function assertRemain(string $expectedRemaining, Parser $parser, string $input, string $message = "")
+    protected function assertRemain(string $expectedRemaining, Parser $parser, string $input, string $message = "") : void
     {
         $actual = $parser($input);
         if ($actual->isSuccess()) {
@@ -50,7 +53,7 @@ abstract class ParserTest extends TestCase
         }
     }
 
-    protected function assertNotParse(Parser $parser, string $input, ?string $expectedFailure = null, $message = "")
+    protected function assertNotParse(Parser $parser, string $input, ?string $expectedFailure = null, string $message = "") : void
     {
         $actual = $parser($input);
         $this->assertFalse(
