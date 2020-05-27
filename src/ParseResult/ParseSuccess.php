@@ -1,6 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinators\Infra;
+namespace Mathias\ParserCombinator\ParseResult;
+
+use Mathias\ParserCombinator\ParseResult\ParseResult;
+use Mathias\ParserCombinator\T;
 
 /**
  * @template T
@@ -41,7 +44,17 @@ final class ParseSuccess implements ParseResult
         return true;
     }
 
-    public function expectation(): string
+    public function isFail(): bool
+    {
+        return false;
+    }
+
+    public function expected(): string
+    {
+        throw new \Exception("Can't read the expectation of a succeeded ParseResult.");
+    }
+
+    public function got(): string
     {
         throw new \Exception("Can't read the expectation of a succeeded ParseResult.");
     }

@@ -1,9 +1,6 @@
 {
   "name": "mathias/parsercombinators",
-  "require-dev": {
-    "phpunit/phpunit": "^9.1",
-    "vimeo/psalm": "^3.11"
-  },
+  "version": "0.2",
   "authors": [
     {
       "name": "Mathias Verraes",
@@ -11,21 +8,30 @@
     }
   ],
   "require": {
+    "php": "^7.4",
+    "ext-mbstring": "*",
     "webmozart/assert": "^1.8"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.1",
+    "vimeo/psalm": "^3.11"
   },
   "autoload": {
     "psr-4": {
-      "Mathias\\ParserCombinators\\": "src/"
+      "Mathias\\ParserCombinator\\": "src/"
     },
     "files": [
-      "src/BasicParsers.php",
-      "src/functions.php",
-      "src/Parser.php"
+      "src/ParseResult/functions.php",
+      "src/combinators.php",
+      "src/parsers.php",
+      "src/predicates.php",
+      "src/primitives.php",
+      "src/runParser.php"
     ]
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\Mathias\\ParserCombinators\\": "tests/"
+      "Tests\\Mathias\\ParserCombinator\\": "tests/"
     }
   }
 }

@@ -1,35 +1,120 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinators;
+namespace Mathias\ParserCombinator;
 
-use Mathias\ParserCombinators\Infra\Parser;
-use Mathias\ParserCombinators\Infra\ParseResult;
-use Mathias\ParserCombinators\Infra\ParserFailure;
-use Mathias\ParserCombinators\Infra\ParseSuccess;
-
-function parser(callable $f): Parser
-{
-    return new Parser($f);
-}
+use Mathias\ParserCombinator\ParseResult\ParseResult;
+use function Mathias\ParserCombinator\ParseResult\{parser, succeed, fail};
 
 /**
- * @param mixed $parsed
+ * @template T
  */
-function succeed($parsed, string $output): ParseResult
+final class Parser
 {
-    return new ParseSuccess($parsed, $output);
-}
+    /**
+     * @psalm-param callable(string):ParseResult<T> $parser
+     */
+    private $parser;
 
-function fail(string $expectation): ParseResult
-{
-    return new ParserFailure($expectation);
-}
+    /**
+     * @param callable(string):ParseResult<T> $parser
+     */
+    function __construct(callable $parser)
+    {
+        $this->parser = $parser;
+    }
 
-/**
- * @return mixed
- */
-function runparser(Parser $parser, string $input)
-{
-    $result = $parser($input);
-    return $result->parsed();
+    public function __invoke(string $input): ParseResult
+    {
+        $f = $this->parser;
+        return $f($input);
+    }
+
+    /**
+     * @see ignore()
+     */
+    public function ignore(): Parser
+    {
+        return $this->into1(fn(string $_) => "");
+    }
+
+    /**
+     * @see optional()
+     */
+    public function optional(): Parser
+    {
+        return parser(function (string $input): ParseResult {
+            $r1 = $this($input);
+            if ($r1->isSuccess()) {
+                return $r1;
+            } else {
+                return succeed("", $input);
+            }
+        });
+    }
+
+    /**
+     * @see seq()
+     */
+    public function followedBy(Parser $second): Parser
+    {
+        return parser(function (string $input) use ($second) : ParseResult {
+            $r1 = $this($input);
+            if ($r1->isSuccess()) {
+                $r2 = $second($r1->remaining());
+                if ($r2->isSuccess()) {
+                    return succeed($r1->parsed() . $r2->parsed(), $r2->remaining());
+                }
+                return fail("seq ({$r1->parsed()} {$r2->expected()})", "@TODO");
+            }
+            return fail("seq ({$r1->expected()} ...)", "@TODO");
+        });
+
+    }
+
+    /**
+     * @see either()
+     */
+    public function or(Parser $second): Parser
+    {
+        return parser(function (string $input) use ($second) : ParseResult {
+            $r1 = $this($input);
+            if ($r1->isSuccess()) {
+                return $r1;
+            }
+
+            $r2 = $second($input);
+            if ($r2->isSuccess()) {
+                return $r2;
+            }
+
+            $expectation = "either ({$r1->expected()} or {$r2->expected()})";
+            return fail($expectation, "@TODO");
+        });
+    }
+
+    /**
+     * @see into1()
+     *
+     * @template T2
+     * @param callable(T):T2 $transform
+     * @return Parser<T2>
+     */
+    public function into1(callable $transform): Parser
+    {
+        return into1($this, $transform);
+    }
+
+    /**
+     * @see intoNew1()
+     *
+     * @template T2
+     * @param class-string<T2> $className
+     * @return Parser<T2>
+     */
+    public function intoNew1(string $className): Parser
+    {
+        return $this->into1(
+            fn(string $val) => new $className($val)
+        );
+    }
 }

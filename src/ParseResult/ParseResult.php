@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinators\Infra;
+namespace Mathias\ParserCombinator\ParseResult;
+
+use Mathias\ParserCombinator\T;
 
 /**
  * @template T
@@ -9,6 +11,8 @@ interface ParseResult
 {
     public function isSuccess(): bool;
 
+    public function isFail(): bool;
+
     /**
      * @return T
      */
@@ -16,5 +20,7 @@ interface ParseResult
 
     public function remaining(): string;
 
-    public function expectation(): string;
+    public function expected(): string;
+
+    public function got(): string;
 }

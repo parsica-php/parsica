@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinators;
+namespace Tests\Mathias\ParserCombinator;
 
-use function Mathias\ParserCombinators\{any,
+use Mathias\ParserCombinator\PHPUnit\ParserTest;
+use function Mathias\ParserCombinator\{any,
     atLeastOne,
     char,
     collect,
@@ -25,26 +26,30 @@ final class CombinatorsTest extends ParserTest
     public function ignore()
     {
         $parser = ignore(char('a'));
-        $this->shouldParse($parser, "abc", "", "bc");
+        $this->assertParse("", $parser, "abc");
+        $this->assertRemain("bc", $parser, "abc");
 
         $parser = string('abcd')
             ->followedBy(ignore(char('-')))
             ->followedBy(string('efgh'));
-        $this->shouldParse($parser, "abcd-efgh", "abcdefgh");
+        $this->assertParse("abcdefgh", $parser, "abcd-efgh");
     }
 
     /** @test */
     public function optional()
     {
         $parser = char('a')->optional();
-        $this->shouldParse($parser, "abc", "a", "bc");
-        $this->shouldParse($parser, "bc", "", "bc");
+        $this->assertParse("a", $parser, "abc");
+        $this->assertRemain("bc", $parser, "abc");
+
+        $this->assertParse("", $parser, "bc");
+        $this->assertRemain("bc", $parser, "bc");
 
         $parser = string('abcd')
             ->followedBy(optional(ignore(char('-'))))
             ->followedBy(string('efgh'));
-        $this->shouldParse($parser, "abcd-efgh", "abcdefgh");
-        $this->shouldParse($parser, "abcdefgh", "abcdefgh");
+        $this->assertParse("abcdefgh", $parser, "abcd-efgh");
+        $this->assertParse("abcdefgh", $parser, "abcdefgh");
     }
 
     /** @test */
@@ -52,9 +57,11 @@ final class CombinatorsTest extends ParserTest
     {
         $parser = either(char('a'), char('b'));
 
-        $this->shouldParse($parser, "abc", "a", "bc");
-        $this->shouldParse($parser, "bc", "b", "c");
-        $this->shouldNotParse($parser, "cd");
+        $this->assertParse("a", $parser, "abc");
+        $this->assertRemain("bc", $parser, "abc");
+        $this->assertParse("b", $parser, "bc");
+        $this->assertRemain("c", $parser, "bc");
+        $this->assertNotParse($parser, "cd");
     }
 
     /** @test */
@@ -62,9 +69,10 @@ final class CombinatorsTest extends ParserTest
     {
         $parser = seq(char('a'), char('b'));
 
-        $this->shouldParse($parser, "abc", "ab", "c");
-        $this->shouldNotParse($parser, "acc");
-        $this->shouldNotParse($parser, "cab");
+        $this->assertParse("ab", $parser, "abc");
+        $this->assertRemain("c", $parser, "abc");
+        $this->assertNotParse($parser, "acc");
+        $this->assertNotParse($parser, "cab");
     }
 
     /** @test */
@@ -90,8 +98,8 @@ final class CombinatorsTest extends ParserTest
 
         $expected = ["Hello", "world"];
 
-        $this->shouldParse($parser, "Hello , world!", $expected);
-        $this->shouldParse($parser, "Hello,world!", $expected);
+        $this->assertParse($expected, $parser, "Hello , world!");
+        $this->assertParse($expected, $parser, "Hello,world!");
     }
 
     /** @test */
@@ -102,7 +110,7 @@ final class CombinatorsTest extends ParserTest
                 string("Hello"),
                 string("world")
             );
-        $this->shouldNotParse($parser, "Helloplanet");
+        $this->assertNotParse($parser, "Helloplanet");
     }
 
     /**
@@ -111,10 +119,10 @@ final class CombinatorsTest extends ParserTest
     public function atLeastOne()
     {
         $parser = atLeastOne(char('a'));
-        $this->shouldParse($parser, "a", "a");
-        $this->shouldParse($parser, "aa", "aa");
-        $this->shouldParse($parser, "aabb", "aa");
-        $this->shouldNotParse($parser, "bb");
+        $this->assertParse("a", $parser, "a");
+        $this->assertParse("aa", $parser, "aa");
+        $this->assertParse("aa", $parser, "aabb");
+        $this->assertNotParse($parser, "bb");
     }
 
     /** @test */
@@ -124,11 +132,11 @@ final class CombinatorsTest extends ParserTest
         $amount = float()->into1('floatval');
         $money = collect($symbol, $amount);
 
-        $this->shouldParse($symbol, "€", "€");
-        $this->shouldParse($amount, "15.23", 15.23);
-        $this->shouldParse($money, "€15.23", ["€", 15.23]);
-        $this->shouldParse($money, "$15", ["$", 15]);
-        $this->shouldNotParse($money, "£12.13");
+        $this->assertParse("€", $symbol, "€");
+        $this->assertParse(15.23, $amount, "15.23");
+        $this->assertParse(["€", 15.23], $money, "€15.23");
+        $this->assertParse(["$", 15], $money, "$15");
+        $this->assertNotParse($money, "£12.13");
     }
 
 }
