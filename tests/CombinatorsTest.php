@@ -2,7 +2,7 @@
 
 namespace Tests\Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\PHPUnit\ParserTest;
+use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\{any,
     atLeastOne,
     char,
@@ -19,7 +19,7 @@ use function Mathias\ParserCombinator\{any,
     string
 };
 
-final class CombinatorsTest extends ParserTest
+final class CombinatorsTest extends ParserTestCase
 {
 
     /** @test */

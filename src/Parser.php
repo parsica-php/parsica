@@ -11,7 +11,7 @@ use function Mathias\ParserCombinator\ParseResult\{parser, succeed, fail};
 final class Parser
 {
     /**
-     * @psalm-param callable(string):ParseResult<T> $parser
+     * @param callable(string):ParseResult<T> $parser
      */
     private $parser;
 
@@ -23,10 +23,25 @@ final class Parser
         $this->parser = $parser;
     }
 
+    /** @todo replace by a simple parse method? */
     public function __invoke(string $input): ParseResult
     {
         $f = $this->parser;
         return $f($input);
+    }
+
+    /**
+     * Label a parser. When a parser fails, instead of a generrated error message, you'll see your label.
+     * eg (char(':')->followedBy(char(')')).followedBy(char(')')).
+     */
+    public function label(string $label): Parser
+    {
+        return parser(function (string $input) use ($label) : ParseResult {
+            $result = $this($input);
+            return ($result->isSuccess())
+                ? $result
+                : fail($label, $input);
+        });
     }
 
     /**
@@ -93,11 +108,12 @@ final class Parser
     }
 
     /**
+     * @param callable(T):T2 $transform
+     *
+     * @return Parser<T2>
      * @see into1()
      *
      * @template T2
-     * @param callable(T):T2 $transform
-     * @return Parser<T2>
      */
     public function into1(callable $transform): Parser
     {
@@ -105,11 +121,12 @@ final class Parser
     }
 
     /**
+     * @param class-string<T2> $className
+     *
+     * @return Parser<T2>
      * @see intoNew1()
      *
      * @template T2
-     * @param class-string<T2> $className
-     * @return Parser<T2>
      */
     public function intoNew1(string $className): Parser
     {

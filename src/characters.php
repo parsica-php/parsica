@@ -2,6 +2,7 @@
 
 namespace Mathias\ParserCombinator;
 
+use Mathias\ParserCombinator\Parser;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
 use Webmozart\Assert\Assert;
 use function Mathias\ParserCombinator\ParseResult\fail;
@@ -32,7 +33,7 @@ function string(string $str): Parser
     return parser(
         fn(string $input): ParseResult => mb_substr($input, 0, $len) === $str
             ? succeed($str, mb_substr($input, $len))
-            : fail("string($str))", $input)
+            : fail("string($str)", $input)
     );
 }
 
@@ -46,7 +47,6 @@ function newline(): Parser
     return char("\n");
 }
 
-
 /**
  * Parse a carriage return character and a newline character. Return the two characters. {\r\n}
  *
@@ -54,6 +54,15 @@ function newline(): Parser
  */
 function crlf(): Parser
 {
-    return string("\r\n");
+    return string("\r\n")->label("crlf");
 }
 
+/**
+ * Parse a newline or a crlf.
+ *
+ * @return Parser<string>
+ */
+function eol(): Parser
+{
+    return either(newline(), crlf())->label("eol");
+}

@@ -2,13 +2,13 @@
 
 namespace Tests\Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\PHPUnit\ParserTest;
+use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\eof;
 use function Mathias\ParserCombinator\equals;
 use function Mathias\ParserCombinator\satisfy;
 use function Mathias\ParserCombinator\single;
 
-final class PrimitivesTest extends ParserTest
+final class PrimitivesTest extends ParserTestCase
 {
     /** @test */
     public function satisfy()
@@ -34,6 +34,7 @@ final class PrimitivesTest extends ParserTest
         $this->assertParse("", eof(), "");
         $this->assertNotParse(eof(), "xyz", "eof");
     }
+
 
 }
 
