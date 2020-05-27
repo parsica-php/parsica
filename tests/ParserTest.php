@@ -9,19 +9,20 @@ abstract class ParserTest extends TestCase
 {
     protected function assertParse(Parser $parser, string $input, $expectedParsed)
     {
-        $actual = $parser($input);
-        if ($actual->isSuccess()) {
+        $result = $parser($input);
+        if ($result->isSuccess()) {
             $this->assertEquals(
                 $expectedParsed,
-                $actual->parsed(),
+                $result->parsed(),
                 "The parser succeeded but the parsed value doesn't match."
             );
         } else {
             $this->fail(
                 "Parser test failed."
                 . "\nInput: $input"
-                . "\nExpected: ".var_Export($expectedParsed, true)
-                . "\nParser expected: {$actual->expectation()}"
+                . "\nTest expected: ".$expectedParsed
+                . "\nParser expected: ".$result->expected()
+                . "\nGot: ".$result->got()
             );
         }
     }
@@ -55,7 +56,7 @@ abstract class ParserTest extends TestCase
         if (isset($expectedFailure)) {
             $this->assertEquals(
                 $expectedFailure,
-                $actual->expectation(),
+                $actual->expected(),
                 "The expected failure message is not the same as the actual one."
             );
         }
