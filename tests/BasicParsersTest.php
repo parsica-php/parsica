@@ -10,13 +10,7 @@ use function Mathias\ParserCombinator\string;
 
 final class BasicParsersTest extends ParserTest
 {
-    /** @test */
-    public function char()
-    {
-        $this->assertParse("a", char('a'), "abc");
-        $this->assertRemain("bc", char('a'), "abc");
-        $this->assertNotParse(char('a'), "bc", "char(a)");
-    }
+
 
     /** @test */
     public function string()

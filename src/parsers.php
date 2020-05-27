@@ -6,22 +6,7 @@ use Mathias\ParserCombinator\ParseResult\ParseResult;
 use Webmozart\Assert\Assert;
 use function Mathias\ParserCombinator\ParseResult\{fail, parser, succeed};
 
-/**
- * Parse a single character.
- * @TODO Not safe for UTF-8
- */
-function char(string $char): Parser
-{
-    Assert::length($char, 1, "char() expects a single character. Use string() if you want longer strings");
-    return parser(
-        function (string $input) use ($char): ParseResult {
-            if ((strlen($input) === 0)) return fail("char($char), got EOF", "@TODO");
-            return (Str::head($input) === $char)
-                ? succeed($char, Str::tail($input))
-                : fail("char($char)", "@TODO");
-        }
-    );
-}
+
 
 /**
  * Parse a non-empty string
