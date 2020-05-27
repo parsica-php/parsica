@@ -127,10 +127,10 @@ function any(Parser ...$parsers): Parser
             if ($r->isSuccess()) {
                 return $r;
             } else {
-                $expectations[] = $r->expectation();
+                $expectations[] = $r->expected();
             }
         }
-        return fail("any(" . implode(", ", $expectations) . ")");
+        return fail("any(" . implode(", ", $expectations) . ")", "@TODO");
     });
 }
 

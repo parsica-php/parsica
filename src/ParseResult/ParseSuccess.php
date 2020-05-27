@@ -44,7 +44,17 @@ final class ParseSuccess implements ParseResult
         return true;
     }
 
-    public function expectation(): string
+    public function isFail(): bool
+    {
+        return false;
+    }
+
+    public function expected(): string
+    {
+        throw new \Exception("Can't read the expectation of a succeeded ParseResult.");
+    }
+
+    public function got(): string
     {
         throw new \Exception("Can't read the expectation of a succeeded ParseResult.");
     }

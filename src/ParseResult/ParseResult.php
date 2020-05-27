@@ -11,6 +11,8 @@ interface ParseResult
 {
     public function isSuccess(): bool;
 
+    public function isFail(): bool;
+
     /**
      * @return T
      */
@@ -18,5 +20,7 @@ interface ParseResult
 
     public function remaining(): string;
 
-    public function expectation(): string;
+    public function expected(): string;
+
+    public function got(): string;
 }

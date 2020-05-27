@@ -11,12 +11,14 @@ use Mathias\ParserCombinator\T;
  */
 final class ParserFailure extends Exception implements ParseResult
 {
-    private string $expectation;
+    private string $expected;
+    private string $got;
 
-    public function __construct(string $expectation)
+    public function __construct(string $expected, string $got)
     {
-        $this->expectation = $expectation;
-        parent::__construct("Expected: {$this->expectation}");
+        $this->expected = $expected;
+        $this->got = $got;
+        parent::__construct("Expected: $expected, got $got");
     }
 
     public function isSuccess(): bool
@@ -24,9 +26,19 @@ final class ParserFailure extends Exception implements ParseResult
         return false;
     }
 
-    public function expectation(): string
+    public function isFail(): bool
     {
-        return $this->expectation;
+        return true;
+    }
+
+    public function expected(): string
+    {
+        return $this->expected;
+    }
+
+    public function got(): string
+    {
+        return $this->got;
     }
 
     /**

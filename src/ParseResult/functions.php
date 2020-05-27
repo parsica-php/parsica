@@ -20,7 +20,7 @@ function succeed($parsed, string $output): ParseResult
     return new ParseSuccess($parsed, $output);
 }
 
-function fail(string $expectation): ParseResult
+function fail(string $expected, string $got): ParseResult
 {
-    return new ParserFailure($expectation);
+    return new ParserFailure($expected, $got);
 }

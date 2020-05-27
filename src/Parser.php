@@ -64,9 +64,9 @@ final class Parser
                 if ($r2->isSuccess()) {
                     return succeed($r1->parsed() . $r2->parsed(), $r2->remaining());
                 }
-                return fail("seq ({$r1->parsed()} {$r2->expectation()})");
+                return fail("seq ({$r1->parsed()} {$r2->expected()})", "@TODO");
             }
-            return fail("seq ({$r1->expectation()} ...)");
+            return fail("seq ({$r1->expected()} ...)", "@TODO");
         });
 
     }
@@ -87,8 +87,8 @@ final class Parser
                 return $r2;
             }
 
-            $expectation = "either ({$r1->expectation()} or {$r2->expectation()})";
-            return fail($expectation);
+            $expectation = "either ({$r1->expected()} or {$r2->expected()})";
+            return fail($expectation, "@TODO");
         });
     }
 
