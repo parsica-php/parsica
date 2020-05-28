@@ -4,7 +4,7 @@
 namespace Mathias\ParserCombinator;
 
 /**
- * Creates an equality function
+ * Creates an equality predicate
  *
  * @template T
  *
@@ -15,4 +15,18 @@ namespace Mathias\ParserCombinator;
 function equals($x): callable
 {
     return fn($y) => $x === $y;
+}
+
+/**
+ * Negates a predicate.
+ *
+ * @template T
+ *
+ * @param callable(T) : bool $predicate
+ *
+ * @return callable(T) : bool
+ */
+function not(callable $predicate): callable
+{
+    return fn($x) => !$predicate($x);
 }
