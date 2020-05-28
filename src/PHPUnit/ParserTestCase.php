@@ -15,11 +15,11 @@ abstract class ParserTestCase extends TestCase
      */
     protected function assertParse($expectedParsed, Parser $parser, string $input, string $message = ""): void
     {
-        $result = $parser($input);
-        if ($result->isSuccess()) {
+        $actualResult = $parser($input);
+        if ($actualResult->isSuccess()) {
             $this->assertEquals(
                 $expectedParsed,
-                $result->parsed(),
+                $actualResult->parsed(),
                 $message . "\n" . "The parser succeeded but the parsed value doesn't match."
             );
         } else {
@@ -28,43 +28,45 @@ abstract class ParserTestCase extends TestCase
                 "Parser test failed."
                 . "\nInput: $input"
                 . "\nTest expected: " . $expectedParsed
-                . "\nParser expected: " . $result->expected()
-                . "\nGot: " . $result->got()
+                . "\nParser expected: " . $actualResult->expected()
+                . "\nGot: " . $actualResult->got()
             );
         }
     }
 
     protected function assertRemain(string $expectedRemaining, Parser $parser, string $input, string $message = "") : void
     {
-        $actual = $parser($input);
-        if ($actual->isSuccess()) {
+        $actualResult = $parser($input);
+        if ($actualResult->isSuccess()) {
             $this->assertEquals(
                 $expectedRemaining,
-                $actual->remaining(),
+                $actualResult->remaining(),
                 $message . "\n" . "The parser succeeded but the expected remaining input doesn't match."
             );
         } else {
             $this->fail(
                 $message . "\n" .
-                "Parser test failed."
+                "Parser failed."
                 . "\nInput: $input"
                 . "\nExpected remaining: " . var_Export($expectedRemaining, true)
+                . "\nParser expected: " . $actualResult->expected()
+                . "\nGot: " . $actualResult->got()
             );
         }
     }
 
     protected function assertNotParse(Parser $parser, string $input, ?string $expectedFailure = null, string $message = "") : void
     {
-        $actual = $parser($input);
+        $actualResult = $parser($input);
         $this->assertFalse(
-            $actual->isSuccess(),
+            $actualResult->isSuccess(),
             $message . "\n" . "Parser succeeded but expected a failure.\nInput: $input"
         );
 
         if (isset($expectedFailure)) {
             $this->assertEquals(
                 $expectedFailure,
-                $actual->expected(),
+                $actualResult->expected(),
                 $message . "\n" . "The expected failure message is not the same as the actual one."
             );
         }
