@@ -10,6 +10,8 @@ use function Mathias\ParserCombinator\ParseResult\{fail, parser, succeed};
 /**
  * Parse a character
  *
+ * @param string $c A single character
+ *
  * @return Parser<string>
  */
 function char(string $c): Parser
