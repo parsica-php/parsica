@@ -26,8 +26,7 @@
       "src/space.php",
       "src/parsers.php",
       "src/predicates.php",
-      "src/primitives.php",
-      "src/runParser.php"
+      "src/primitives.php"
     ]
   },
   "autoload-dev": {
