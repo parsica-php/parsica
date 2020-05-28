@@ -15,9 +15,9 @@ function parser(callable $f): Parser
 /**
  * @param mixed $parsed
  */
-function succeed($parsed, string $output): ParseResult
+function succeed($parsed, string $remaining): ParseResult
 {
-    return new ParseSuccess($parsed, $output);
+    return new ParseSuccess($parsed, $remaining);
 }
 
 function fail(string $expected, string $got): ParseResult
