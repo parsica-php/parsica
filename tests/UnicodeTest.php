@@ -10,7 +10,7 @@ final class UnicodeTest extends ParserTestCase
     /** @test */
     public function mbstring_must_be_installed()
     {
-        $this->assertSame("b", mb_substr("abc", 1, 1), "ext-mbstring is not installed.");
+        $this->assertTrue(function_exists('mb_detect_encoding'), "ext-mbstring must be installed.");
     }
 
     /** @test */
