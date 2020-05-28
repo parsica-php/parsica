@@ -23,8 +23,12 @@ final class Parser
         $this->parser = $parser;
     }
 
-    /** @todo replace by a simple parse method? */
-    public function __invoke(string $input): ParseResult
+    /**
+     * Run the parser on an input
+     *
+     * @return ParseResult<T>
+     */
+    public function run(string $input): ParseResult
     {
         $f = $this->parser;
         return $f($input);
@@ -37,7 +41,7 @@ final class Parser
     public function label(string $label): Parser
     {
         return parser(function (string $input) use ($label) : ParseResult {
-            $result = $this($input);
+            $result = $this->run($input);
             return ($result->isSuccess())
                 ? $result
                 : fail($label, $input);
@@ -60,7 +64,7 @@ final class Parser
     public function optional(): Parser
     {
         return parser(function (string $input): ParseResult {
-            $r1 = $this($input);
+            $r1 = $this->run($input);
             if ($r1->isSuccess()) {
                 return $r1;
             } else {
@@ -76,9 +80,9 @@ final class Parser
     public function followedBy(Parser $second): Parser
     {
         return parser(function (string $input) use ($second) : ParseResult {
-            $r1 = $this($input);
+            $r1 = $this->run($input);
             if ($r1->isSuccess()) {
-                $r2 = $second($r1->remaining());
+                $r2 = $second->run($r1->remaining());
                 if ($r2->isSuccess()) {
                     return succeed($r1->parsed() . $r2->parsed(), $r2->remaining());
                 }
@@ -96,12 +100,12 @@ final class Parser
     public function or(Parser $second): Parser
     {
         return parser(function (string $input) use ($second) : ParseResult {
-            $r1 = $this($input);
+            $r1 = $this->run($input);
             if ($r1->isSuccess()) {
                 return $r1;
             }
 
-            $r2 = $second($input);
+            $r2 = $second->run($input);
             if ($r2->isSuccess()) {
                 return $r2;
             }

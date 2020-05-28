@@ -55,9 +55,9 @@ function either(Parser $first, Parser $second): Parser
 function collect(Parser $first, Parser $second): Parser
 {
     return parser(function (string $input) use ($first, $second) : ParseResult {
-        $r1 = $first($input);
+        $r1 = $first->run($input);
         if ($r1->isSuccess()) {
-            $r2 = $second($r1->remaining());
+            $r2 = $second->run($r1->remaining());
             if ($r2->isSuccess()) {
                 return succeed([$r1->parsed(), $r2->parsed()], $r2->remaining());
             } else {
@@ -91,7 +91,7 @@ function into1(Parser $parser, callable $transform): Parser
      * @return ParseResult<T2>
      */
         function (string $input) use ($parser, $transform) : ParseResult {
-            $r = $parser($input);
+            $r = $parser->run($input);
             if ($r->isSuccess()) {
                 return succeed($transform($r->parsed()), $r->remaining());
             }
@@ -132,7 +132,7 @@ function any(Parser ...$parsers): Parser
     return parser(function (string $input) use ($parsers): ParseResult {
         $expectations = [];
         foreach ($parsers as $parser) {
-            $r = $parser($input);
+            $r = $parser->run($input);
             if ($r->isSuccess()) {
                 return $r;
             } else {
@@ -156,14 +156,14 @@ function any(Parser ...$parsers): Parser
 function atLeastOne(Parser $parser): Parser
 {
     return parser(function (string $input) use ($parser): ParseResult {
-        $r = $parser($input);
+        $r = $parser->run($input);
         if (!$r->isSuccess()) return $r;
         /** @psalm-var T $parsed */
         $parsed = "";
         do {
             $parsed .= $r->parsed();
             $remaining = $r->remaining();
-            $r = $parser($remaining);
+            $r = $parser->run($remaining);
         } while ($r->isSuccess());
         return succeed($parsed, $remaining);
     });

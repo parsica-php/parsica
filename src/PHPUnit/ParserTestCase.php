@@ -15,7 +15,7 @@ abstract class ParserTestCase extends TestCase
      */
     protected function assertParse($expectedParsed, Parser $parser, string $input, string $message = ""): void
     {
-        $actualResult = $parser($input);
+        $actualResult = $parser->run($input);
         if ($actualResult->isSuccess()) {
             $this->assertEquals(
                 $expectedParsed,
@@ -36,7 +36,7 @@ abstract class ParserTestCase extends TestCase
 
     protected function assertRemain(string $expectedRemaining, Parser $parser, string $input, string $message = "") : void
     {
-        $actualResult = $parser($input);
+        $actualResult = $parser->run($input);
         if ($actualResult->isSuccess()) {
             $this->assertEquals(
                 $expectedRemaining,
@@ -57,7 +57,7 @@ abstract class ParserTestCase extends TestCase
 
     protected function assertNotParse(Parser $parser, string $input, ?string $expectedFailure = null, string $message = "") : void
     {
-        $actualResult = $parser($input);
+        $actualResult = $parser->run($input);
         $this->assertFalse(
             $actualResult->isSuccess(),
             $message . "\n" . "Parser succeeded but expected a failure.\nInput: $input"
