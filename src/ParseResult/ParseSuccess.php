@@ -2,9 +2,6 @@
 
 namespace Mathias\ParserCombinator\ParseResult;
 
-use Mathias\ParserCombinator\ParseResult\ParseResult;
-use Mathias\ParserCombinator\T;
-
 /**
  * @template T
  */
@@ -46,7 +43,7 @@ final class ParseSuccess implements ParseResult
 
     public function isFail(): bool
     {
-        return false;
+        return !$this->isSuccess();
     }
 
     public function expected(): string

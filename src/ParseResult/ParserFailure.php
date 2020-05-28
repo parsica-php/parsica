@@ -3,8 +3,6 @@
 namespace Mathias\ParserCombinator\ParseResult;
 
 use Exception;
-use Mathias\ParserCombinator\ParseResult\ParseResult;
-use Mathias\ParserCombinator\T;
 
 /**
  * @template T
@@ -28,7 +26,7 @@ final class ParserFailure extends Exception implements ParseResult
 
     public function isFail(): bool
     {
-        return true;
+        return !$this->isSuccess();
     }
 
     public function expected(): string
