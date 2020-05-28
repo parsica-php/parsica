@@ -45,6 +45,7 @@ final class Parser
     }
 
     /**
+     * @deprecated 0.2
      * @see ignore()
      */
     public function ignore(): Parser
@@ -89,6 +90,7 @@ final class Parser
     }
 
     /**
+     * @deprecated 0.2
      * @see either()
      */
     public function or(Parser $second): Parser
