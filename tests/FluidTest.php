@@ -10,6 +10,7 @@ final class FluidTest extends ParserTestCase
     /** @test */
     public function followedBy()
     {
+        $this->markTestIncomplete("@TODO Replace with 0.2 version");
         $parser = char('a')->followedBy(char('b'));
         $this->assertParse("ab", $parser, "abc");
     }
@@ -17,6 +18,7 @@ final class FluidTest extends ParserTestCase
     /** @test */
     public function into1()
     {
+        $this->markTestIncomplete("@TODO Replace with 0.2 version");
         $parser = char('a')
             ->followedBy(char('b'))
             ->into1('strtoupper');
@@ -26,6 +28,7 @@ final class FluidTest extends ParserTestCase
     /** @test */
     public function intoNew1()
     {
+        $this->markTestIncomplete("@TODO Replace with 0.2 version");
         $parser = char('a')
             ->followedBy(char('b'))
             ->intoNew1(__NAMESPACE__.'\\MyType2');

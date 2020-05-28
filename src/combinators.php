@@ -14,6 +14,7 @@ function id(Parser $parser): Parser
 }
 
 /**
+ * @deprecated 0.2
  * Parse something, strip it from the remaining string, but do not return anything
  */
 function ignore(Parser $parser): Parser
@@ -22,6 +23,7 @@ function ignore(Parser $parser): Parser
 }
 
 /**
+ * @deprecated 0.2
  * Optionally parse something, but still succeed if the thing is not there
  */
 function optional(Parser $parser): Parser
@@ -30,6 +32,7 @@ function optional(Parser $parser): Parser
 }
 
 /**
+ * @deprecated 0.2
  * Parse something, then follow by something else.
  */
 function seq(Parser $first, Parser $second): Parser
@@ -38,6 +41,7 @@ function seq(Parser $first, Parser $second): Parser
 }
 
 /**
+ * @deprecated 0.2
  * Either parse the first thing or the second thing
  */
 function either(Parser $first, Parser $second): Parser
@@ -45,9 +49,11 @@ function either(Parser $first, Parser $second): Parser
     return $first->or($second);
 }
 
+/**
+ * @deprecated 0.2
+ */
 function collect(Parser $first, Parser $second): Parser
 {
-    // @TODO ignoring failures for now
     return parser(function (string $input) use ($first, $second) : ParseResult {
         $r1 = $first($input);
         if ($r1->isSuccess()) {
@@ -65,6 +71,7 @@ function collect(Parser $first, Parser $second): Parser
 }
 
 /**
+ * @deprecated 0.2
  * Transform the parsed string into something else using a callable.
  *
  * @template T1
@@ -94,6 +101,7 @@ function into1(Parser $parser, callable $transform): Parser
 }
 
 /**
+ * @deprecated 0.2
  * Transform the parsed string into an object of type $className
  *
  * @template T1
@@ -110,6 +118,7 @@ function intoNew1(Parser $parser, string $className): Parser
 }
 
 /**
+ * @deprecated 0.2
  * Tries each parser one by one
  *
  * @template T
@@ -135,6 +144,7 @@ function any(Parser ...$parsers): Parser
 }
 
 /**
+ * @deprecated 0.2
  * One or more repetitions of Parser
  *
  * @template T

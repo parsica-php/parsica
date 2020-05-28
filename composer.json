@@ -1,5 +1,5 @@
 {
-  "name": "mathias/parsercombinators",
+  "name": "mathias/parser-combinator",
   "version": "0.2",
   "authors": [
     {
@@ -24,6 +24,7 @@
       "src/ParseResult/functions.php",
       "src/characters.php",
       "src/combinators.php",
+      "src/space.php",
       "src/parsers.php",
       "src/predicates.php",
       "src/primitives.php",

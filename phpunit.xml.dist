@@ -12,7 +12,7 @@
 >
 
     <testsuites>
-        <testsuite name="Project Test Suite">
+        <testsuite name="Parser Combinator Unit Tests">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

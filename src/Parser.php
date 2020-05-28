@@ -53,6 +53,7 @@ final class Parser
     }
 
     /**
+     * @deprecated 0.2
      * @see optional()
      */
     public function optional(): Parser
@@ -68,6 +69,7 @@ final class Parser
     }
 
     /**
+     * @deprecated 0.2
      * @see seq()
      */
     public function followedBy(Parser $second): Parser
@@ -108,6 +110,7 @@ final class Parser
     }
 
     /**
+     * @deprecated 0.2
      * @param callable(T):T2 $transform
      *
      * @return Parser<T2>
@@ -121,6 +124,7 @@ final class Parser
     }
 
     /**
+     * @deprecated 0.2
      * @param class-string<T2> $className
      *
      * @return Parser<T2>
