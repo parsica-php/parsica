@@ -69,7 +69,7 @@ final class PrimitivesTest extends ParserTestCase
     /** @test */
     public function takeWhile_using_not()
     {
-        $parser = takeWhile(not(equals('b')));
+        $parser = takeWhile(not(equals('a')));
 
         $this->assertParse("xyz", $parser, "xyza");
         $this->assertParse("x", $parser, "xaaa");
@@ -90,6 +90,4 @@ final class PrimitivesTest extends ParserTestCase
         $this->assertParse("aaa", $parser, "aaa");
         $this->assertNotParse($parser, "", "takeWhile1(predicate)");
     }
-
 }
-
