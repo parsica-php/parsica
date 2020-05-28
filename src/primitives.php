@@ -44,7 +44,7 @@ function takeWhile(callable $predicate, string $expected = "takeWhile(predicate)
         }
         $chunk = "";
         $remaining = $input;
-        while ($predicate(mb_substr($remaining, 0, 1))) {
+        while (mb_strlen($remaining) > 0 && $predicate(mb_substr($remaining, 0, 1))) {
             $chunk .= mb_substr($remaining, 0, 1);
             $remaining = mb_substr($remaining, 1);
         }

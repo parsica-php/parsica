@@ -69,8 +69,6 @@ final class PrimitivesTest extends ParserTestCase
     /** @test */
     public function takeWhile_using_not()
     {
-        $this->fail("@TODO this test hangs and I'm too sleepy to figure it out");
-
         $parser = takeWhile(not(equals('b')));
 
         $this->assertParse("xyz", $parser, "xyza");
