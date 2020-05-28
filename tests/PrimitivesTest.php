@@ -3,11 +3,7 @@
 namespace Tests\Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
-use function Mathias\ParserCombinator\nothing;
-use function Mathias\ParserCombinator\eof;
-use function Mathias\ParserCombinator\equals;
-use function Mathias\ParserCombinator\satisfy;
-use function Mathias\ParserCombinator\anything;
+use function Mathias\ParserCombinator\{everything, nothing, eof, equals, satisfy, anything};
 
 final class PrimitivesTest extends ParserTestCase
 {
@@ -39,6 +35,16 @@ final class PrimitivesTest extends ParserTestCase
         $this->assertParse("", nothing(), ":-)");
         $this->assertRemain(":-)", nothing(), ":-)");
         $this->assertParse("", nothing(), "");
+    }
+
+    /** @test */
+    public function everything()
+    {
+        $this->assertParse("xyz", everything(), "xyz");
+        $this->assertRemain("", everything(), "xyz");
+        $this->assertParse(":-)", everything(), ":-)");
+        $this->assertRemain("", everything(), ":-)");
+        $this->assertParse("", everything(), "");
     }
 
     /** @test */

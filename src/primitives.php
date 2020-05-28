@@ -44,6 +44,14 @@ function nothing(): Parser
     return parser(fn(string $input) => succeed("", $input));
 }
 
+/**
+ * Parse everything; that is, consume the rest of the input until the end.
+ */
+function everything(): Parser
+{
+    return parser(fn(string $input) => succeed($input, ""));
+}
+
 
 /**
  * Parse the end of the input
