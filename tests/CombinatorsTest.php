@@ -9,23 +9,40 @@ use function Mathias\ParserCombinator\{any,
     collect,
     digit,
     either,
+    empty_,
     float,
+    identity,
     ignore,
     into1,
     intoNew1,
     optional,
     seq,
     space,
-    string
-};
+    string};
 
 final class CombinatorsTest extends ParserTestCase
 {
+    /** @test */
+    public function empty()
+    {
+        $parser = empty_();
+        $this->assertParse("", $parser, "");
+        $this->assertParse("", $parser, "abc");
+    }
+
+    /** @test */
+    public function identity()
+    {
+        $parser = identity(char('a'));
+        $this->assertParse("a", $parser, "abc");
+        $this->assertRemain("bc", $parser, "abc");
+        $this->assertNotParse($parser, "bc", "char(a)", "identity shouldn't show up in error messages");
+    }
+
 
     /** @test */
     public function ignore()
     {
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
         $parser = ignore(char('a'));
         $this->assertParse("", $parser, "abc");
         $this->assertRemain("bc", $parser, "abc");
@@ -34,12 +51,12 @@ final class CombinatorsTest extends ParserTestCase
             ->followedBy(ignore(char('-')))
             ->followedBy(string('efgh'));
         $this->assertParse("abcdefgh", $parser, "abcd-efgh");
+        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 
     /** @test */
     public function optional()
     {
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
         $parser = char('a')->optional();
         $this->assertParse("a", $parser, "abc");
         $this->assertRemain("bc", $parser, "abc");
@@ -52,12 +69,12 @@ final class CombinatorsTest extends ParserTestCase
             ->followedBy(string('efgh'));
         $this->assertParse("abcdefgh", $parser, "abcd-efgh");
         $this->assertParse("abcdefgh", $parser, "abcdefgh");
+        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 
     /** @test */
     public function either()
     {
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
         $parser = either(char('a'), char('b'));
 
         $this->assertParse("a", $parser, "abc");
@@ -65,24 +82,24 @@ final class CombinatorsTest extends ParserTestCase
         $this->assertParse("b", $parser, "bc");
         $this->assertRemain("c", $parser, "bc");
         $this->assertNotParse($parser, "cd");
+        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 
     /** @test */
     public function seq()
     {
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
         $parser = seq(char('a'), char('b'));
 
         $this->assertParse("ab", $parser, "abc");
         $this->assertRemain("c", $parser, "abc");
         $this->assertNotParse($parser, "acc");
         $this->assertNotParse($parser, "cab");
+        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 
     /** @test */
     public function collect()
     {
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
         $parser =
             collect(
                 string("Hello")
@@ -105,18 +122,19 @@ final class CombinatorsTest extends ParserTestCase
 
         $this->assertParse($expected, $parser, "Hello , world!");
         $this->assertParse($expected, $parser, "Hello,world!");
+        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 
     /** @test */
     public function collectFails()
     {
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
         $parser =
             collect(
                 string("Hello"),
                 string("world")
             );
         $this->assertNotParse($parser, "Helloplanet");
+        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 
     /**
@@ -124,18 +142,17 @@ final class CombinatorsTest extends ParserTestCase
      */
     public function atLeastOne()
     {
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
         $parser = atLeastOne(char('a'));
         $this->assertParse("a", $parser, "a");
         $this->assertParse("aa", $parser, "aa");
         $this->assertParse("aa", $parser, "aabb");
         $this->assertNotParse($parser, "bb");
+        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 
     /** @test */
     public function any_()
     {
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
         $symbol = any(string("€"), string("$"));
         $amount = float()->into1('floatval');
         $money = collect($symbol, $amount);
@@ -145,6 +162,7 @@ final class CombinatorsTest extends ParserTestCase
         $this->assertParse(["€", 15.23], $money, "€15.23");
         $this->assertParse(["$", 15], $money, "$15");
         $this->assertNotParse($money, "£12.13");
+        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 
 }

@@ -6,9 +6,17 @@ use function Mathias\ParserCombinator\ParseResult\{fail, parser, succeed};
 use Mathias\ParserCombinator\ParseResult\ParseResult;
 
 /**
- * Identity function, returns the Parser. Sometimes useful.
+ * Empty parser. Does absolutely nothing.
  */
-function id(Parser $parser): Parser
+function empty_(): Parser
+{
+    return parser(fn($input) => succeed("", $input));
+}
+
+/**
+ * Identity parser, returns the Parser as is.
+ */
+function identity(Parser $parser): Parser
 {
     return $parser;
 }
@@ -71,16 +79,16 @@ function collect(Parser $first, Parser $second): Parser
 }
 
 /**
+ * @param Parser<T1> $parser
+ * @param callable(T1):T2 $transform
+ *
+ * @return Parser<T2>
+ *
  * @deprecated 0.2
  * Transform the parsed string into something else using a callable.
  *
  * @template T1
  * @template T2
- *
- * @param Parser<T1> $parser
- * @param callable(T1):T2 $transform
- *
- * @return Parser<T2>
  *
  * @see Parser::into1()
  */
@@ -101,16 +109,16 @@ function into1(Parser $parser, callable $transform): Parser
 }
 
 /**
+ * @param Parser<T1> $parser
+ * @param class-string<T2> $className
+ *
+ * @return Parser<T2>
  * @deprecated 0.2
  * Transform the parsed string into an object of type $className
  *
  * @template T1
  * @template T2
  *
- * @param Parser<T1> $parser
- * @param class-string<T2> $className
- *
- * @return Parser<T2>
  */
 function intoNew1(Parser $parser, string $className): Parser
 {
@@ -118,14 +126,14 @@ function intoNew1(Parser $parser, string $className): Parser
 }
 
 /**
+ * @param Parser<T>[] $parsers
+ *
+ * @return Parser<T>
  * @deprecated 0.2
  * Tries each parser one by one
  *
  * @template T
  *
- * @param Parser<T>[] $parsers
- *
- * @return Parser<T>
  */
 function any(Parser ...$parsers): Parser
 {
@@ -144,14 +152,14 @@ function any(Parser ...$parsers): Parser
 }
 
 /**
+ * @param Parser<T> $parser
+ *
+ * @return Parser<T>
  * @deprecated 0.2
  * One or more repetitions of Parser
  *
  * @template T
  *
- * @param Parser<T> $parser
- *
- * @return Parser<T>
  */
 function atLeastOne(Parser $parser): Parser
 {
