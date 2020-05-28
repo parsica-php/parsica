@@ -6,14 +6,6 @@ use function Mathias\ParserCombinator\ParseResult\{fail, parser, succeed};
 use Mathias\ParserCombinator\ParseResult\ParseResult;
 
 /**
- * Empty parser. Does absolutely nothing.
- */
-function empty_(): Parser
-{
-    return parser(fn($input) => succeed("", $input));
-}
-
-/**
  * Identity parser, returns the Parser as is.
  */
 function identity(Parser $parser): Parser

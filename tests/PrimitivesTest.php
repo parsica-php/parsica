@@ -3,10 +3,11 @@
 namespace Tests\Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
+use function Mathias\ParserCombinator\nothing;
 use function Mathias\ParserCombinator\eof;
 use function Mathias\ParserCombinator\equals;
 use function Mathias\ParserCombinator\satisfy;
-use function Mathias\ParserCombinator\single;
+use function Mathias\ParserCombinator\anything;
 
 final class PrimitivesTest extends ParserTestCase
 {
@@ -21,11 +22,23 @@ final class PrimitivesTest extends ParserTestCase
     }
 
     /** @test */
-    public function single()
+    public function anything_()
     {
-        $this->assertParse("x", single(), "xyz");
-        $this->assertParse(":", single(), ":-)");
-        $this->assertNotParse(single(), "", "single");
+        $this->assertParse("x", anything(), "xyz");
+        $this->assertRemain("yz", anything(), "xyz");
+        $this->assertParse(":", anything(), ":-)");
+        $this->assertRemain("-)", anything(), ":-)");
+        $this->assertNotParse(anything(), "", "anything");
+    }
+
+    /** @test */
+    public function nothing()
+    {
+        $this->assertParse("", nothing(), "xyz");
+        $this->assertRemain("xyz", nothing(), "xyz");
+        $this->assertParse("", nothing(), ":-)");
+        $this->assertRemain(":-)", nothing(), ":-)");
+        $this->assertParse("", nothing(), "");
     }
 
     /** @test */
@@ -34,7 +47,6 @@ final class PrimitivesTest extends ParserTestCase
         $this->assertParse("", eof(), "");
         $this->assertNotParse(eof(), "xyz", "eof");
     }
-
 
 }
 

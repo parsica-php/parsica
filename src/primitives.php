@@ -31,9 +31,17 @@ function satisfy(callable $predicate, string $expected = "satisfy(predicate)"): 
  *
  * @return Parser<string>
  */
-function single(): Parser
+function anything(): Parser
 {
-    return satisfy(fn(string $_) => true, 'single');
+    return satisfy(fn(string $_) => true, 'anything');
+}
+
+/**
+ * Parse nothing, but still succeed.
+ */
+function nothing(): Parser
+{
+    return parser(fn(string $input) => succeed("", $input));
 }
 
 
@@ -44,9 +52,8 @@ function single(): Parser
  */
 function eof(): Parser
 {
-    return parser(function (string $input): ParseResult {
-        return mb_strlen($input) === 0
-            ? succeed("", "")
-            : fail("eof", $input);
-    });
+    return parser(fn(string $input): ParseResult => mb_strlen($input) === 0
+        ? succeed("", "")
+        : fail("eof", $input)
+    );
 }

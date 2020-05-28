@@ -9,7 +9,7 @@ use function Mathias\ParserCombinator\{any,
     collect,
     digit,
     either,
-    empty_,
+    nothing,
     float,
     identity,
     ignore,
@@ -23,14 +23,6 @@ use function Mathias\ParserCombinator\{any,
 final class CombinatorsTest extends ParserTestCase
 {
     /** @test */
-    public function empty()
-    {
-        $parser = empty_();
-        $this->assertParse("", $parser, "");
-        $this->assertParse("", $parser, "abc");
-    }
-
-    /** @test */
     public function identity()
     {
         $parser = identity(char('a'));
@@ -38,7 +30,6 @@ final class CombinatorsTest extends ParserTestCase
         $this->assertRemain("bc", $parser, "abc");
         $this->assertNotParse($parser, "bc", "char(a)", "identity shouldn't show up in error messages");
     }
-
 
     /** @test */
     public function ignore()
