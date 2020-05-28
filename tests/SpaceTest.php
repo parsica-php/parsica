@@ -61,7 +61,7 @@ final class SpaceTest extends ParserTestCase
     /** @test */
     public function skipSpace1()
     {
-        $this->assertNotParse(skipSpace1(), "no space");
+        $this->assertNotParse(skipSpace1(), "no space", "skipSpace1");
         $this->assertParse("", skipSpace1(), " 1 space");
         $this->assertParse("", skipSpace1(), "\ttab");
         $this->assertParse("", skipSpace1(), "\nnewline");
@@ -73,7 +73,7 @@ final class SpaceTest extends ParserTestCase
     /** @test */
     public function skipHSpace1()
     {
-        $this->assertNotParse(skipHSpace1(), "no space");
+        $this->assertNotParse(skipHSpace1(), "no space", "skipHSpace1");
         $this->assertParse("", skipHSpace1(), "\t   some space");
         $this->assertRemain("abc", skipHSpace1(), "\t   abc");
         $this->assertRemain("\nabc", skipHSpace1(), "\t   \nabc");

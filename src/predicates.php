@@ -3,30 +3,48 @@
 
 namespace Mathias\ParserCombinator;
 
+use Mathias\ParserCombinator\Internal\Assert;
+
 /**
  * Creates an equality predicate
  *
- * @template T
- *
- * @param T $x
- *
- * @return callable(T) : bool
+ * @return callable(string) : bool
  */
-function equals($x): callable
+function equals(string $x): callable
 {
+    Assert::length($x, 1, "The argument to equals() must be 1 character in length");
     return fn($y) => $x === $y;
 }
 
 /**
  * Negates a predicate.
  *
- * @template T
+ * @param callable(string) : bool $predicate
  *
- * @param callable(T) : bool $predicate
- *
- * @return callable(T) : bool
+ * @return callable(string) : bool
  */
 function not(callable $predicate): callable
 {
     return fn($x) => !$predicate($x);
+}
+
+/**
+ * Returns true for any Unicode space character, and the control characters \t, \n, \r, \f, \v.
+ *
+ * @return callable(string) : bool
+ */
+function isSpace(): callable
+{
+    return fn($y) => in_array(mb_ord($y), [9, 10, 11, 12, 13, 32, 160]);
+}
+
+/**
+ * Like 'isSpace', but does not accept newlines and carriage returns.
+ *
+ * @return callable(string) : bool
+ * @see isSpace
+ */
+function isHSpace(): callable
+{
+    return fn($y) => in_array(mb_ord($y), [9, 11, 12, 32, 160]);
 }

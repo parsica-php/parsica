@@ -49,7 +49,7 @@ function tab(): Parser
  */
 function skipSpace(): Parser
 {
-    return nothing()->label("@TODO needs takeWhile satisfy");
+    return takeWhile(isSpace())->ignore();
 }
 
 /**
@@ -60,7 +60,7 @@ function skipSpace(): Parser
  */
 function skipHSpace(): Parser
 {
-    return nothing()->label("@TODO needs takeWhile satisfy");
+    return takeWhile(isHSpace())->ignore();
 }
 
 /**
@@ -70,7 +70,7 @@ function skipHSpace(): Parser
  */
 function skipSpace1(): Parser
 {
-    return nothing()->label("@TODO needs takeWhile satisfy");
+    return takeWhile1(isSpace())->label("skipSpace1")->ignore();
 }
 
 /**
@@ -81,5 +81,5 @@ function skipSpace1(): Parser
  */
 function skipHSpace1(): Parser
 {
-    return nothing()->label("@TODO needs takeWhile satisfy");
+    return takeWhile1(isHSpace())->label("skipHSpace1")->ignore();
 }

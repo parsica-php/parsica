@@ -26,6 +26,59 @@ function satisfy(callable $predicate, string $expected = "satisfy(predicate)"): 
     });
 }
 
+
+
+/**
+ * Keep parsing 0 or more characters as long as the predicate holds.
+ *
+ * @param callable(string) : bool $predicate
+ * @param string $expected
+ *
+ * @return Parser<string>
+ */
+function takeWhile(callable $predicate, string $expected = "takeWhile(predicate)"): Parser
+{
+    return parser(function (string $input) use ($predicate, $expected) : ParseResult {
+        if (mb_strlen($input) === 0) {
+            return fail($expected, "EOF");
+        }
+        $chunk = "";
+        $remaining = $input;
+        while ($predicate(mb_substr($remaining, 0, 1))) {
+            $chunk .= mb_substr($remaining, 0, 1);
+            $remaining = mb_substr($remaining, 1);
+        }
+        return succeed($chunk, $remaining);
+    });
+}
+
+/**
+ * Keep parsing 1 or more characters as long as the predicate holds.
+ *
+ * @param callable(string) : bool $predicate
+ * @param string $expected
+ *
+ * @return Parser<string>
+ */
+function takeWhile1(callable $predicate, string $expected = "takeWhile1(predicate)"): Parser
+{
+    return parser(function (string $input) use ($predicate, $expected) : ParseResult {
+        if (mb_strlen($input) === 0) {
+            return fail($expected, "EOF");
+        }
+        if(!$predicate(mb_substr($input, 0, 1))) {
+            return fail($expected, $input);
+        }
+        $chunk = "";
+        $remaining = $input;
+        while ($predicate(mb_substr($remaining, 0, 1))) {
+            $chunk .= mb_substr($remaining, 0, 1);
+            $remaining = mb_substr($remaining, 1);
+        }
+        return succeed($chunk, $remaining);
+    });
+}
+
 /**
  * Parse a single character of anything
  *
