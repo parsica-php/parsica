@@ -2,9 +2,8 @@
 
 namespace Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\Parser;
+use Mathias\ParserCombinator\Internal\Assert;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
-use Webmozart\Assert\Assert;
 use function Mathias\ParserCombinator\ParseResult\{fail, parser, succeed};
 
 /**
@@ -28,7 +27,7 @@ function char(string $c): Parser
  */
 function string(string $str): Parser
 {
-    Assert::minLength($str, 1);
+    Assert::minLength($str, 1, "The string must not be empty.");
     $len = mb_strlen($str);
     return parser(
         fn(string $input): ParseResult => mb_substr($input, 0, $len) === $str
