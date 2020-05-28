@@ -10,21 +10,20 @@ final class TypecastingTest extends ParserTestCase
     /** @test */
     public function into1()
     {
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
         $parser =
             char('a')->followedBy(char('b'))
                 ->into1('strtoupper');
 
         $expected = "AB";
 
-        $this->assertParse($expected, $parser, "abc");
+        $this->assertParse($expected, $parser, "abca");
+        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
     
     
     /** @test */
     public function intoNew1()
     {
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
         $parser = intoNew1(
             seq(char('a'), char('b')),
             __NAMESPACE__.'\\MyType1'
@@ -33,6 +32,7 @@ final class TypecastingTest extends ParserTestCase
         $expected = new MyType1("ab");
 
         $this->assertParse($expected, $parser, "abc");
+        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 
 }
