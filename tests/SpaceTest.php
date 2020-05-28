@@ -7,6 +7,7 @@ use function Mathias\ParserCombinator\{crlf, eol, newline, tab};
 
 final class SpaceTest extends ParserTestCase
 {
+
     /** @test */
     public function newline()
     {
@@ -37,6 +38,7 @@ final class SpaceTest extends ParserTestCase
         $this->assertNotParse(tab(), "abc", "tab");
     }
 
+    /** @test */
     public function todo()
     {
 

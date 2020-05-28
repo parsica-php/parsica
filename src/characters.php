@@ -2,6 +2,7 @@
 
 namespace Mathias\ParserCombinator;
 
+use Mathias\ParserCombinator\Parser;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
 use Webmozart\Assert\Assert;
 use function Mathias\ParserCombinator\ParseResult\{fail, parser, succeed};

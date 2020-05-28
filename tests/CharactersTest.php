@@ -3,7 +3,7 @@
 namespace Tests\Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
-use function Mathias\ParserCombinator\{char, crlf, eol, newline, string, tab};
+use function Mathias\ParserCombinator\{char, string};
 
 final class CharactersTest extends ParserTestCase
 {
