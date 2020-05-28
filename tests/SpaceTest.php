@@ -3,7 +3,7 @@
 namespace Tests\Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
-use function Mathias\ParserCombinator\{crlf, eol, newline, tab};
+use function Mathias\ParserCombinator\{crlf, eol, newline, skipHSpace, skipHSpace1, skipSpace, skipSpace1, tab};
 
 final class SpaceTest extends ParserTestCase
 {
@@ -39,42 +39,44 @@ final class SpaceTest extends ParserTestCase
     }
 
     /** @test */
-    public function todo()
+    public function skipSpace()
     {
+        $this->assertParse("", skipSpace(), "no space");
+        $this->assertParse("", skipSpace(), " 1 space");
+        $this->assertParse("", skipSpace(), "\ttab");
+        $this->assertParse("", skipSpace(), "\nnewline");
+        $this->assertParse("", skipSpace(), "\t   \n   \r\n  abc");
+        $this->assertRemain("abc", skipSpace(), "\t   \n   \r\n  abc");
+    }
 
-        $this->fail("not implemented");
-        /**
-         *
-         * -- | Skip /zero/ or more white space characters.
-         * --
-         * -- See also: 'skipMany' and 'spaceChar'.
-         * space :: (MonadParsec e s m, Token s ~ Char) => m ()
-         * space = void $ takeWhileP (Just "white space") isSpace
-         * {-# INLINE space #-}
-         *
-         * -- | Like 'space', but does not accept newlines and carriage returns.
-         * --
-         * -- @since 8.1.0
-         * hspace :: (MonadParsec e s m, Token s ~ Char) => m ()
-         * hspace = void $ takeWhileP (Just "white space") isHSpace
-         * {-# INLINE hspace #-}
-         *
-         * -- | Skip /one/ or more white space characters.
-         * --
-         * -- See also: 'skipSome' and 'spaceChar'.
-         * --
-         * -- @since 6.0.0
-         * space1 :: (MonadParsec e s m, Token s ~ Char) => m ()
-         * space1 = void $ takeWhile1P (Just "white space") isSpace
-         * {-# INLINE space1 #-}
-         *
-         * -- | Like 'space1', but does not accept newlines and carriage returns.
-         * --
-         * -- @since 8.1.0
-         * hspace1 :: (MonadParsec e s m, Token s ~ Char) => m ()
-         * hspace1 = void $ takeWhile1P (Just "white space") isHSpace
-         * {-# INLINE hspace1 #-}
-         */
+    /** @test */
+    public function skipHSpace()
+    {
+        $this->assertParse("", skipHSpace(), "no space");
+        $this->assertParse("", skipHSpace(), "\t   some space");
+        $this->assertRemain("abc", skipHSpace(), "\t   abc");
+        $this->assertRemain("\nabc", skipHSpace(), "\t   \nabc");
+    }
+
+    /** @test */
+    public function skipSpace1()
+    {
+        $this->assertNotParse(skipSpace1(), "no space");
+        $this->assertParse("", skipSpace1(), " 1 space");
+        $this->assertParse("", skipSpace1(), "\ttab");
+        $this->assertParse("", skipSpace1(), "\nnewline");
+        $this->assertParse("", skipSpace1(), "\t   \n   \r\n  abc");
+        $this->assertRemain("abc", skipSpace1(), "\t   \n   \r\n  abc");
+    }
+
+
+    /** @test */
+    public function skipHSpace1()
+    {
+        $this->assertNotParse(skipHSpace1(), "no space");
+        $this->assertParse("", skipHSpace1(), "\t   some space");
+        $this->assertRemain("abc", skipHSpace1(), "\t   abc");
+        $this->assertRemain("\nabc", skipHSpace1(), "\t   \nabc");
     }
 }
 
