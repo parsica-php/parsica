@@ -5,7 +5,6 @@ namespace Mathias\ParserCombinator;
 use Mathias\ParserCombinator\Assert\Assert;
 use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
-use function Mathias\ParserCombinator\Parser\parser;
 use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
 
 /**
@@ -24,9 +23,6 @@ function char(string $c): Parser
 
 /**
  * Parse a non-empty string
- *
- * @return Parser<string>
- * @psalm-suppress MixedReturnTypeCoercion
  */
 function string(string $str): Parser
 {

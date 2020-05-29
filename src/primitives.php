@@ -10,11 +10,10 @@ use function Mathias\ParserCombinator\Parser\parser;
 /**
  * A parser that satisfies a predicate. Useful as a building block for writing things like char(), digit()...
  *
+ * @template T
  * @param callable(string) : bool $predicate
  * @param string $expected
- *
- * @psalm-suppress MixedReturnTypeCoercion
- * @return Parser<string>
+ * @return Parser<T>
  */
 function satisfy(callable $predicate, string $expected = "satisfy(predicate)"): Parser
 {
@@ -34,11 +33,10 @@ function satisfy(callable $predicate, string $expected = "satisfy(predicate)"): 
 /**
  * Keep parsing 0 or more characters as long as the predicate holds.
  *
+ * @template T
  * @param callable(string) : bool $predicate
  * @param string $expected
- *
- * @psalm-suppress MixedReturnTypeCoercion
- * @return Parser<string>
+ * @return Parser<T>
  */
 function takeWhile(callable $predicate, string $expected = "takeWhile(predicate)"): Parser
 {
@@ -59,11 +57,11 @@ function takeWhile(callable $predicate, string $expected = "takeWhile(predicate)
 /**
  * Keep parsing 1 or more characters as long as the predicate holds.
  *
+ * @template T
  * @param callable(string) : bool $predicate
  * @param string $expected
  *
- * @return Parser<string>
- * @psalm-suppress MixedReturnTypeCoercion
+ * @return Parser<T>
  */
 function takeWhile1(callable $predicate, string $expected = "takeWhile1(predicate)"): Parser
 {
@@ -114,8 +112,8 @@ function everything(): Parser
 /**
  * Parse the end of the input
  *
- * @return Parser<string>
- * @psalm-suppress MixedReturnTypeCoercion
+ * @template T
+ * @return Parser<T>
  */
 function eof(): Parser
 {

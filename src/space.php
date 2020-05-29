@@ -16,8 +16,6 @@ function newline(): Parser
 
 /**
  * Parse a carriage return character and a newline character. Return the two characters. {\r\n}
- *
- * @return Parser<string>
  */
 function crlf(): Parser
 {

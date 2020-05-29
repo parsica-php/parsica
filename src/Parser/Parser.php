@@ -70,7 +70,6 @@ final class Parser
      * @param callable(T) : T2 $transform
      *
      * @return Parser<T2>
-     * @psalm-suppress InvalidReturnStatement
      */
     public function fmap(callable $transform): Parser
     {
