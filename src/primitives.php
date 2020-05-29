@@ -3,6 +3,7 @@
 namespace Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\Parser\Parser;
+use Mathias\ParserCombinator\Parser\TakeWhile;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
 use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
 
@@ -42,18 +43,7 @@ function satisfy(callable $predicate, string $expected = "satisfy(predicate)"): 
  */
 function takeWhile(callable $predicate): Parser
 {
-    return new Parser(function (string $input) use ($predicate) : ParseResult {
-        if (mb_strlen($input) === 0) {
-            return fail("takeWhile(predicate)", "EOF");
-        }
-        $chunk = "";
-        $remaining = $input;
-        while (mb_strlen($remaining) > 0 && $predicate(mb_substr($remaining, 0, 1))) {
-            $chunk .= mb_substr($remaining, 0, 1);
-            $remaining = mb_substr($remaining, 1);
-        }
-        return succeed($chunk, $remaining);
-    });
+    return TakeWhile::_takeWhile($predicate);
 }
 
 
@@ -69,21 +59,7 @@ function takeWhile(callable $predicate): Parser
  */
 function takeWhile1(callable $predicate): Parser
 {
-    return new Parser(function (string $input) use ($predicate) : ParseResult {
-        if (mb_strlen($input) === 0) {
-            return fail("takeWhile1(predicate)", "EOF");
-        }
-        if (!$predicate(mb_substr($input, 0, 1))) {
-            return fail("takeWhile1(predicate)", $input);
-        }
-        $chunk = "";
-        $remaining = $input;
-        while ($predicate(mb_substr($remaining, 0, 1))) {
-            $chunk .= mb_substr($remaining, 0, 1);
-            $remaining = mb_substr($remaining, 1);
-        }
-        return succeed($chunk, $remaining);
-    });
+    return TakeWhile::_takeWhile1($predicate);
 }
 
 /**

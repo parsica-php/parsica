@@ -72,6 +72,7 @@ final class primitivesTest extends ParserTestCase
         $parser = takeWhile(not(equals('a')));
 
         $this->assertParse("xyz", $parser, "xyza");
+        $this->assertParse("xyz", $parser, "xyz");
         $this->assertParse("x", $parser, "xaaa");
         $this->assertParse("", $parser, "axyz");
         $this->assertParse("", $parser, "aaaxyz");
