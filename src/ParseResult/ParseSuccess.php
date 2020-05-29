@@ -48,11 +48,11 @@ final class ParseSuccess implements ParseResult
 
     public function expected(): string
     {
-        throw new \Exception("Can't read the expectation of a succeeded ParseResult.");
+        throw new \BadMethodCallException("Can't read the expectation of a succeeded ParseResult.");
     }
 
     public function got(): string
     {
-        throw new \Exception("Can't read the expectation of a succeeded ParseResult.");
+        throw new \BadMethodCallException("Can't read the expectation of a succeeded ParseResult.");
     }
 }
