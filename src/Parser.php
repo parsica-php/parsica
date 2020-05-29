@@ -11,7 +11,7 @@ use function Mathias\ParserCombinator\ParseResult\{parser, succeed, fail};
 final class Parser
 {
     /**
-     * @psalm-param callable(string):ParseResult<T> $parser
+     * @var callable(string):ParseResult<T> $parser
      */
     private $parser;
 
@@ -26,7 +26,7 @@ final class Parser
     /**
      * Run the parser on an input
      *
-     * @return ParseResult<T>
+     * @PSALMTODO return ParseResult<T>
      */
     public function run(string $input): ParseResult
     {
@@ -116,12 +116,13 @@ final class Parser
     }
 
     /**
+     * @param callable(T):T2 $transform
+     *
+     * @return Parser<T2>
      * @deprecated 0.2
      * @see into1()
      *
      * @template T2
-     * @param callable(T):T2 $transform
-     * @return Parser<T2>
      */
     public function into1(callable $transform): Parser
     {
@@ -129,13 +130,13 @@ final class Parser
     }
 
     /**
-     * @deprecated 0.2
      * @param class-string<T2> $className
      *
      * @return Parser<T2>
+     * @template T2
      * @see intoNew1()
      *
-     * @template T2
+     * @deprecated 0.2
      */
     public function intoNew1(string $className): Parser
     {
