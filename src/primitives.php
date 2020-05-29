@@ -40,11 +40,11 @@ function satisfy(callable $predicate, string $expected = "satisfy(predicate)"): 
  *
  * @return Parser<T>
  */
-function takeWhile(callable $predicate, string $expected = "takeWhile(predicate)"): Parser
+function takeWhile(callable $predicate): Parser
 {
-    return new Parser(function (string $input) use ($predicate, $expected) : ParseResult {
+    return new Parser(function (string $input) use ($predicate) : ParseResult {
         if (mb_strlen($input) === 0) {
-            return fail($expected, "EOF");
+            return fail("takeWhile(predicate)", "EOF");
         }
         $chunk = "";
         $remaining = $input;
@@ -67,14 +67,14 @@ function takeWhile(callable $predicate, string $expected = "takeWhile(predicate)
  *
  * @return Parser<T>
  */
-function takeWhile1(callable $predicate, string $expected = "takeWhile1(predicate)"): Parser
+function takeWhile1(callable $predicate): Parser
 {
-    return new Parser(function (string $input) use ($predicate, $expected) : ParseResult {
+    return new Parser(function (string $input) use ($predicate) : ParseResult {
         if (mb_strlen($input) === 0) {
-            return fail($expected, "EOF");
+            return fail("takeWhile1(predicate)", "EOF");
         }
         if (!$predicate(mb_substr($input, 0, 1))) {
-            return fail($expected, $input);
+            return fail("takeWhile1(predicate)", $input);
         }
         $chunk = "";
         $remaining = $input;
