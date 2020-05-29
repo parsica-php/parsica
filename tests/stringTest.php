@@ -5,7 +5,7 @@ namespace Tests\Mathias\ParserCombinator;
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\{char, string};
 
-final class CharactersTest extends ParserTestCase
+final class stringTest extends ParserTestCase
 {
     /** @test */
     public function char()

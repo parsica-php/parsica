@@ -21,12 +21,12 @@
     },
     "files": [
       "src/ParseResult/functions.php",
-      "src/characters.php",
       "src/combinators.php",
-      "src/parsers.php",
+      "src/numeric.php",
       "src/predicates.php",
       "src/primitives.php",
-      "src/space.php"
+      "src/space.php",
+      "src/string.php"
     ]
   },
   "autoload-dev": {

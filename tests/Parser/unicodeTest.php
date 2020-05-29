@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinator;
+namespace Tests\Mathias\ParserCombinator\Parser;
 
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\char;
 
-final class UnicodeTest extends ParserTestCase
+final class unicodeTest extends ParserTestCase
 {
     /** @test */
     public function mbstring_must_be_installed()

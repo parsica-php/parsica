@@ -5,7 +5,7 @@ namespace Tests\Mathias\ParserCombinator;
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\{crlf, eol, newline, skipHSpace, skipHSpace1, skipSpace, skipSpace1, tab};
 
-final class SpaceTest extends ParserTestCase
+final class spaceTest extends ParserTestCase
 {
 
     /** @test */

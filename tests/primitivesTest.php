@@ -5,7 +5,7 @@ namespace Tests\Mathias\ParserCombinator;
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\{everything, not, nothing, eof, equals, satisfy, anything, takeWhile, takeWhile1};
 
-final class PrimitivesTest extends ParserTestCase
+final class primitivesTest extends ParserTestCase
 {
     /** @test */
     public function satisfy()

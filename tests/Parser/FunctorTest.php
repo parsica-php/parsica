@@ -1,9 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinator;
+namespace Tests\Mathias\ParserCombinator\Parser;
 
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
-use function Mathias\ParserCombinator\{char, seq};
+use function Mathias\ParserCombinator\char;
+use function Mathias\ParserCombinator\seq;
 
 final class FunctorTest extends ParserTestCase
 {
@@ -18,7 +19,6 @@ final class FunctorTest extends ParserTestCase
 
         $this->assertParse($expected, $parser, "abca");
     }
-
 
     /** @test */
     public function fmapClass()

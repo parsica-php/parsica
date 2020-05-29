@@ -5,7 +5,7 @@ namespace Tests\Mathias\ParserCombinator;
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\{equals, not, satisfy};
 
-final class PredicatesTest extends ParserTestCase
+final class predicatesTest extends ParserTestCase
 {
     /** @test */
     public function equals()

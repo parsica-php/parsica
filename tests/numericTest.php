@@ -8,7 +8,7 @@ use function Mathias\ParserCombinator\digit;
 use function Mathias\ParserCombinator\float;
 use function Mathias\ParserCombinator\string;
 
-final class NumericTest extends ParserTestCase
+final class numericTest extends ParserTestCase
 {
 
 
