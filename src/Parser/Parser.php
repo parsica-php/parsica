@@ -24,7 +24,7 @@ final class Parser
     }
 
     /**
-     * Label a parser. When a parser fails, instead of a generrated error message, you'll see your label.
+     * Label a parser. When a parser fails, instead of a generated error message, you'll see your label.
      * eg (char(':')->followedBy(char(')')).followedBy(char(')')).
      *
      * @return Parser<T>
