@@ -44,6 +44,7 @@ final class combinatorsTest extends ParserTestCase
     public function optional()
     {
         $parser = char('a')->optional();
+        $this->assertParse("", $parser, "");
         $this->assertParse("a", $parser, "abc");
         $this->assertRemain("bc", $parser, "abc");
 
@@ -55,7 +56,6 @@ final class combinatorsTest extends ParserTestCase
             ->followedBy(string('efgh'));
         $this->assertParse("abcdefgh", $parser, "abcd-efgh");
         $this->assertParse("abcdefgh", $parser, "abcdefgh");
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 
     /** @test */

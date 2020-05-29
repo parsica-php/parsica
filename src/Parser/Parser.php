@@ -76,17 +76,12 @@ final class Parser
     /**
      * @return Parser<T>
      * @see optional()
-     * @deprecated 0.2
      */
     public function optional(): Parser
     {
         return new Parser(function (string $input): ParseResult {
             $r1 = $this->run($input);
-            if ($r1->isSuccess()) {
-                return $r1;
-            } else {
-                return succeed("", $input);
-            }
+            return $r1->isSuccess() ? $r1 : succeed("", $input);
         });
     }
 

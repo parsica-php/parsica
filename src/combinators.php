@@ -42,7 +42,6 @@ function ignore(Parser $parser): Parser
  * @param Parser<T> $parsed
  *
  * @return Parser<T|string>
- * @deprecated 0.2
  */
 function optional(Parser $parser): Parser
 {
