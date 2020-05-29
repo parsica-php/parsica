@@ -9,3 +9,7 @@ Turn off XDebug, as it will make things much slower. If you need it, increase th
 ```php
 ini_set('xdebug.max_nesting_level', 5b000);
 ```
+
+## Badges
+
+![Test](https://github.com/mathiasverraes/parser-combinator/workflows/Test/badge.svg)
