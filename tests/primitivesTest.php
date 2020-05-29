@@ -58,12 +58,12 @@ final class primitivesTest extends ParserTestCase
     public function takeWhile()
     {
         $parser = takeWhile(equals('a'));
+        $this->assertFailOnEOF($parser);
         $this->assertParse("", $parser, "xyz");
         $this->assertParse("", $parser, "xaaa");
         $this->assertParse("a", $parser, "axyz");
         $this->assertParse("aaa", $parser, "aaaxyz");
         $this->assertParse("aaa", $parser, "aaa");
-        $this->assertNotParse($parser, "");
     }
 
     /** @test */
@@ -71,19 +71,21 @@ final class primitivesTest extends ParserTestCase
     {
         $parser = takeWhile(not(equals('a')));
 
+        $this->assertFailOnEOF($parser);
         $this->assertParse("xyz", $parser, "xyza");
         $this->assertParse("xyz", $parser, "xyz");
         $this->assertParse("x", $parser, "xaaa");
         $this->assertParse("", $parser, "axyz");
         $this->assertParse("", $parser, "aaaxyz");
         $this->assertParse("", $parser, "aaa");
-        $this->assertNotParse($parser, "");
+
     }
 
     /** @test */
     public function takeWhile1()
     {
         $parser = takeWhile1(equals('a'));
+        $this->assertFailOnEOF($parser);
         $this->assertNotParse($parser, "xyz", "takeWhile1(predicate)");
         $this->assertNotParse($parser, "takeWhile1(predicate)");
         $this->assertParse("a", $parser, "axyz");

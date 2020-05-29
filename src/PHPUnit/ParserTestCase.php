@@ -58,8 +58,8 @@ abstract class ParserTestCase extends TestCase
     protected function assertNotParse(Parser $parser, string $input, ?string $expectedFailure = null, string $message = ""): void
     {
         $actualResult = $parser->run($input);
-        $this->assertFalse(
-            $actualResult->isSuccess(),
+        $this->assertTrue(
+            $actualResult->isFail(),
             $message . "\n" . "Parser succeeded but expected a failure.\nInput: $input"
         );
 
@@ -70,5 +70,24 @@ abstract class ParserTestCase extends TestCase
                 $message . "\n" . "The expected failure message is not the same as the actual one."
             );
         }
+    }
+
+    protected function assertFailOnEOF(Parser $parser, string $message = "") : void
+    {
+        $actualResult = $parser->run("");
+        $this->assertTrue(
+            $actualResult->isFail(),
+            $message . "\n" . "Expected the parser to fail on EOL."
+        );
+    }
+
+    protected function assertSucceedOnEOF(Parser $parser, string $message = "") : void
+    {
+        $actualResult = $parser->run("");
+        $this->assertTrue(
+            $actualResult->isSuccess(),
+            $message . "\n" . "Expected the parser to succeed on EOL."
+        );
+        $this->assertSame("", $actualResult->parsed());
     }
 }
