@@ -2,6 +2,8 @@
 
 namespace Mathias\ParserCombinator;
 
+use Mathias\ParserCombinator\Parser\Parser;
+
 /**
  * Parse a newline character. {\n}
  *

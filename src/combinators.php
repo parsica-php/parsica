@@ -2,11 +2,19 @@
 
 namespace Mathias\ParserCombinator;
 
-use function Mathias\ParserCombinator\ParseResult\{fail, parser, succeed};
+use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
+use function Mathias\ParserCombinator\Parser\parser;
+use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
 
 /**
  * Identity parser, returns the Parser as is.
+ *
+ * @template T
+ *
+ * @param Parser<T> $parser
+ *
+ * @return Parser<T>
  */
 function identity(Parser $parser): Parser
 {
@@ -14,8 +22,14 @@ function identity(Parser $parser): Parser
 }
 
 /**
- * @deprecated 0.2
  * Parse something, strip it from the remaining string, but do not return anything
+ *
+ * @template T
+ *
+ * @param Parser<T> $parser
+ * @return Parser<string>
+ *
+ * @deprecated 0.2
  */
 function ignore(Parser $parser): Parser
 {
@@ -23,8 +37,13 @@ function ignore(Parser $parser): Parser
 }
 
 /**
- * @deprecated 0.2
  * Optionally parse something, but still succeed if the thing is not there
+ *
+ * @template T
+ * @param Parser<T> $parsed
+ *
+ * @return Parser<T|string>
+ * @deprecated 0.2
  */
 function optional(Parser $parser): Parser
 {
@@ -32,8 +51,15 @@ function optional(Parser $parser): Parser
 }
 
 /**
+ * Parse something, then follow by something else. Return the result of the second parser.
+ *
+ * @param Parser<T1> $first
+ * @param Parser<T2> $second
+ *
+ * @return Parser<T2>
  * @deprecated 0.2
- * Parse something, then follow by something else.
+ * @template T1
+ * @template T2
  */
 function seq(Parser $first, Parser $second): Parser
 {
@@ -41,8 +67,13 @@ function seq(Parser $first, Parser $second): Parser
 }
 
 /**
- * @deprecated 0.2
  * Either parse the first thing or the second thing
+ *
+ * @template T
+ * @param Parser<T> $first
+ * @param Parser<T> $second
+ * @return Parser<T>
+ * @deprecated 0.2
  */
 function either(Parser $first, Parser $second): Parser
 {
@@ -50,11 +81,17 @@ function either(Parser $first, Parser $second): Parser
 }
 
 /**
+ * Parse into an array that consists of the results of both parsers.
+ * @template T
+ * @param Parser<T> $first
+ * @param Parser<T> $second
+ *
+ * @return Parser
  * @deprecated 0.2
  */
 function collect(Parser $first, Parser $second): Parser
 {
-    return parser(function (string $input) use ($first, $second) : ParseResult {
+    return new Parser(function (string $input) use ($first, $second) : ParseResult {
         $r1 = $first->run($input);
         if ($r1->isSuccess()) {
             $r2 = $second->run($r1->remaining());
@@ -71,68 +108,19 @@ function collect(Parser $first, Parser $second): Parser
 }
 
 /**
- * Transform the parsed string into something else using a callable.
- *
- * @template T1
- * @template T2
- *
- * @param Parser<T1> $parser
- * @param callable(T1):T2 $transform
- *
- * @return Parser<T2>
- *
- * @deprecated 0.2
- *
- *
- * @see Parser::into1()
- */
-function into1(Parser $parser, callable $transform): Parser
-{
-    return parser(
-    /**
-     * @PSALMTODO return ParseResult<T2>
-     */
-        function (string $input) use ($parser, $transform) : ParseResult {
-            $r = $parser->run($input);
-            if ($r->isSuccess()) {
-                return succeed($transform($r->parsed()), $r->remaining());
-            }
-            return $r;
-        }
-    );
-}
-
-/**
- * @param Parser<T1> $parser
- * @param class-string<T2> $className
- *
- * @return Parser<T2>
- * @deprecated 0.2
- * Transform the parsed string into an object of type $className
- *
- * @template T1
- * @template T2
- *
- */
-function intoNew1(Parser $parser, string $className): Parser
-{
-    return $parser->intoNew1($className);
-}
-
-/**
  * Tries each parser one by one
  *
- * @param Parser<T>[] $parsers
+ * @param Parser<TParsed>[] $parsers
  *
- * @return Parser<T>
+ * @return Parser<TParsed>
  * @deprecated 0.2
  *
- * @template T
+ * @template TParsed
  *
  */
 function any(Parser ...$parsers): Parser
 {
-    return parser(function (string $input) use ($parsers): ParseResult {
+    return new Parser(function (string $input) use ($parsers): ParseResult {
         $expectations = [];
         foreach ($parsers as $parser) {
             $r = $parser->run($input);
@@ -149,26 +137,25 @@ function any(Parser ...$parsers): Parser
 /**
  * One or more repetitions of Parser
  *
- * @param Parser<T> $parser
+ * @param Parser<TParsed> $parser
  *
- * @return Parser<T>
+ * @return Parser<TParsed>
  * @deprecated 0.2
  *
- * @template T
+ * @template TParsed
  *
  */
 function atLeastOne(Parser $parser): Parser
 {
-    return parser(function (string $input) use ($parser): ParseResult {
+    return new Parser(function (string $input) use ($parser): ParseResult {
         $r = $parser->run($input);
-        if (!$r->isSuccess()) return $r;
-        /** @psalm-var T $parsed */
-        $parsed = "";
-        do {
-            $parsed .= $r->parsed();
-            $remaining = $r->remaining();
-            $r = $parser->run($remaining);
-        } while ($r->isSuccess());
-        return succeed($parsed, $remaining);
+        if ($r->isFail()) return $r;
+
+        while ($r->isSuccess()) {
+            $next = $parser->continueFrom($r);
+            if($next->isFail()) return $r;
+            $r = $r->mappend($next);
+        };
+        return $r;
     });
 }

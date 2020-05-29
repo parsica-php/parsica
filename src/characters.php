@@ -2,9 +2,11 @@
 
 namespace Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\Internal\Assert;
+use Mathias\ParserCombinator\Assert\Assert;
+use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
-use function Mathias\ParserCombinator\ParseResult\{fail, parser, succeed};
+use function Mathias\ParserCombinator\Parser\parser;
+use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
 
 /**
  * Parse a character
@@ -24,12 +26,13 @@ function char(string $c): Parser
  * Parse a non-empty string
  *
  * @return Parser<string>
+ * @psalm-suppress MixedReturnTypeCoercion
  */
 function string(string $str): Parser
 {
     Assert::minLength($str, 1, "The string must not be empty.");
     $len = mb_strlen($str);
-    return parser(
+    return new Parser(
         fn(string $input): ParseResult => mb_substr($input, 0, $len) === $str
             ? succeed($str, mb_substr($input, $len))
             : fail("string($str)", $input)

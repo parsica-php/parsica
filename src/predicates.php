@@ -3,7 +3,7 @@
 
 namespace Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\Internal\Assert;
+use Mathias\ParserCombinator\Assert\Assert;
 
 /**
  * Creates an equality predicate

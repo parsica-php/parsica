@@ -2,12 +2,13 @@
 
 namespace Mathias\ParserCombinator\ParseResult;
 
+use BadMethodCallException;
 use Exception;
 
 /**
  * @template T
  */
-final class ParserFailure extends Exception implements ParseResult
+final class ParseFailure extends Exception implements ParseResult
 {
     private string $expected;
     private string $got;
@@ -44,11 +45,32 @@ final class ParserFailure extends Exception implements ParseResult
      */
     public function parsed()
     {
-        throw new \BadMethodCallException("Can't read the parsed value of a failed ParseResult.");
+        throw new BadMethodCallException("Can't read the parsed value of a failed ParseResult.");
     }
 
     public function remaining(): string
     {
-        throw new \BadMethodCallException("Can't read the remaining string of a failed ParseResult.");
+        throw new BadMethodCallException("Can't read the remaining string of a failed ParseResult.");
+    }
+
+    /**
+     * @param ParseResult<T> $other
+     * @return ParseResult<T>
+     */
+    public function mappend(ParseResult $other): ParseResult
+    {
+        throw new \Exception("@TODO Not implemented");
+    }
+
+    /**
+     * Map a function over the parsed result
+     *
+     * @template T2
+     * @param callable(T) : T2 $transform
+     * @return ParseResult<T2>
+     */
+    public function fmap(callable $transform): ParseResult
+    {
+        return fail($this->expected, $this->got);
     }
 }

@@ -23,10 +23,10 @@
       "src/ParseResult/functions.php",
       "src/characters.php",
       "src/combinators.php",
-      "src/space.php",
       "src/parsers.php",
       "src/predicates.php",
-      "src/primitives.php"
+      "src/primitives.php",
+      "src/space.php"
     ]
   },
   "autoload-dev": {

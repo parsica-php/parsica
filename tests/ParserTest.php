@@ -3,17 +3,34 @@
 namespace Tests\Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
-use function Mathias\ParserCombinator\string;
+use function Mathias\ParserCombinator\char;
 
 final class ParserTest extends ParserTestCase
 {
     /** @test */
-    public function label()
+    public function followedBy()
     {
-        $parser = string(":-)");
-        $this->assertNotParse($parser, "x", "string(:-))");
+        $parser = char('a')->followedBy(char('b'));
+        $this->assertParse("ab", $parser, "abc");
+        $this->markTestIncomplete("@TODO Replace with 0.2 version");
+    }
 
-        $labeled = $parser->label("smiley");
-        $this->assertNotParse($labeled, "x", "smiley");
+    /** @test */
+    public function fmap()
+    {
+        $parser = char('a')
+            ->followedBy(char('b'))
+            ->fmap('strtoupper');
+        $this->assertParse("AB", $parser, "abc");
+    }
+
+}
+
+class MyType2 {
+    private $x;
+
+    function __construct($x)
+    {
+        $this->x = $x;
     }
 }

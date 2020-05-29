@@ -2,16 +2,13 @@
 
 namespace Mathias\ParserCombinator;
 
-use function Mathias\ParserCombinator\ParseResult\{fail, parser, succeed};
-
-function space(): Parser
-{
-    return char(' ');
-}
+use Mathias\ParserCombinator\Parser\Parser;
 
 /**
  * Parse 0-9. Like all parsers, this returns the digit as a string. Use into1('intval')
  * or similar to cast it to a numeric type.
+ *
+ * @return Parser<string>
  */
 function digit(): Parser
 {

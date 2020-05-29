@@ -7,20 +7,16 @@ use function Mathias\ParserCombinator\{any,
     atLeastOne,
     char,
     collect,
-    digit,
     either,
-    nothing,
     float,
     identity,
     ignore,
-    into1,
-    intoNew1,
     optional,
     seq,
     space,
     string};
 
-final class CombinatorsTest extends ParserTestCase
+final class combinatorsTest extends ParserTestCase
 {
     /** @test */
     public function identity()
@@ -95,13 +91,14 @@ final class CombinatorsTest extends ParserTestCase
             collect(
                 string("Hello")
                     ->followedBy(
-                        optional(space())->ignore()
+                        // @todo replace char(' ') by something spacey
+                        optional(char(' '))->ignore()
                     )
                     ->followedBy(
                         char(',')->ignore()
                     )
                     ->followedBy(
-                        optional(space())->ignore()
+                        optional(char(' '))->ignore()
                     ),
                 string("world")
                     ->followedBy(
@@ -145,7 +142,7 @@ final class CombinatorsTest extends ParserTestCase
     public function any_()
     {
         $symbol = any(string("€"), string("$"));
-        $amount = float()->into1('floatval');
+        $amount = float()->fmap('floatval');
         $money = collect($symbol, $amount);
 
         $this->assertParse("€", $symbol, "€");

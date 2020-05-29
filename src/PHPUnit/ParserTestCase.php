@@ -2,7 +2,7 @@
 
 namespace Mathias\ParserCombinator\PHPUnit;
 
-use Mathias\ParserCombinator\Parser;
+use Mathias\ParserCombinator\Parser\Parser;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,7 +27,7 @@ abstract class ParserTestCase extends TestCase
                 $message . "\n" .
                 "Parser test failed."
                 . "\nInput: $input"
-                . "\nTest expected: " . $expectedParsed
+                . "\nTest expected: " . (string) $expectedParsed
                 . "\nParser expected: " . $actualResult->expected()
                 . "\nGot: " . $actualResult->got()
             );

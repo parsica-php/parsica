@@ -3,38 +3,33 @@
 namespace Tests\Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
-use function Mathias\ParserCombinator\{char, either, ignore, into1, intoNew1, optional, seq, string};
+use function Mathias\ParserCombinator\{char, seq};
 
-final class TypecastingTest extends ParserTestCase
+final class FunctorTest extends ParserTestCase
 {
     /** @test */
-    public function into1()
+    public function fmap()
     {
         $parser =
             char('a')->followedBy(char('b'))
-                ->into1('strtoupper');
+                ->fmap('strtoupper');
 
         $expected = "AB";
 
         $this->assertParse($expected, $parser, "abca");
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
-    
-    
+
+
     /** @test */
-    public function intoNew1()
+    public function fmapClass()
     {
-        $parser = intoNew1(
-            seq(char('a'), char('b')),
-            __NAMESPACE__.'\\MyType1'
-        );
+        $parser = seq(char('a'), char('b'))
+            ->fmapClass(__NAMESPACE__ . '\\MyType1');
 
         $expected = new MyType1("ab");
 
         $this->assertParse($expected, $parser, "abc");
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
-
 }
 
 class MyType1

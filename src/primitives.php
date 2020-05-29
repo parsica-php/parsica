@@ -2,8 +2,10 @@
 
 namespace Mathias\ParserCombinator;
 
+use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
-use function Mathias\ParserCombinator\ParseResult\{fail, parser, succeed};
+use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
+use function Mathias\ParserCombinator\Parser\parser;
 
 /**
  * A parser that satisfies a predicate. Useful as a building block for writing things like char(), digit()...
@@ -11,11 +13,12 @@ use function Mathias\ParserCombinator\ParseResult\{fail, parser, succeed};
  * @param callable(string) : bool $predicate
  * @param string $expected
  *
+ * @psalm-suppress MixedReturnTypeCoercion
  * @return Parser<string>
  */
 function satisfy(callable $predicate, string $expected = "satisfy(predicate)"): Parser
 {
-    return parser(function (string $input) use ($predicate, $expected) : ParseResult {
+    return new Parser(function (string $input) use ($predicate, $expected) : ParseResult {
         if (mb_strlen($input) === 0) {
             return fail($expected, "EOF");
         }
@@ -34,11 +37,12 @@ function satisfy(callable $predicate, string $expected = "satisfy(predicate)"): 
  * @param callable(string) : bool $predicate
  * @param string $expected
  *
+ * @psalm-suppress MixedReturnTypeCoercion
  * @return Parser<string>
  */
 function takeWhile(callable $predicate, string $expected = "takeWhile(predicate)"): Parser
 {
-    return parser(function (string $input) use ($predicate, $expected) : ParseResult {
+    return new Parser(function (string $input) use ($predicate, $expected) : ParseResult {
         if (mb_strlen($input) === 0) {
             return fail($expected, "EOF");
         }
@@ -59,10 +63,11 @@ function takeWhile(callable $predicate, string $expected = "takeWhile(predicate)
  * @param string $expected
  *
  * @return Parser<string>
+ * @psalm-suppress MixedReturnTypeCoercion
  */
 function takeWhile1(callable $predicate, string $expected = "takeWhile1(predicate)"): Parser
 {
-    return parser(function (string $input) use ($predicate, $expected) : ParseResult {
+    return new Parser(function (string $input) use ($predicate, $expected) : ParseResult {
         if (mb_strlen($input) === 0) {
             return fail($expected, "EOF");
         }
@@ -94,7 +99,7 @@ function anything(): Parser
  */
 function nothing(): Parser
 {
-    return parser(fn(string $input) => succeed("", $input));
+    return new Parser(fn(string $input) => succeed("", $input));
 }
 
 /**
@@ -102,7 +107,7 @@ function nothing(): Parser
  */
 function everything(): Parser
 {
-    return parser(fn(string $input) => succeed($input, ""));
+    return new Parser(fn(string $input) => succeed($input, ""));
 }
 
 
@@ -110,10 +115,11 @@ function everything(): Parser
  * Parse the end of the input
  *
  * @return Parser<string>
+ * @psalm-suppress MixedReturnTypeCoercion
  */
 function eof(): Parser
 {
-    return parser(fn(string $input): ParseResult => mb_strlen($input) === 0
+    return new Parser(fn(string $input): ParseResult => mb_strlen($input) === 0
         ? succeed("", "")
         : fail("eof", $input)
     );

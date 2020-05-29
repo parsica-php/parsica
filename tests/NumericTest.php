@@ -25,7 +25,7 @@ final class NumericTest extends ParserTestCase
         $this->assertParse("0", float(), "0");
         $this->assertParse("0.1", float(), "0.1");
         $this->assertParse("123.456", float(), "123.456");
-        $this->assertParse(123.456, float()->into1('floatval'), "123.456");
+        $this->assertParse(123.456, float()->fmap('floatval'), "123.456");
         $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 }
