@@ -13,8 +13,8 @@ use function Mathias\ParserCombinator\{any,
     ignore,
     optional,
     seq,
-    space,
-    string};
+    string
+};
 
 final class combinatorsTest extends ParserTestCase
 {
@@ -91,7 +91,7 @@ final class combinatorsTest extends ParserTestCase
             collect(
                 string("Hello")
                     ->followedBy(
-                        // @todo replace char(' ') by something spacey
+                    // @todo replace char(' ') by something spacey
                         optional(char(' '))->ignore()
                     )
                     ->followedBy(

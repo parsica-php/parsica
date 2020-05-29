@@ -7,7 +7,6 @@ use function Mathias\ParserCombinator\{crlf, eol, newline, skipHSpace, skipHSpac
 
 final class spaceTest extends ParserTestCase
 {
-
     /** @test */
     public function newline()
     {

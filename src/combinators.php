@@ -4,7 +4,6 @@ namespace Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
-use function Mathias\ParserCombinator\Parser\parser;
 use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
 
 /**
@@ -27,6 +26,7 @@ function identity(Parser $parser): Parser
  * @template T
  *
  * @param Parser<T> $parser
+ *
  * @return Parser<string>
  *
  * @deprecated 0.2
@@ -40,6 +40,7 @@ function ignore(Parser $parser): Parser
  * Optionally parse something, but still succeed if the thing is not there
  *
  * @template T
+ *
  * @param Parser<T> $parsed
  *
  * @return Parser<T|string>
@@ -70,8 +71,10 @@ function seq(Parser $first, Parser $second): Parser
  * Either parse the first thing or the second thing
  *
  * @template T
+ *
  * @param Parser<T> $first
  * @param Parser<T> $second
+ *
  * @return Parser<T>
  * @deprecated 0.2
  */
@@ -82,7 +85,9 @@ function either(Parser $first, Parser $second): Parser
 
 /**
  * Parse into an array that consists of the results of both parsers.
+ *
  * @template T
+ *
  * @param Parser<T> $first
  * @param Parser<T> $second
  *
@@ -153,9 +158,9 @@ function atLeastOne(Parser $parser): Parser
 
         while ($r->isSuccess()) {
             $next = $parser->continueFrom($r);
-            if($next->isFail()) return $r;
+            if ($next->isFail()) return $r;
             $r = $r->mappend($next);
-        };
+        }
         return $r;
     });
 }

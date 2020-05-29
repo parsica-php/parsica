@@ -9,9 +9,9 @@ final class Assert
     /**
      * @throws InvalidArgumentException
      */
-    public static function length(string $value, int $length, string $message) : void
+    public static function length(string $value, int $length, string $message): void
     {
-        if($length !== mb_strlen($value)) {
+        if ($length !== mb_strlen($value)) {
             throw new InvalidArgumentException($message);
         }
     }
@@ -19,9 +19,9 @@ final class Assert
     /**
      * @throws InvalidArgumentException
      */
-    public static function minLength(string $value, int $length, string $message) : void
+    public static function minLength(string $value, int $length, string $message): void
     {
-        if(mb_strlen($value) < $length) {
+        if (mb_strlen($value) < $length) {
             throw new InvalidArgumentException($message);
         }
     }

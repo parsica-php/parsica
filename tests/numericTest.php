@@ -3,15 +3,11 @@
 namespace Tests\Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
-use function Mathias\ParserCombinator\char;
 use function Mathias\ParserCombinator\digit;
 use function Mathias\ParserCombinator\float;
-use function Mathias\ParserCombinator\string;
 
 final class numericTest extends ParserTestCase
 {
-
-
     /** @test */
     public function digit()
     {

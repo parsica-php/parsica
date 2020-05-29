@@ -24,16 +24,19 @@ interface ParseResult
 
     /**
      * @param ParseResult<T> $other
+     *
      * @return ParseResult<T>
      */
-    public function mappend(ParseResult $other) : ParseResult;
+    public function mappend(ParseResult $other): ParseResult;
 
     /**
      * Map a function over the parsed result
      *
      * @template T2
+     *
      * @param callable(T):T2 $transform
+     *
      * @return ParseResult<T2>
      */
-    public function fmap(callable $transform) : ParseResult;
+    public function fmap(callable $transform): ParseResult;
 }

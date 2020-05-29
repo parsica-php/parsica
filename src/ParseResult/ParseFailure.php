@@ -55,18 +55,21 @@ final class ParseFailure extends Exception implements ParseResult
 
     /**
      * @param ParseResult<T> $other
+     *
      * @return ParseResult<T>
      */
     public function mappend(ParseResult $other): ParseResult
     {
-        throw new \Exception("@TODO Not implemented");
+        throw new Exception("@TODO Not implemented");
     }
 
     /**
      * Map a function over the parsed result
      *
      * @template T2
+     *
      * @param callable(T) : T2 $transform
+     *
      * @return ParseResult<T2>
      */
     public function fmap(callable $transform): ParseResult

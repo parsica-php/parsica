@@ -27,14 +27,14 @@ abstract class ParserTestCase extends TestCase
                 $message . "\n" .
                 "Parser test failed."
                 . "\nInput: $input"
-                . "\nTest expected: " . (string) $expectedParsed
+                . "\nTest expected: " . (string)$expectedParsed
                 . "\nParser expected: " . $actualResult->expected()
                 . "\nGot: " . $actualResult->got()
             );
         }
     }
 
-    protected function assertRemain(string $expectedRemaining, Parser $parser, string $input, string $message = "") : void
+    protected function assertRemain(string $expectedRemaining, Parser $parser, string $input, string $message = ""): void
     {
         $actualResult = $parser->run($input);
         if ($actualResult->isSuccess()) {
@@ -55,7 +55,7 @@ abstract class ParserTestCase extends TestCase
         }
     }
 
-    protected function assertNotParse(Parser $parser, string $input, ?string $expectedFailure = null, string $message = "") : void
+    protected function assertNotParse(Parser $parser, string $input, ?string $expectedFailure = null, string $message = ""): void
     {
         $actualResult = $parser->run($input);
         $this->assertFalse(

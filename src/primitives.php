@@ -5,14 +5,15 @@ namespace Mathias\ParserCombinator;
 use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
 use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
-use function Mathias\ParserCombinator\Parser\parser;
 
 /**
  * A parser that satisfies a predicate. Useful as a building block for writing things like char(), digit()...
  *
  * @template T
+ *
  * @param callable(string) : bool $predicate
  * @param string $expected
+ *
  * @return Parser<T>
  */
 function satisfy(callable $predicate, string $expected = "satisfy(predicate)"): Parser
@@ -29,13 +30,14 @@ function satisfy(callable $predicate, string $expected = "satisfy(predicate)"): 
 }
 
 
-
 /**
  * Keep parsing 0 or more characters as long as the predicate holds.
  *
  * @template T
+ *
  * @param callable(string) : bool $predicate
  * @param string $expected
+ *
  * @return Parser<T>
  */
 function takeWhile(callable $predicate, string $expected = "takeWhile(predicate)"): Parser
@@ -54,10 +56,12 @@ function takeWhile(callable $predicate, string $expected = "takeWhile(predicate)
     });
 }
 
+
 /**
  * Keep parsing 1 or more characters as long as the predicate holds.
  *
  * @template T
+ *
  * @param callable(string) : bool $predicate
  * @param string $expected
  *
@@ -69,7 +73,7 @@ function takeWhile1(callable $predicate, string $expected = "takeWhile1(predicat
         if (mb_strlen($input) === 0) {
             return fail($expected, "EOF");
         }
-        if(!$predicate(mb_substr($input, 0, 1))) {
+        if (!$predicate(mb_substr($input, 0, 1))) {
             return fail($expected, $input);
         }
         $chunk = "";

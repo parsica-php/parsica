@@ -21,6 +21,5 @@ final class stringTest extends ParserTestCase
         $this->assertParse("abc", string('abc'), "abcde");
         $this->assertNotParse(string('abc'), "babc", "string(abc)");
     }
-
 }
 
