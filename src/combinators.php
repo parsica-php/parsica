@@ -71,16 +71,18 @@ function collect(Parser $first, Parser $second): Parser
 }
 
 /**
+ * Transform the parsed string into something else using a callable.
+ *
+ * @template T1
+ * @template T2
+ *
  * @param Parser<T1> $parser
  * @param callable(T1):T2 $transform
  *
  * @return Parser<T2>
  *
  * @deprecated 0.2
- * Transform the parsed string into something else using a callable.
  *
- * @template T1
- * @template T2
  *
  * @see Parser::into1()
  */
@@ -88,7 +90,7 @@ function into1(Parser $parser, callable $transform): Parser
 {
     return parser(
     /**
-     * @return ParseResult<T2>
+     * @PSALMTODO return ParseResult<T2>
      */
         function (string $input) use ($parser, $transform) : ParseResult {
             $r = $parser->run($input);
@@ -118,11 +120,12 @@ function intoNew1(Parser $parser, string $className): Parser
 }
 
 /**
+ * Tries each parser one by one
+ *
  * @param Parser<T>[] $parsers
  *
  * @return Parser<T>
  * @deprecated 0.2
- * Tries each parser one by one
  *
  * @template T
  *
@@ -144,11 +147,12 @@ function any(Parser ...$parsers): Parser
 }
 
 /**
+ * One or more repetitions of Parser
+ *
  * @param Parser<T> $parser
  *
  * @return Parser<T>
  * @deprecated 0.2
- * One or more repetitions of Parser
  *
  * @template T
  *
