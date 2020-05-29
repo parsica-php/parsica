@@ -16,7 +16,7 @@ use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
  */
 function char(string $c): Parser
 {
-    Assert::length($c, 1, "char() expects a single character. Use string() if you want longer strings");
+    Assert::singleChar($c);
     return satisfy(equals($c), "char($c)");
 }
 
@@ -26,7 +26,7 @@ function char(string $c): Parser
  */
 function string(string $str): Parser
 {
-    Assert::minLength($str, 1, "The string must not be empty.");
+    Assert::nonEmpty($str);
     $len = mb_strlen($str);
     return new Parser(
         fn(string $input): ParseResult => mb_substr($input, 0, $len) === $str

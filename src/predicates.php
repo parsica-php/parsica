@@ -12,7 +12,7 @@ use Mathias\ParserCombinator\Assert\Assert;
  */
 function equals(string $x): callable
 {
-    Assert::length($x, 1, "The argument to equals() must be 1 character in length");
+    Assert::singleChar($x);
     return fn(string $y): bool => $x === $y;
 }
 
