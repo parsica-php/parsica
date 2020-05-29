@@ -88,4 +88,15 @@ final class ParseSuccess implements ParseResult
     {
         return succeed($transform($this->parsed), $this->remaining);
     }
+
+    /**
+     * Return the first successful ParseResult if any, and otherwise return the first failing one.
+     *
+     * @param ParseResult<T> $other
+     * @return ParseResult<T>
+     */
+    public function alternative(ParseResult $other): ParseResult
+    {
+        return $this;
+    }
 }

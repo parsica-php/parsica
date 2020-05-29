@@ -76,4 +76,15 @@ final class ParseFailure extends Exception implements ParseResult
     {
         return fail($this->expected, $this->got);
     }
+
+    /**
+     * Return the first successful ParseResult if any, and otherwise return the first failing one.
+     *
+     * @param ParseResult<T> $other
+     * @return ParseResult<T>
+     */
+    public function alternative(ParseResult $other): ParseResult
+    {
+        return $other->isSuccess() ? $other : $this;
+    }
 }
