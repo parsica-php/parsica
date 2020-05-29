@@ -2,8 +2,11 @@
 
 namespace Tests\Mathias\ParserCombinator;
 
+use http\Exception\InvalidArgumentException;
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\{any,
+    anySingle,
+    anySingleBut,
     atLeastOne,
     char,
     collect,
@@ -11,10 +14,14 @@ use function Mathias\ParserCombinator\{any,
     float,
     identity,
     ignore,
+    noneOf,
+    noneOfS,
+    oneOf,
+    oneOfS,
     optional,
     seq,
-    string
-};
+    string,
+    takeRest};
 
 final class combinatorsTest extends ParserTestCase
 {
@@ -31,6 +38,7 @@ final class combinatorsTest extends ParserTestCase
     public function ignore()
     {
         $parser = ignore(char('a'));
+        $this->assertFailOnEOF($parser);
         $this->assertParse("", $parser, "abc");
         $this->assertRemain("bc", $parser, "abc");
 
@@ -44,7 +52,7 @@ final class combinatorsTest extends ParserTestCase
     public function optional()
     {
         $parser = char('a')->optional();
-        $this->assertParse("", $parser, "");
+        $this->assertSucceedOnEOF($parser);
         $this->assertParse("a", $parser, "abc");
         $this->assertRemain("bc", $parser, "abc");
 
@@ -59,10 +67,99 @@ final class combinatorsTest extends ParserTestCase
     }
 
     /** @test */
+    public function anySingle()
+    {
+        $parser = anySingle();
+        $this->assertFailOnEOF($parser);
+        $this->assertParse("a", $parser, "a");
+        $this->assertParse("a", $parser, "abc");
+        $this->assertParse(":", $parser, ":");
+        $this->assertParse(":", $parser, ":-)");
+    }
+
+    /** @test */
+    public function anySingleBut()
+    {
+        $parser = anySingleBut("x");
+        $this->assertFailOnEOF($parser);
+        $this->assertParse("a", $parser, "a");
+        $this->assertRemain("", $parser, "a");
+        $this->assertParse("a", $parser, "abc");
+        $this->assertRemain("bc", $parser, "abc");
+        $this->assertNotParse($parser, "x");
+        $this->assertNotParse($parser, "xxx");
+    }
+
+    /** @test */
+    public function oneOf()
+    {
+        $parser = oneOf(['a', 'b', 'c']);
+        $this->assertFailOnEOF($parser);
+        $this->assertParse("a", $parser, "a");
+        $this->assertParse("a", $parser, "ax");
+        $this->assertParse("b", $parser, "b");
+        $this->assertParse("c", $parser, "c");
+        $this->assertNotParse($parser, "xyz");
+    }
+
+    /** @test */
+    public function oneOf_expects_single_chars()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $parser = oneOf(['a', "long", "c"]);
+    }
+
+    /** @test */
+    public function oneOfS()
+    {
+        $parser = oneOfS("abc");
+        $this->assertParse("a", $parser, "ax");
+        $this->assertNotParse($parser, "xyz");
+    }
+
+    /** @test */
+    public function noneOf()
+    {
+        $parser = noneOf(['a', 'b', 'c']);
+        $this->assertFailOnEOF($parser);
+        $this->assertNotParse($parser, "a");
+        $this->assertNotParse($parser, "ax");
+        $this->assertNotParse($parser, "b");
+        $this->assertParse("x", $parser, "xyz");
+        $this->assertRemain("yz", $parser, "xyz");
+    }
+
+    /** @test */
+    public function noneOfS()
+    {
+        $parser = noneOfS("abc");
+        $this->assertNotParse($parser, "ax");
+        $this->assertParse("x", $parser, "xyz");
+    }
+
+    /** @test */
+    public function take()
+    {
+        $this->fail();
+        // take(5, 'a')
+    }
+
+
+    /** @test */
+    public function takeRest()
+    {
+        $parser = takeRest();
+        $this->assertSucceedOnEOF($parser);
+        $this->assertParse("xyz", $parser, "xyz");
+        $this->assertRemain("", $parser, "xyz");
+    }
+
+
+    /** @test */
     public function either()
     {
         $parser = either(char('a'), char('b'));
-
+        $this->assertFailOnEOF($parser);
         $this->assertParse("a", $parser, "abc");
         $this->assertRemain("bc", $parser, "abc");
         $this->assertParse("b", $parser, "bc");
@@ -75,7 +172,7 @@ final class combinatorsTest extends ParserTestCase
     public function seq()
     {
         $parser = seq(char('a'), char('b'));
-
+        $this->assertFailOnEOF($parser);
         $this->assertParse("ab", $parser, "abc");
         $this->assertRemain("c", $parser, "abc");
         $this->assertNotParse($parser, "acc");
@@ -106,7 +203,7 @@ final class combinatorsTest extends ParserTestCase
             );
 
         $expected = ["Hello", "world"];
-
+        $this->assertFailOnEOF($parser);
         $this->assertParse($expected, $parser, "Hello , world!");
         $this->assertParse($expected, $parser, "Hello,world!");
         $this->markTestIncomplete("@TODO Replace with 0.2 version");
@@ -120,6 +217,7 @@ final class combinatorsTest extends ParserTestCase
                 string("Hello"),
                 string("world")
             );
+        $this->assertFailOnEOF($parser);
         $this->assertNotParse($parser, "Helloplanet");
         $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
@@ -130,6 +228,7 @@ final class combinatorsTest extends ParserTestCase
     public function atLeastOne()
     {
         $parser = atLeastOne(char('a'));
+        $this->assertFailOnEOF($parser);
         $this->assertParse("a", $parser, "a");
         $this->assertParse("aa", $parser, "aa");
         $this->assertParse("aa", $parser, "aabb");
@@ -144,6 +243,7 @@ final class combinatorsTest extends ParserTestCase
         $amount = float()->fmap('floatval');
         $money = collect($symbol, $amount);
 
+        $this->assertFailOnEOF($money);
         $this->assertParse("€", $symbol, "€");
         $this->assertParse(15.23, $amount, "15.23");
         $this->assertParse(["€", 15.23], $money, "€15.23");

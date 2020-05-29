@@ -2,6 +2,7 @@
 
 namespace Mathias\ParserCombinator;
 
+use Mathias\ParserCombinator\Assert\Assert;
 use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\Parser\TakeWhile;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
@@ -63,13 +64,116 @@ function takeWhile1(callable $predicate): Parser
 }
 
 /**
- * Parse a single character of anything
+ * Parse and return a single character of anything.
  *
+ * @template T
+ *
+ * @return Parser<T>
+ */
+function anySingle() : Parser
+{
+    return satisfy(
+        /** @param mixed $_ */
+        fn($_)=>true,
+        "anySingle"
+    );
+}
+
+/**
+ * Parse and return a single character of anything.
+ * @TODO This is an alias of anySingle. Should we get rid of one of them?
  * @return Parser<string>
  */
 function anything(): Parser
 {
     return satisfy(fn(string $_) => true, 'anything');
+}
+
+
+/**
+ * Match any character but the given one.
+ *
+ * @template T
+ *
+ * @return Parser<T>
+ */
+function anySingleBut(string $x) : Parser
+{
+    return satisfy(not(equals($x)), "anySingleBut($x)");
+}
+
+/**
+ * Succeeds if the current character is in the supplied list of characters. Returns the parsed character.
+ *
+ * @template T
+ *
+ * @param list<string> $chars
+ * @return Parser<T>
+ */
+function oneOf(array $chars) : Parser
+{
+    Assert::singleChars($chars);
+    return satisfy(
+        fn(string $x) => in_array($x, $chars),
+        "oneOf(".implode('', $chars).")"
+    );
+}
+
+/**
+ * A compact form of 'oneOf'.
+ * oneOfS("abc") == oneOf(['a', 'b', 'c'])
+ *
+ * @template T
+ *
+ * @param string $chars
+ * @return Parser<T>
+ */
+function oneOfS(string $chars) : Parser
+{
+    return oneOf(mb_str_split($chars));
+}
+
+
+/**
+ * The dual of 'oneOf'. Succeeds if the current character is not in the supplied list of characters. Returns the
+ * parsed character.
+ *
+ * @template T
+ *
+ * @param list<string> $chars
+ * @return Parser<T>
+ */
+function noneOf(array $chars) : Parser
+{
+    Assert::singleChars($chars);
+    return satisfy(
+        fn(string $x) => !in_array($x, $chars),
+        "noneOf(".implode('', $chars).")"
+    );
+}
+
+/**
+ * A compact form of 'noneOf'.
+ * noneOfS("abc") == noneOf(['a', 'b', 'c'])
+ *
+ * @template T
+ *
+ * @param string $chars
+ * @return Parser<T>
+ */
+function noneOfS(string $chars) : Parser
+{
+    return noneOf(mb_str_split($chars));
+}
+
+/**
+ * Consume the rest of the input and return it as a string. This parser never fails, but may return the empty string.
+ * @template T
+ * @return Parser<T>
+ */
+function takeRest() : Parser
+{
+    return takeWhile(fn (string $_) : bool => true);
 }
 
 /**
