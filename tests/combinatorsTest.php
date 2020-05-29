@@ -38,7 +38,6 @@ final class combinatorsTest extends ParserTestCase
             ->followedBy(ignore(char('-')))
             ->followedBy(string('efgh'));
         $this->assertParse("abcdefgh", $parser, "abcd-efgh");
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 
     /** @test */

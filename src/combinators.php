@@ -21,15 +21,13 @@ function identity(Parser $parser): Parser
 }
 
 /**
- * Parse something, strip it from the remaining string, but do not return anything
+ * Parse something, strip it from the remaining input, but do not return anything.
  *
  * @template T
  *
  * @param Parser<T> $parser
  *
  * @return Parser<string>
- *
- * @deprecated 0.2
  */
 function ignore(Parser $parser): Parser
 {

@@ -51,10 +51,8 @@ final class Parser
     }
 
     /**
-     * @return Parser<string>
      * @see ignore()
-     *
-     * @deprecated 0.2
+     * @return Parser<string>
      */
     public function ignore(): Parser
     {
