@@ -20,6 +20,7 @@ use function Mathias\ParserCombinator\{any,
     oneOfS,
     optional,
     seq,
+    skipSpace,
     string,
     takeRest};
 
@@ -138,14 +139,6 @@ final class combinatorsTest extends ParserTestCase
     }
 
     /** @test */
-    public function take()
-    {
-        $this->fail();
-        // take(5, 'a')
-    }
-
-
-    /** @test */
     public function takeRest()
     {
         $parser = takeRest();
@@ -186,20 +179,11 @@ final class combinatorsTest extends ParserTestCase
         $parser =
             collect(
                 string("Hello")
-                    ->followedBy(
-                    // @todo replace char(' ') by something spacey
-                        optional(char(' '))->ignore()
-                    )
-                    ->followedBy(
-                        char(',')->ignore()
-                    )
-                    ->followedBy(
-                        optional(char(' '))->ignore()
-                    ),
+                    ->followedBy(skipSpace())
+                    ->followedBy(char(',')->ignore())
+                    ->followedBy(skipSpace()),
                 string("world")
-                    ->followedBy(
-                        char('!')->ignore()
-                    )
+                    ->followedBy(char('!')->ignore())
             );
 
         $expected = ["Hello", "world"];
