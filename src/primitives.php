@@ -201,7 +201,7 @@ function everything(): Parser
  * Parse the end of the input
  *
  * @template T
- * @return Parser<string>
+ * @return Parser<T>
  */
 function eof(): Parser
 {
