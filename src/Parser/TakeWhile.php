@@ -22,10 +22,13 @@ final class TakeWhile
      */
     public static function _takeWhile(callable $predicate): Parser
     {
+        /**
+         * @see \Tests\Mathias\ParserCombinator\primitivesTest::not_sure_how_takeWhile_should_deal_with_EOF()
+         */
         return new Parser(
             fn(string $input): ParseResult =>
-                self::isEOF($input) ?
-                    fail("takeWhile(predicate)", "EOF") :
+                //self::isEOF($input) ?
+                //    fail("takeWhile(predicate)", "EOF") :
                 self::parseRemainingInput($input, $predicate)
         );
     }
@@ -43,11 +46,9 @@ final class TakeWhile
     {
         return new Parser(
             fn(string $input): ParseResult =>
-                self::isEOF($input) ?
-                    fail("takeWhile1(predicate)", "EOF") :
-                (!self::matchFirst($predicate, $input) ?
+                !self::matchFirst($predicate, $input) ?
                     fail("takeWhile1(predicate)", $input) :
-                self::parseRemainingInput($input, $predicate))
+                self::parseRemainingInput($input, $predicate)
         );
     }
 
