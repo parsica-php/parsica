@@ -95,7 +95,7 @@ function anything(): Parser
  *
  * @template T
  *
- * @return Parser<T>
+ * @return Parser<string>
  */
 function anySingleBut(string $x) : Parser
 {
@@ -108,7 +108,7 @@ function anySingleBut(string $x) : Parser
  * @template T
  *
  * @param list<string> $chars
- * @return Parser<T>
+ * @return Parser<string>
  */
 function oneOf(array $chars) : Parser
 {
@@ -126,11 +126,13 @@ function oneOf(array $chars) : Parser
  * @template T
  *
  * @param string $chars
- * @return Parser<T>
+ * @return Parser<string>
  */
 function oneOfS(string $chars) : Parser
 {
-    return oneOf(mb_str_split($chars));
+    /** @var list<string> $split */
+    $split = mb_str_split($chars);
+    return oneOf($split);
 }
 
 
@@ -141,7 +143,7 @@ function oneOfS(string $chars) : Parser
  * @template T
  *
  * @param list<string> $chars
- * @return Parser<T>
+ * @return Parser<string>
  */
 function noneOf(array $chars) : Parser
 {
@@ -159,17 +161,19 @@ function noneOf(array $chars) : Parser
  * @template T
  *
  * @param string $chars
- * @return Parser<T>
+ * @return Parser<string>
  */
 function noneOfS(string $chars) : Parser
 {
-    return noneOf(mb_str_split($chars));
+    /** @var list<string> $split */
+    $split = mb_str_split($chars);
+    return noneOf($split);
 }
 
 /**
  * Consume the rest of the input and return it as a string. This parser never fails, but may return the empty string.
  * @template T
- * @return Parser<T>
+ * @return Parser<string>
  */
 function takeRest() : Parser
 {
@@ -197,7 +201,7 @@ function everything(): Parser
  * Parse the end of the input
  *
  * @template T
- * @return Parser<T>
+ * @return Parser<string>
  */
 function eof(): Parser
 {
