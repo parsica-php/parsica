@@ -38,18 +38,17 @@ final class ParserTestCaseTest extends ParserTestCase
             "should fail");
         $this->assertStrictlyEquals(new MyType(1.23), new MyType(7.89),
             "should fail");
-        $this->assertStrictlyEquals([new MyType(1.23)], [new MyType(1.23)],
-            "We'd probably want this to pass?");
         */
     }
 
     /** @test */
     public function strictlyEquals_for_arrays()
     {
-        throw new \Exception("@todo nto implemented");
-
+        $this->assertStrictlyEquals(
+            [1, new MyType(5.0)],
+            [1, new MyType(5.0)]
+        );
     }
-
 
 }
 
