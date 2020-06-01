@@ -102,9 +102,9 @@ final class Parser
                 if ($r2->isSuccess()) {
                     return succeed($r1->mappend($r2)->parsed(), $r2->remaining());
                 }
-                return fail("seq ({$r1->parsed()} {$r2->expected()})", "@TODO");
+                return fail("seq (... {$r2->expected()})", $r2->got());
             }
-            return fail("seq ({$r1->expected()} ...)", "@TODO");
+            return fail("seq ({$r1->expected()} ...)", $r1->got());
         });
 
     }
@@ -154,7 +154,7 @@ final class Parser
     public function fmapClass(string $className): Parser
     {
         return $this->fmap(
-            fn(string $val) => new $className($val)
+            fn($val) => new $className($val)
         );
     }
 }
