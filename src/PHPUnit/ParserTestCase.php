@@ -7,9 +7,27 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Convenience assertion methods. When writing tests for your own parsers, extend from this instead of PHPUnit's TestCase.
+ *
  */
 abstract class ParserTestCase extends TestCase
 {
+    /**
+     * @see \Tests\Mathias\ParserCombinator\PHPUnit\ParserTestCaseTest::strict_equality
+     */
+    protected function assertStrictlyEquals($expected, $actual, string $message = ''): void
+    {
+        // Just a POC implementation.
+        if(is_scalar($expected) ) {
+            $this->assertSame($expected, $actual, $message);
+        } elseif(is_object($expected)) {
+            $this->assertEquals(get_class($expected), get_class($actual),
+                "Expected type didn't match actual type");
+            $this->assertEquals($expected, $actual, $message);
+        } else {
+            throw new \Exception("@todo Not implemented");
+        }
+    }
+
     /**
      * @param mixed $expectedParsed
      */
@@ -17,7 +35,7 @@ abstract class ParserTestCase extends TestCase
     {
         $actualResult = $parser->run($input);
         if ($actualResult->isSuccess()) {
-            $this->assertEquals(
+            $this->assertStrictlyEquals(
                 $expectedParsed,
                 $actualResult->parsed(),
                 $message . "\n" . "The parser succeeded but the parsed value doesn't match."
