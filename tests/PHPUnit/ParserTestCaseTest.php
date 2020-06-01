@@ -42,6 +42,15 @@ final class ParserTestCaseTest extends ParserTestCase
             "We'd probably want this to pass?");
         */
     }
+
+    /** @test */
+    public function strictlyEquals_for_arrays()
+    {
+        throw new \Exception("@todo nto implemented");
+
+    }
+
+
 }
 
 final class MyType
