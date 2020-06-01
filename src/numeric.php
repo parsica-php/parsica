@@ -23,11 +23,11 @@ function digit(): Parser
         char('7'),
         char('8'),
         char('9'),
-    );
+    )->label('digit');
 }
 
 /**
- * Parse a float. Like all parsers, this returns the float as a string. Use into1('floatval')
+ * Parse a float. Like all parsers, this returns the float as a string. Use fmap('floatval')
  * or similar to cast it to a numeric type.
  */
 function float(): Parser
@@ -39,5 +39,5 @@ function float(): Parser
                     char('.')
                         ->followedBy(atLeastOne(digit()))
                 )
-            );
+            )->label('float');
 }
