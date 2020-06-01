@@ -50,7 +50,7 @@ abstract class ParserTestCase extends TestCase
                 $message . "\n" .
                 "Parser test failed."
                 . "\nInput: $input"
-                . "\nTest expected: " . (string)$expectedParsed
+                . "\nTest expected: " . print_r($expectedParsed, true)
                 . "\nParser expected: " . $actualResult->expected()
                 . "\nGot: " . $actualResult->got()
             );
