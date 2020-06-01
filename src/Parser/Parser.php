@@ -157,7 +157,8 @@ final class Parser
     public function fmapClass(string $className): Parser
     {
         return $this->fmap(
-            fn($val) => new $className($val)
+        /** @param mixed $val */
+        fn($val) => new $className($val)
         );
     }
 

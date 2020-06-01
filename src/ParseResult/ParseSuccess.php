@@ -70,7 +70,9 @@ final class ParseSuccess implements ParseResult
      * @TODO    Can we avoid suppressing this? We'd need some way of indicating that the parsed types are monoids.
      *          For strings that would mean wrapping them in a String class, for user types it would mean they have to
      *          implement Monoid, which is going to be impractical for parsing into existing types.
+     *
      * @psalm-suppress MixedOperand
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function mappend(ParseResult $other): ParseResult
     {
@@ -135,6 +137,10 @@ final class ParseSuccess implements ParseResult
     /**
      * The type of the ParseResult
      * @return class-string<T>
+     *
+     * @psalm-suppress MoreSpecificReturnType
+     * @psalm-suppress LessSpecificReturnStatement
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function type() : string
     {

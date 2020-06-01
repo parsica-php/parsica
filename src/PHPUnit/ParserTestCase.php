@@ -12,7 +12,16 @@ use PHPUnit\Framework\TestCase;
 abstract class ParserTestCase extends TestCase
 {
     /**
+     * @param mixed $expected
+     * @param mixed $actual
+     * @param string $message
+     *
+     * @throws \Exception
      * @see \Tests\Mathias\ParserCombinator\PHPUnit\ParserTestCaseTest::strict_equality
+     *
+     * @psalm-suppress MixedArgument
+     * @psalm-suppress MixedAssignment
+     * @psalm-suppress MixedArrayAccess
      */
     protected function assertStrictlyEquals($expected, $actual, string $message = ''): void
     {
