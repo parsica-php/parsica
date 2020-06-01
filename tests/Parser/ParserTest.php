@@ -22,8 +22,7 @@ final class ParserTest extends ParserTestCase
     public function followedBy()
     {
         $parser = char('a')->followedBy(char('b'));
-        $this->assertParse("ab", $parser, "abc");
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
+        $this->assertParse("b", $parser, "abc");
     }
 
 }

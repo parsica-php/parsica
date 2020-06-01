@@ -2,6 +2,8 @@
 
 namespace Mathias\ParserCombinator\ParseResult;
 
+use Mathias\ParserCombinator\Parser\Parser;
+
 /**
  * @template T
  */
@@ -47,4 +49,14 @@ interface ParseResult
      * @return ParseResult<T>
      */
     public function alternative(ParseResult $other) : ParseResult;
+
+    /**
+     * @template T2
+     *
+     * @param Parser<T2> $parser
+     *
+     * @return ParseResult<T2>
+     * @deprecated
+     */
+    public function continueOnRemaining(Parser $parser): ParseResult;
 }

@@ -49,7 +49,10 @@ function optional(Parser $parser): Parser
 }
 
 /**
- * Parse something, then follow by something else. Return the result of the second parser.
+ * Parse something, then follow by something else. Ignore the result of the first parser and return the result of the
+ * second parser.
+ *
+ * Haskell Equivalent if (>>)
  *
  * @param Parser<T1> $first
  * @param Parser<T2> $second

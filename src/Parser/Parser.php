@@ -53,6 +53,8 @@ final class Parser
     /**
      * @see ignore()
      * @return Parser<string>
+     *
+     * @TODO decide on the return type. Perhaps we need a Maybe here?
      */
     public function ignore(): Parser
     {
@@ -100,7 +102,7 @@ final class Parser
             if ($r1->isSuccess()) {
                 $r2 = $second->continueFrom($r1);
                 if ($r2->isSuccess()) {
-                    return succeed($r1->mappend($r2)->parsed(), $r2->remaining());
+                    return succeed($r2->parsed(), $r2->remaining());
                 }
                 return fail("seq (... {$r2->expected()})", $r2->got());
             }
@@ -111,6 +113,7 @@ final class Parser
 
     /**
      * Take the remaining input from the result and parses it
+     * @deprecated Doesn't have a test
      */
     public function continueFrom(ParseResult $result): ParseResult
     {
@@ -156,5 +159,24 @@ final class Parser
         return $this->fmap(
             fn($val) => new $className($val)
         );
+    }
+
+    /**
+     *
+     * Combine the parser with another parser of the same type, which will cause the results to be mappended.
+     *
+     * @param Parser<T> $other
+     *
+     * @return Parser<T>
+     * @see ParseResult::mappend
+     */
+    public function mappend(Parser $other) : Parser
+    {
+        return new Parser(function (string $input) use ($other): ParseResult {
+            $first = $this->run($input);
+            $second = $first->continueOnRemaining($other);
+            return $first->mappend($second);
+        });
+
     }
 }

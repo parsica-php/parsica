@@ -2,7 +2,6 @@
 
 namespace Tests\Mathias\ParserCombinator;
 
-use http\Exception\InvalidArgumentException;
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\{any,
     anySingle,
@@ -22,7 +21,8 @@ use function Mathias\ParserCombinator\{any,
     seq,
     skipSpace,
     string,
-    takeRest};
+    takeRest
+};
 
 final class combinatorsTest extends ParserTestCase
 {
@@ -44,8 +44,16 @@ final class combinatorsTest extends ParserTestCase
         $this->assertRemain("bc", $parser, "abc");
 
         $parser = string('abcd')
-            ->followedBy(ignore(char('-')))
-            ->followedBy(string('efgh'));
+            ->mappend(ignore(char('-')))
+            ->mappend(string('efgh'));
+        $this->assertParse("abcdefgh", $parser, "abcd-efgh");
+
+
+        // This is how you'd want to do things like creditcard numbers with optional separators
+        $parser = string('abcd')
+            ->mappend(ignore(optional(char('-'))))
+            ->mappend(string('efgh'));
+        $this->assertParse("abcdefgh", $parser, "abcdefgh");
         $this->assertParse("abcdefgh", $parser, "abcd-efgh");
     }
 
@@ -59,12 +67,6 @@ final class combinatorsTest extends ParserTestCase
 
         $this->assertParse("", $parser, "bc");
         $this->assertRemain("bc", $parser, "bc");
-
-        $parser = string('abcd')
-            ->followedBy(optional(ignore(char('-'))))
-            ->followedBy(string('efgh'));
-        $this->assertParse("abcdefgh", $parser, "abcd-efgh");
-        $this->assertParse("abcdefgh", $parser, "abcdefgh");
     }
 
     /** @test */
@@ -166,11 +168,10 @@ final class combinatorsTest extends ParserTestCase
     {
         $parser = seq(char('a'), char('b'));
         $this->assertFailOnEOF($parser);
-        $this->assertParse("ab", $parser, "abc");
+        $this->assertParse("b", $parser, "abc");
         $this->assertRemain("c", $parser, "abc");
         $this->assertNotParse($parser, "acc");
         $this->assertNotParse($parser, "cab");
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 
     /** @test */
@@ -179,18 +180,17 @@ final class combinatorsTest extends ParserTestCase
         $parser =
             collect(
                 string("Hello")
-                    ->followedBy(skipSpace())
-                    ->followedBy(char(',')->ignore())
-                    ->followedBy(skipSpace()),
+                    ->mappend(skipSpace())
+                    ->mappend(char(',')->ignore())
+                    ->mappend(skipSpace()),
                 string("world")
-                    ->followedBy(char('!')->ignore())
+                    ->mappend(char('!')->ignore())
             );
 
         $expected = ["Hello", "world"];
         $this->assertFailOnEOF($parser);
         $this->assertParse($expected, $parser, "Hello , world!");
         $this->assertParse($expected, $parser, "Hello,world!");
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 
     /** @test */
@@ -231,9 +231,31 @@ final class combinatorsTest extends ParserTestCase
         $this->assertParse("€", $symbol, "€");
         $this->assertParse(15.23, $amount, "15.23");
         $this->assertParse(["€", 15.23], $money, "€15.23");
-        $this->assertParse(["$", 15], $money, "$15");
+        $this->assertParse(["$", 15.0], $money, "$15");
         $this->assertNotParse($money, "£12.13");
         $this->markTestIncomplete("@TODO Replace with 0.2 version");
+    }
+
+    /** @test */
+    public function takeN()
+    {
+        $parser = seq(
+            char('€'),
+            float()->fmap('floatval')->fmapClass(SimpleEur::class)
+        );
+        $this->assertParse(new SimpleEur(1.25), $parser, "€1.25");
+
+    }
+
+}
+
+final class SimpleEur
+{
+    private float $val;
+
+    function __construct(float $val)
+    {
+        $this->val = $val;
     }
 
 }

@@ -4,6 +4,7 @@ namespace Mathias\ParserCombinator\ParseResult;
 
 use BadMethodCallException;
 use Exception;
+use Mathias\ParserCombinator\Parser\Parser;
 
 /**
  * @template T
@@ -60,7 +61,7 @@ final class ParseFailure extends Exception implements ParseResult
      */
     public function mappend(ParseResult $other): ParseResult
     {
-        throw new Exception("@TODO Not implemented");
+        return $this;
     }
 
     /**
@@ -86,5 +87,18 @@ final class ParseFailure extends Exception implements ParseResult
     public function alternative(ParseResult $other): ParseResult
     {
         return $other->isSuccess() ? $other : $this;
+    }
+
+    /**
+     * @template T2
+     *
+     * @param Parser<T2> $parser
+     *
+     * @return ParseResult<T2>
+     * @deprecated
+     */
+    public function continueOnRemaining(Parser $parser): ParseResult
+    {
+        return $this;
     }
 }

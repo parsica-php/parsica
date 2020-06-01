@@ -34,10 +34,11 @@ function float(): Parser
 {
     return
         atLeastOne(digit())
-            ->followedBy(
+            ->mappend(
                 optional(
                     char('.')
-                        ->followedBy(atLeastOne(digit()))
+                        ->mappend(atLeastOne(digit()))
                 )
             )->label('float');
+
 }

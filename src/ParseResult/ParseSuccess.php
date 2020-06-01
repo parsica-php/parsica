@@ -3,6 +3,7 @@
 namespace Mathias\ParserCombinator\ParseResult;
 
 use BadMethodCallException;
+use Mathias\ParserCombinator\Parser\Parser;
 
 /**
  * @template T
@@ -59,6 +60,7 @@ final class ParseSuccess implements ParseResult
     }
 
     /**
+     * @deprecated depends on this being a ParseResult<string>, but it should work for ParseResult<Semigroup>
      * @param ParseResult<T> $other
      *
      * @return ParseResult<T>
@@ -87,6 +89,17 @@ final class ParseSuccess implements ParseResult
     public function fmap(callable $transform): ParseResult
     {
         return succeed($transform($this->parsed), $this->remaining);
+    }
+
+    /**
+     * @template T2
+     * @param Parser<T2> $parser
+     * @return ParseResult<T2>
+     * @deprecated
+     */
+    public function continueOnRemaining(Parser $parser) : ParseResult
+    {
+        return $parser->run($this->remaining());
     }
 
     /**

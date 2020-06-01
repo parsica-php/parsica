@@ -15,7 +15,7 @@ final class FunctorTest extends ParserTestCase
             char('a')->followedBy(char('b'))
                 ->fmap('strtoupper');
 
-        $expected = "AB";
+        $expected = "B";
 
         $this->assertParse($expected, $parser, "abca");
     }
@@ -26,7 +26,7 @@ final class FunctorTest extends ParserTestCase
         $parser = seq(char('a'), char('b'))
             ->fmapClass(__NAMESPACE__ . '\\MyType1');
 
-        $expected = new MyType1("ab");
+        $expected = new MyType1("b");
 
         $this->assertParse($expected, $parser, "abc");
     }
