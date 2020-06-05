@@ -3,7 +3,7 @@
 namespace Mathias\ParserCombinator\FP;
 
 /**
- * @template T
+ * @template MaybeT
  */
 interface Maybe extends Functor
 {
@@ -12,9 +12,9 @@ interface Maybe extends Functor
     public function isNothing(): bool;
 
     /**
-     * @param T $defaultValue
+     * @param MaybeT $defaultValue
      *
-     * @return T
+     * @return MaybeT
      */
     public function default($defaultValue);
 }

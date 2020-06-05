@@ -13,5 +13,4 @@ interface Functor
      * @return T2
      */
     public function fmap(callable $f);
-
 }

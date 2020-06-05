@@ -2,15 +2,8 @@
 
 namespace Mathias\ParserCombinator\FP;
 
-/**
- * @template T
- */
-final class Nothing implements Maybe
+final class Nothing implements Functor, Maybe
 {
-    public function __construct()
-    {
-    }
-
     public function isJust(): bool
     {
         return false;
@@ -21,11 +14,6 @@ final class Nothing implements Maybe
         return true;
     }
 
-    /**
-     * @param T $defaultValue
-     *
-     * @return T
-     */
     public function default($defaultValue)
     {
         return $defaultValue;
@@ -33,7 +21,7 @@ final class Nothing implements Maybe
 
     /**
      * @template T2
-     * @param callable(T):T2 $f
+     * @param callable(T1):T2 $f
      * @return Maybe<T2>
      */
     public function fmap(callable $f) : Maybe
