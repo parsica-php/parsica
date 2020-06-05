@@ -5,7 +5,7 @@ namespace Mathias\ParserCombinator\FP;
 /**
  * @template T
  */
-interface Maybe
+interface Maybe extends Functor
 {
     public function isJust(): bool;
 

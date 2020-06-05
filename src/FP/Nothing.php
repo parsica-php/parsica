@@ -1,40 +1,24 @@
 <?php declare(strict_types=1);
 
-
 namespace Mathias\ParserCombinator\FP;
 
 /**
  * @template T
  */
-final class Just implements Maybe
+final class Nothing implements Maybe
 {
-    /** @var T */
-    private $value;
-
-    /**
-     * @param T $value
-     */
-    function __construct($value)
+    public function __construct()
     {
-        $this->value = $value;
-    }
-
-    /**
-     * @return T
-     */
-    public function value()
-    {
-        return $this->value;
     }
 
     public function isJust(): bool
     {
-        return true;
+        return false;
     }
 
     public function isNothing(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -44,7 +28,7 @@ final class Just implements Maybe
      */
     public function default($defaultValue)
     {
-        return $this->value;
+        return $defaultValue;
     }
 
     /**
@@ -54,6 +38,6 @@ final class Just implements Maybe
      */
     public function fmap(callable $f) : Maybe
     {
-        return new Just($f($this->value));
+        return new Nothing;
     }
 }
