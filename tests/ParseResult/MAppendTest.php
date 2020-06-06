@@ -19,7 +19,7 @@ final class MAppendTest extends ParserTestCase
         $discard1 = discard("");
         $discard2 = discard("");
 
-        $this->assertStrictlyEquals(succeed("S1S2a", ""), $succeed1->mappend($succeed2));
+        $this->assertStrictlyEquals(succeed("S1S2", ""), $succeed1->mappend($succeed2));
         $this->assertStrictlyEquals($succeed1, $succeed1->mappend($discard2));
         $this->assertStrictlyEquals($fail2, $succeed1->mappend($fail2));
 
