@@ -76,25 +76,7 @@ final class ParseSuccess implements ParseResult
      */
     public function mappend(ParseResult $other): ParseResult
     {
-        if($other->isFail()) return $other;
-
-        $type1 = $this->type();
-        $type2 = $this->type();
-        if($type1!==$type2) throw new \Exception("Mappend only works for ParseResult<T> instances with the same type T, got ParseResult<$type1> and ParseResult<$type2>.");
-
-        switch($type1) {
-            case 'string':
-                return succeed($this->parsed() . $other->parsed(), $other->remaining());
-            case 'array':
-                return succeed(
-                    array_merge(array_values($this->parsed()), array_values($other->parsed())),
-                    $other->remaining()
-                );
-
-            case 'object':
-            default:
-                throw new \Exception("@TODO cannot mappend ParseResult<$type1>");
-        }
+        return MAppend::mappend($this, $other);
 
     }
 
@@ -148,4 +130,8 @@ final class ParseSuccess implements ParseResult
         return $t == 'object' ? get_class($this->parsed) : $t;
     }
 
+    public function isDiscarded(): bool
+    {
+        return false;
+    }
 }

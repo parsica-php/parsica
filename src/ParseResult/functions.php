@@ -15,3 +15,8 @@ function fail(string $expected, string $got): ParseResult
 {
     return new ParseFailure($expected, $got);
 }
+
+function discard(string $remaining) : ParseResult
+{
+    return new DiscardResult($remaining);
+}

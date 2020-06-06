@@ -59,4 +59,6 @@ interface ParseResult
      * @deprecated
      */
     public function continueOnRemaining(Parser $parser): ParseResult;
+
+    public function isDiscarded() : bool;
 }
