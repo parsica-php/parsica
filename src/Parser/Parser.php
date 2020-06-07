@@ -24,6 +24,14 @@ final class Parser
     }
 
     /**
+     * @deprecated Quick attempt at making recursive parsers possible by mutating them.
+     */
+    public function mutate(Parser $parser)
+    {
+        $this->parserF = $parser->parserF;
+    }
+
+    /**
      * Label a parser. When a parser fails, instead of a generated error message, you'll see your label.
      * eg (char(':')->followedBy(char(')')).followedBy(char(')')).
      *
