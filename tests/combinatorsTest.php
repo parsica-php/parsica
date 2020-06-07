@@ -200,7 +200,6 @@ final class combinatorsTest extends ParserTestCase
             );
         $this->assertFailOnEOF($parser);
         $this->assertNotParse($parser, "Helloplanet");
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 
     /**

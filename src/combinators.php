@@ -4,7 +4,7 @@ namespace Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
-use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
+use function Mathias\ParserCombinator\ParseResult\{fail};
 
 /**
  * Identity parser, returns the Parser as is.
@@ -87,46 +87,37 @@ function either(Parser $first, Parser $second): Parser
  * Mappend all the passed parsers.
  *
  * @template T
+ *
  * @param [Parser<T>] $parsers
+ *
  * @return Parser<T>
  */
-function assemble(Parser ... $parsers) : Parser
+function assemble(Parser ...$parsers): Parser
 {
     return array_reduce(
         $parsers,
-        fn(Parser $l, Parser $r) : Parser => $l->mappend($r),
+        fn(Parser $l, Parser $r): Parser => $l->mappend($r),
         nothing()
     )->label('assemble()');
 }
 
 /**
- * Parse into an array that consists of the results of both parsers.
+ * Parse into an array that consists of the results of all parsers.
  *
  * @template T
  *
- * @param Parser<T> $first
- * @param Parser<T> $second
+ * @param [Parser<T>] $parsers
  *
- * @return Parser
- * @deprecated 0.2
+ * @return Parser<T>
  */
-function collect(Parser $first, Parser $second): Parser
+function collect(Parser ...$parsers): Parser
 {
-    throw new \Exception("@todo see assemble");
-    return new Parser(function (string $input) use ($first, $second) : ParseResult {
-        $r1 = $first->run($input);
-        if ($r1->isSuccess()) {
-            $r2 = $second->run($r1->remaining());
-            if ($r2->isSuccess()) {
-                return succeed([$r1->parsed(), $r2->parsed()], $r2->remaining());
-            } else {
-                return $r2;
-            }
-        } else {
-            return $r1;
-        }
-
-    });
+    $toArray = fn($v) => [$v];
+    $arrayParsers = array_map(
+        fn(Parser $parser): Parser => $parser->fmap($toArray),
+        $parsers
+    );
+    return assemble(...$arrayParsers);
 }
 
 /**
