@@ -76,8 +76,33 @@ final class ParseSuccess implements ParseResult
      */
     public function mappend(ParseResult $other): ParseResult
     {
-        return MAppend::mappend($this, $other);
+        if($other->isFail()) {
+            return $other;
+        } elseif($other->isDiscarded()) {
+            return succeed($this->parsed(), $other->remaining());
+        } else {
+            return $this->mappendSuccess($other);
+        }
+    }
 
+    private function mappendSuccess(ParseResult $other) : ParseResult
+    {
+        // @TODO functor interface so we can mappend arbitrary types
+        $type1 = $this->type();
+        $type2 = $other->type();
+        if($type1!==$type2) throw new \Exception("Mappend only works for ParseResult<T> instances with the same type T, got ParseResult<$type1> and ParseResult<$type2>.");
+
+        switch($type1) {
+            case 'string':
+                return succeed($this->parsed() . $other->parsed(), $other->remaining());
+            case 'array':
+                return succeed(
+                    array_merge(array_values($this->parsed()), array_values($other->parsed())),
+                    $other->remaining()
+                );
+            default:
+                throw new \Exception("@TODO cannot mappend ParseResult<$type1>");
+        }
     }
 
     /**
@@ -124,7 +149,7 @@ final class ParseSuccess implements ParseResult
      * @psalm-suppress LessSpecificReturnStatement
      * @psalm-suppress MixedArgumentTypeCoercion
      */
-    public function type() : string
+    private function type() : string
     {
         $t = gettype($this->parsed);
         return $t == 'object' ? get_class($this->parsed) : $t;
@@ -133,5 +158,13 @@ final class ParseSuccess implements ParseResult
     public function isDiscarded(): bool
     {
         return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function discard(): ParseResult
+    {
+        return new DiscardResult($this->remaining());
     }
 }

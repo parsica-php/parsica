@@ -61,7 +61,7 @@ final class ParseFailure extends Exception implements ParseResult
      */
     public function mappend(ParseResult $other): ParseResult
     {
-        return MAppend::mappend($this, $other);
+        return $this;
     }
 
     /**
@@ -82,12 +82,12 @@ final class ParseFailure extends Exception implements ParseResult
      * Return the first successful ParseResult if any, and otherwise return the first failing one.
      *
      * @param ParseResult<T> $other
+     *
      * @return ParseResult<T>
      */
     public function alternative(ParseResult $other): ParseResult
     {
-        if($other->isSuccess()) return $other;
-        return $this;
+        return $other->isSuccess() ? $other : $this;
     }
 
     /**
@@ -106,5 +106,13 @@ final class ParseFailure extends Exception implements ParseResult
     public function isDiscarded(): bool
     {
         return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function discard(): ParseResult
+    {
+        return $this;
     }
 }

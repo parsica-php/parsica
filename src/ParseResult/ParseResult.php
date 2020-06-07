@@ -56,9 +56,13 @@ interface ParseResult
      * @param Parser<T2> $parser
      *
      * @return ParseResult<T2>
-     * @deprecated
      */
     public function continueOnRemaining(Parser $parser): ParseResult;
+
+    /**
+     * Discard a successful result or return the failed result.
+     */
+    public function discard() : ParseResult;
 
     public function isDiscarded() : bool;
 }

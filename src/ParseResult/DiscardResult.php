@@ -6,7 +6,7 @@ use BadMethodCallException;
 use Mathias\ParserCombinator\Parser\Parser;
 
 /**
- * Discard is a special case of ParseSuccess
+ * Discard is a special case of ParseSuccess. It represents a success but discards the result.
  */
 final class DiscardResult implements ParseResult
 {
@@ -29,7 +29,7 @@ final class DiscardResult implements ParseResult
 
     public function parsed()
     {
-        throw new \Exception("ParseNothing has no parsed value");
+        throw new \Exception("DiscardResult has no parsed value");
     }
 
     public function remaining(): string
@@ -49,7 +49,7 @@ final class DiscardResult implements ParseResult
 
     public function mappend(ParseResult $other): ParseResult
     {
-        return MAppend::mappend($this, $other);
+        return $other->isDiscarded() ? $this : $other;
     }
 
     public function fmap(callable $transform): ParseResult
@@ -78,5 +78,13 @@ final class DiscardResult implements ParseResult
     public function isDiscarded(): bool
     {
         return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function discard(): ParseResult
+    {
+        return $this;
     }
 }

@@ -40,7 +40,6 @@ final class combinatorsTest extends ParserTestCase
     {
         $parser = ignore(char('a'));
         $this->assertFailOnEOF($parser);
-        $this->assertParse("", $parser, "abc");
         $this->assertRemain("bc", $parser, "abc");
 
         $parser = string('abcd')
@@ -48,8 +47,6 @@ final class combinatorsTest extends ParserTestCase
             ->mappend(string('efgh'));
         $this->assertParse("abcdefgh", $parser, "abcd-efgh");
 
-
-        // This is how you'd want to do things like creditcard numbers with optional separators
         $parser = string('abcd')
             ->mappend(ignore(optional(char('-'))))
             ->mappend(string('efgh'));

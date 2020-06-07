@@ -51,14 +51,15 @@ final class Parser
     }
 
     /**
-     * @see ignore()
-     * @return Parser<string>
+     * Parse something, strip it from the remaining input, but discard the parsed value.
      *
-     * @TODO decide on the return type. Perhaps we need a Maybe here?
+     * @return Parser<string>
      */
     public function ignore(): Parser
     {
-        return $this->fmap(fn(string $_) => "");
+        return new Parser(function (string $input) : ParseResult {
+            return $this->run($input)->discard();
+        });
     }
 
     /**
@@ -174,10 +175,9 @@ final class Parser
     public function mappend(Parser $other) : Parser
     {
         return new Parser(function (string $input) use ($other): ParseResult {
-            $first = $this->run($input);
-            $second = $first->continueOnRemaining($other);
-            return $first->mappend($second);
+            $r1 = $this->run($input);
+            $r2 = $r1->continueOnRemaining($other);
+            return $r1->mappend($r2);
         });
-
     }
 }

@@ -40,19 +40,17 @@ final class spaceTest extends ParserTestCase
     /** @test */
     public function skipSpace()
     {
-        $this->assertParse("", skipSpace(), "no space");
-        $this->assertParse("", skipSpace(), " 1 space");
-        $this->assertParse("", skipSpace(), "\ttab");
-        $this->assertParse("", skipSpace(), "\nnewline");
-        $this->assertParse("", skipSpace(), "\t   \n   \r\n  abc");
+        $this->assertRemain("no space", skipSpace(), "no space");
+        $this->assertRemain("1 space", skipSpace(), " 1 space");
+        $this->assertRemain("tab", skipSpace(), "\ttab");
+        $this->assertRemain("newline", skipSpace(), "\nnewline");
         $this->assertRemain("abc", skipSpace(), "\t   \n   \r\n  abc");
     }
 
     /** @test */
     public function skipHSpace()
     {
-        $this->assertParse("", skipHSpace(), "no space");
-        $this->assertParse("", skipHSpace(), "\t   some space");
+        $this->assertRemain("abc", skipHSpace(), "abc");
         $this->assertRemain("abc", skipHSpace(), "\t   abc");
         $this->assertRemain("\nabc", skipHSpace(), "\t   \nabc");
     }
@@ -61,10 +59,9 @@ final class spaceTest extends ParserTestCase
     public function skipSpace1()
     {
         $this->assertNotParse(skipSpace1(), "no space", "skipSpace1");
-        $this->assertParse("", skipSpace1(), " 1 space");
-        $this->assertParse("", skipSpace1(), "\ttab");
-        $this->assertParse("", skipSpace1(), "\nnewline");
-        $this->assertParse("", skipSpace1(), "\t   \n   \r\n  abc");
+        $this->assertRemain("1 space", skipSpace1(), " 1 space");
+        $this->assertRemain("tab", skipSpace1(), "\ttab");
+        $this->assertRemain("newline", skipSpace1(), "\nnewline");
         $this->assertRemain("abc", skipSpace1(), "\t   \n   \r\n  abc");
     }
 
@@ -73,7 +70,7 @@ final class spaceTest extends ParserTestCase
     public function skipHSpace1()
     {
         $this->assertNotParse(skipHSpace1(), "no space", "skipHSpace1");
-        $this->assertParse("", skipHSpace1(), "\t   some space");
+        $this->assertRemain("some space", skipHSpace1(), "\t   some space");
         $this->assertRemain("abc", skipHSpace1(), "\t   abc");
         $this->assertRemain("\nabc", skipHSpace1(), "\t   \nabc");
     }
