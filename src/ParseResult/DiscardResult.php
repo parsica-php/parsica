@@ -63,13 +63,7 @@ final class DiscardResult implements ParseResult
      */
     public function mappend(ParseResult $other): ParseResult
     {
-        if($other->isFail()) {
-            return $other;
-        } elseif($other->isDiscarded()) {
-            return $other;
-        } elseif($other->isSuccess()) {
-            return $other;
-        }
+        return $other;
     }
 
     public function fmap(callable $transform): ParseResult
