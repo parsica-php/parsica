@@ -21,13 +21,18 @@ final class RecursiveParserTest extends ParserTestCase
 
 function list_(): Parser
 {
+    $opening = char('[')->ignore();
+    $closing = char(']')->ignore();
+    $comma = char(',')->ignore();
+    $digit = digit()->fmap('intval');
+
     $list = nothing();
     $list->mutate(collect(
-        ignore(char('[')),
-        digit()->fmap('intval')->or($list),
-        ignore(char(',')),
-        digit()->fmap('intval')->or($list),
-        ignore(char(']'))
+        $opening,
+        $digit->or($list),
+        $comma,
+        $digit->or($list),
+        $closing,
     ));
     return $list;
 }
