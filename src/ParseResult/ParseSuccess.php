@@ -75,14 +75,17 @@ final class ParseSuccess implements ParseResult
         } elseif($other->isDiscarded()) {
             return succeed($this->parsed(), $other->remaining());
         } else {
+            /** @psalm-suppress ArgumentTypeCoercion */
             return $this->mappendSuccess($other);
         }
     }
 
     /**
      * @TODO    This is hardcoded to only deal with certain types. We need an interface with a mappend() for arbitrary types.
+     *
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
-    private function mappendSuccess(ParseResult $other) : ParseResult
+    private function mappendSuccess(ParseSuccess $other) : ParseResult
     {
         $type1 = $this->type();
         $type2 = $other->type();
@@ -90,8 +93,10 @@ final class ParseSuccess implements ParseResult
 
         switch($type1) {
             case 'string':
+                /** @psalm-suppress MixedOperand */
                 return succeed($this->parsed() . $other->parsed(), $other->remaining());
             case 'array':
+                /** @psalm-suppress MixedArgument */
                 return succeed(
                     array_merge(array_values($this->parsed()), array_values($other->parsed())),
                     $other->remaining()

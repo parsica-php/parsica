@@ -27,7 +27,7 @@ function identity(Parser $parser): Parser
  *
  * @param Parser<T> $parser
  *
- * @return Parser<string>
+ * @return Parser<T>
  */
 function ignore(Parser $parser): Parser
 {
@@ -88,7 +88,7 @@ function either(Parser $first, Parser $second): Parser
  *
  * @template T
  *
- * @param [Parser<T>] $parsers
+ * @param list<Parser<T>> $parsers
  *
  * @return Parser<T>
  */
@@ -106,13 +106,14 @@ function assemble(Parser ...$parsers): Parser
  *
  * @template T
  *
- * @param [Parser<T>] $parsers
+ * @param list<Parser<T>> $parsers
  *
  * @return Parser<T>
  */
 function collect(Parser ...$parsers): Parser
 {
-    $toArray = fn($v) => [$v];
+    /** @psalm-suppress MissingClosureParamType */
+    $toArray = fn($v) : array => [$v];
     $arrayParsers = array_map(
         fn(Parser $parser): Parser => $parser->fmap($toArray),
         $parsers

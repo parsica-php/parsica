@@ -7,6 +7,8 @@ use Mathias\ParserCombinator\Parser\Parser;
 
 /**
  * Discard is a special case of ParseSuccess. It represents a success but discards the result.
+ *
+ * @template T
  */
 final class DiscardResult implements ParseResult
 {
@@ -48,9 +50,12 @@ final class DiscardResult implements ParseResult
     }
 
     /**
-     * @param ParseResult<T> $other
      *
-     * @return ParseResult<T>
+     * @template T2
+     *
+     * @param ParseResult<T2> $other
+     *
+     * @return ParseResult<T2>
      *
      * @todo get rid of suppression?
      * @psalm-suppress MixedOperand

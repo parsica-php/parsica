@@ -53,7 +53,7 @@ final class Parser
     /**
      * Parse something, strip it from the remaining input, but discard the parsed value.
      *
-     * @return Parser<string>
+     * @return Parser<T>
      */
     public function ignore(): Parser
     {
