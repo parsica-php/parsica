@@ -12,4 +12,4 @@ ini_set('xdebug.max_nesting_level', 5000);
 
 ## Badges
 
-![Test](https://github.com/mathiasverraes/parser-combinator/workflows/Test/badge.svg)
+[![Test](https://github.com/mathiasverraes/parser-combinator/workflows/Test/badge.svg)](https://github.com/mathiasverraes/parser-combinator/actions?query=workflow%3ATest)
