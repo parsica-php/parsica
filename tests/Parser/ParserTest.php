@@ -24,5 +24,4 @@ final class ParserTest extends ParserTestCase
         $parser = char('a')->followedBy(char('b'));
         $this->assertParse("b", $parser, "abc");
     }
-
 }

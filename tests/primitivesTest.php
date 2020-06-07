@@ -30,11 +30,8 @@ final class primitivesTest extends ParserTestCase
     /** @test */
     public function nothing()
     {
-        $this->assertParse("", nothing(), "xyz");
         $this->assertRemain("xyz", nothing(), "xyz");
-        $this->assertParse("", nothing(), ":-)");
         $this->assertRemain(":-)", nothing(), ":-)");
-        $this->assertParse("", nothing(), "");
     }
 
     /** @test */

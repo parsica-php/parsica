@@ -60,17 +60,11 @@ final class ParseSuccess implements ParseResult
     }
 
     /**
-     * @deprecated depends on this being a ParseResult<string>, but it should work for ParseResult<Semigroup>
      * @param ParseResult<T> $other
      *
      * @return ParseResult<T>
      *
-     * @TODO    This is hardcoded to only deal with strings.
-     *
-     * @TODO    Can we avoid suppressing this? We'd need some way of indicating that the parsed types are monoids.
-     *          For strings that would mean wrapping them in a String class, for user types it would mean they have to
-     *          implement Monoid, which is going to be impractical for parsing into existing types.
-     *
+     * @todo get rid of suppression?
      * @psalm-suppress MixedOperand
      * @psalm-suppress MixedArgumentTypeCoercion
      */
@@ -85,9 +79,11 @@ final class ParseSuccess implements ParseResult
         }
     }
 
+    /**
+     * @TODO    This is hardcoded to only deal with certain types. We need an interface with a mappend() for arbitrary types.
+     */
     private function mappendSuccess(ParseResult $other) : ParseResult
     {
-        // @TODO functor interface so we can mappend arbitrary types
         $type1 = $this->type();
         $type2 = $other->type();
         if($type1!==$type2) throw new \Exception("Mappend only works for ParseResult<T> instances with the same type T, got ParseResult<$type1> and ParseResult<$type2>.");

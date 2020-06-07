@@ -21,7 +21,7 @@ function identity(Parser $parser): Parser
 }
 
 /**
- * Parse something, strip it from the remaining input, but do not return anything.
+ * Parse something, strip it from the remaining input, but discard the parsed value.
  *
  * @template T
  *
@@ -84,6 +84,22 @@ function either(Parser $first, Parser $second): Parser
 }
 
 /**
+ * Mappend all the passed parsers.
+ *
+ * @template T
+ * @param [Parser<T>] $parsers
+ * @return Parser<T>
+ */
+function assemble(Parser ... $parsers) : Parser
+{
+    return array_reduce(
+        $parsers,
+        fn(Parser $l, Parser $r) : Parser => $l->mappend($r),
+        nothing()
+    )->label('assemble()');
+}
+
+/**
  * Parse into an array that consists of the results of both parsers.
  *
  * @template T
@@ -96,6 +112,7 @@ function either(Parser $first, Parser $second): Parser
  */
 function collect(Parser $first, Parser $second): Parser
 {
+    throw new \Exception("@todo see assemble");
     return new Parser(function (string $input) use ($first, $second) : ParseResult {
         $r1 = $first->run($input);
         if ($r1->isSuccess()) {

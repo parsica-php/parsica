@@ -4,8 +4,10 @@ namespace Tests\Mathias\ParserCombinator\Parser;
 
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\char;
+use function Mathias\ParserCombinator\nothing;
+use function Mathias\ParserCombinator\string;
 
-final class SemigroupTest extends ParserTestCase
+final class MappendTest extends ParserTestCase
 {
     /** @test */
     public function mappend_strings()
@@ -32,7 +34,20 @@ final class SemigroupTest extends ParserTestCase
         $a->mappend($b)->run('abc');
     }
 
+    /** @test */
+    public function mappend_nothing()
+    {
+        $parser = nothing()->mappend(char('a'));
+        $this->assertParse("a", $parser, "ab");
+        $this->assertRemain("b", $parser, "ab");
 
+        $parser = char('a')->mappend(nothing());
+        $this->assertParse("a", $parser, "ab");
+        $this->assertRemain("b", $parser, "ab");
+
+        $parser = nothing()->mappend(nothing());
+        $this->assertRemain("ab", $parser, "ab");
+    }
 }
 
 final class NotASemigroup {

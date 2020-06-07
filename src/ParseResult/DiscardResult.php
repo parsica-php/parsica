@@ -47,9 +47,24 @@ final class DiscardResult implements ParseResult
         throw new BadMethodCallException("Can't read the expectation of a succeeded ParseResult.");
     }
 
+    /**
+     * @param ParseResult<T> $other
+     *
+     * @return ParseResult<T>
+     *
+     * @todo get rid of suppression?
+     * @psalm-suppress MixedOperand
+     * @psalm-suppress MixedArgumentTypeCoercion
+     */
     public function mappend(ParseResult $other): ParseResult
     {
-        return $other->isDiscarded() ? $this : $other;
+        if($other->isFail()) {
+            return $other;
+        } elseif($other->isDiscarded()) {
+            return $other;
+        } elseif($other->isSuccess()) {
+            return $other;
+        }
     }
 
     public function fmap(callable $transform): ParseResult

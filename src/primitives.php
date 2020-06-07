@@ -6,7 +6,7 @@ use Mathias\ParserCombinator\Assert\Assert;
 use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\Parser\TakeWhile;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
-use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
+use function Mathias\ParserCombinator\ParseResult\{discard, fail, succeed};
 
 /**
  * A parser that satisfies a predicate. Useful as a building block for writing things like char(), digit()...
@@ -182,10 +182,12 @@ function takeRest() : Parser
 
 /**
  * Parse nothing, but still succeed.
+ *
+ * This serves as the zero parser in mappend operations.
  */
 function nothing(): Parser
 {
-    return new Parser(fn(string $input) => succeed("", $input));
+    return new Parser(fn(string $input) => discard($input));
 }
 
 /**
