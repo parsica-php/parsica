@@ -134,7 +134,7 @@ function collect(Parser ...$parsers): Parser
  */
 function any(Parser ...$parsers): Parser
 {
-    return new Parser(function (string $input) use ($parsers): ParseResult {
+    return Parser::make(function (string $input) use ($parsers): ParseResult {
         $expectations = [];
         foreach ($parsers as $parser) {
             $r = $parser->run($input);
@@ -161,7 +161,7 @@ function any(Parser ...$parsers): Parser
  */
 function atLeastOne(Parser $parser): Parser
 {
-    return new Parser(function (string $input) use ($parser): ParseResult {
+    return Parser::make(function (string $input) use ($parser): ParseResult {
         $r = $parser->run($input);
         if ($r->isFail()) return $r;
 

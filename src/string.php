@@ -28,7 +28,7 @@ function string(string $str): Parser
 {
     Assert::nonEmpty($str);
     $len = mb_strlen($str);
-    return new Parser(
+    return Parser::make(
         fn(string $input): ParseResult => mb_substr($input, 0, $len) === $str
             ? succeed($str, mb_substr($input, $len))
             : fail("string($str)", $input)

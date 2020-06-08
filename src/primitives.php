@@ -20,7 +20,7 @@ use function Mathias\ParserCombinator\ParseResult\{discard, fail, succeed};
  */
 function satisfy(callable $predicate, string $expected = "satisfy(predicate)"): Parser
 {
-    return new Parser(function (string $input) use ($predicate, $expected) : ParseResult {
+    return Parser::make(function (string $input) use ($predicate, $expected) : ParseResult {
         if (mb_strlen($input) === 0) {
             return fail($expected, "EOF");
         }
@@ -187,7 +187,7 @@ function takeRest() : Parser
  */
 function nothing(): Parser
 {
-    return new Parser(fn(string $input) => discard($input));
+    return Parser::make(fn(string $input) => discard($input));
 }
 
 /**
@@ -195,7 +195,7 @@ function nothing(): Parser
  */
 function everything(): Parser
 {
-    return new Parser(fn(string $input) => succeed($input, ""));
+    return Parser::make(fn(string $input) => succeed($input, ""));
 }
 
 
@@ -207,7 +207,7 @@ function everything(): Parser
  */
 function eof(): Parser
 {
-    return new Parser(fn(string $input): ParseResult => mb_strlen($input) === 0
+    return Parser::make(fn(string $input): ParseResult => mb_strlen($input) === 0
         ? succeed("", "")
         : fail("eof", $input)
     );

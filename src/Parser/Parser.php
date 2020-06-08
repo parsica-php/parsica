@@ -15,20 +15,20 @@ final class Parser
      */
     private $parserF;
 
-    /**
-     * @param callable(string) : ParseResult<T> $parserF
-     */
-    function __construct(callable $parserF)
+    private function __construct()
     {
-        $this->parserF = $parserF;
     }
 
     /**
-     * @deprecated Quick attempt at making recursive parsers possible by mutating them.
+     * Make a new parser. This is the constructor for all regular use.
+     * @param callable(string) : ParseResult<T> $parserF
+     * @return Parser<T>
      */
-    public function mutate(Parser $parser)
+    public static function make(callable $parserF) : Parser
     {
-        $this->parserF = $parser->parserF;
+        $parser = new Parser();
+        $parser->parserF = $parserF;
+        return $parser;
     }
 
     /**
@@ -39,7 +39,7 @@ final class Parser
      */
     public function label(string $label): Parser
     {
-        return new Parser(function (string $input) use ($label) : ParseResult {
+        return Parser::make(function (string $input) use ($label) : ParseResult {
             $result = $this->run($input);
             return ($result->isSuccess())
                 ? $result
@@ -65,7 +65,7 @@ final class Parser
      */
     public function ignore(): Parser
     {
-        return new Parser(function (string $input) : ParseResult {
+        return Parser::make(function (string $input) : ParseResult {
             return $this->run($input)->discard();
         });
     }
@@ -81,7 +81,7 @@ final class Parser
      */
     public function fmap(callable $transform): Parser
     {
-        return new Parser(fn(string $input): ParseResult => $this->run($input)->fmap($transform));
+        return Parser::make(fn(string $input): ParseResult => $this->run($input)->fmap($transform));
     }
 
     /**
@@ -90,7 +90,7 @@ final class Parser
      */
     public function optional(): Parser
     {
-        return new Parser(function (string $input): ParseResult {
+        return Parser::make(function (string $input): ParseResult {
             $r1 = $this->run($input);
             return $r1->isSuccess() ? $r1 : succeed("", $input);
         });
@@ -106,7 +106,7 @@ final class Parser
      */
     public function followedBy(Parser $second): Parser
     {
-        return new Parser(function (string $input) use ($second) : ParseResult {
+        return Parser::make(function (string $input) use ($second) : ParseResult {
             $r1 = $this->run($input);
             if ($r1->isSuccess()) {
                 $r2 = $second->continueFrom($r1);
@@ -138,7 +138,7 @@ final class Parser
      */
     public function or(Parser $second): Parser
     {
-        return new Parser(function (string $input) use ($second) : ParseResult {
+        return Parser::make(function (string $input) use ($second) : ParseResult {
             $r1 = $this->run($input);
             if ($r1->isSuccess()) {
                 return $r1;
@@ -182,7 +182,7 @@ final class Parser
      */
     public function mappend(Parser $other) : Parser
     {
-        return new Parser(function (string $input) use ($other): ParseResult {
+        return Parser::make(function (string $input) use ($other): ParseResult {
             $r1 = $this->run($input);
             $r2 = $r1->continueOnRemaining($other);
             return $r1->mappend($r2);
