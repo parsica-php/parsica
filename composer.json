@@ -26,6 +26,7 @@
       "src/numeric.php",
       "src/predicates.php",
       "src/primitives.php",
+      "src/recursion.php",
       "src/space.php",
       "src/string.php"
     ]

@@ -22,22 +22,61 @@ final class Parser
     /**
      * @var callable(string) : ParseResult<T> $parserF
      */
-    private $parserF;
+    private $parserFunction;
+
+    private bool $isRecursive = false;
+
+    /** Inner parser for use with recursion */
+    private Parser $innerParser;
 
     private function __construct()
     {
     }
 
+
     /**
      * Make a new parser. This is the constructor for all regular use.
-     * @param callable(string) : ParseResult<T> $parserF
+     *
+     * @param callable(string) : ParseResult<T> $parserFunction
+     *
      * @return Parser<T>
+     * @internal
      */
-    public static function make(callable $parserF) : Parser
+    public static function make(callable $parserFunction): Parser
     {
         $parser = new Parser();
-        $parser->parserF = $parserF;
+        $parser->parserFunction = $parserFunction;
+        $parser->isRecursive = false;
         return $parser;
+    }
+
+    /**
+     * Make a recursive parser. Use {@see recursive()}.
+     *
+     * @return Parser<T>
+     */
+    public static function recursive(): Parser
+    {
+        $parser = new Parser();
+        $parser->isRecursive = true;
+        return $parser;
+    }
+
+    /**
+     * Recurse on a parser. Used in combination with {@see recursive()}.
+     *
+     * @param Parser<T> $parser
+     */
+    public function recurse(Parser $parser) : void
+    {
+        if(!$this->isRecursive) {
+            throw new \Exception("You can't recurse on a non-recursive parser. Create a recursive parser first using recursive(), then call ->recurse(Parser) on it.");
+        }
+
+        if(isset($this->innerParser)) {
+            throw new \Exception("You can only call recurse() once on a recursive parser.");
+        }
+        $this->innerParser = $parser;
     }
 
     /**
@@ -56,6 +95,7 @@ final class Parser
         });
     }
 
+
     /**
      * Run the parser on an input
      *
@@ -63,8 +103,16 @@ final class Parser
      */
     public function run(string $input): ParseResult
     {
-        $f = $this->parserF;
-        return $f($input);
+        if($this->isRecursive && !isset($this->innerParser)) {
+            throw new \Exception("Can't run a recursive parser that hasn't been setup properly yet. A parser created by recursive(), must then be called with ->recurse(Parser) before it can be used.");
+        }
+
+        if($this->isRecursive) {
+            return $this->innerParser->run($input);
+        } else {
+            $f = $this->parserFunction;
+            return $f($input);
+        }
     }
 
     /**
@@ -74,23 +122,9 @@ final class Parser
      */
     public function ignore(): Parser
     {
-        return Parser::make(function (string $input) : ParseResult {
+        return Parser::make(function (string $input): ParseResult {
             return $this->run($input)->discard();
         });
-    }
-
-    /**
-     * Map a function over the parser (which in turn maps it over the result).
-     *
-     * @template T2
-     *
-     * @param callable(T) : T2 $transform
-     *
-     * @return Parser<T2>
-     */
-    public function fmap(callable $transform): Parser
-    {
-        return Parser::make(fn(string $input): ParseResult => $this->run($input)->fmap($transform));
     }
 
     /**
@@ -131,6 +165,7 @@ final class Parser
 
     /**
      * Take the remaining input from the result and parses it
+     *
      * @deprecated Doesn't have a test
      */
     public function continueFrom(ParseResult $result): ParseResult
@@ -176,8 +211,22 @@ final class Parser
     {
         return $this->fmap(
         /** @param mixed $val */
-        fn($val) => new $className($val)
+            fn($val) => new $className($val)
         );
+    }
+
+    /**
+     * Map a function over the parser (which in turn maps it over the result).
+     *
+     * @template T2
+     *
+     * @param callable(T) : T2 $transform
+     *
+     * @return Parser<T2>
+     */
+    public function fmap(callable $transform): Parser
+    {
+        return Parser::make(fn(string $input): ParseResult => $this->run($input)->fmap($transform));
     }
 
     /**
@@ -189,7 +238,7 @@ final class Parser
      * @return Parser<T>
      * @see ParseResult::mappend
      */
-    public function mappend(Parser $other) : Parser
+    public function mappend(Parser $other): Parser
     {
         return Parser::make(function (string $input) use ($other): ParseResult {
             $r1 = $this->run($input);
