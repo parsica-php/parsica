@@ -6,6 +6,15 @@ use Mathias\ParserCombinator\ParseResult\ParseResult;
 use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
 
 /**
+ * A parser is any function that takes a string input and returns a {@see ParseResult}. The Parser class is fundamentally
+ * just a wrapper around such functions. The {@see Parser::make()} static constructor takes a callable that does the
+ * actual parsing. Usually you don't need to instantiate this class directly. Instead, build your parser from existing
+ * parsers and combinators.
+ *
+ * At the moment, there is no Parser interface, and no Parser abstract class to extend from. This is intentional, but
+ * will be changed if we find use cases where those would be the best solutions.
+ *
+ * @internal
  * @template T
  */
 final class Parser
