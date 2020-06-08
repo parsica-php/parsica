@@ -39,6 +39,18 @@ final class Parser
     }
 
     /**
+     * Make a new parser. This is the constructor for all regular use.
+     *
+     * @param callable(string) : ParseResult<T> $parserFunction
+     *
+     * @return Parser<T>
+     */
+    public static function make(callable $parserFunction): Parser
+    {
+        return new Parser($parserFunction, 'not-recursive');
+    }
+
+    /**
      * Make a recursive parser. Use {@see recursive()}.
      *
      * @return Parser<T>
@@ -111,18 +123,6 @@ final class Parser
                 ? $result
                 : fail($label, $input);
         });
-    }
-
-    /**
-     * Make a new parser. This is the constructor for all regular use.
-     *
-     * @param callable(string) : ParseResult<T> $parserFunction
-     *
-     * @return Parser<T>
-     */
-    public static function make(callable $parserFunction): Parser
-    {
-        return new Parser($parserFunction, 'not-recursive');
     }
 
     /**
