@@ -41,9 +41,11 @@ final class Parser
     /**
      * Make a new parser. This is the constructor for all regular use.
      *
-     * @param callable(string) : ParseResult<T> $parserFunction
+     * @template T2
      *
-     * @return Parser<T>
+     * @param callable(string) : ParseResult<T2> $parserFunction
+     *
+     * @return Parser<T2>
      */
     public static function make(callable $parserFunction): Parser
     {
@@ -58,8 +60,8 @@ final class Parser
     public static function recursive(): Parser
     {
         return new Parser(
-            // Make a placeholder parser that will throw when you try to run it.
-            function (string $input) {
+        // Make a placeholder parser that will throw when you try to run it.
+            function (string $input): ParseResult {
                 throw new Exception(
                     "Can't run a recursive parser that hasn't been setup properly yet. A parser created by recursive(), "
                     . "must then be called with ->recurse(Parser) before it can be used."
@@ -89,7 +91,7 @@ final class Parser
             case 'awaiting-recurse':
                 // Replace the placeholder parser from recursive() with a call to the inner parser. This must be dynamic,
                 // because it's possible that the inner parser is also a recursive parser that has not been setup yet.
-                $this->parserFunction = fn(string $input) => $parser->run($input);
+                $this->parserFunction = fn(string $input): ParseResult => $parser->run($input);
                 $this->recursionStatus = 'recursion-was-setup';
                 break;
             default:
