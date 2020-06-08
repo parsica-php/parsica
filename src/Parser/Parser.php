@@ -2,6 +2,7 @@
 
 namespace Mathias\ParserCombinator\Parser;
 
+use Exception;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
 use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
 
@@ -24,30 +25,17 @@ final class Parser
      */
     private $parserFunction;
 
-    private bool $isRecursive = false;
-
-    /** Inner parser for use with recursion */
-    private Parser $innerParser;
-
-    private function __construct()
-    {
-    }
-
+    /** @var 'not-recursive'|'awaiting-recurse'|'recursion-was-setup' */
+    private string $recursionStatus;
 
     /**
-     * Make a new parser. This is the constructor for all regular use.
-     *
      * @param callable(string) : ParseResult<T> $parserFunction
-     *
-     * @return Parser<T>
-     * @internal
+     * @param 'not-recursive'|'awaiting-recurse'|'recursion-was-setup' $recursionStatus
      */
-    public static function make(callable $parserFunction): Parser
+    function __construct(callable $parserFunction, string $recursionStatus)
     {
-        $parser = new Parser();
-        $parser->parserFunction = $parserFunction;
-        $parser->isRecursive = false;
-        return $parser;
+        $this->parserFunction = $parserFunction;
+        $this->recursionStatus = $recursionStatus;
     }
 
     /**
@@ -57,26 +45,56 @@ final class Parser
      */
     public static function recursive(): Parser
     {
-        $parser = new Parser();
-        $parser->isRecursive = true;
-        return $parser;
+        return new Parser(
+            // Make a placeholder parser that will throw when you try to run it.
+            function (string $input) {
+                throw new Exception(
+                    "Can't run a recursive parser that hasn't been setup properly yet. A parser created by recursive(), "
+                    . "must then be called with ->recurse(Parser) before it can be used."
+                );
+            },
+            'awaiting-recurse');
     }
 
     /**
      * Recurse on a parser. Used in combination with {@see recursive()}.
      *
+     * This method does not return anything, and instead mutates the parser. After calling this method however, the parser
+     * behaves like a regular parser.
+     *
      * @param Parser<T> $parser
      */
-    public function recurse(Parser $parser) : void
+    public function recurse(Parser $parser): void
     {
-        if(!$this->isRecursive) {
-            throw new \Exception("You can't recurse on a non-recursive parser. Create a recursive parser first using recursive(), then call ->recurse(Parser) on it.");
+        switch ($this->recursionStatus) {
+            case 'not-recursive':
+                throw new Exception(
+                    "You can't recurse on a non-recursive parser. Create a recursive parser first using recursive(), "
+                    . "then call ->recurse() on it."
+                );
+            case 'recursion-was-setup':
+                throw new Exception("You can only call recurse() once on a recursive parser.");
+            case 'awaiting-recurse':
+                // Replace the placeholder parser from recursive() with a call to the inner parser. This must be dynamic,
+                // because it's possible that the inner parser is also a recursive parser that has not been setup yet.
+                $this->parserFunction = fn(string $input) => $parser->run($input);
+                $this->recursionStatus = 'recursion-was-setup';
+                break;
+            default:
+                throw new Exception("Unexpected recursionStatus value");
         }
 
-        if(isset($this->innerParser)) {
-            throw new \Exception("You can only call recurse() once on a recursive parser.");
-        }
-        $this->innerParser = $parser;
+    }
+
+    /**
+     * Run the parser on an input
+     *
+     * @return ParseResult<T>
+     */
+    public function run(string $input): ParseResult
+    {
+        $f = $this->parserFunction;
+        return $f($input);
     }
 
     /**
@@ -95,24 +113,16 @@ final class Parser
         });
     }
 
-
     /**
-     * Run the parser on an input
+     * Make a new parser. This is the constructor for all regular use.
      *
-     * @return ParseResult<T>
+     * @param callable(string) : ParseResult<T> $parserFunction
+     *
+     * @return Parser<T>
      */
-    public function run(string $input): ParseResult
+    public static function make(callable $parserFunction): Parser
     {
-        if($this->isRecursive && !isset($this->innerParser)) {
-            throw new \Exception("Can't run a recursive parser that hasn't been setup properly yet. A parser created by recursive(), must then be called with ->recurse(Parser) before it can be used.");
-        }
-
-        if($this->isRecursive) {
-            return $this->innerParser->run($input);
-        } else {
-            $f = $this->parserFunction;
-            return $f($input);
-        }
+        return new Parser($parserFunction, 'not-recursive');
     }
 
     /**

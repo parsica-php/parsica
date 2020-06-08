@@ -64,3 +64,6 @@ $squarePair->recurse(collect(
 ));
 
 $result = $anyPair->run("[1,[2,[3,4]]]");
+```
+
+Note that when you initialize a parser with `recursive()`, it is in fact mutable, and the `recurse()` method mutates it. All parsers are immutable, and this is the only exception. After calling `recurse()`, the parser is immutable again and behaves just like any other parser.
