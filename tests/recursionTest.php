@@ -114,8 +114,7 @@ final class recursionTest extends ParserTestCase
     {
         $p1 = recursive();
         $p2 = char('a')->or($p1->label("test"));
-        $this->assertParse("a", $p2, "abc");
         $this->expectException(Exception::class);
-        $this->assertParse("a", $p2, "bc");
+        $this->assertParse("a", $p2, "abc");
     }
 }
