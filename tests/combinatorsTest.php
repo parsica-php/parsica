@@ -232,26 +232,6 @@ final class combinatorsTest extends ParserTestCase
         $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 
-    /** @test */
-    public function takeN()
-    {
-        $parser = seq(
-            char('€'),
-            float()->fmap('floatval')->fmapClass(SimpleEur::class)
-        );
-        $this->assertParse(new SimpleEur(1.25), $parser, "€1.25");
 
-    }
-
-}
-
-final class SimpleEur
-{
-    private float $val;
-
-    function __construct(float $val)
-    {
-        $this->val = $val;
-    }
 
 }

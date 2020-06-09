@@ -113,7 +113,7 @@ function assemble(Parser ...$parsers): Parser
 function collect(Parser ...$parsers): Parser
 {
     /** @psalm-suppress MissingClosureParamType */
-    $toArray = fn($v) : array => [$v];
+    $toArray = fn($v): array => [$v];
     $arrayParsers = array_map(
         fn(Parser $parser): Parser => $parser->fmap($toArray),
         $parsers
