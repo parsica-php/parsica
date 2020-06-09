@@ -186,31 +186,6 @@ final class Parser
     }
 
     /**
-     * @param Parser<T> $second
-     *
-     * @return Parser<T>
-     * @deprecated 0.2
-     * @see either()
-     */
-    public function or(Parser $second): Parser
-    {
-        return Parser::make(function (string $input) use ($second) : ParseResult {
-            $r1 = $this->run($input);
-            if ($r1->isSuccess()) {
-                return $r1;
-            }
-
-            $r2 = $second->run($input);
-            if ($r2->isSuccess()) {
-                return $r2;
-            }
-
-            $expectation = "({$r1->expected()} or {$r2->expected()})";
-            return fail($expectation, "@TODO");
-        });
-    }
-
-    /**
      * Map the parser into a new object instance
      *
      * @template T2
@@ -242,7 +217,6 @@ final class Parser
     }
 
     /**
-     *
      * Combine the parser with another parser of the same type, which will cause the results to be mappended.
      *
      * @param Parser<T> $other
@@ -256,6 +230,38 @@ final class Parser
             $r1 = $this->run($input);
             $r2 = $r1->continueOnRemaining($other);
             return $r1->mappend($r2);
+        });
+    }
+
+    /**
+     * Try the first parser, and failing that, try the second parser. Returns the first succeeding result, or the first
+     * failing result.
+     *
+     * @param Parser<T> $other
+     *
+     * @return Parser<T>
+     */
+    public function alternative(Parser $other) : Parser
+    {
+        return $this->or($other);
+    }
+
+    /**
+     * Try the first parser, and failing that, try the second parser. Returns the first succeeding result, or the first
+     * failing result.
+     *
+     * @param Parser<T> $other
+     *
+     * @return Parser<T>
+     */
+    public function or(Parser $other) : Parser
+    {
+        return Parser::make(function (string $input) use ($other): ParseResult {
+            // @TODO When the first parser succeeds, this implementation unnecessarily evaluates $other anyway.
+            return $this->run($input)
+                ->alternative(
+                    $other->run($input)
+                );
         });
     }
 }
