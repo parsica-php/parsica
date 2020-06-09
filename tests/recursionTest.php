@@ -113,7 +113,7 @@ final class recursionTest extends ParserTestCase
     public function calling_combinators_on_a_recursive_parser_before_it_is_setup()
     {
         $p1 = recursive();
-        $p2 = char('a')->or($p1->label("test"));
+        $p2 = char('a')->followedBy($p1->label("test"));
         $this->expectException(Exception::class);
         $this->assertParse("a", $p2, "abc");
     }
