@@ -118,7 +118,7 @@ function collect(Parser ...$parsers): Parser
         fn(Parser $parser): Parser => $parser->fmap($toArray),
         $parsers
     );
-    return assemble(...$arrayParsers);
+    return assemble(...$arrayParsers)->label('collect()');
 }
 
 /**
