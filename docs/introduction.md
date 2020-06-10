@@ -4,23 +4,13 @@
 
 A parser is a function that takes some unstructured input (like a string) and turns it into structured output. This output could be as simple as a slightly better structured string, or an array, an object, up to a complete abstract syntax tree. You can then use this data structure for subsequent processing.
 
-You're probably using parsers all the time, such as `json_decode()`. And even just casting a string to a float is parsing. 
+You're probably using parsers all the time, such as `json_decode()`. And even just casting a string to a float<sup>[1](#floatval)</sup> is parsing. 
 
 ```php
 <?php
 $v = floatval("1.23");
 // $v is now a float 1.23
 ```
-
-Footnote: on it's own, `floatval` isn't a very good parser.
-
-```php
-<?php
-echo  floatval("abc");
-// 0
-```
-
-`floatval` claims that the float of `"abc"` is `0`, which really should be an error. So you can only use `floatval` when you already know that the string doesn't contain anything non-float.
 
 ## Building a parser
 
@@ -66,7 +56,7 @@ $output = $result->parsed();
 
 To make this work, we need a small change in our original definition of a parser.
 
-> A parser is a function that takes some unstructured input (such as a string), and returns a more structured output, as well as the remaining unparsed part of the input.
+> A parser is a function<sup>[2](#object)</sup> that takes some unstructured input (such as a string), and returns a more structured output, as well as the remaining unparsed part of the input.
 
 This way, each parser function can parse a chunk of the input, and leave the remainder to another parser. The combinators deal with executing all the parser they combined. 
 
@@ -109,4 +99,33 @@ $result = $myParser($input);
 // $result is ['output' => 'b', 'remainder' => "c"]
 ```
 
-If you've been working in PHP long enough and have never used parser combinators, the code above may look more familiar for now. But imagine scaling that to parse anything from formats like credit card numbers, recursive structures like JSON or XML, or even entire programming languages like PHP. And that doesn't even include the code you'd need for performance, testing and debugging tooling, code reuse, and reporting on bad input. If you'd rather write `char('a')->followedBy(char('b'))`, stick around.  
+If you've been working in PHP long enough and have never used parser combinators, the code above may look more familiar for now. But imagine scaling that to parse anything from formats like credit card numbers, recursive structures like JSON or XML, or even entire programming languages like PHP. And that doesn't even include the code you'd need for performance, testing and debugging tooling, code reuse, and reporting on bad input. If you'd rather write `char('a')->followedBy(char('b'))`, stick around.
+
+
+
+### Footnotes
+
+#### <a name="floatval">Note 1</a> 
+
+On it's own, `floatval()` isn't a very good parser.
+
+```php
+<?php
+echo  floatval("abc");
+// 0
+```
+
+`floatval()` claims that the float of `"abc"` is `0`, which really should be an error. So you can only use `floatval` when you already know that the string doesn't contain anything non-float. This library can help you do that:
+
+
+```php
+<?php
+$parser = float()->map('floatval');
+$result = $parser->try("abc"); // throws an exception
+```
+
+
+
+#### <a name="object">Note 2</a> 
+
+In our case, functions like `char('a')` return a `Parser` object with a method `try($input)`, so strictly speaking, `try` is the parser.  
