@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Convenience assertion methods. When writing tests for your own parsers, extend from this instead of PHPUnit's TestCase.
  *
+ * @TODO move to standalone package
  */
 abstract class ParserTestCase extends TestCase
 {
