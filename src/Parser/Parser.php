@@ -264,4 +264,19 @@ final class Parser
                 );
         });
     }
+
+    /**
+     * Try to parse the input, or throw an exception;
+     *
+     * @return ParseResult<T>
+     * @throws ParseFailure<T>
+     */
+    public function try(string $input) : ParseResult
+    {
+        $result = $this->run($input);
+        if($result->isFail()) {
+            throw $result;
+        }
+        return $result;
+    }
 }
