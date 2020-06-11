@@ -21,7 +21,7 @@ One of the great benefits of parser combinators is that, once you know how, they
 ```php
 <?php 
 $parser = digit();
-$input = "1. Write Docs"
+$input = "1. Write Docs";
 $result = $parser->try($input);
 $output = $result->parsed();
 // $output is a string "1"
