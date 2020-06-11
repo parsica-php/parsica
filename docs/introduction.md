@@ -120,8 +120,12 @@ echo  floatval("abc");
 
 ```php
 <?php
-$parser = float()->map('floatval');
-$result = $parser->try("abc"); // throws an exception
+$parser = float()->fmap('floatval');
+try {
+    $result = $parser->try("abc"); 
+} catch (ParseFailure $e) {
+    // throws an exception
+}
 ```
 
 
