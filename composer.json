@@ -15,8 +15,14 @@
   "require-dev": {
     "phpunit/phpunit": "^9.1",
     "vimeo/psalm": "^3.11",
-    "mathiasverraes/uptodocs": "^1.0"
+    "mathiasverraes/uptodocs": "dev-master"
   },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/mathiasverraes/uptodocs"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "Mathias\\ParserCombinator\\": "src/"

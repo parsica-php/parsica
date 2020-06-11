@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4ff5eb29d78a6835cb158f66f7cca66f",
+    "content-hash": "3bd7d39b1c35ca173ff0fe67fa3a2374",
     "packages": [],
     "packages-dev": [
         {
@@ -529,16 +529,16 @@
         },
         {
             "name": "mathiasverraes/uptodocs",
-            "version": "1.0.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mathiasverraes/uptodocs.git",
-                "reference": "685f35f4524014c09be2198e67cf77c5f2e46854"
+                "reference": "dc24ecc2417ef222be63dc89b6d83e7ffbb7b85e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mathiasverraes/uptodocs/zipball/685f35f4524014c09be2198e67cf77c5f2e46854",
-                "reference": "685f35f4524014c09be2198e67cf77c5f2e46854",
+                "url": "https://api.github.com/repos/mathiasverraes/uptodocs/zipball/dc24ecc2417ef222be63dc89b6d83e7ffbb7b85e",
+                "reference": "dc24ecc2417ef222be63dc89b6d83e7ffbb7b85e",
                 "shasum": ""
             },
             "require": {
@@ -556,7 +556,6 @@
                     "Verraes\\UpToDocs\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -571,11 +570,15 @@
             "description": "UpToDocs scans a Markdown file for PHP code blocks, and executes each one in a separate process. Include this in your CI workflows, to make sure your documentation is always up to date with your code.",
             "homepage": "https://github.com/mathiasverraes/uptodocs",
             "keywords": [
-                "ci",
+                "CI",
                 "documentation",
                 "testing"
             ],
-            "time": "2020-06-11T21:08:22+00:00"
+            "support": {
+                "source": "https://github.com/mathiasverraes/uptodocs/tree/master",
+                "issues": "https://github.com/mathiasverraes/uptodocs/issues"
+            },
+            "time": "2020-06-11T21:29:41+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -3402,7 +3405,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "mathiasverraes/uptodocs": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
