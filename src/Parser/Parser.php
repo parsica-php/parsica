@@ -3,6 +3,7 @@
 namespace Mathias\ParserCombinator\Parser;
 
 use Exception;
+use Mathias\ParserCombinator\ParseResult\ParseFailure;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
 use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
 
