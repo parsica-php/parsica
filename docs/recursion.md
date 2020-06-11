@@ -8,7 +8,7 @@ We need to parse nested pairs such as `[1,[2,[3,4]]]`. The structure repeats its
 
 We cannot write this:
 
-```php
+```
 <?php
 $pair = collect(
     ignore(char('[')),

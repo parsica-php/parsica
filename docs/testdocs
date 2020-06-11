@@ -3,3 +3,4 @@
 # Execute the docs to make sure all code examples are in sync with the library code.
 
 vendor/bin/uptodocs run docs/introduction.md docs/prelude.php
+vendor/bin/uptodocs run docs/recursion.md docs/prelude.php
