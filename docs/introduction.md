@@ -18,7 +18,7 @@ There are many ways to build a parser for your own use case, ranging from formal
 
 One of the great benefits of parser combinators is that, once you know how, they're very easy to write, understand, and maintain. You start from building blocks, such as `digit()`, which returns a function that parses a single digit.  
 
-```
+```php
 <?php 
 $parser = digit();
 $input = "1. Write Docs"
