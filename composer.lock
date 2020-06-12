@@ -533,12 +533,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mathiasverraes/uptodocs.git",
-                "reference": "dc24ecc2417ef222be63dc89b6d83e7ffbb7b85e"
+                "reference": "173682f92e4ad108839b5282af969718c6e2fb12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mathiasverraes/uptodocs/zipball/dc24ecc2417ef222be63dc89b6d83e7ffbb7b85e",
-                "reference": "dc24ecc2417ef222be63dc89b6d83e7ffbb7b85e",
+                "url": "https://api.github.com/repos/mathiasverraes/uptodocs/zipball/173682f92e4ad108839b5282af969718c6e2fb12",
+                "reference": "173682f92e4ad108839b5282af969718c6e2fb12",
                 "shasum": ""
             },
             "require": {
@@ -578,7 +578,7 @@
                 "source": "https://github.com/mathiasverraes/uptodocs/tree/master",
                 "issues": "https://github.com/mathiasverraes/uptodocs/issues"
             },
-            "time": "2020-06-11T21:29:41+00:00"
+            "time": "2020-06-12T07:59:50+00:00"
         },
         {
             "name": "myclabs/deep-copy",
