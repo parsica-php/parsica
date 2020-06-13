@@ -33,7 +33,7 @@ final class Parser
      * @param callable(string) : ParseResult<T> $parserFunction
      * @param 'not-recursive'|'awaiting-recurse'|'recursion-was-setup' $recursionStatus
      */
-    function __construct(callable $parserFunction, string $recursionStatus)
+    private function __construct(callable $parserFunction, string $recursionStatus)
     {
         $this->parserFunction = $parserFunction;
         $this->recursionStatus = $recursionStatus;
