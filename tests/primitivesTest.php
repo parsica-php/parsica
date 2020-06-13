@@ -4,7 +4,7 @@ namespace Tests\Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\{anything, eof, everything, nothing, satisfy, takeWhile, takeWhile1};
-use function Mathias\ParserCombinator\Predicates\{equals, not};
+use function Mathias\ParserCombinator\Predicates\{isEqual, notPred};
 
 
 final class primitivesTest extends ParserTestCase
@@ -12,7 +12,7 @@ final class primitivesTest extends ParserTestCase
     /** @test */
     public function satisfy()
     {
-        $parser = satisfy(equals('x'));
+        $parser = satisfy(isEqual('x'));
         $this->assertParse("x", $parser, "xyz");
         $this->assertRemain("yz", $parser, "xyz");
         $this->assertNotParse($parser, "yz", "satisfy(predicate)");
@@ -56,7 +56,7 @@ final class primitivesTest extends ParserTestCase
     /** @test */
     public function takeWhile()
     {
-        $parser = takeWhile(equals('a'));
+        $parser = takeWhile(isEqual('a'));
         $this->assertParse("", $parser, "xyz");
         $this->assertParse("", $parser, "xaaa");
         $this->assertParse("a", $parser, "axyz");
@@ -67,7 +67,7 @@ final class primitivesTest extends ParserTestCase
     /** @test */
     public function takeWhile_using_not()
     {
-        $parser = takeWhile(not(equals('a')));
+        $parser = takeWhile(notPred(isEqual('a')));
 
         $this->assertParse("xyz", $parser, "xyza");
         $this->assertParse("xyz", $parser, "xyz");
@@ -81,10 +81,10 @@ final class primitivesTest extends ParserTestCase
     public function not_sure_how_takeWhile_should_deal_with_EOF()
     {
         // For now let's have it succeed until we figure it out.
-        $parser = takeWhile(equals('a'));
+        $parser = takeWhile(isEqual('a'));
         $this->assertSucceedOnEOF($parser);
 
-        $parser = takeWhile(not(equals('a')));
+        $parser = takeWhile(notPred(isEqual('a')));
         $this->assertSucceedOnEOF($parser);
     }
 
@@ -92,7 +92,7 @@ final class primitivesTest extends ParserTestCase
     /** @test */
     public function takeWhile1()
     {
-        $parser = takeWhile1(equals('a'));
+        $parser = takeWhile1(isEqual('a'));
         $this->assertFailOnEOF($parser);
         $this->assertNotParse($parser, "xyz", "takeWhile1(predicate)");
         $this->assertNotParse($parser, "takeWhile1(predicate)");

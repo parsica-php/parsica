@@ -1,6 +1,5 @@
 <?php declare(strict_types=1);
 
-
 namespace Mathias\ParserCombinator\Predicates;
 
 use Mathias\ParserCombinator\Assert\Assert;
@@ -10,7 +9,7 @@ use Mathias\ParserCombinator\Assert\Assert;
  *
  * @return callable(string) : bool
  */
-function equals(string $x): callable
+function isEqual(string $x): callable
 {
     Assert::singleChar($x);
     return fn(string $y): bool => $x === $y;
@@ -23,9 +22,35 @@ function equals(string $x): callable
  *
  * @return callable(string) : bool
  */
-function not(callable $predicate): callable
+function notPred(callable $predicate): callable
 {
     return fn(string $x): bool => !$predicate($x);
+}
+
+/**
+ * Boolean And predicate.
+ *
+ * @param callable(string) : bool $first
+ * @param callable(string) : bool $second
+ *
+ * @return callable(string) : bool
+ */
+function andPred(callable $first, callable $second): callable
+{
+    return fn(string $x): bool => $first($x) && $second($x);
+}
+
+/**
+ * Boolean Or predicate.
+ *
+ * @param callable(string) : bool $first
+ * @param callable(string) : bool $second
+ *
+ * @return callable(string) : bool
+ */
+function orPred(callable $first, callable $second): callable
+{
+    return fn(string $x): bool => $first($x) || $second($x);
 }
 
 /**

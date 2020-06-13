@@ -3,9 +3,9 @@
 namespace Tests\Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
-use function Mathias\ParserCombinator\{char, string};
+use function Mathias\ParserCombinator\{char, charI, string, stringI};
 
-final class stringTest extends ParserTestCase
+final class charactersTest extends ParserTestCase
 {
     /** @test */
     public function char()
@@ -16,10 +16,23 @@ final class stringTest extends ParserTestCase
     }
 
     /** @test */
+    public function charI()
+    {
+        $this->assertParse("a", charI('a'), "abc");
+        $this->assertParse("A", charI('a'), "ABC");
+    }
+
+    /** @test */
     public function string()
     {
         $this->assertParse("abc", string('abc'), "abcde");
         $this->assertNotParse(string('abc'), "babc", "string(abc)");
+    }
+
+    /** @test */
+    public function stringI()
+    {
+        $this->assertParse("hElLO WoRlD", stringI('hello world'), "hElLO WoRlD");
     }
 }
 

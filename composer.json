@@ -30,12 +30,12 @@
     "files": [
       "src/ParseResult/functions.php",
       "src/Predicates/predicates.php",
+      "src/characters.php",
       "src/combinators.php",
       "src/numeric.php",
       "src/primitives.php",
       "src/recursion.php",
-      "src/space.php",
-      "src/string.php"
+      "src/space.php"
     ]
   },
   "autoload-dev": {
