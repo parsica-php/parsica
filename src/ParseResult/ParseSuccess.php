@@ -98,7 +98,7 @@ final class ParseSuccess implements ParseResult
             case 'array':
                 /** @psalm-suppress MixedArgument */
                 return succeed(
-                    array_merge(array_values($this->output()), array_values($other->output())),
+                    array_merge($this->output(), $other->output()),
                     $other->remainder()
                 );
             default:
