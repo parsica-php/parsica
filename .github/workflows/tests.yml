@@ -34,7 +34,7 @@ jobs:
       run: vendor/bin/phpunit
 
     - name: Psalm Static type checker
-      run: vendor/bin/psalm
+      run: vendor/bin/psalm --output-format=github
 
     - name: UpToDocs Documentation tester
       run: docs/testdocs
