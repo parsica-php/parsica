@@ -18,5 +18,4 @@ final class RunningParsersTest extends TestCase
         $this->expectException(ParseFailure::class);
         $result = $parser->try("b");
     }
-
 }
