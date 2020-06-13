@@ -24,7 +24,8 @@ function char(string $c): Parser
 }
 
 /**
- * Parse a single character, case-insensitive. On success it returns the string cased as the actually parsed input.
+ * Parse a single character, case-insensitive and case-preserving. On success it returns the string cased as the
+ * actually parsed input.
  * eg charI('a'')->run("ABC") will succeed with "A", not "a".
  *
  * @see char()
@@ -61,7 +62,8 @@ function string(string $str): Parser
 }
 
 /**
- * Parse a non-empty string, case-insensitive. On success it returns the string cased as the actually parsed input.
+ * Parse a non-empty string, case-insensitive and case-preserving. On success it returns the string cased as the
+ * actually parsed input.
  * eg stringI("foobar")->run("foObAr") will succeed with "foObAr"
  *
  * @see string()
