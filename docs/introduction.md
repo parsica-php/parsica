@@ -20,7 +20,7 @@ One of the great benefits of parser combinators is that, once you know how, they
 
 ```php
 <?php 
-$parser = digit();
+$parser = digitChar();
 $input = "1. Write Docs";
 $result = $parser->try($input);
 $output = $result->output();
