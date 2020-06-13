@@ -136,6 +136,7 @@ function collect(Parser ...$parsers): Parser
  */
 function any(Parser ...$parsers): Parser
 {
+    // @TODO canonical implementation is a foldl over or() starting from a failure
     return Parser::make(function (string $input) use ($parsers): ParseResult {
         $expectations = [];
         foreach ($parsers as $parser) {
