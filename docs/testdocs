@@ -4,3 +4,4 @@
 
 vendor/bin/uptodocs run docs/introduction.md --before=docs/before.php
 vendor/bin/uptodocs run docs/recursion.md --before=docs/before.php
+vendor/bin/uptodocs run docs/order_matters.md --before=docs/before.php

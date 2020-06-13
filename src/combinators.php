@@ -70,6 +70,8 @@ function seq(Parser $first, Parser $second): Parser
 /**
  * Either parse the first thing or the second thing
  *
+ * @see Parser::or()
+ *
  * @template T
  *
  * @param Parser<T> $first
