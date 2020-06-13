@@ -19,7 +19,7 @@ $pair = collect(
 );
 ```
 
-The above results in "Undefined variable: pair" because we're trying to use $pair before it's defined. Instead, we need to mark the parser as `recursive` in a first step, and then define how the parser should `recurse`: 
+The above results in "Undefined variable: pair" because we're trying to use `$pair` before it's defined. Instead, we need to mark the parser as `recursive` in a first step, and then define how the parser should `recurse`: 
 
 ```php
 <?php
