@@ -78,7 +78,6 @@ function seq(Parser $first, Parser $second): Parser
  * @param Parser<T> $second
  *
  * @return Parser<T>
- * @deprecated 0.2
  */
 function either(Parser $first, Parser $second): Parser
 {
@@ -175,4 +174,23 @@ function atLeastOne(Parser $parser): Parser
         }
         return $r;
     });
+}
+
+/**
+ * Parse something exactly n times
+ *
+ * @template T
+ *
+ * @param Parser<T> $parser
+ *
+ * @return Parser<T>
+ *
+ */
+function repeat(int $n, Parser $parser): Parser
+{
+    return array_reduce(
+        array_fill(0, $n, $parser),
+        fn(Parser $l, Parser $r): Parser => $l->mappend($r),
+        nothing()
+    )->label("repeat($n)");
 }
