@@ -15,7 +15,7 @@
   "require-dev": {
     "phpunit/phpunit": "^9.1",
     "vimeo/psalm": "^3.11",
-    "mathiasverraes/uptodocs": "dev-master"
+    "mathiasverraes/uptodocs": "dev-main"
   },
   "repositories": [
     {
