@@ -95,3 +95,13 @@ function isDigit(): callable
 {
     return isCharCode(range(48, 57));
 }
+
+/**
+ * Control character predicate (a non-printing character of the Latin-1 subset of Unicode).
+ *
+ * @return callable(string) : bool
+ */
+function isControl() : callable
+{
+    return isCharCode(range(0x00, 0x1F) + [0x7F]);
+}

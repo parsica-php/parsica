@@ -6,7 +6,7 @@ use Mathias\ParserCombinator\Assert\Assert;
 use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
 use function Mathias\ParserCombinator\ParseResult\{fail,succeed};
-use function Mathias\ParserCombinator\Predicates\{isEqual, orPred};
+use function Mathias\ParserCombinator\Predicates\{isControl, isEqual, orPred};
 
 /**
  * Parse a single character.
@@ -75,3 +75,12 @@ function stringI(string $str): Parser
     throw new \Exception("@TODO not implemented");
 }
 
+/**
+ * Parse a control character (a non-printing character of the Latin-1 subset of Unicode).
+ *
+ * @return Parser<string>
+ */
+function controlChar() : Parser
+{
+    return satisfy(isControl())->label("controlChar");
+}

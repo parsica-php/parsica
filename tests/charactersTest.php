@@ -2,8 +2,9 @@
 
 namespace Tests\Mathias\ParserCombinator;
 
+use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
-use function Mathias\ParserCombinator\{char, charI, string, stringI};
+use function Mathias\ParserCombinator\{char, charI, controlChar, string, stringI};
 
 final class charactersTest extends ParserTestCase
 {
@@ -34,5 +35,25 @@ final class charactersTest extends ParserTestCase
     {
         $this->assertParse("hElLO WoRlD", stringI('hello world'), "hElLO WoRlD");
     }
+
+    public function characterParsers(): array
+    {
+        return [
+            // dataSet => [Parser, example string]
+            'controlChar' => [controlChar(), mb_chr(0x05)],
+        ];
+
+    }
+
+    /**
+     * @test
+     * @dataProvider characterParsers
+     */
+    public function a_whole_bunch_of_character_parsers(Parser $parser, string $example)
+    {
+        $this->assertParse($example, $parser, $example);
+    }
+
+
 }
 
