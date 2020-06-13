@@ -6,9 +6,12 @@ This is roughly the road to 1.0:
 
 - [ ] All essential parsers
 - [ ] All essential combinators
+- [x] Recursive parsers
+- [x] PHPUnit tooling
+- [ ] Other popular tst frameworks
 - [ ] Lexer
 - [ ] Streaming input
-- [x] Basic debugging
+- [x] Basic error messages
 - [ ] Parser state, positions
 - [ ] Expression parser helpers
 - [ ] Debug trees
