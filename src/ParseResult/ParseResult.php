@@ -51,6 +51,7 @@ interface ParseResult
     public function alternative(ParseResult $other) : ParseResult;
 
     /**
+     * @todo rename to continueOnRemainder
      * @template T2
      *
      * @param Parser<T2> $parser
