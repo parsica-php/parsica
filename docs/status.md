@@ -20,3 +20,4 @@ This is roughly the road to 1.0:
 - [ ] API Documentation
 - [ ] Better parser assertions
 - [ ] Implementations of some typical real world parsers (markdown, json, ...)
+- [ ] Permutation phrases https://www.cs.ox.ac.uk/jeremy.gibbons/wg21/meeting56/loeh-paper.pdf
