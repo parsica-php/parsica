@@ -13,7 +13,7 @@ use function Mathias\ParserCombinator\string;
 final class SimpleDateTest extends ParserTestCase
 {
     /** @test */
-    public function simple_date_POC()
+    public function simple_date()
     {
         $jan = (string("January")->or(string("Jan")))->fmap(fn($v) => 1);
         $feb = (string("February")->or(string("Feb")))->fmap(fn($v) => 2);
