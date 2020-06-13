@@ -8,7 +8,7 @@ This is a rough wishlist of features to do before 1.0:
 - [ ] All essential combinators
 - [x] Recursive parsers
 - [x] PHPUnit tooling
-- [ ] Other popular tst frameworks
+- [ ] Other popular test frameworks
 - [ ] Lexer
 - [ ] Streaming input
 - [x] Basic error messages
