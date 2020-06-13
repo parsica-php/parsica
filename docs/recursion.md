@@ -27,13 +27,15 @@ The above results in "Undefined variable: pair" because we're trying to use `$pa
 $pair = recursive();
 
 // Then define the parser
-$pair->recurse(collect(
-    ignore(char('[')),
-    digit()->or($pair),
-    ignore(char(',')),
-    digit()->or($pair),
-    ignore(char(']')),
-));
+$pair->recurse(
+    collect(
+        ignore(char('[')),
+        digit()->or($pair),
+        ignore(char(',')),
+        digit()->or($pair),
+        ignore(char(']')),
+    )
+);
 
 $result = $pair->run("[1,[2,[3,4]]]");
 ```
@@ -47,21 +49,25 @@ $squarePair = recursive();
 
 $anyPair = $curlyPair->or($squarePair);
 
-$curlyPair->recurse(collect(
-    ignore(char('{')),
-    digit()->or($anyPair),
-    ignore(char(',')),
-    digit()->or($anyPair),
-    ignore(char('}')),
-));
+$curlyPair->recurse(
+    collect(
+        ignore(char('{')),
+        digit()->or($anyPair),
+        ignore(char(',')),
+        digit()->or($anyPair),
+        ignore(char('}')),
+    )
+);
 
-$squarePair->recurse(collect(
-   ignore(char('[')),
-   digit()->or($anyPair),
-   ignore(char(',')),
-   digit()->or($anyPair),
-   ignore(char(']')),
-));
+$squarePair->recurse(
+    collect(
+        ignore(char('[')),
+        digit()->or($anyPair),
+        ignore(char(',')),
+        digit()->or($anyPair),
+        ignore(char(']')),  
+    )
+);
 
 $result = $anyPair->run("[1,[2,[3,4]]]");
 ```
