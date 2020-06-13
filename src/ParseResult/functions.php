@@ -4,11 +4,11 @@ namespace Mathias\ParserCombinator\ParseResult;
 
 
 /**
- * @param mixed $parsed
+ * @param mixed $output
  */
-function succeed($parsed, string $remaining): ParseResult
+function succeed($output, string $remainder): ParseResult
 {
-    return new ParseSuccess($parsed, $remaining);
+    return new ParseSuccess($output, $remainder);
 }
 
 function fail(string $expected, string $got): ParseResult
@@ -16,7 +16,7 @@ function fail(string $expected, string $got): ParseResult
     return new ParseFailure($expected, $got);
 }
 
-function discard(string $remaining) : ParseResult
+function discard(string $remainder) : ParseResult
 {
-    return new DiscardResult($remaining);
+    return new DiscardResult($remainder);
 }

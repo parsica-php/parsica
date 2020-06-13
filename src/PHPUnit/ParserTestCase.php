@@ -52,8 +52,8 @@ abstract class ParserTestCase extends TestCase
         if ($actualResult->isSuccess()) {
             $this->assertStrictlyEquals(
                 $expectedParsed,
-                $actualResult->parsed(),
-                $message . "\n" . "The parser succeeded but the parsed value doesn't match."
+                $actualResult->output(),
+                $message . "\n" . "The parser succeeded but the output doesn't match."
             );
         } else {
             $this->fail(
@@ -73,7 +73,7 @@ abstract class ParserTestCase extends TestCase
         if ($actualResult->isSuccess()) {
             $this->assertEquals(
                 $expectedRemaining,
-                $actualResult->remaining(),
+                $actualResult->remainder(),
                 $message . "\n" . "The parser succeeded but the expected remaining input doesn't match."
             );
         } else {
@@ -121,6 +121,6 @@ abstract class ParserTestCase extends TestCase
             $actualResult->isSuccess(),
             $message . "\n" . "Expected the parser to succeed on EOL."
         );
-        $this->assertSame("", $actualResult->parsed());
+        $this->assertSame("", $actualResult->output());
     }
 }

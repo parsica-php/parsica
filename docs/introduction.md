@@ -23,7 +23,7 @@ One of the great benefits of parser combinators is that, once you know how, they
 $parser = digit();
 $input = "1. Write Docs";
 $result = $parser->try($input);
-$output = $result->parsed();
+$output = $result->output();
 // $output is a string "1"
 ```
 
@@ -35,7 +35,7 @@ Parser Combinators are functions (or methods) that combine parsers into new pars
 <?php
 $parser = char('a')->mappend(char('b'));
 $result = $parser->try("abc");
-$output = $result->parsed();
+$output = $result->output();
 // $output is "b"
 ```
 
@@ -50,7 +50,7 @@ $parser =
         ignore(char("!")),
     );
 $result = $parser->try("Hello, world!");
-$output = $result->parsed();
+$output = $result->output();
 // $output is ["Hello", "World"];   
 ```
 
@@ -66,9 +66,10 @@ We can inspect the remainder:
 <?php
 $parser = seq(char('a'), char('b'));
 $result = $parser->try("abc");
-$output = $result->parsed(); 
+$output = $result->output(); 
 // $output is "b"
-$remainder = $result->remaining();
+assert($output === "b");
+$remainder = $result->remainder();
 // $remainder is "c"
  ```
 

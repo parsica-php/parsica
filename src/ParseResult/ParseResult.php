@@ -16,9 +16,9 @@ interface ParseResult
     /**
      * @return T
      */
-    public function parsed();
+    public function output();
 
-    public function remaining(): string;
+    public function remainder(): string;
 
     public function expected(): string;
 
@@ -32,7 +32,7 @@ interface ParseResult
     public function mappend(ParseResult $other): ParseResult;
 
     /**
-     * Map a function over the parsed result
+     * Map a function over the output
      *
      * @template T2
      *

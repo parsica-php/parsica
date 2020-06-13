@@ -129,7 +129,7 @@ final class Parser
     }
 
     /**
-     * Parse something, strip it from the remaining input, but discard the parsed value.
+     * Parse something, strip it from the remaining input, but discard the parsed output.
      *
      * @return Parser<T>
      */
@@ -167,7 +167,7 @@ final class Parser
             if ($r1->isSuccess()) {
                 $r2 = $second->continueFrom($r1);
                 if ($r2->isSuccess()) {
-                    return succeed($r2->parsed(), $r2->remaining());
+                    return succeed($r2->output(), $r2->remainder());
                 }
                 return fail("seq (... {$r2->expected()})", $r2->got());
             }
@@ -183,7 +183,7 @@ final class Parser
      */
     public function continueFrom(ParseResult $result): ParseResult
     {
-        return $this->run($result->remaining());
+        return $this->run($result->remainder());
     }
 
     /**

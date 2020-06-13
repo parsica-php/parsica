@@ -11,8 +11,8 @@ final class FunctorTest extends ParserTestCase
     /** @test */
     public function fmap_over_ParseSuccess()
     {
-        $succeed = succeed("parsed", "remaining");
-        $expected = succeed("PARSED", "remaining");
+        $succeed = succeed("parsed", "remainder");
+        $expected = succeed("PARSED", "remainder");
         $this->assertEquals($expected, $succeed->fmap('strtoupper'));
     }
 

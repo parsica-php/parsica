@@ -13,7 +13,7 @@ final class RunningParsersTest extends TestCase
     {
         $parser = char('a');
         $result = $parser->try("a");
-        $this->assertSame("a", $result->parsed());
+        $this->assertSame("a", $result->output());
 
         $this->expectException(ParseFailure::class);
         $result = $parser->try("b");

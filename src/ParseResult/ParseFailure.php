@@ -44,14 +44,14 @@ final class ParseFailure extends Exception implements ParseResult
     /**
      * @return T
      */
-    public function parsed()
+    public function output()
     {
-        throw new BadMethodCallException("Can't read the parsed value of a failed ParseResult.");
+        throw new BadMethodCallException("Can't read the output of a failed ParseResult.");
     }
 
-    public function remaining(): string
+    public function remainder(): string
     {
-        throw new BadMethodCallException("Can't read the remaining string of a failed ParseResult.");
+        throw new BadMethodCallException("Can't read the remainder of a failed ParseResult.");
     }
 
     /**
@@ -65,7 +65,7 @@ final class ParseFailure extends Exception implements ParseResult
     }
 
     /**
-     * Map a function over the parsed result
+     * Map a function over the output
      *
      * @template T2
      *

@@ -21,7 +21,7 @@ function identity(Parser $parser): Parser
 }
 
 /**
- * Parse something, strip it from the remaining input, but discard the parsed value.
+ * Parse something, strip it from the remaining input, but discard the output.
  *
  * @template T
  *
@@ -39,7 +39,7 @@ function ignore(Parser $parser): Parser
  *
  * @template T
  *
- * @param Parser<T> $parsed
+ * @param Parser<T> $parser
  *
  * @return Parser<T|string>
  */

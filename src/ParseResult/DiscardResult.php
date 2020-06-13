@@ -12,11 +12,11 @@ use Mathias\ParserCombinator\Parser\Parser;
  */
 final class DiscardResult implements ParseResult
 {
-    private string $remaining;
+    private string $remainder;
 
-    public function __construct(string $remaining)
+    public function __construct(string $remainder)
     {
-        $this->remaining = $remaining;
+        $this->remainder = $remainder;
     }
 
     public function isSuccess(): bool
@@ -29,14 +29,14 @@ final class DiscardResult implements ParseResult
         return false;
     }
 
-    public function parsed()
+    public function output()
     {
-        throw new \Exception("DiscardResult has no parsed value");
+        throw new \Exception("DiscardResult has no output");
     }
 
-    public function remaining(): string
+    public function remainder(): string
     {
-        return $this->remaining;
+        return $this->remainder;
     }
 
     public function expected(): string
@@ -86,7 +86,7 @@ final class DiscardResult implements ParseResult
      */
     public function continueOnRemaining(Parser $parser): ParseResult
     {
-        return $parser->run($this->remaining());
+        return $parser->run($this->remainder());
     }
 
     public function isDiscarded(): bool

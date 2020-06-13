@@ -13,30 +13,30 @@ final class ParseSuccess implements ParseResult
     /**
      * @var T
      */
-    private $parsed;
+    private $output;
 
-    private string $remaining;
+    private string $remainder;
 
     /**
-     * @param T $parsed
+     * @param T $output
      */
-    public function __construct($parsed, string $remaining)
+    public function __construct($output, string $remainder)
     {
-        $this->parsed = $parsed;
-        $this->remaining = $remaining;
+        $this->output = $output;
+        $this->remainder = $remainder;
     }
 
     /**
      * @return T
      */
-    public function parsed()
+    public function output()
     {
-        return $this->parsed;
+        return $this->output;
     }
 
-    public function remaining(): string
+    public function remainder(): string
     {
-        return $this->remaining;
+        return $this->remainder;
     }
 
     public function isSuccess(): bool
@@ -73,7 +73,7 @@ final class ParseSuccess implements ParseResult
         if($other->isFail()) {
             return $other;
         } elseif($other->isDiscarded()) {
-            return succeed($this->parsed(), $other->remaining());
+            return succeed($this->output(), $other->remainder());
         } else {
             /** @psalm-suppress ArgumentTypeCoercion */
             return $this->mappendSuccess($other);
@@ -94,12 +94,12 @@ final class ParseSuccess implements ParseResult
         switch($type1) {
             case 'string':
                 /** @psalm-suppress MixedOperand */
-                return succeed($this->parsed() . $other->parsed(), $other->remaining());
+                return succeed($this->output() . $other->output(), $other->remainder());
             case 'array':
                 /** @psalm-suppress MixedArgument */
                 return succeed(
-                    array_merge(array_values($this->parsed()), array_values($other->parsed())),
-                    $other->remaining()
+                    array_merge(array_values($this->output()), array_values($other->output())),
+                    $other->remainder()
                 );
             default:
                 throw new \Exception("@TODO cannot mappend ParseResult<$type1>");
@@ -107,7 +107,7 @@ final class ParseSuccess implements ParseResult
     }
 
     /**
-     * Map a function over the parsed result
+     * Map a function over the output
      *
      * @template T2
      *
@@ -117,7 +117,7 @@ final class ParseSuccess implements ParseResult
      */
     public function fmap(callable $transform): ParseResult
     {
-        return succeed($transform($this->parsed), $this->remaining);
+        return succeed($transform($this->output), $this->remainder);
     }
 
     /**
@@ -128,7 +128,7 @@ final class ParseSuccess implements ParseResult
      */
     public function continueOnRemaining(Parser $parser) : ParseResult
     {
-        return $parser->run($this->remaining());
+        return $parser->run($this->remainder());
     }
 
     /**
@@ -152,8 +152,8 @@ final class ParseSuccess implements ParseResult
      */
     private function type() : string
     {
-        $t = gettype($this->parsed);
-        return $t == 'object' ? get_class($this->parsed) : $t;
+        $t = gettype($this->output);
+        return $t == 'object' ? get_class($this->output) : $t;
     }
 
     public function isDiscarded(): bool
@@ -166,6 +166,6 @@ final class ParseSuccess implements ParseResult
      */
     public function discard(): ParseResult
     {
-        return new DiscardResult($this->remaining());
+        return new DiscardResult($this->remainder());
     }
 }
