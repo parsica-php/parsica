@@ -1,12 +1,16 @@
 # Development Status
 
+This project is early stage, so expect things to break all the time. 
+
 This is roughly the road to 1.0:
 
 - [ ] All essential parsers
 - [ ] All essential combinators
-- [ ] Higher level combinators for programming languages
+- [ ] Lexer
+- [ ] Streaming input
 - [x] Basic debugging
-- [ ] Parser state
+- [ ] Parser state, positions
+- [ ] Expression parser helpers
 - [ ] Debug trees
 - [ ] Monoidal parser types
 - [ ] Profiling & performance
