@@ -179,6 +179,7 @@ final class Parser
     /**
      * Take the remaining input from the result and parses it
      *
+     * @TODO this should be a proper >>=, so that (Fail >>= Parser) == Fail
      * @deprecated Doesn't have a test
      */
     public function continueFrom(ParseResult $result): ParseResult
