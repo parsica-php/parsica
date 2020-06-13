@@ -242,7 +242,7 @@ final class Parser
      *
      * @return Parser<T>
      */
-    public function alternative(Parser $other) : Parser
+    public function alternative(Parser $other): Parser
     {
         return $this->or($other);
     }
@@ -251,12 +251,18 @@ final class Parser
      * Try the first parser, and failing that, try the second parser. Returns the first succeeding result, or the first
      * failing result.
      *
+     * Caveat: The order matters!
+     * string('http')->or(string('https')
+     *
      * @param Parser<T> $other
      *
      * @return Parser<T>
      */
-    public function or(Parser $other) : Parser
+    public function or(Parser $other): Parser
     {
+        // This is the canonical implementation: run both parsers, and pick the first succeeding one, by delegating
+        // this work to ParseResult::alternative.
+
         return Parser::make(function (string $input) use ($other): ParseResult {
             // @TODO When the first parser succeeds, this implementation unnecessarily evaluates $other anyway.
             return $this->run($input)
@@ -264,6 +270,20 @@ final class Parser
                     $other->run($input)
                 );
         });
+
+        // @TODO For a more performant version, we'll need to replace the above impementation with this one.
+        // The reason is that the above implementation runs both parsers, even if the first one succeeds.
+        // The implementation below only runs the second parser if the first one fails.
+        /*
+        return Parser::make(function (string $input) use ($other): ParseResult {
+            $r1 = $this->run($input);
+            if($r1->isSuccess()) {
+                return $r1;
+            }
+            $r2 = $other->run($input);
+            return $r2->isSuccess() ? $r2 : $r1;
+        });
+        */
     }
 
     /**
