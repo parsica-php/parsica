@@ -1,5 +1,4 @@
 {
-
     "_readme": [
         "This file locks the dependencies of your project to a known state",
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
@@ -534,12 +533,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mathiasverraes/uptodocs.git",
-                "reference": "173682f92e4ad108839b5282af969718c6e2fb12"
+                "reference": "97d3da1f2c2b3a861fd43140e34ad598737fe6fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mathiasverraes/uptodocs/zipball/173682f92e4ad108839b5282af969718c6e2fb12",
-                "reference": "173682f92e4ad108839b5282af969718c6e2fb12",
+                "url": "https://api.github.com/repos/mathiasverraes/uptodocs/zipball/97d3da1f2c2b3a861fd43140e34ad598737fe6fb",
+                "reference": "97d3da1f2c2b3a861fd43140e34ad598737fe6fb",
                 "shasum": ""
             },
             "require": {
@@ -576,10 +575,10 @@
                 "testing"
             ],
             "support": {
-                "source": "https://github.com/mathiasverraes/uptodocs/tree/master",
+                "source": "https://github.com/mathiasverraes/uptodocs/tree/main",
                 "issues": "https://github.com/mathiasverraes/uptodocs/issues"
             },
-            "time": "2020-06-12T07:59:50+00:00"
+            "time": "2020-06-13T21:38:27+00:00"
         },
         {
             "name": "myclabs/deep-copy",
