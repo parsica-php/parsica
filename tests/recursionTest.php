@@ -4,7 +4,7 @@ namespace Tests\Mathias\ParserCombinator;
 
 use Exception;
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
-use function Mathias\ParserCombinator\{char, collect, digit, recursive};
+use function Mathias\ParserCombinator\{char, collect, digitChar, recursive};
 
 final class recursionTest extends ParserTestCase
 {
@@ -14,7 +14,7 @@ final class recursionTest extends ParserTestCase
         $opening = char('[')->ignore();
         $closing = char(']')->ignore();
         $comma = char(',')->ignore();
-        $digit = digit()->fmap('intval');
+        $digit = digitChar()->fmap('intval');
 
         $pair = recursive();
         $pair->recurse(collect(
@@ -43,7 +43,7 @@ final class recursionTest extends ParserTestCase
         $openingCurly = char('{')->ignore();
         $closingCurly = char('}')->ignore();
         $comma = char(',')->ignore();
-        $digit = digit()->fmap('intval');
+        $digit = digitChar()->fmap('intval');
 
         $curlyPair = recursive();
         $squarePair = recursive();

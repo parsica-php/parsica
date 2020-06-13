@@ -5,7 +5,7 @@ namespace Tests\Mathias\ParserCombinator\Examples;
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\any;
 use function Mathias\ParserCombinator\collect;
-use function Mathias\ParserCombinator\digit;
+use function Mathias\ParserCombinator\digitChar;
 use function Mathias\ParserCombinator\repeat;
 use function Mathias\ParserCombinator\skipSpace;
 use function Mathias\ParserCombinator\string;
@@ -21,7 +21,7 @@ final class SimpleDateTest extends ParserTestCase
         // ... you get the gist
 
         $month = any($jan, $feb, $mar);
-        $day = repeat(2, digit())->fmap('intval');
+        $day = repeat(2, digitChar())->fmap('intval');
         $p1 = collect(
             $month,
             skipSpace(),

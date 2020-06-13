@@ -2,7 +2,7 @@
 
 This project is early stage, so expect things to break all the time. 
 
-This is roughly the road to 1.0:
+This is a rough wishlist of features to do before 1.0:
 
 - [ ] All essential parsers
 - [ ] All essential combinators
@@ -25,3 +25,4 @@ This is roughly the road to 1.0:
 - [ ] Implementations of some typical real world parsers (markdown, json, ...)
 - [ ] Permutation phrases https://www.cs.ox.ac.uk/jeremy.gibbons/wg21/meeting56/loeh-paper.pdf
 - [ ] Versioned documentation, published in different formats
+- [ ] Character classes

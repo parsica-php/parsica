@@ -3,7 +3,7 @@
 namespace Tests\Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
-use function Mathias\ParserCombinator\digit;
+use function Mathias\ParserCombinator\digitChar;
 use function Mathias\ParserCombinator\float;
 
 final class numericTest extends ParserTestCase
@@ -11,7 +11,7 @@ final class numericTest extends ParserTestCase
     /** @test */
     public function digit()
     {
-        $this->assertParse("1", digit(), "1ab");
+        $this->assertParse("1", digitChar(), "1ab");
         $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 
