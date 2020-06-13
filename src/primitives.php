@@ -7,6 +7,8 @@ use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\Parser\TakeWhile;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
 use function Mathias\ParserCombinator\ParseResult\{discard, fail, succeed};
+use function Mathias\ParserCombinator\Predicates\equals;
+use function Mathias\ParserCombinator\Predicates\not;
 
 /**
  * A parser that satisfies a predicate. Useful as a building block for writing things like char(), digit()...

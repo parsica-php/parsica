@@ -29,9 +29,9 @@
     },
     "files": [
       "src/ParseResult/functions.php",
+      "src/Predicates/predicates.php",
       "src/combinators.php",
       "src/numeric.php",
-      "src/predicates.php",
       "src/primitives.php",
       "src/recursion.php",
       "src/space.php",

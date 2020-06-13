@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 
-namespace Mathias\ParserCombinator;
+namespace Mathias\ParserCombinator\Predicates;
 
 use Mathias\ParserCombinator\Assert\Assert;
 
@@ -29,13 +29,25 @@ function not(callable $predicate): callable
 }
 
 /**
+ * Predicate that checks if a character is in an array of character codes.
+ *
+ * @param list<int> $chars
+ *
+ * @return callable(string) : bool
+ */
+function isCharCode(array $chars): callable
+{
+    return fn(string $x): bool => in_array(mb_ord($x), $chars);
+}
+
+/**
  * Returns true for any Unicode space character, and the control characters \t, \n, \r, \f, \v.
  *
  * @return callable(string) : bool
  */
 function isSpace(): callable
 {
-    return fn(string $y): bool => in_array(mb_ord($y), [9, 10, 11, 12, 13, 32, 160]);
+    return isCharCode([9, 10, 11, 12, 13, 32, 160]);
 }
 
 /**
@@ -46,5 +58,15 @@ function isSpace(): callable
  */
 function isHSpace(): callable
 {
-    return fn(string $y): bool => in_array(mb_ord($y), [9, 11, 12, 32, 160]);
+    return isCharCode([9, 11, 12, 32, 160]);
+}
+
+/**
+ * True for 0-9
+ *
+ * @return callable(string) : bool
+ */
+function isDigit(): callable
+{
+    return isCharCode(range(48, 57));
 }

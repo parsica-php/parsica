@@ -3,7 +3,9 @@
 namespace Tests\Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
-use function Mathias\ParserCombinator\{anything, eof, equals, everything, not, nothing, satisfy, takeWhile, takeWhile1};
+use function Mathias\ParserCombinator\{anything, eof, everything, nothing, satisfy, takeWhile, takeWhile1};
+use function Mathias\ParserCombinator\Predicates\{equals, not};
+
 
 final class primitivesTest extends ParserTestCase
 {

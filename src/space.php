@@ -3,6 +3,7 @@
 namespace Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\Parser\Parser;
+use function Mathias\ParserCombinator\Predicates\{isHSpace, isSpace};
 
 /**
  * Parse a newline character. {\n}
