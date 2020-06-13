@@ -38,6 +38,7 @@ $pair->recurse(
 );
 
 $result = $pair->run("[1,[2,[3,4]]]");
+assert($result->output() == [1, [2, [3, 4]]]);
 ```
 
 It's possible to nest multiple recursive parsers. Simply initialise them all first using  `recursive()` and then define them in terms of each other:
@@ -70,6 +71,9 @@ $squarePair->recurse(
 );
 
 $result = $anyPair->run("[1,[2,[3,4]]]");
+assert($result->output() == [1, [2, [3, 4]]]);
+$result = $anyPair->run("{1,{2,{3,4}}}");
+assert($result->output() == [1, [2, [3, 4]]]);
 ```
 
 Note that when you initialize a parser with `recursive()`, it is in fact mutable, and the `recurse()` method mutates it. All parsers are immutable, and this is the only exception. After calling `recurse()`, the parser is immutable again and behaves just like any other parser.
