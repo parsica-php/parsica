@@ -30,9 +30,9 @@ $pair = recursive();
 $pair->recurse(
     collect(
         ignore(char('[')),
-        digit()->or($pair),
+        digitChar()->or($pair),
         ignore(char(',')),
-        digit()->or($pair),
+        digitChar()->or($pair),
         ignore(char(']')),
     )
 );
@@ -53,9 +53,9 @@ $anyPair = $curlyPair->or($squarePair);
 $curlyPair->recurse(
     collect(
         ignore(char('{')),
-        digit()->or($anyPair),
+        digitChar()->or($anyPair),
         ignore(char(',')),
-        digit()->or($anyPair),
+        digitChar()->or($anyPair),
         ignore(char('}')),
     )
 );
@@ -63,9 +63,9 @@ $curlyPair->recurse(
 $squarePair->recurse(
     collect(
         ignore(char('[')),
-        digit()->or($anyPair),
+        digitChar()->or($anyPair),
         ignore(char(',')),
-        digit()->or($anyPair),
+        digitChar()->or($anyPair),
         ignore(char(']')),  
     )
 );

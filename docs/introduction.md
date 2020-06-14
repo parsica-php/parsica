@@ -9,7 +9,8 @@ You're probably using parsers all the time, such as `json_decode()`. And even ju
 ```php
 <?php
 $v = floatval("1.23");
-// $v is now a float 1.23
+assert($v === 1.23); 
+assert(is_float($v)); 
 ```
 
 ## Building a parser
@@ -24,7 +25,8 @@ $parser = digitChar();
 $input = "1. Write Docs";
 $result = $parser->try($input);
 $output = $result->output();
-// $output is a string "1"
+assert($output === "1");
+assert(is_string($output));
 ```
 
 ## Parser Combinators
@@ -36,7 +38,7 @@ Parser Combinators are functions (or methods) that combine parsers into new pars
 $parser = char('a')->mappend(char('b'));
 $result = $parser->try("abc");
 $output = $result->output();
-// $output is "b"
+assert($output === "ab");
 ```
 
 ```php
@@ -51,7 +53,7 @@ $parser =
     );
 $result = $parser->try("Hello, world!");
 $output = $result->output();
-// $output is ["Hello", "World"];   
+assert($output == ["Hello", "world"]);   
 ```
 
 To make this work, we need a small change in our original definition of a parser.

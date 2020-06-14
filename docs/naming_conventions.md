@@ -23,8 +23,11 @@ Some parsers have case-insensitive versions. These are sufficed with 'I'.
 
 ```php 
 <?php
+// @TODO
+/*
 $parser = stringI('hello world'); 
 $result = $parser->run("hElLO WoRlD"); 
 assert($result->output() === "hElLO WoRlD");
+*/
 ```
 
