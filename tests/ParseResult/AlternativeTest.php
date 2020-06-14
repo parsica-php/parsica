@@ -31,5 +31,4 @@ final class AlternativeTest extends ParserTestCase
         $this->assertStrictlyEquals($discard1, $discard1->alternative($fail1));
         $this->assertStrictlyEquals($discard1, $discard1->alternative($discard2));
     }
-
 }

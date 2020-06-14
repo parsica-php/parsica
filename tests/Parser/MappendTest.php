@@ -2,10 +2,10 @@
 
 namespace Tests\Mathias\ParserCombinator\Parser;
 
+use Exception;
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\char;
 use function Mathias\ParserCombinator\nothing;
-use function Mathias\ParserCombinator\string;
 
 final class MappendTest extends ParserTestCase
 {
@@ -30,7 +30,7 @@ final class MappendTest extends ParserTestCase
     {
         $a = char('a')->fmapClass(NotASemigroup::class);
         $b = char('b')->fmapClass(NotASemigroup::class);
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $a->mappend($b)->run('abc');
     }
 
@@ -52,7 +52,7 @@ final class MappendTest extends ParserTestCase
 
 final class NotASemigroup {
 
-    function __construct($_)
+    public function __construct($_)
     {
     }
 }

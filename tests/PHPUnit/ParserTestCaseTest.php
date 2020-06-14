@@ -56,12 +56,12 @@ final class MyType
 {
     private float $x;
 
-    function __construct(float $x)
+    public function __construct(float $x)
     {
         $this->x = $x;
     }
 
-    function equals(MyType $other): bool
+    public function equals(MyType $other): bool
     {
         return $this->x === $other->x;
     }

@@ -2,6 +2,7 @@
 
 namespace Mathias\ParserCombinator;
 
+use Exception;
 use Mathias\ParserCombinator\Assert\Assert;
 use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
@@ -82,7 +83,7 @@ function string(string $str): Parser
  */
 function stringI(string $str): Parser
 {
-    throw new \Exception("@TODO not implemented");
+    throw new Exception("@TODO not implemented");
 }
 
 /**

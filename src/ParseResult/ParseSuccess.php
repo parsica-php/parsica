@@ -3,6 +3,7 @@
 namespace Mathias\ParserCombinator\ParseResult;
 
 use BadMethodCallException;
+use Exception;
 use Mathias\ParserCombinator\Parser\Parser;
 
 /**
@@ -89,7 +90,7 @@ final class ParseSuccess implements ParseResult
     {
         $type1 = $this->type();
         $type2 = $other->type();
-        if($type1!==$type2) throw new \Exception("Mappend only works for ParseResult<T> instances with the same type T, got ParseResult<$type1> and ParseResult<$type2>.");
+        if($type1!==$type2) throw new Exception("Mappend only works for ParseResult<T> instances with the same type T, got ParseResult<$type1> and ParseResult<$type2>.");
 
         switch($type1) {
             case 'string':
@@ -102,7 +103,7 @@ final class ParseSuccess implements ParseResult
                     $other->remainder()
                 );
             default:
-                throw new \Exception("@TODO cannot mappend ParseResult<$type1>");
+                throw new Exception("@TODO cannot mappend ParseResult<$type1>");
         }
     }
 

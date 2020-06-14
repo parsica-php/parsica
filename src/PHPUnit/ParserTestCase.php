@@ -2,6 +2,7 @@
 
 namespace Mathias\ParserCombinator\PHPUnit;
 
+use Exception;
 use Mathias\ParserCombinator\Parser\Parser;
 use PHPUnit\Framework\TestCase;
 
@@ -17,7 +18,7 @@ abstract class ParserTestCase extends TestCase
      * @param mixed $actual
      * @param string $message
      *
-     * @throws \Exception
+     * @throws Exception
      * @see \Tests\Mathias\ParserCombinator\PHPUnit\ParserTestCaseTest::strict_equality
      *
      * @psalm-suppress MixedArgument
@@ -39,7 +40,7 @@ abstract class ParserTestCase extends TestCase
                 $this->assertStrictlyEquals($expected[$k], $actual[$k], "Item $k from the actual array differs from item $k in the expected array");
             }
         } else {
-            throw new \Exception("@todo Not implemented");
+            throw new Exception("@todo Not implemented");
         }
     }
 
@@ -81,7 +82,7 @@ abstract class ParserTestCase extends TestCase
                 $message . "\n" .
                 "Parser failed."
                 . "\nInput: $input"
-                . "\nExpected remaining: " . var_Export($expectedRemaining, true)
+                . "\nExpected remaining: " . var_export($expectedRemaining, true)
                 . "\nParser expected: " . $actualResult->expected()
                 . "\nGot: " . $actualResult->got()
             );

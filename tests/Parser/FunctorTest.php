@@ -48,7 +48,7 @@ class MyType1
 {
     private $val;
 
-    function __construct($val)
+    public function __construct($val)
     {
         $this->val = $val;
     }
@@ -59,7 +59,7 @@ final class SimpleEur
 {
     private float $val;
 
-    function __construct(float $val)
+    public function __construct(float $val)
     {
         $this->val = $val;
     }

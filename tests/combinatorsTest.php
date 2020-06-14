@@ -2,6 +2,7 @@
 
 namespace Tests\Mathias\ParserCombinator;
 
+use InvalidArgumentException;
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\{any,
     anySingle,
@@ -105,7 +106,7 @@ final class combinatorsTest extends ParserTestCase
     /** @test */
     public function oneOf_expects_single_chars()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $parser = oneOf(['a', "long", "c"]);
     }
 

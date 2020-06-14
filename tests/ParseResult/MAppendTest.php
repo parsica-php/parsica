@@ -3,7 +3,6 @@
 namespace Tests\Mathias\ParserCombinator\ParseResult;
 
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
-use function Mathias\ParserCombinator\nothing;
 use function Mathias\ParserCombinator\ParseResult\discard;
 use function Mathias\ParserCombinator\ParseResult\fail;
 use function Mathias\ParserCombinator\ParseResult\succeed;

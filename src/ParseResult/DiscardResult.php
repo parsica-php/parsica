@@ -3,6 +3,7 @@
 namespace Mathias\ParserCombinator\ParseResult;
 
 use BadMethodCallException;
+use Exception;
 use Mathias\ParserCombinator\Parser\Parser;
 
 /**
@@ -31,7 +32,7 @@ final class DiscardResult implements ParseResult
 
     public function output()
     {
-        throw new \Exception("DiscardResult has no output");
+        throw new Exception("DiscardResult has no output");
     }
 
     public function remainder(): string

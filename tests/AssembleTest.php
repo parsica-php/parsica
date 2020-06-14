@@ -2,11 +2,9 @@
 
 namespace Tests\Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\assemble;
 use function Mathias\ParserCombinator\char;
-use function Mathias\ParserCombinator\nothing;
 use function Mathias\ParserCombinator\string;
 
 final class AssembleTest extends ParserTestCase

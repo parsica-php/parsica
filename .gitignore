@@ -1,3 +1,4 @@
 /vendor/
 .idea/
 .private/
+/.php_cs.cache
