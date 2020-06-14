@@ -58,6 +58,8 @@ function orPred(callable $first, callable $second): callable
  *
  * @param list<int> $chars
  *
+ * @link https://doc.bccnsoft.com/docs/cppreference2018/en/c/string/wide/iswcntrl.html
+ *
  * @return callable(string) : bool
  */
 function isCharCode(array $chars): callable
@@ -66,7 +68,7 @@ function isCharCode(array $chars): callable
 }
 
 /**
- * Returns true for any Unicode space character, and the control characters \t, \n, \r, \f, \v.
+ * Returns true for a space character, and the control characters \t, \n, \r, \f, \v.
  *
  * @return callable(string) : bool
  */
@@ -93,7 +95,7 @@ function isHSpace(): callable
  */
 function isDigit(): callable
 {
-    return isCharCode(range(48, 57));
+    return isCharCode(range(0x30, 0x39));
 }
 
 /**
@@ -105,3 +107,95 @@ function isControl() : callable
 {
     return isCharCode(range(0x00, 0x1F) + [0x7F]);
 }
+
+/**
+ * Returns true for a space or a tab character
+ *
+ * @return callable(string) : bool
+ */
+function isBlank()
+{
+    return isCharCode([0x9, 0x20]);
+}
+
+/**
+ * Returns true for a space character, and \t, \n, \r, \f, \v.
+ *
+ * @return callable(string) : bool
+ */
+function isWhitespace()
+{
+    return isCharCode([0x20, 0x9, 0xA, 0xB, 0xC, 0xD]);
+}
+
+/**
+ * Returns true for an uppercase character A-Z.
+ *
+ * @return callable(string) : bool
+ */
+function isUpper()
+{
+    return isCharCode(range(0x41, 0x5A));
+}
+
+/**
+ * Returns true for a lowercase character a-z.
+ *
+ * @return callable(string) : bool
+ */
+function isLower()
+{
+    return isCharCode(range(0x61, 0x7A));
+}
+
+/**
+ * Returns true for an uppercase or lowercase character A-Z, a-z.
+ *
+ * @return callable(string) : bool
+ */
+function isAlpha()
+{
+    return isCharCode(array_merge(range(0x41, 0x5A), range(0x61, 0x7A)));
+}
+
+/**
+ * Returns true for an alpha or numeric character A-Z, a-z, 0-9.
+ *
+ * @return callable(string) : bool
+ */
+function isAlphaNum()
+{
+    return isCharCode(array_merge(range(0x30, 0x39), range(0x41, 0x5A), range(0x61, 0x7A)));
+}
+
+/**
+     * Returns true if the given character is a hexadecimal numeric character 0123456789abcdefABCDEF.
+ *
+ * @return callable(string) : bool
+ */
+function isHexDigit()
+{
+    return isCharCode(array_merge(range(0x30, 0x39), range(0x41, 0x46), range(0x61, 0x66)));
+}
+
+/**
+ * Returns true if the given character is a printable ASCII char.
+ *
+ * @return callable(string) : bool
+ */
+function isPrintable()
+{
+    return isCharCode(range(0x20, 0x7E));
+}
+
+/**
+ * Returns true if the given character is a punctuation character !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+ *
+ * @return callable(string) : bool
+ */
+function isPunctuation()
+{
+    return isCharCode(array_merge(range(0x21, 0x2F), range(0x3A, 0x40), range(0x5B, 0x60), range(0x7B, 0x7E)));
+}
+
+

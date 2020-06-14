@@ -4,7 +4,7 @@ namespace Tests\Mathias\ParserCombinator\Predicates;
 
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\{satisfy};
-use function Mathias\ParserCombinator\Predicates\{isEqual, notPred, orPred};
+use function Mathias\ParserCombinator\Predicates\{andPred, isEqual, notPred, orPred};
 
 final class predicatesTest extends ParserTestCase
 {
@@ -39,7 +39,7 @@ final class predicatesTest extends ParserTestCase
     /** @test */
     public function andPred()
     {
-        $predicate = orPred(isEqual('x'), isEqual('x'));
+        $predicate = andPred(isEqual('x'), isEqual('x'));
         $this->assertTrue($predicate('x'));
         $this->assertFalse($predicate('y'));
     }

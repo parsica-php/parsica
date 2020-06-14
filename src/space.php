@@ -3,16 +3,57 @@
 namespace Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\Parser\Parser;
-use function Mathias\ParserCombinator\Predicates\{isHSpace, isSpace};
+use function Mathias\ParserCombinator\Predicates\{isBlank, isCharCode, isHSpace, isSpace, isWhitespace};
 
 /**
- * Parse a newline character. {\n}
+ * Parse a single space character.
+ *
+ * @return Parser<string>
+ */
+function space(): Parser
+{
+    return char(' ')->label("space");
+}
+
+/**
+ * Parse a single tab character.
+ *
+ * @return Parser<string>
+ */
+function tab(): Parser
+{
+    return char("\t")->label("tab");
+}
+
+/**
+ *  Parse a space or tab.
+ *
+ * @return Parser<string>
+ */
+function blank(): Parser
+{
+    return satisfy(isBlank())->label("blank");
+}
+
+/**
+ *  Parse a space character, and \t, \n, \r, \f, \v.
+ *
+ * @return Parser<string>
+ */
+function whitespace(): Parser
+{
+    return satisfy(isWhitespace())->label("whitespace");
+}
+
+
+/**
+ * Parse a newline character.
  *
  * @return Parser<string>
  */
 function newline(): Parser
 {
-    return char("\n");
+    return char("\n")->label("newline");
 }
 
 /**
@@ -31,16 +72,6 @@ function crlf(): Parser
 function eol(): Parser
 {
     return either(newline(), crlf())->label("eol");
-}
-
-/**
- * Parse a newline character. {\n}
- *
- * @return Parser<string>
- */
-function tab(): Parser
-{
-    return char("\t")->label("tab");
 }
 
 /**

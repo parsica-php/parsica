@@ -4,7 +4,25 @@ namespace Tests\Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
-use function Mathias\ParserCombinator\{char, charI, controlChar, string, stringI};
+use function Mathias\ParserCombinator\{alphaChar,
+    alphaNumChar,
+    binDigitChar,
+    blank,
+    char,
+    charI,
+    controlChar,
+    digitChar,
+    hexDigitChar,
+    lowerChar,
+    octDigitChar,
+    printChar,
+    punctuationChar,
+    space,
+    string,
+    stringI,
+    tab,
+    upperChar,
+    whitespace};
 
 final class charactersTest extends ParserTestCase
 {
@@ -39,10 +57,38 @@ final class charactersTest extends ParserTestCase
 
     public function characterParsers(): array
     {
-        return [
-            // dataSet => [Parser, example string]
+        $tests = [
+            // dataSet => [Parser, example character]
             'controlChar' => [controlChar(), mb_chr(0x05)],
+            'printChar_a' => [printChar(), "a"],
+            'printChar_%' => [printChar(), "%"],
         ];
+
+
+        $types = [
+            // dataSet => [Parser, [example character]]
+            'upperChar' => [upperChar(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ"],
+            'lowerChar' => [lowerChar(), "abcdefghijklmnopqrstuvwxyz"],
+            'alphaChar' => [alphaChar(), "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"],
+            'alphaNumChar' => [alphaNumChar(), "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"],
+            'digitChar' => [digitChar(), "0123456789"],
+            'binDigitChar' => [binDigitChar(), "01"],
+            'octDigitChar' => [octDigitChar(), "01234567"],
+            'hexDigitChar' => [hexDigitChar(), "0123456789abcdefABCDEF"],
+            'punctuationChar' => [punctuationChar(), "!\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"],
+            'whitespace' => [whitespace(), " \t\n\r\f\v"],
+            'space' => [space(), " "],
+            'tab' => [tab(), "\t"],
+            'blank' => [blank(), "\t "],
+            ];
+
+        foreach($types as $name => [$parser, $chars]) {
+            foreach(mb_str_split($chars) as $char) {
+                $tests["{$name}: {$char}"] = [$parser, $char];
+            }
+        }
+
+        return $tests;
 
     }
 
@@ -50,11 +96,9 @@ final class charactersTest extends ParserTestCase
      * @test
      * @dataProvider characterParsers
      */
-    public function a_whole_bunch_of_character_parsers(Parser $parser, string $example)
+    public function character_parsers(Parser $parser, string $example)
     {
         $this->assertParse($example, $parser, $example);
     }
-
-
 }
 
