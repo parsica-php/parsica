@@ -157,13 +157,11 @@ function collect(Parser ...$parsers): Parser
 /**
  * Tries each parser one by one, returning the result of the first one that succeeds.
  *
- * @param Parser<TParsed>[] $parsers
+ * @param Parser<T>[] $parsers
  *
- * @return Parser<TParsed>
+ * @return Parser<T>
  *
- * @template TParsed
- * @deprecated 0.2 Do we have tests for this?
- *
+ * @template T
  */
 function any(Parser ...$parsers): Parser
 {

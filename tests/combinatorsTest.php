@@ -232,8 +232,6 @@ final class combinatorsTest extends TestCase
         $this->assertParse(["€", 15.23], $money, "€15.23");
         $this->assertParse(["$", 15.0], $money, "$15");
         $this->assertNotParse($money, "£12.13");
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
-
 
 }
