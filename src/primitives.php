@@ -201,7 +201,7 @@ function everything(): Parser
 
 
 /**
- * Always fail, no matter what you try.
+ * Always fail, no matter what the input was.
  *
  * @deprecated no tests
  */
