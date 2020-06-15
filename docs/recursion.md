@@ -105,7 +105,7 @@ In fact the code above is how the `atLeastOne()` combinator works, so you can si
 <?php
 $parser = atLeastOne(char('a'));
 $result = $parser->try("aaab");
-assert($result->output() == "aaa");
+assert($result->output() == "baaa");
 ```
 
 
