@@ -2,11 +2,8 @@
 
 namespace Tests\Mathias\ParserCombinator\Parser;
 
-use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
-use function Mathias\ParserCombinator\alphaChar;
-use function Mathias\ParserCombinator\alphaNumChar;
 use function Mathias\ParserCombinator\anySingle;
 use function Mathias\ParserCombinator\bind;
 use function Mathias\ParserCombinator\char;
