@@ -4,7 +4,15 @@ namespace Tests\Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
-use function Mathias\ParserCombinator\{anything, eof, everything, nothing, satisfy, takeWhile, takeWhile1};
+use function Mathias\ParserCombinator\{anything,
+    eof,
+    everything,
+    failure,
+    nothing,
+    satisfy,
+    success,
+    takeWhile,
+    takeWhile1};
 use function Mathias\ParserCombinator\Predicates\{isEqual, notPred};
 
 
@@ -91,7 +99,6 @@ final class primitivesTest extends TestCase
         $this->assertSucceedOnEOF($parser);
     }
 
-
     /** @test */
     public function takeWhile1()
     {
@@ -104,4 +111,16 @@ final class primitivesTest extends TestCase
         $this->assertParse("aaa", $parser, "aaa");
         $this->assertNotParse($parser, "", "takeWhile1(predicate)");
     }
+
+    /** @test */
+    public function success_and_failure()
+    {
+        $this->assertParse("", success(), "doesn't matter what we put in here");
+        $this->assertRemain("no input is consumed", success(), "no input is consumed");
+        $this->assertNotParse(failure(), "doesn't matter what we put in here");
+
+        $or = failure()->or(success());
+        $this->assertParse("", $or, "failure or success is success");
+    }
+
 }

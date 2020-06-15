@@ -199,17 +199,21 @@ function everything(): Parser
     return Parser::make(fn(string $input) => succeed($input, ""));
 }
 
+/**
+ * Always succeed, no matter what the input was.
+ */
+function success(): Parser
+{
+    return Parser::make(fn(string $input) => succeed('', $input))->label('success');
+}
 
 /**
  * Always fail, no matter what the input was.
- *
- * @deprecated no tests
  */
 function failure(): Parser
 {
     return Parser::make(fn(string $input) => fail('', $input))->label('failure');
 }
-
 
 /**
  * Parse the end of the input
