@@ -77,3 +77,35 @@ assert($result->output() == [1, [2, [3, 4]]]);
 ```
 
 Note that when you initialize a parser with `recursive()`, it is in fact mutable, and the `recurse()` method mutates it. All parsers are immutable, and this is the only exception. After calling `recurse()`, the parser is immutable again and behaves just like any other parser.
+
+## Using recusion to avoid loops
+
+Let's say we want to parse the character `'a'` at least one time, so that `"aaab"` outputs `"aaa"`, but `"bbb"` fails. Imperatively, you could solve this by running the `char('a')` parser in a while loop, and stop on the first failure. We can express it more concisely with recursion though: 
+
+1. Start by parsing `char('a')`.
+2. Append another `char('a')`, but this second one is `optional()`.
+3. Append another `optional(char('a'))`
+4. Notice the similarity between the first two steps. This suggest an opportunity for recursion. 
+5. Wrap our `char('a')->append(optional(char('a')))` in a `recurse()` parser. 
+6. Replace the second `char('a')` by the recursive parser.
+
+The end result looks like this:
+
+```php
+<?php
+$rec = recursive();
+$rec->recurse(char('a')->append(optional($rec)));
+$result = $rec->try("aaab");
+assert($result->output() == "aaa");
+```
+
+In fact the code above is how the `atLeastOne()` combinator works, so you can simplify that code by writing this:
+
+```php
+<?php
+$parser = atLeastOne(char(' a'));
+$result = $parser->try("aaab");
+assert($result->output() == "aaa");
+```
+
+
