@@ -59,14 +59,10 @@ final class Parser
     }
 
     /**
-     * Recurse on a parser. Used in combination with {@see recursive()}.
-     *
-     * This method does not return anything, and instead mutates the parser. After calling this method however, the
-     * parser behaves like a regular parser.
-     *
-     * @param Parser<T> $parser
+     * Recurse on a parser. Used in combination with {@see recursive()}. After calling this method, this parser behaves
+     * like a regular parser.
      */
-    public function recurse(Parser $parser): void
+    public function recurse(Parser $parser): Parser
     {
         switch ($this->recursionStatus) {
             case 'not-recursive':
@@ -86,6 +82,7 @@ final class Parser
                 throw new Exception("Unexpected recursionStatus value");
         }
 
+        return $this;
     }
 
     /**
@@ -181,6 +178,7 @@ final class Parser
      */
     public function label(string $label): Parser
     {
+        // @todo perhaps something like $parser->onSuccess($f)->onFailure($g) ?
         return Parser::make(function (string $input) use ($label) : ParseResult {
             $result = $this->run($input);
             return ($result->isSuccess())
@@ -310,7 +308,7 @@ final class Parser
                 );
         });
 
-        // @TODO For a more performant version, we'll need to replace the above impementation with this one.
+        // @TODO For a more performant version, we'll probably need to replace the above impementation with this one.
         // The reason is that the above implementation runs both parsers, even if the first one succeeds.
         // The implementation below only runs the second parser if the first one fails.
         /*

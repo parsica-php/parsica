@@ -55,7 +55,7 @@ function pure($output): Parser
  *
  * @param Parser<T> $parser
  *
- * @return Parser<T|string>
+ * @return Parser<T>
  */
 function optional(Parser $parser): Parser
 {
@@ -175,27 +175,16 @@ function any(Parser ...$parsers): Parser
 /**
  * One or more repetitions of Parser
  *
- * @param Parser<TParsed> $parser
+ * @template T
+ * @param Parser<T> $parser
  *
- * @return Parser<TParsed>
- * @deprecated 0.2
- *
- * @template TParsed
+ * @return Parser<T>
  *
  */
 function atLeastOne(Parser $parser): Parser
 {
-    return Parser::make(function (string $input) use ($parser): ParseResult {
-        $r = $parser->run($input);
-        if ($r->isFail()) return $r;
-
-        while ($r->isSuccess()) {
-            $next = $parser->continueFrom($r);
-            if ($next->isFail()) return $r;
-            $r = $r->append($next);
-        }
-        return $r;
-    });
+    $rec = recursive();
+    return $rec->recurse($parser->append(optional($rec)));
 }
 
 /**

@@ -214,9 +214,9 @@ final class combinatorsTest extends TestCase
         $this->assertFailOnEOF($parser);
         $this->assertParse("a", $parser, "a");
         $this->assertParse("aa", $parser, "aa");
-        $this->assertParse("aa", $parser, "aabb");
+        $this->assertParse("aaaaa", $parser, "aaaaa");
+        $this->assertParse("aaa", $parser, "aaabb");
         $this->assertNotParse($parser, "bb");
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 
     /** @test */
