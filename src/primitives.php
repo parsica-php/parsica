@@ -7,7 +7,7 @@ use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\Parser\TakeWhile;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
 use function Mathias\ParserCombinator\ParseResult\{discard, fail, succeed};
-use function Mathias\ParserCombinator\Predicates\{isEqual,notPred};
+use function Mathias\ParserCombinator\Predicates\{isEqual, notPred};
 
 /**
  * A parser that satisfies a predicate. Useful as a building block for writing things like char(), digit()...
@@ -71,17 +71,18 @@ function takeWhile1(callable $predicate): Parser
  *
  * @return Parser<T>
  */
-function anySingle() : Parser
+function anySingle(): Parser
 {
     return satisfy(
-        /** @param mixed $_ */
-        fn($_)=>true,
+    /** @param mixed $_ */
+        fn($_) => true,
         "anySingle"
     );
 }
 
 /**
  * Parse and return a single character of anything.
+ *
  * @TODO This is an alias of anySingle. Should we get rid of one of them?
  * @return Parser<string>
  */
@@ -98,7 +99,7 @@ function anything(): Parser
  *
  * @return Parser<string>
  */
-function anySingleBut(string $x) : Parser
+function anySingleBut(string $x): Parser
 {
     return satisfy(notPred(isEqual($x)), "anySingleBut($x)");
 }
@@ -109,14 +110,15 @@ function anySingleBut(string $x) : Parser
  * @template T
  *
  * @param list<string> $chars
+ *
  * @return Parser<string>
  */
-function oneOf(array $chars) : Parser
+function oneOf(array $chars): Parser
 {
     Assert::singleChars($chars);
     return satisfy(
         fn(string $x) => in_array($x, $chars),
-        "oneOf(".implode('', $chars).")"
+        "oneOf(" . implode('', $chars) . ")"
     );
 }
 
@@ -127,9 +129,10 @@ function oneOf(array $chars) : Parser
  * @template T
  *
  * @param string $chars
+ *
  * @return Parser<string>
  */
-function oneOfS(string $chars) : Parser
+function oneOfS(string $chars): Parser
 {
     /** @var list<string> $split */
     $split = mb_str_split($chars);
@@ -144,14 +147,15 @@ function oneOfS(string $chars) : Parser
  * @template T
  *
  * @param list<string> $chars
+ *
  * @return Parser<string>
  */
-function noneOf(array $chars) : Parser
+function noneOf(array $chars): Parser
 {
     Assert::singleChars($chars);
     return satisfy(
         fn(string $x) => !in_array($x, $chars),
-        "noneOf(".implode('', $chars).")"
+        "noneOf(" . implode('', $chars) . ")"
     );
 }
 
@@ -162,9 +166,10 @@ function noneOf(array $chars) : Parser
  * @template T
  *
  * @param string $chars
+ *
  * @return Parser<string>
  */
-function noneOfS(string $chars) : Parser
+function noneOfS(string $chars): Parser
 {
     /** @var list<string> $split */
     $split = mb_str_split($chars);
@@ -173,12 +178,13 @@ function noneOfS(string $chars) : Parser
 
 /**
  * Consume the rest of the input and return it as a string. This parser never fails, but may return the empty string.
+ *
  * @template T
  * @return Parser<string>
  */
-function takeRest() : Parser
+function takeRest(): Parser
 {
-    return takeWhile(fn (string $_) : bool => true);
+    return takeWhile(fn(string $_): bool => true);
 }
 
 /**

@@ -6,7 +6,7 @@ use Exception;
 use Mathias\ParserCombinator\Assert\Assert;
 use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
-use function Mathias\ParserCombinator\ParseResult\{fail,succeed};
+use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
 use function Mathias\ParserCombinator\Predicates\{isAlpha,
     isAlphaNum,
     isControl,
@@ -15,16 +15,17 @@ use function Mathias\ParserCombinator\Predicates\{isAlpha,
     isPrintable,
     isPunctuation,
     isUpper,
-    orPred};
+    orPred
+};
 
 /**
  * Parse a single character.
  *
- * @see charI()
- *
  * @param string $c A single character
  *
  * @return Parser<string>
+ * @see charI()
+ *
  */
 function char(string $c): Parser
 {
@@ -37,27 +38,27 @@ function char(string $c): Parser
  * actually parsed input.
  * eg charI('a'')->run("ABC") will succeed with "A", not "a".
  *
- * @see char()
- *
  * @param string $c A single character
  *
  * @return Parser<string>
+ * @see char()
+ *
  */
 function charI(string $c): Parser
 {
     Assert::singleChar($c);
     return satisfy(
-            orPred(isEqual(mb_strtolower($c)), isEqual(mb_strtoupper($c))),
-                "charI($c)"
-            );
+        orPred(isEqual(mb_strtolower($c)), isEqual(mb_strtoupper($c))),
+        "charI($c)"
+    );
 }
 
 /**
  * Parse a non-empty string.
  *
+ * @return Parser<string>
  * @see stringI()
  *
- * @return Parser<string>
  */
 function string(string $str): Parser
 {
@@ -77,9 +78,9 @@ function string(string $str): Parser
  * actually parsed input.
  * eg stringI("foobar")->run("foObAr") will succeed with "foObAr"
  *
+ * @return Parser<string>
  * @see string()
  *
- * @return Parser<string>
  */
 function stringI(string $str): Parser
 {
@@ -91,7 +92,7 @@ function stringI(string $str): Parser
  *
  * @return Parser<string>
  */
-function controlChar() : Parser
+function controlChar(): Parser
 {
     return satisfy(isControl())->label("controlChar");
 }

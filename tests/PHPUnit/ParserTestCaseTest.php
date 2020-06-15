@@ -24,12 +24,12 @@ final class ParserTestCaseTest extends TestCase
             "...but value object instances with the same value do not have equality");
         $this->assertTrue((new MyType(1.23))->equals(new MyType(1.23)),
             "We can solve it with an equals() method, but the user doesn't always have "
-            ."control of the types.");
+            . "control of the types.");
 
         $this->assertTrue(true,
             "Therefore, we need something that will behave like assertSame for primitives, "
-            ."like assertEquals for objects of the same type,"
-            ."and fail for everything else.");
+            . "like assertEquals for objects of the same type,"
+            . "and fail for everything else.");
 
         $this->assertStrictlyEquals(1.23, 1.23);
         $this->assertStrictlyEquals(new MyType(1.23), new MyType(1.23));

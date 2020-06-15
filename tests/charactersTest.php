@@ -83,10 +83,10 @@ final class charactersTest extends TestCase
             'space' => [space(), " "],
             'tab' => [tab(), "\t"],
             'blank' => [blank(), "\t "],
-            ];
+        ];
 
-        foreach($types as $name => [$parser, $chars]) {
-            foreach(mb_str_split($chars) as $char) {
+        foreach ($types as $name => [$parser, $chars]) {
+            foreach (mb_str_split($chars) as $char) {
                 $tests["{$name}: {$char}"] = [$parser, $char];
             }
         }

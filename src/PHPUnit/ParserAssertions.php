@@ -12,42 +12,6 @@ use Mathias\ParserCombinator\Parser\Parser;
  */
 trait ParserAssertions
 {
-    abstract public static function assertSame($expected, $actual, string $message = ''): void;
-    abstract public static function assertEquals($expected, $actual, string $message = ''): void;
-    abstract public static function fail(string $message = ''): void;
-    abstract public static function assertTrue($condition, string $message = ''): void;
-
-    /**
-     * @param mixed $expected
-     * @param mixed $actual
-     * @param string $message
-     *
-     * @throws Exception
-     * @see \Tests\Mathias\ParserCombinator\PHPUnit\ParserTestCaseTest::strict_equality
-     *
-     * @psalm-suppress MixedArgument
-     * @psalm-suppress MixedAssignment
-     * @psalm-suppress MixedArrayAccess
-     */
-    protected function assertStrictlyEquals($expected, $actual, string $message = ''): void
-    {
-        // Just a POC implementation.
-        if(is_scalar($expected) ) {
-            $this->assertSame($expected, $actual, $message);
-        } elseif(is_object($expected)) {
-            $this->assertEquals(get_class($expected), get_class($actual),
-                "Expected type didn't match actual type");
-            $this->assertEquals($expected, $actual, $message);
-        }elseif(is_array($expected)) {
-            $this->assertSame(count($expected), count($actual), "The length of the  actual array differs from the length of the expected array.");
-            foreach($expected as $k=>$v) {
-                $this->assertStrictlyEquals($expected[$k], $actual[$k], "Item $k from the actual array differs from item $k in the expected array");
-            }
-        } else {
-            throw new Exception("@todo Not implemented");
-        }
-    }
-
     /**
      * @param mixed $expectedParsed
      */
@@ -71,6 +35,43 @@ trait ParserAssertions
             );
         }
     }
+
+    /**
+     * @param mixed  $expected
+     * @param mixed  $actual
+     * @param string $message
+     *
+     * @throws Exception
+     * @see \Tests\Mathias\ParserCombinator\PHPUnit\ParserTestCaseTest::strict_equality
+     *
+     * @psalm-suppress MixedArgument
+     * @psalm-suppress MixedAssignment
+     * @psalm-suppress MixedArrayAccess
+     */
+    protected function assertStrictlyEquals($expected, $actual, string $message = ''): void
+    {
+        // Just a POC implementation.
+        if (is_scalar($expected)) {
+            $this->assertSame($expected, $actual, $message);
+        } elseif (is_object($expected)) {
+            $this->assertEquals(get_class($expected), get_class($actual),
+                "Expected type didn't match actual type");
+            $this->assertEquals($expected, $actual, $message);
+        } elseif (is_array($expected)) {
+            $this->assertSame(count($expected), count($actual), "The length of the  actual array differs from the length of the expected array.");
+            foreach ($expected as $k => $v) {
+                $this->assertStrictlyEquals($expected[$k], $actual[$k], "Item $k from the actual array differs from item $k in the expected array");
+            }
+        } else {
+            throw new Exception("@todo Not implemented");
+        }
+    }
+
+    abstract public static function assertSame($expected, $actual, string $message = ''): void;
+
+    abstract public static function assertEquals($expected, $actual, string $message = ''): void;
+
+    abstract public static function fail(string $message = ''): void;
 
     protected function assertRemain(string $expectedRemaining, Parser $parser, string $input, string $message = ""): void
     {
@@ -110,7 +111,9 @@ trait ParserAssertions
         }
     }
 
-    protected function assertFailOnEOF(Parser $parser, string $message = "") : void
+    abstract public static function assertTrue($condition, string $message = ''): void;
+
+    protected function assertFailOnEOF(Parser $parser, string $message = ""): void
     {
         $actualResult = $parser->run("");
         $this->assertTrue(
@@ -119,7 +122,7 @@ trait ParserAssertions
         );
     }
 
-    protected function assertSucceedOnEOF(Parser $parser, string $message = "") : void
+    protected function assertSucceedOnEOF(Parser $parser, string $message = ""): void
     {
         $actualResult = $parser->run("");
         $this->assertTrue(

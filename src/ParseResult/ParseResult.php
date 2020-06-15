@@ -46,14 +46,13 @@ interface ParseResult
      * Return the first successful ParseResult if any, and otherwise return the first failing one.
      *
      * @param ParseResult<T> $other
+     *
      * @return ParseResult<T>
      */
-    public function alternative(ParseResult $other) : ParseResult;
+    public function alternative(ParseResult $other): ParseResult;
 
     /**
-     * @todo rename to continueOnRemainder
      * @template T2
-     *
      * @param Parser<T2> $parser
      *
      * @return ParseResult<T2>
@@ -63,7 +62,7 @@ interface ParseResult
     /**
      * Discard a successful result or return the failed result.
      */
-    public function discard() : ParseResult;
+    public function discard(): ParseResult;
 
-    public function isDiscarded() : bool;
+    public function isDiscarded(): bool;
 }

@@ -9,7 +9,7 @@ final class Assert
     /**
      * @throws InvalidArgumentException
      */
-    public static function nonEmpty(string $str) : void
+    public static function nonEmpty(string $str): void
     {
         Assert::minLength($str, 1, "The string must not be empty.");
     }
@@ -25,11 +25,12 @@ final class Assert
     }
 
     /**
+     * @param list<string> $chars
+     *
      * @throws InvalidArgumentException
      *
-     * @param list<string> $chars
      */
-    public static function singleChars(array $chars) : void
+    public static function singleChars(array $chars): void
     {
         foreach ($chars as $char) {
             Assert::singleChar($char);
@@ -39,7 +40,7 @@ final class Assert
     /**
      * @throws InvalidArgumentException
      */
-    public static function singleChar(string $char) : void
+    public static function singleChar(string $char): void
     {
         Assert::length($char, 1, "The argument must be a single character");
     }

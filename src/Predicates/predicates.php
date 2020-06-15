@@ -58,9 +58,8 @@ function orPred(callable $first, callable $second): callable
  *
  * @param list<int> $chars
  *
- * @link https://doc.bccnsoft.com/docs/cppreference2018/en/c/string/wide/iswcntrl.html
- *
  * @return callable(string) : bool
+ * @link https://doc.bccnsoft.com/docs/cppreference2018/en/c/string/wide/iswcntrl.html
  */
 function isCharCode(array $chars): callable
 {
@@ -103,7 +102,7 @@ function isDigit(): callable
  *
  * @return callable(string) : bool
  */
-function isControl() : callable
+function isControl(): callable
 {
     return isCharCode(range(0x00, 0x1F) + [0x7F]);
 }
@@ -169,7 +168,7 @@ function isAlphaNum()
 }
 
 /**
-     * Returns true if the given character is a hexadecimal numeric character 0123456789abcdefABCDEF.
+ * Returns true if the given character is a hexadecimal numeric character 0123456789abcdefABCDEF.
  *
  * @return callable(string) : bool
  */

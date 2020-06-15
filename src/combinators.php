@@ -4,7 +4,7 @@ namespace Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
-use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
+use function Mathias\ParserCombinator\ParseResult\{succeed};
 
 /**
  * Identity parser, returns the Parser as is.
@@ -38,10 +38,12 @@ function ignore(Parser $parser): Parser
  * A parser that will have the argument as its output, no matter what the input was. It doesn't consume any input.
  *
  * @template T
+ *
  * @param T $output
+ *
  * @return Parser<T>
  */
-function pure($output) : Parser
+function pure($output): Parser
 {
     return Parser::make(fn(string $input) => succeed($output, $input));
 }
@@ -83,14 +85,14 @@ function bind(Parser $parser, callable $f): Parser
  * Parse something, then follow by something else. Ignore the result of the first parser and return the result of the
  * second parser.
  *
- * @see Parser::sequence()
- *
  * @param Parser<T1> $first
  * @param Parser<T2> $second
  *
  * @return Parser<T2>
  * @template T1
  * @template T2
+ * @see Parser::sequence()
+ *
  */
 function sequence(Parser $first, Parser $second): Parser
 {
@@ -100,14 +102,14 @@ function sequence(Parser $first, Parser $second): Parser
 /**
  * Either parse the first thing or the second thing
  *
- * @see Parser::or()
- *
- * @template T
- *
  * @param Parser<T> $first
  * @param Parser<T> $second
  *
  * @return Parser<T>
+ * @see Parser::or()
+ *
+ * @template T
+ *
  */
 function either(Parser $first, Parser $second): Parser
 {
@@ -154,19 +156,20 @@ function collect(Parser ...$parsers): Parser
 
 /**
  * Tries each parser one by one, returning the result of the first one that succeeds.
- * @deprecated 0.2 Do we have tests for this?
  *
  * @param Parser<TParsed>[] $parsers
  *
  * @return Parser<TParsed>
  *
  * @template TParsed
+ * @deprecated 0.2 Do we have tests for this?
+ *
  */
 function any(Parser ...$parsers): Parser
 {
     return array_reduce(
         $parsers,
-        fn(Parser $first, Parser $second):Parser => $first->or($second),
+        fn(Parser $first, Parser $second): Parser => $first->or($second),
         failure()
     )->label('any');
 }

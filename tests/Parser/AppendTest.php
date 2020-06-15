@@ -15,8 +15,8 @@ final class AppendTest extends TestCase
     /** @test */
     public function append_strings()
     {
-       $parser = char('a')->append(char('b'));
-       $this->assertParse("ab", $parser, "abc");
+        $parser = char('a')->append(char('b'));
+        $this->assertParse("ab", $parser, "abc");
     }
 
     /** @test */
@@ -53,7 +53,8 @@ final class AppendTest extends TestCase
     }
 }
 
-final class NotASemigroup {
+final class NotASemigroup
+{
 
     public function __construct($_)
     {

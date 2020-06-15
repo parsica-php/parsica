@@ -23,8 +23,7 @@ use function Mathias\ParserCombinator\{any,
     sequence,
     skipSpace,
     string,
-    takeRest
-};
+    takeRest};
 
 final class combinatorsTest extends TestCase
 {
@@ -235,7 +234,6 @@ final class combinatorsTest extends TestCase
         $this->assertNotParse($money, "£12.13");
         $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
-
 
 
 }

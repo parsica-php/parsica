@@ -71,9 +71,9 @@ final class ParseSuccess implements ParseResult
      */
     public function append(ParseResult $other): ParseResult
     {
-        if($other->isFail()) {
+        if ($other->isFail()) {
             return $other;
-        } elseif($other->isDiscarded()) {
+        } elseif ($other->isDiscarded()) {
             return succeed($this->output(), $other->remainder());
         } else {
             /** @psalm-suppress ArgumentTypeCoercion */
@@ -86,13 +86,13 @@ final class ParseSuccess implements ParseResult
      *
      * @psalm-suppress MixedArgumentTypeCoercion
      */
-    private function appendSuccess(ParseSuccess $other) : ParseResult
+    private function appendSuccess(ParseSuccess $other): ParseResult
     {
         $type1 = $this->type();
         $type2 = $other->type();
-        if($type1!==$type2) throw new Exception("Append only works for ParseResult<T> instances with the same type T, got ParseResult<$type1> and ParseResult<$type2>.");
+        if ($type1 !== $type2) throw new Exception("Append only works for ParseResult<T> instances with the same type T, got ParseResult<$type1> and ParseResult<$type2>.");
 
-        switch($type1) {
+        switch ($type1) {
             case 'string':
                 /** @psalm-suppress MixedOperand */
                 return succeed($this->output() . $other->output(), $other->remainder());
@@ -123,11 +123,12 @@ final class ParseSuccess implements ParseResult
 
     /**
      * @template T2
+     *
      * @param Parser<T2> $parser
+     *
      * @return ParseResult<T2>
-     * @deprecated
      */
-    public function continueWith(Parser $parser) : ParseResult
+    public function continueWith(Parser $parser): ParseResult
     {
         return $parser->run($this->remainder());
     }
@@ -136,6 +137,7 @@ final class ParseSuccess implements ParseResult
      * Return the first successful ParseResult if any, and otherwise return the first failing one.
      *
      * @param ParseResult<T> $other
+     *
      * @return ParseResult<T>
      */
     public function alternative(ParseResult $other): ParseResult
@@ -145,13 +147,14 @@ final class ParseSuccess implements ParseResult
 
     /**
      * The type of the ParseResult
+     *
      * @return class-string<T>
      *
      * @psalm-suppress MoreSpecificReturnType
      * @psalm-suppress LessSpecificReturnStatement
      * @psalm-suppress MixedArgumentTypeCoercion
      */
-    private function type() : string
+    private function type(): string
     {
         $t = gettype($this->output);
         return $t == 'object' ? get_class($this->output) : $t;

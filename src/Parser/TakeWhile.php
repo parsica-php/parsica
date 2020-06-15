@@ -29,32 +29,8 @@ final class TakeWhile
             fn(string $input): ParseResult =>
                 //self::isEOF($input) ?
                 //    fail("takeWhile(predicate)", "EOF") :
-                self::parseRemainingInput($input, $predicate)
+            self::parseRemainingInput($input, $predicate)
         );
-    }
-
-    /**
-     * Keep parsing 1 or more characters as long as the predicate holds.
-     *
-     * @template T
-     *
-     * @param callable(string) : bool $predicate
-     *
-     * @return Parser<T>
-     */
-    public static function _takeWhile1(callable $predicate): Parser
-    {
-        return Parser::make(
-            fn(string $input): ParseResult =>
-                !self::matchFirst($predicate, $input) ?
-                    fail("takeWhile1(predicate)", $input) :
-                self::parseRemainingInput($input, $predicate)
-        );
-    }
-
-    private static function isEOF(string $input): bool
-    {
-        return mb_strlen($input) === 0;
     }
 
     /**
@@ -71,12 +47,35 @@ final class TakeWhile
         return succeed($chunk, $remaining);
     }
 
+    private static function isEOF(string $input): bool
+    {
+        return mb_strlen($input) === 0;
+    }
+
     /**
      * @param callable(string) : bool $predicate
      */
     private static function matchFirst(callable $predicate, string $str): bool
     {
         return $predicate(mb_substr($str, 0, 1));
+    }
+
+    /**
+     * Keep parsing 1 or more characters as long as the predicate holds.
+     *
+     * @template T
+     *
+     * @param callable(string) : bool $predicate
+     *
+     * @return Parser<T>
+     */
+    public static function _takeWhile1(callable $predicate): Parser
+    {
+        return Parser::make(
+            fn(string $input): ParseResult => !self::matchFirst($predicate, $input) ?
+                fail("takeWhile1(predicate)", $input) :
+                self::parseRemainingInput($input, $predicate)
+        );
     }
 
 }
