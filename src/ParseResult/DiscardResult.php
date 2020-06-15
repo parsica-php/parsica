@@ -62,7 +62,7 @@ final class DiscardResult implements ParseResult
      * @psalm-suppress MixedOperand
      * @psalm-suppress MixedArgumentTypeCoercion
      */
-    public function mappend(ParseResult $other): ParseResult
+    public function append(ParseResult $other): ParseResult
     {
         return $other;
     }
@@ -83,9 +83,9 @@ final class DiscardResult implements ParseResult
      * @param Parser<T2> $parser
      *
      * @return ParseResult<T2>
-     * @deprecated
+     * @deprecated has no test?
      */
-    public function continueOnRemaining(Parser $parser): ParseResult
+    public function continueWith(Parser $parser): ParseResult
     {
         return $parser->run($this->remainder());
     }

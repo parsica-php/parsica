@@ -29,7 +29,7 @@ interface ParseResult
      *
      * @return ParseResult<T>
      */
-    public function mappend(ParseResult $other): ParseResult;
+    public function append(ParseResult $other): ParseResult;
 
     /**
      * Map a function over the output
@@ -58,7 +58,7 @@ interface ParseResult
      *
      * @return ParseResult<T2>
      */
-    public function continueOnRemaining(Parser $parser): ParseResult;
+    public function continueWith(Parser $parser): ParseResult;
 
     /**
      * Discard a successful result or return the failed result.

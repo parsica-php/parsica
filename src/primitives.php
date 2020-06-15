@@ -184,7 +184,7 @@ function takeRest() : Parser
 /**
  * Parse nothing, but still succeed.
  *
- * This serves as the zero parser in mappend operations.
+ * This serves as the zero parser in `append()` operations.
  */
 function nothing(): Parser
 {

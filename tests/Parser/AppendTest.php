@@ -7,45 +7,45 @@ use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\char;
 use function Mathias\ParserCombinator\nothing;
 
-final class MappendTest extends ParserTestCase
+final class AppendTest extends ParserTestCase
 {
     /** @test */
-    public function mappend_strings()
+    public function append_strings()
     {
-       $parser = char('a')->mappend(char('b'));
+       $parser = char('a')->append(char('b'));
        $this->assertParse("ab", $parser, "abc");
     }
 
     /** @test */
-    public function mappend_array()
+    public function append_array()
     {
         $a = char('a')->fmap(fn($x) => [$x]);
         $b = char('b')->fmap(fn($x) => [$x]);
-        $this->assertParse(['a', 'b'], $a->mappend($b), "abc");
+        $this->assertParse(['a', 'b'], $a->append($b), "abc");
     }
 
 
     /** @test */
-    public function mappend_non_semigroup()
+    public function append_non_semigroup()
     {
         $a = char('a')->fmapClass(NotASemigroup::class);
         $b = char('b')->fmapClass(NotASemigroup::class);
         $this->expectException(Exception::class);
-        $a->mappend($b)->run('abc');
+        $a->append($b)->run('abc');
     }
 
     /** @test */
-    public function mappend_nothing()
+    public function append_nothing()
     {
-        $parser = nothing()->mappend(char('a'));
+        $parser = nothing()->append(char('a'));
         $this->assertParse("a", $parser, "ab");
         $this->assertRemain("b", $parser, "ab");
 
-        $parser = char('a')->mappend(nothing());
+        $parser = char('a')->append(nothing());
         $this->assertParse("a", $parser, "ab");
         $this->assertRemain("b", $parser, "ab");
 
-        $parser = nothing()->mappend(nothing());
+        $parser = nothing()->append(nothing());
         $this->assertRemain("ab", $parser, "ab");
     }
 }

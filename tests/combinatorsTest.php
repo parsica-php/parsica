@@ -19,7 +19,7 @@ use function Mathias\ParserCombinator\{any,
     oneOf,
     oneOfS,
     optional,
-    seq,
+    sequence,
     skipSpace,
     string,
     takeRest
@@ -44,13 +44,13 @@ final class combinatorsTest extends ParserTestCase
         $this->assertRemain("bc", $parser, "abc");
 
         $parser = string('abcd')
-            ->mappend(ignore(char('-')))
-            ->mappend(string('efgh'));
+            ->append(ignore(char('-')))
+            ->append(string('efgh'));
         $this->assertParse("abcdefgh", $parser, "abcd-efgh");
 
         $parser = string('abcd')
-            ->mappend(ignore(optional(char('-'))))
-            ->mappend(string('efgh'));
+            ->append(ignore(optional(char('-'))))
+            ->append(string('efgh'));
         $this->assertParse("abcdefgh", $parser, "abcdefgh");
         $this->assertParse("abcdefgh", $parser, "abcd-efgh");
     }
@@ -162,9 +162,9 @@ final class combinatorsTest extends ParserTestCase
     }
 
     /** @test */
-    public function seq()
+    public function sequence()
     {
-        $parser = seq(char('a'), char('b'));
+        $parser = sequence(char('a'), char('b'));
         $this->assertFailOnEOF($parser);
         $this->assertParse("b", $parser, "abc");
         $this->assertRemain("c", $parser, "abc");
@@ -178,11 +178,11 @@ final class combinatorsTest extends ParserTestCase
         $parser =
             collect(
                 string("Hello")
-                    ->mappend(skipSpace())
-                    ->mappend(char(',')->ignore())
-                    ->mappend(skipSpace()),
+                    ->append(skipSpace())
+                    ->append(char(',')->ignore())
+                    ->append(skipSpace()),
                 string("world")
-                    ->mappend(char('!')->ignore())
+                    ->append(char('!')->ignore())
             );
 
         $expected = ["Hello", "world"];

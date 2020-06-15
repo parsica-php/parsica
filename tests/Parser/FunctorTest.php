@@ -5,7 +5,7 @@ namespace Tests\Mathias\ParserCombinator\Parser;
 use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
 use function Mathias\ParserCombinator\char;
 use function Mathias\ParserCombinator\float;
-use function Mathias\ParserCombinator\seq;
+use function Mathias\ParserCombinator\sequence;
 
 final class FunctorTest extends ParserTestCase
 {
@@ -24,7 +24,7 @@ final class FunctorTest extends ParserTestCase
     /** @test */
     public function fmapClass()
     {
-        $parser = seq(char('a'), char('b'))
+        $parser = sequence(char('a'), char('b'))
             ->fmapClass(__NAMESPACE__ . '\\MyType1');
 
         $expected = new MyType1("b");
@@ -35,7 +35,7 @@ final class FunctorTest extends ParserTestCase
     /** @test */
     public function simple_eur()
     {
-        $parser = seq(
+        $parser = sequence(
             char('€'),
             float()->fmap('floatval')->fmapClass(SimpleEur::class)
         );

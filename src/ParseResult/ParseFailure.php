@@ -59,7 +59,7 @@ final class ParseFailure extends Exception implements ParseResult
      *
      * @return ParseResult<T>
      */
-    public function mappend(ParseResult $other): ParseResult
+    public function append(ParseResult $other): ParseResult
     {
         return $this;
     }
@@ -96,9 +96,9 @@ final class ParseFailure extends Exception implements ParseResult
      * @param Parser<T2> $parser
      *
      * @return ParseResult<T2>
-     * @deprecated
+     * @deprecated has no test?
      */
-    public function continueOnRemaining(Parser $parser): ParseResult
+    public function continueWith(Parser $parser): ParseResult
     {
         return $this;
     }

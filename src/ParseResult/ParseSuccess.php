@@ -69,7 +69,7 @@ final class ParseSuccess implements ParseResult
      * @psalm-suppress MixedOperand
      * @psalm-suppress MixedArgumentTypeCoercion
      */
-    public function mappend(ParseResult $other): ParseResult
+    public function append(ParseResult $other): ParseResult
     {
         if($other->isFail()) {
             return $other;
@@ -77,20 +77,20 @@ final class ParseSuccess implements ParseResult
             return succeed($this->output(), $other->remainder());
         } else {
             /** @psalm-suppress ArgumentTypeCoercion */
-            return $this->mappendSuccess($other);
+            return $this->appendSuccess($other);
         }
     }
 
     /**
-     * @TODO    This is hardcoded to only deal with certain types. We need an interface with a mappend() for arbitrary types.
+     * @TODO    This is hardcoded to only deal with certain types. We need an interface with a append() for arbitrary types.
      *
      * @psalm-suppress MixedArgumentTypeCoercion
      */
-    private function mappendSuccess(ParseSuccess $other) : ParseResult
+    private function appendSuccess(ParseSuccess $other) : ParseResult
     {
         $type1 = $this->type();
         $type2 = $other->type();
-        if($type1!==$type2) throw new Exception("Mappend only works for ParseResult<T> instances with the same type T, got ParseResult<$type1> and ParseResult<$type2>.");
+        if($type1!==$type2) throw new Exception("Append only works for ParseResult<T> instances with the same type T, got ParseResult<$type1> and ParseResult<$type2>.");
 
         switch($type1) {
             case 'string':
@@ -103,7 +103,7 @@ final class ParseSuccess implements ParseResult
                     $other->remainder()
                 );
             default:
-                throw new Exception("@TODO cannot mappend ParseResult<$type1>");
+                throw new Exception("@TODO cannot append ParseResult<$type1>");
         }
     }
 
@@ -127,7 +127,7 @@ final class ParseSuccess implements ParseResult
      * @return ParseResult<T2>
      * @deprecated
      */
-    public function continueOnRemaining(Parser $parser) : ParseResult
+    public function continueWith(Parser $parser) : ParseResult
     {
         return $parser->run($this->remainder());
     }

@@ -25,8 +25,8 @@ final class AlternativeTest extends ParserTestCase
     {
         $jan =
             either(
-                string("Jan")->mappend(ignore(eof())),
-                string("January")->mappend(ignore(eof())),
+                string("Jan")->append(ignore(eof())),
+                string("January")->append(ignore(eof())),
             );
         $this->assertParse("Jan", $jan, "Jan");
         $this->assertParse("January", $jan, "January");
@@ -34,8 +34,8 @@ final class AlternativeTest extends ParserTestCase
         // Reverse order
         $jan =
             either(
-                string("January")->mappend(ignore(eof())),
-                string("Jan")->mappend(ignore(eof())),
+                string("January")->append(ignore(eof())),
+                string("Jan")->append(ignore(eof())),
             );
         $this->assertParse("Jan", $jan, "Jan");
         $this->assertParse("January", $jan, "January");

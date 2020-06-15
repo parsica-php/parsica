@@ -28,10 +28,10 @@ function float(): Parser
 {
     return
         atLeastOne(digitChar())
-            ->mappend(
+            ->append(
                 optional(
                     char('.')
-                        ->mappend(atLeastOne(digitChar()))
+                        ->append(atLeastOne(digitChar()))
                 )
             )->label('float');
 }

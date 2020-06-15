@@ -26,3 +26,4 @@ This is a rough wishlist of features to do before 1.0:
 - [ ] Permutation phrases https://www.cs.ox.ac.uk/jeremy.gibbons/wg21/meeting56/loeh-paper.pdf
 - [ ] Versioned documentation, published in different formats
 - [ ] Character classes
+- [ ] More monad combinators https://hackage.haskell.org/package/base-4.14.0.0/docs/Control-Monad.html#v:-62--61--62-

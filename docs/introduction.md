@@ -2,16 +2,22 @@
 
 ## Parsers
 
+```php
+<?php
+$parser = char(':')
+            ->append(atLeastOne(punctuationChar()))
+            ->label('smiley');
+$result = $parser->try(':*{)'); 
+echo $result->output() . " is a valid smiley!";
+```
+
+
 A parser is a function that takes some unstructured input (like a string) and turns it into structured output. This output could be as simple as a slightly better structured string, or an array, an object, up to a complete abstract syntax tree. You can then use this data structure for subsequent processing.
 
 You're probably using parsers all the time, such as `json_decode()`. And even just casting a string to a float<sup>[1](#floatval)</sup> is parsing. 
 
-```php
-<?php
-$v = floatval("1.23");
-assert($v === 1.23); 
-assert(is_float($v)); 
-```
+This library helps you build your own parsers, in a concise, declarative way. Behind the scenes it takes care of things like error handling, so you can focus on the parser itself. 
+
 
 ## Building a parser
 
@@ -35,7 +41,7 @@ Parser Combinators are functions (or methods) that combine parsers into new pars
 
 ```php
 <?php
-$parser = char('a')->mappend(char('b'));
+$parser = char('a')->append(char('b'));
 $result = $parser->try("abc");
 $output = $result->output();
 assert($output === "ab");
@@ -66,72 +72,80 @@ We can inspect the remainder:
 
 ```php
 <?php
-$parser = seq(char('a'), char('b'));
+$parser = sequence(char('a'), char('b'));
 $result = $parser->try("abc");
-$output = $result->output(); 
-// $output is "b"
-assert($output === "b");
-$remainder = $result->remainder();
-// $remainder is "c"
+
+assert($result->output() === "b");
+assert($result->remainder() === "c");
  ```
 
-So when we run our parser using `$parser->try($input)`, the sequence combinator `seq()` first tries to run `char('a')` on the input `"abc"`. If it succeeds, it takes the remainder `"bc"` and successfully runs `char('b')` on it and returns the result. That result consists of the output from the last parser `"b"`, and the remainder `"c"`.
+So when we run our parser using `$parser->try($input)`, the `sequence()` combinator first tries to run `char('a')` on the input `"abc"`. If it succeeds, it takes the remainder `"bc"` and successfully runs `char('b')` on it and returns the result. That result consists of the output from the last parser `"b"`, and the remainder `"c"`.
 
-In imperative code, it would have looked something like this:
+In imperative code, it would look something like this:
 
 ```php
 <?php
-$input = "abc";
-$myParser = function (string $input): array
+final class MyParser 
 {
-    $output1 = substr($input, 0, 1); // "a"
-    if ($output1 == 'a') {
-        $remainder1 = substr($input, 1); // "bc"
-        $output2 = substr($remainder1, 0, 1); // "b"
-        if ($output2 == 'b') {
-            $remainder2 = substr($remainder1, 1); // "c"
+    public function try(string $input) : array 
+    {
+        $output1 = substr($input, 0, 1); // "a"
+        if ($output1 == 'a') {
+            $remainder1 = substr($input, 1); // "bc"
+            $output2 = substr($remainder1, 0, 1); // "b"
+            if ($output2 == 'b') {
+                $remainder2 = substr($remainder1, 1); // "c"
+            } else {
+                throw new Exception("Parser failed");
+            }
         } else {
             throw new Exception("Parser failed");
         }
-    } else {
-        throw new Exception("Parser failed");
+        return ['output' => $output2, 'remainder' => $remainder2];
     }
-    return ['output' => $output2, 'remainder' => $remainder2];
-};
-$result = $myParser($input);
-// $result is ['output' => 'b', 'remainder' => "c"]
+}
+$parser = new MyParser();
+$result = $parser->try("abc");
+
+assert($result['output'] == 'b');
+assert($result['remainder'] == 'c');
 ```
 
-If you've been working in PHP long enough and have never used parser combinators, the code above may look more familiar for now. But imagine scaling that to parse anything from formats like credit card numbers, recursive structures like JSON or XML, or even entire programming languages like PHP. And that doesn't even include the code you'd need for performance, testing and debugging tooling, code reuse, and reporting on bad input. If you'd rather write `char('a')->followedBy(char('b'))`, stick around.
-
+If you've been working in PHP long enough and have never used parser combinators, the code above may look more familiar for now. But imagine scaling that to parse anything from simple formats like credit card numbers, recursive structures like JSON or XML, or even entire programming languages like PHP. And that doesn't even include the code you'd need for performance, testing and debugging tooling, code reuse, and reporting on bad input. If you'd rather write `sequence(char('a'), char('b'))`, stick around.
 
 
 ### Footnotes
 
 #### <a name="floatval">Note 1</a> 
 
-On it's own, `floatval()` isn't a very good parser.
+```php
+<?php
+$v = floatval("1.23");
+assert($v === 1.23); 
+assert(is_float($v)); 
+```
+
+The above looks fine at first sight, but `floatval()` really isn't a very good parser.
 
 ```php
 <?php
-echo  floatval("abc");
-// 0
+assert(floatval("abc") == 0);
 ```
 
 `floatval()` claims that the float of `"abc"` is `0`, which really should be an error. So you can only use `floatval` when you already know that the string doesn't contain anything non-float. This library can help you do that:
 
-
 ```php
 <?php
-$parser = float()->fmap('floatval');
+$parser = float()->fmap(fn($v) => floatval($v));
 try {
-    $result = $parser->try("abc"); 
-} catch (ParseFailure $e) {
-    // throws an exception
-}
+    // works: 
+    $result = $parser->try("1.23");
+    assert($result->output() == 1.23);
+ 
+    // throws a ParseFailure exception with message "Expected: float, got abc"
+    $result = $parser->try("abc");
+} catch (ParseFailure $e) {}
 ```
-
-
 
 #### <a name="object">Note 2</a> 
 

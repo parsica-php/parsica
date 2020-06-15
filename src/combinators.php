@@ -4,7 +4,7 @@ namespace Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
-use function Mathias\ParserCombinator\ParseResult\{fail};
+use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
 
 /**
  * Identity parser, returns the Parser as is.
@@ -35,6 +35,18 @@ function ignore(Parser $parser): Parser
 }
 
 /**
+ * A parser that will have the argument as its output, no matter what the input was. It doesn't consume any input.
+ *
+ * @template T
+ * @param T $output
+ * @return Parser<T>
+ */
+function pure($output) : Parser
+{
+    return Parser::make(fn(string $input) => succeed($output, $input));
+}
+
+/**
  * Optionally parse something, but still succeed if the thing is not there
  *
  * @template T
@@ -49,22 +61,40 @@ function optional(Parser $parser): Parser
 }
 
 /**
+ * Create a parser that takes the output from the first parser (if successful) and feeds it to the callable. The callable
+ * must return another parser. If the first parser fails, the first parser is returned.
+ *
+ * This is a monadic bind aka flatmap.
+ *
+ * @template T1
+ * @template T2
+ *
+ * @param Parser<T1> $parser
+ * @param callable(T1) : Parser<T2> $f
+ *
+ * @return Parser<T2>
+ */
+function bind(Parser $parser, callable $f): Parser
+{
+    return $parser->bind($f);
+}
+
+/**
  * Parse something, then follow by something else. Ignore the result of the first parser and return the result of the
  * second parser.
  *
- * Haskell Equivalent if (>>)
+ * @see Parser::sequence()
  *
  * @param Parser<T1> $first
  * @param Parser<T2> $second
  *
  * @return Parser<T2>
- * @deprecated 0.2
  * @template T1
  * @template T2
  */
-function seq(Parser $first, Parser $second): Parser
+function sequence(Parser $first, Parser $second): Parser
 {
-    return $first->followedBy($second);
+    return $first->sequence($second)->label('sequence');
 }
 
 /**
@@ -85,7 +115,7 @@ function either(Parser $first, Parser $second): Parser
 }
 
 /**
- * Mappend all the passed parsers.
+ * Append all the passed parsers.
  *
  * @template T
  *
@@ -97,7 +127,7 @@ function assemble(Parser ...$parsers): Parser
 {
     return array_reduce(
         $parsers,
-        fn(Parser $l, Parser $r): Parser => $l->mappend($r),
+        fn(Parser $l, Parser $r): Parser => $l->append($r),
         nothing()
     )->label('assemble()');
 }
@@ -170,7 +200,7 @@ function atLeastOne(Parser $parser): Parser
         while ($r->isSuccess()) {
             $next = $parser->continueFrom($r);
             if ($next->isFail()) return $r;
-            $r = $r->mappend($next);
+            $r = $r->append($next);
         }
         return $r;
     });
@@ -190,7 +220,7 @@ function repeat(int $n, Parser $parser): Parser
 {
     return array_reduce(
         array_fill(0, $n, $parser),
-        fn(Parser $l, Parser $r): Parser => $l->mappend($r),
+        fn(Parser $l, Parser $r): Parser => $l->append($r),
         nothing()
     )->label("repeat($n)");
 }

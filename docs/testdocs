@@ -6,7 +6,9 @@ set -e
 
 vendor/bin/uptodocs run README.md --before=docs/before.php --output-format=github
 vendor/bin/uptodocs run docs/design_goals.md --before=docs/before.php --output-format=github
+vendor/bin/uptodocs run docs/functional_paradigms.md --before=docs/before.php --output-format=github
 vendor/bin/uptodocs run docs/introduction.md --before=docs/before.php --output-format=github
-vendor/bin/uptodocs run docs/recursion.md --before=docs/before.php --output-format=github
-vendor/bin/uptodocs run docs/order_matters.md --before=docs/before.php --output-format=github
 vendor/bin/uptodocs run docs/naming_conventions.md --before=docs/before.php --output-format=github
+vendor/bin/uptodocs run docs/order_matters.md --before=docs/before.php --output-format=github
+vendor/bin/uptodocs run docs/performance.md --before=docs/before.php --output-format=github
+vendor/bin/uptodocs run docs/recursion.md --before=docs/before.php --output-format=github

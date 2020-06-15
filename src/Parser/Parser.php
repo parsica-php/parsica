@@ -8,10 +8,10 @@ use Mathias\ParserCombinator\ParseResult\ParseResult;
 use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
 
 /**
- * A parser is any function that takes a string input and returns a {@see ParseResult}. The Parser class is fundamentally
- * just a wrapper around such functions. The {@see Parser::make()} static constructor takes a callable that does the
- * actual parsing. Usually you don't need to instantiate this class directly. Instead, build your parser from existing
- * parsers and combinators.
+ * A parser is any function that takes a string input and returns a {@see ParseResult}. The Parser class is a wrapper
+ * around such functions. The {@see Parser::make()} static constructor takes a callable that does the actual parsing.
+ * Usually you don't need to instantiate this class directly. Instead, build your parser from existing parsers and
+ * combinators.
  *
  * At the moment, there is no Parser interface, and no Parser abstract class to extend from. This is intentional, but
  * will be changed if we find use cases where those would be the best solutions.
@@ -40,20 +40,6 @@ final class Parser
     }
 
     /**
-     * Make a new parser. This is the constructor for all regular use.
-     *
-     * @template T2
-     *
-     * @param callable(string) : ParseResult<T2> $parserFunction
-     *
-     * @return Parser<T2>
-     */
-    public static function make(callable $parserFunction): Parser
-    {
-        return new Parser($parserFunction, 'not-recursive');
-    }
-
-    /**
      * Make a recursive parser. Use {@see recursive()}.
      *
      * @return Parser<T>
@@ -64,8 +50,9 @@ final class Parser
         // Make a placeholder parser that will throw when you try to run it.
             function (string $input): ParseResult {
                 throw new Exception(
-                    "Can't run a recursive parser that hasn't been setup properly yet. A parser created by recursive(), "
-                    . "must then be called with ->recurse(Parser) before it can be used."
+                    "Can't run a recursive parser that hasn't been setup properly yet. "
+                    . "A parser created by recursive(), must then be called with ->recurse(Parser) "
+                    . "before it can be used."
                 );
             },
             'awaiting-recurse');
@@ -74,8 +61,8 @@ final class Parser
     /**
      * Recurse on a parser. Used in combination with {@see recursive()}.
      *
-     * This method does not return anything, and instead mutates the parser. After calling this method however, the parser
-     * behaves like a regular parser.
+     * This method does not return anything, and instead mutates the parser. After calling this method however, the
+     * parser behaves like a regular parser.
      *
      * @param Parser<T> $parser
      */
@@ -129,6 +116,20 @@ final class Parser
     }
 
     /**
+     * Make a new parser. This is the constructor for all regular use.
+     *
+     * @template T2
+     *
+     * @param callable(string) : ParseResult<T2> $parserFunction
+     *
+     * @return Parser<T2>
+     */
+    public static function make(callable $parserFunction): Parser
+    {
+        return new Parser($parserFunction, 'not-recursive');
+    }
+
+    /**
      * Parse something, strip it from the remaining input, but discard the parsed output.
      *
      * @return Parser<T>
@@ -153,33 +154,37 @@ final class Parser
     }
 
     /**
+     * Parse something, then follow by something else. Ignore the result of the first parser and return the result of the
+     * second parser.
+     *
+     * @template T2
      * @param Parser<T2> $second
      *
      * @return Parser<T2>
-     * @deprecated 0.2
-     * @see seq()
-     * @template T2
+     * @see sequence()
      */
-    public function followedBy(Parser $second): Parser
+    public function sequence(Parser $second): Parser
     {
-        return Parser::make(function (string $input) use ($second) : ParseResult {
-            $r1 = $this->run($input);
-            if ($r1->isSuccess()) {
-                $r2 = $second->continueFrom($r1);
-                if ($r2->isSuccess()) {
-                    return succeed($r2->output(), $r2->remainder());
-                }
-                return fail("seq (... {$r2->expected()})", $r2->got());
-            }
-            return fail("seq ({$r1->expected()} ...)", $r1->got());
-        });
-
+        return $this->bind(fn($_) => $second)->label('sequence');
     }
 
     /**
-     * Take the remaining input from the result and parses it
+     * Alias for `sequence()`. Parse something, then follow by something else. Ignore the result of the first parser and return the result of the
+     * second parser.
      *
-     * @TODO this should be a proper >>=, so that (Fail >>= Parser) == Fail
+     * @template T2
+     * @param Parser<T2> $second
+     *
+     * @return Parser<T2>
+     */
+    public function followedBy(Parser $second): Parser
+    {
+        return $this->sequence($second);
+    }
+
+    /**
+     * Take the remaining input from the result and parse it
+     *
      * @deprecated Doesn't have a test
      */
     public function continueFrom(ParseResult $result): ParseResult
@@ -219,19 +224,19 @@ final class Parser
     }
 
     /**
-     * Combine the parser with another parser of the same type, which will cause the results to be mappended.
+     * Combine the parser with another parser of the same type, which will cause the results to be appended.
      *
      * @param Parser<T> $other
      *
      * @return Parser<T>
-     * @see ParseResult::mappend
+     * @see ParseResult::append
      */
-    public function mappend(Parser $other): Parser
+    public function append(Parser $other): Parser
     {
         return Parser::make(function (string $input) use ($other): ParseResult {
             $r1 = $this->run($input);
-            $r2 = $r1->continueOnRemaining($other);
-            return $r1->mappend($r2);
+            $r2 = $r1->continueWith($other);
+            return $r1->append($r2);
         });
     }
 
@@ -294,13 +299,38 @@ final class Parser
      *
      * @throws ParseFailure
      */
-    public function try(string $input) : ParseResult
+    public function try(string $input): ParseResult
     {
         $result = $this->run($input);
-        if($result->isFail()) {
+        if ($result->isFail()) {
             /** @psalm-suppress InvalidThrow */
             throw $result;
         }
         return $result;
+    }
+
+    /**
+     * Create a parser that takes the output from the first parser (if successful) and feeds it to the callable. The
+     * callable must return another parser. If the first parser fails, the first parser is returned.
+     *
+     * @see bind()
+     *
+     * @template T2
+     *
+     * @param callable(T) : Parser<T2> $f
+     *
+     * @return Parser<T2>
+     */
+    public function bind(callable $f): Parser
+    {
+        return Parser::make(function (string $input) use ($f) : ParseResult {
+            $result = $this->fmap($f)->run($input);
+            if ($result->isSuccess()) {
+                $p2 = $result->output();
+                return $result->continueWith($p2);
+            } else {
+                return $result;
+            }
+        });
     }
 }
