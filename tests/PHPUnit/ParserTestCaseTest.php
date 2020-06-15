@@ -2,10 +2,13 @@
 
 namespace Tests\Mathias\ParserCombinator\PHPUnit;
 
-use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
+use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use PHPUnit\Framework\TestCase;
 
-final class ParserTestCaseTest extends ParserTestCase
+final class ParserTestCaseTest extends TestCase
 {
+    use ParserAssertions;
+
     /** @test */
     public function strict_equality()
     {

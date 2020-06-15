@@ -4,15 +4,19 @@ namespace Mathias\ParserCombinator\PHPUnit;
 
 use Exception;
 use Mathias\ParserCombinator\Parser\Parser;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Convenience assertion methods. When writing tests for your own parsers, extend from this instead of PHPUnit's TestCase.
  *
  * @TODO move to standalone package
  */
-abstract class ParserTestCase extends TestCase
+trait ParserAssertions
 {
+    abstract public static function assertSame($expected, $actual, string $message = ''): void;
+    abstract public static function assertEquals($expected, $actual, string $message = ''): void;
+    abstract public static function fail(string $message = ''): void;
+    abstract public static function assertTrue($condition, string $message = ''): void;
+
     /**
      * @param mixed $expected
      * @param mixed $actual

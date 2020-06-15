@@ -2,12 +2,15 @@
 
 namespace Tests\Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
+use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\digitChar;
 use function Mathias\ParserCombinator\float;
 
-final class numericTest extends ParserTestCase
+final class numericTest extends TestCase
 {
+    use ParserAssertions;
+
     /** @test */
     public function digit()
     {

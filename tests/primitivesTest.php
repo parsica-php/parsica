@@ -2,13 +2,16 @@
 
 namespace Tests\Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
+use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\{anything, eof, everything, nothing, satisfy, takeWhile, takeWhile1};
 use function Mathias\ParserCombinator\Predicates\{isEqual, notPred};
 
 
-final class primitivesTest extends ParserTestCase
+final class primitivesTest extends TestCase
 {
+    use ParserAssertions;
+
     /** @test */
     public function satisfy()
     {

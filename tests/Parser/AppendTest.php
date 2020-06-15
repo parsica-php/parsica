@@ -3,12 +3,15 @@
 namespace Tests\Mathias\ParserCombinator\Parser;
 
 use Exception;
-use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
+use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\char;
 use function Mathias\ParserCombinator\nothing;
 
-final class AppendTest extends ParserTestCase
+final class AppendTest extends TestCase
 {
+    use ParserAssertions;
+
     /** @test */
     public function append_strings()
     {

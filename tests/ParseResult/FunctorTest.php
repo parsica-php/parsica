@@ -2,12 +2,15 @@
 
 namespace Tests\Mathias\ParserCombinator\ParseResult;
 
-use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
+use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\ParseResult\fail;
 use function Mathias\ParserCombinator\ParseResult\succeed;
 
-final class FunctorTest extends ParserTestCase
+final class FunctorTest extends TestCase
 {
+    use ParserAssertions;
+
     /** @test */
     public function fmap_over_ParseSuccess()
     {

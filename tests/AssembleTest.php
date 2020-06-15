@@ -2,13 +2,16 @@
 
 namespace Tests\Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
+use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\assemble;
 use function Mathias\ParserCombinator\char;
 use function Mathias\ParserCombinator\string;
 
-final class AssembleTest extends ParserTestCase
+final class AssembleTest extends TestCase
 {
+    use ParserAssertions;
+
     /** @test */
     public function assemble_string()
     {

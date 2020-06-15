@@ -2,12 +2,15 @@
 
 namespace Tests\Mathias\ParserCombinator\Predicates;
 
-use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
+use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\{satisfy};
 use function Mathias\ParserCombinator\Predicates\{andPred, isEqual, notPred, orPred};
 
-final class predicatesTest extends ParserTestCase
+final class predicatesTest extends TestCase
 {
+    use ParserAssertions;
+
     /** @test */
     public function isEqual()
     {

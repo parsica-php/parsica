@@ -3,7 +3,7 @@
 namespace Tests\Mathias\ParserCombinator\Parser;
 
 use Mathias\ParserCombinator\Parser\Parser;
-use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
+use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\alphaChar;
 use function Mathias\ParserCombinator\alphaNumChar;
@@ -13,8 +13,10 @@ use function Mathias\ParserCombinator\char;
 use function Mathias\ParserCombinator\pure;
 use function Mathias\ParserCombinator\sequence;
 
-final class MonadTest extends ParserTestCase
+final class MonadTest extends TestCase
 {
+    use ParserAssertions;
+
     /** @test */
     public function bind()
     {

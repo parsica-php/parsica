@@ -3,7 +3,8 @@
 namespace Tests\Mathias\ParserCombinator;
 
 use InvalidArgumentException;
-use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
+use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\{any,
     anySingle,
     anySingleBut,
@@ -25,8 +26,10 @@ use function Mathias\ParserCombinator\{any,
     takeRest
 };
 
-final class combinatorsTest extends ParserTestCase
+final class combinatorsTest extends TestCase
 {
+    use ParserAssertions;
+
     /** @test */
     public function identity()
     {

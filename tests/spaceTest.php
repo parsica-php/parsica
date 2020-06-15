@@ -2,11 +2,14 @@
 
 namespace Tests\Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
+use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\{crlf, eol, newline, skipHSpace, skipHSpace1, skipSpace, skipSpace1, tab};
 
-final class spaceTest extends ParserTestCase
+final class spaceTest extends TestCase
 {
+    use ParserAssertions;
+
     /** @test */
     public function newline()
     {

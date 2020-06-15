@@ -2,12 +2,15 @@
 
 namespace Tests\Mathias\ParserCombinator\Parser;
 
-use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
+use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\char;
 use function Mathias\ParserCombinator\string;
 
-final class ParserTest extends ParserTestCase
+final class ParserTest extends TestCase
 {
+    use ParserAssertions;
+
     /** @test */
     public function label()
     {

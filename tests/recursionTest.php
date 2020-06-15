@@ -3,11 +3,14 @@
 namespace Tests\Mathias\ParserCombinator;
 
 use Exception;
-use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
+use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\{char, collect, digitChar, recursive};
 
-final class recursionTest extends ParserTestCase
+final class recursionTest extends TestCase
 {
+    use ParserAssertions;
+
     /** @test */
     public function recursion_on_nested_structures()
     {

@@ -2,15 +2,18 @@
 
 namespace Tests\Mathias\ParserCombinator\Parser;
 
-use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
+use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\char;
 use function Mathias\ParserCombinator\either;
 use function Mathias\ParserCombinator\eof;
 use function Mathias\ParserCombinator\ignore;
 use function Mathias\ParserCombinator\string;
 
-final class AlternativeTest extends ParserTestCase
+final class AlternativeTest extends TestCase
 {
+    use ParserAssertions;
+
     /** @test */
     public function alternative()
     {

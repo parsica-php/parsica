@@ -2,7 +2,8 @@
 
 namespace Tests\Mathias\ParserCombinator\Examples;
 
-use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
+use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\any;
 use function Mathias\ParserCombinator\collect;
 use function Mathias\ParserCombinator\digitChar;
@@ -10,8 +11,10 @@ use function Mathias\ParserCombinator\repeat;
 use function Mathias\ParserCombinator\skipSpace;
 use function Mathias\ParserCombinator\string;
 
-final class SimpleDateTest extends ParserTestCase
+final class SimpleDateTest extends TestCase
 {
+    use ParserAssertions;
+
     /** @test */
     public function simple_date()
     {

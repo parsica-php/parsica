@@ -2,13 +2,16 @@
 
 namespace Tests\Mathias\ParserCombinator\Parser;
 
-use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
+use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\char;
 use function Mathias\ParserCombinator\float;
 use function Mathias\ParserCombinator\sequence;
 
-final class FunctorTest extends ParserTestCase
+final class FunctorTest extends TestCase
 {
+    use ParserAssertions;
+
     /** @test */
     public function fmap()
     {

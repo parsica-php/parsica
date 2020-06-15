@@ -3,7 +3,8 @@
 namespace Tests\Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\Parser\Parser;
-use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
+use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\{alphaChar,
     alphaNumChar,
     binDigitChar,
@@ -24,8 +25,10 @@ use function Mathias\ParserCombinator\{alphaChar,
     upperChar,
     whitespace};
 
-final class charactersTest extends ParserTestCase
+final class charactersTest extends TestCase
 {
+    use ParserAssertions;
+
     /** @test */
     public function char()
     {

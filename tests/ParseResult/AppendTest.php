@@ -2,13 +2,16 @@
 
 namespace Tests\Mathias\ParserCombinator\ParseResult;
 
-use Mathias\ParserCombinator\PHPUnit\ParserTestCase;
+use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\ParseResult\discard;
 use function Mathias\ParserCombinator\ParseResult\fail;
 use function Mathias\ParserCombinator\ParseResult\succeed;
 
-final class AppendTest extends ParserTestCase
+final class AppendTest extends TestCase
 {
+    use ParserAssertions;
+
     /** @test */
     public function append_strings()
     {
