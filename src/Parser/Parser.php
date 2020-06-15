@@ -100,18 +100,14 @@ final class Parser
     }
 
     /**
-     * Label a parser. When a parser fails, instead of a generated error message, you'll see your label.
-     * eg (char(':')->followedBy(char(')')).followedBy(char(')')).
+     * Parse something, strip it from the remaining input, but discard the parsed output.
      *
      * @return Parser<T>
      */
-    public function label(string $label): Parser
+    public function ignore(): Parser
     {
-        return Parser::make(function (string $input) use ($label) : ParseResult {
-            $result = $this->run($input);
-            return ($result->isSuccess())
-                ? $result
-                : fail($label, $input);
+        return Parser::make(function (string $input): ParseResult {
+            return $this->run($input)->discard();
         });
     }
 
@@ -130,18 +126,6 @@ final class Parser
     }
 
     /**
-     * Parse something, strip it from the remaining input, but discard the parsed output.
-     *
-     * @return Parser<T>
-     */
-    public function ignore(): Parser
-    {
-        return Parser::make(function (string $input): ParseResult {
-            return $this->run($input)->discard();
-        });
-    }
-
-    /**
      * @return Parser<T>
      * @see optional()
      */
@@ -154,25 +138,11 @@ final class Parser
     }
 
     /**
-     * Parse something, then follow by something else. Ignore the result of the first parser and return the result of the
-     * second parser.
-     *
-     * @template T2
-     * @param Parser<T2> $second
-     *
-     * @return Parser<T2>
-     * @see sequence()
-     */
-    public function sequence(Parser $second): Parser
-    {
-        return $this->bind(fn($_) => $second)->label('sequence');
-    }
-
-    /**
      * Alias for `sequence()`. Parse something, then follow by something else. Ignore the result of the first parser and return the result of the
      * second parser.
      *
      * @template T2
+     *
      * @param Parser<T2> $second
      *
      * @return Parser<T2>
@@ -180,6 +150,83 @@ final class Parser
     public function followedBy(Parser $second): Parser
     {
         return $this->sequence($second);
+    }
+
+    /**
+     * Parse something, then follow by something else. Ignore the result of the first parser and return the result of the
+     * second parser.
+     *
+     * @template T2
+     *
+     * @param Parser<T2> $second
+     *
+     * @return Parser<T2>
+     * @see sequence()
+     */
+    public function sequence(Parser $second): Parser
+    {
+        return $this->bind(
+        /** @param mixed $_ */
+            function ($_) use ($second) {
+                return $second;
+            }
+        )->label('sequence');
+    }
+
+    /**
+     * Label a parser. When a parser fails, instead of a generated error message, you'll see your label.
+     * eg (char(':')->followedBy(char(')')).followedBy(char(')')).
+     *
+     * @return Parser<T>
+     */
+    public function label(string $label): Parser
+    {
+        return Parser::make(function (string $input) use ($label) : ParseResult {
+            $result = $this->run($input);
+            return ($result->isSuccess())
+                ? $result
+                : fail($label, $input);
+        });
+    }
+
+    /**
+     * Create a parser that takes the output from the first parser (if successful) and feeds it to the callable. The
+     * callable must return another parser. If the first parser fails, the first parser is returned.
+     *
+     * @template T2
+     *
+     * @param callable(T) : Parser<T2> $f
+     *
+     * @return Parser<T2>
+     * @see bind()
+     */
+    public function bind(callable $f): Parser
+    {
+        /** @var Parser<T2> $parser */
+        $parser = Parser::make(function (string $input) use ($f) : ParseResult {
+            $result = $this->fmap($f)->run($input);
+            if ($result->isSuccess()) {
+                $p2 = $result->output();
+                return $result->continueWith($p2);
+            } else {
+                return $result;
+            }
+        });
+        return $parser;
+    }
+
+    /**
+     * Map a function over the parser (which in turn maps it over the result).
+     *
+     * @template T2
+     *
+     * @param callable(T) : T2 $transform
+     *
+     * @return Parser<T2>
+     */
+    public function fmap(callable $transform): Parser
+    {
+        return Parser::make(fn(string $input): ParseResult => $this->run($input)->fmap($transform));
     }
 
     /**
@@ -207,20 +254,6 @@ final class Parser
         /** @param mixed $val */
             fn($val) => new $className($val)
         );
-    }
-
-    /**
-     * Map a function over the parser (which in turn maps it over the result).
-     *
-     * @template T2
-     *
-     * @param callable(T) : T2 $transform
-     *
-     * @return Parser<T2>
-     */
-    public function fmap(callable $transform): Parser
-    {
-        return Parser::make(fn(string $input): ParseResult => $this->run($input)->fmap($transform));
     }
 
     /**
@@ -307,30 +340,5 @@ final class Parser
             throw $result;
         }
         return $result;
-    }
-
-    /**
-     * Create a parser that takes the output from the first parser (if successful) and feeds it to the callable. The
-     * callable must return another parser. If the first parser fails, the first parser is returned.
-     *
-     * @see bind()
-     *
-     * @template T2
-     *
-     * @param callable(T) : Parser<T2> $f
-     *
-     * @return Parser<T2>
-     */
-    public function bind(callable $f): Parser
-    {
-        return Parser::make(function (string $input) use ($f) : ParseResult {
-            $result = $this->fmap($f)->run($input);
-            if ($result->isSuccess()) {
-                $p2 = $result->output();
-                return $result->continueWith($p2);
-            } else {
-                return $result;
-            }
-        });
     }
 }
