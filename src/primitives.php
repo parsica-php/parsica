@@ -201,6 +201,17 @@ function everything(): Parser
 
 
 /**
+ * Always fail, no matter what you try.
+ *
+ * @deprecated no tests
+ */
+function failure(): Parser
+{
+    return Parser::make(fn(string $input) => fail('', $input))->label('failure');
+}
+
+
+/**
  * Parse the end of the input
  *
  * @template T

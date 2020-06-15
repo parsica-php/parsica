@@ -153,31 +153,22 @@ function collect(Parser ...$parsers): Parser
 }
 
 /**
- * Tries each parser one by one
+ * Tries each parser one by one, returning the result of the first one that succeeds.
+ * @deprecated 0.2 Do we have tests for this?
  *
  * @param Parser<TParsed>[] $parsers
  *
  * @return Parser<TParsed>
- * @deprecated 0.2
  *
  * @template TParsed
- *
  */
 function any(Parser ...$parsers): Parser
 {
-    // @TODO canonical implementation is a foldl over or() starting from a failure
-    return Parser::make(function (string $input) use ($parsers): ParseResult {
-        $expectations = [];
-        foreach ($parsers as $parser) {
-            $r = $parser->run($input);
-            if ($r->isSuccess()) {
-                return $r;
-            } else {
-                $expectations[] = $r->expected();
-            }
-        }
-        return fail("any(" . implode(", ", $expectations) . ")", "@TODO");
-    });
+    return array_reduce(
+        $parsers,
+        fn(Parser $first, Parser $second):Parser => $first->or($second),
+        failure()
+    )->label('any');
 }
 
 /**
