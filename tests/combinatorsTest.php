@@ -160,7 +160,6 @@ final class combinatorsTest extends TestCase
         $this->assertParse("b", $parser, "bc");
         $this->assertRemain("c", $parser, "bc");
         $this->assertNotParse($parser, "cd");
-        $this->markTestIncomplete("@TODO Replace with 0.2 version");
     }
 
     /** @test */
