@@ -1,20 +1,20 @@
 # Functional Paradigms
 
-We use a number of paradigms from functional programming throughout the code. [We've chosen not to expose these to end users](design_goals.md). We list them here for anybody who's interested.
+@TODO Add tests to illustrate the laws.
+
+We use a number of paradigms from functional programming throughout the code. [We've chosen not to expose these to end users](design_goals.md). We list them here for anybody who's interested. 
+
+Throughout this document, `$parser1 ≡ $parser2` means that you can swap `$parser1` with `$parser2` and vice-versa, and it will not affect the outcome of your program.
 
 ## Purity
 
-Almost all code is pure and referentially transparent. [A notable exception](recursion.md) is the combo of `recursive()` and `Parser::recurse()`. The latter mutates a `Parser`. We constrained this so that you can't use the parser when it's not set up yet, and after calling `recurse()`, you can't call it again.
+Almost all the code is pure and referentially transparent. [A notable exception](recursion.md) is the combo of `recursive()` and `Parser::recurse()`. The latter mutates a `Parser`. We constrained this so that you can't use the parser when it's not set up yet, and after calling `recurse()`, you can't call it again. So not strictly pure, but close enough not to matter much in practice.
 
-All functions that return parsers ar pure, and even though there are some instance methods on `Parser`, these are also pure.
+The combinators are all pure. Some combinators are implemented as instance methods on `Parser`, but these are also pure. You can think of them as functions that take `$this` as the first argument.
 
-```
-$parser->combinator($otherParser);
-// Is equivalent to
-combinator($parsere, $otherParser);
-```
+`$parser1->combinator($parser2) ≡ combinator($parser1, $parser2)`
 
-In fact, very often there are both a function and an instance method for the same combinator.
+In fact, very often there are both a function and an instance method for the same combinator, where one is an alias for the other.
 
 ## Types
 
@@ -23,6 +23,7 @@ There are no generics in PHP 7.4, but we use thee Psalm static typechecker to si
 ## Either
 
 `ParseResult<T>` is approximately an `Either<ParseFailure, ParseSuccess<T>>` type.  
+
 ## Maybe
 
 `ParseResult<T>` is also double serving as a kind of `Maybe<T>`. You can think of a successful parseresult as `Just<T>`, and a discarded parse result as `Nothing`. 
@@ -41,18 +42,60 @@ Similarly, mapping over `Parser` is really mapping over the future `ParseResult`
 
 `Parser<T>` is a monoid under the `Parser::append()`, when `T` is a monoid as well. `nothing()` is the zero value. 
 
+### Laws
+
+
+#### Identity
+
+`$parser->append(nothing()) ≡ $parser`
+
+`nothing()->append($parser) ≡ $parser`
+
+#### Associativity
+
+`$p1->append($p2)->append($p3) ≡ $p1->append($p2->append($p3))`
+
+## Applicative Functors
+
+`Parser<T>` is an applicative functor.
+
+- `pure()` is a parser that will always output its argument, no matter what the input was. Type: `T -> Parser<T>`.
+- `apply()` is sequential application. `pure(callable)->apply($parser)` is a parser that applies `callable` to the output of `$parser`. It works for callables with multiple arguments, if the callable is curried: `pure(curry($f))->apply($p1)->apply($p2)`. We used [matteosister/php-curry](https://github.com/matteosister/php-curry) to test this, but any method for currying functions should work.
+
+### Laws
+
+#### Identity
+
+`pure(identity())->apply($parser) ≡ $parser`
+
+#### Homomorphism
+
+`pure($f)->apply(pure($x)) ≡ pure($f($x))`
+
+#### Interchange
+
+`$p->apply(pure($x)) ≡ pure(fn($f) => $f($x))->apply($p)`
+
+#### Composition
+
+Assuming `$compose = fn($f, $g) => fn($x) => $f($g($x))`:  
+
+`pure($compose)->apply($p1)->apply($p2)->apply($p3) ≡ $p1->apply($p2->apply($p3))` 
+
+#### Map
+
+`pure($f)->apply($parser) ≡ $parser->map($f)`
+
 ## Monads
 
 `Parser<T>` is a monad. 
 
+- `pure()`: see above.
 - `sequence()` runs two parsers in sequence, dropping the result of the first one. Both parsers consume input. You may know this as `>>`. The type of sequence is `Parser<T> -> Parser<T2> -> Parser<T2>`.
 - `bind()` sequentially composes a parser and a parser-constructing function, passing the output produced by the first parser as an argument to the second.  Both parsers consume input. You may know this as `>>=` or `flatmap`. Type: `Parser<T> -> (T -> Parser<T2>) -> Parser<T2>`.
-- `pure()` is a parser that will always output its argument, no matter what the input was. Type: `T -> Parser<T>`.
 
 
 ### Laws
-
-@TODO write tests
 
 Left identity: 
 

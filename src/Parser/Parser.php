@@ -337,4 +337,23 @@ final class Parser
         }
         return $result;
     }
+
+    /**
+     * Sequential application.
+     *
+     * The first parser must be of type Parser<callable(T2):T3>.
+     *
+     * apply :: f (a -> b) -> f a -> f b
+     *
+     * @template T2
+     * @template T3
+     *
+     * @param Parser<T2> $parser
+     *
+     * @return Parser<T3>
+     */
+    public function apply(Parser $parser) : Parser
+    {
+       return $this->bind(fn(callable $f) => $parser->fmap($f));
+    }
 }
