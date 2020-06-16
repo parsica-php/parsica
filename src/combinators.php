@@ -113,7 +113,7 @@ function sequence(Parser $first, Parser $second): Parser
  */
 function either(Parser $first, Parser $second): Parser
 {
-    return $first->or($second);
+    return $first->or($second)->label('either');
 }
 
 /**
