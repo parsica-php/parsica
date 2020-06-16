@@ -5,6 +5,8 @@ namespace Tests\Mathias\ParserCombinator\Parser;
 use Mathias\ParserCombinator\ParseResult\ParseFailure;
 use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\char;
+use function Mathias\ParserCombinator\skipSpace;
+use function Mathias\ParserCombinator\string;
 
 final class RunningParsersTest extends TestCase
 {
@@ -17,5 +19,16 @@ final class RunningParsersTest extends TestCase
 
         $this->expectException(ParseFailure::class);
         $result = $parser->try("b");
+    }
+
+    /** @test */
+    public function continueFrom()
+    {
+        $parser = string('hello')->sequence(skipSpace());
+        $result = $parser->try("hello world!");
+        $parser2 = string("world");
+        $result2 = $parser2->continueFrom($result);
+        $this->assertEquals("world", $result2->output());
+        $this->assertEquals("!", $result2->remainder());
     }
 }

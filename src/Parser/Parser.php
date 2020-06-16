@@ -229,8 +229,6 @@ final class Parser
 
     /**
      * Take the remaining input from the result and parse it
-     *
-     * @deprecated Doesn't have a test
      */
     public function continueFrom(ParseResult $result): ParseResult
     {
