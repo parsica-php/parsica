@@ -84,7 +84,13 @@ function string(string $str): Parser
  */
 function stringI(string $str): Parser
 {
-    throw new Exception("@TODO not implemented");
+    Assert::nonEmpty($str);
+    $chars = array_map(fn(string $c) : Parser => charI($c), mb_str_split($str));
+    return array_reduce(
+        $chars,
+        fn(Parser $l, Parser $r) : Parser => $l->append($r),
+        success()
+    );
 }
 
 /**

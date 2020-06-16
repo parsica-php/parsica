@@ -54,8 +54,11 @@ final class charactersTest extends TestCase
     /** @test */
     public function stringI()
     {
-        self::markTestSkipped("not implemented yet");
-        $this->assertParse("hElLO WoRlD", stringI('hello world'), "hElLO WoRlD");
+        $parser = stringI('hello world');
+        $input = "hElLO WoRlD!!1!";
+        $expected = "hElLO WoRlD";
+        $this->assertParse($expected, $parser, $input, "stringI() should be case-preserving");
+        $this->assertRemain("!!1!", $parser, $input);
     }
 
     public function characterParsers(): array
