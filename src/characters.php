@@ -85,12 +85,16 @@ function string(string $str): Parser
 function stringI(string $str): Parser
 {
     Assert::nonEmpty($str);
-    $chars = array_map(fn(string $c) : Parser => charI($c), mb_str_split($str));
-    return array_reduce(
+    /** @var list<string> $split */
+    $split = mb_str_split($str);
+    $chars = array_map(fn(string $c) : Parser => charI($c), $split);
+    /** @var Parser<string> $parser */
+    $parser = array_reduce(
         $chars,
-        fn(Parser $l, Parser $r) : Parser => $l->append($r),
+        fn(Parser $l, Parser $r): Parser => $l->append($r),
         success()
     )->label("stringI($str)");
+    return $parser;
 }
 
 /**
