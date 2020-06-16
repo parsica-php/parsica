@@ -10,13 +10,13 @@
   ],
   "require": {
     "php": "^7.4",
-    "ext-mbstring": "*",
-    "cypresslab/php-curry": "^0.5.0"
+    "ext-mbstring": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.1",
     "vimeo/psalm": "^3.11",
-    "mathiasverraes/uptodocs": "dev-main"
+    "mathiasverraes/uptodocs": "dev-main",
+    "cypresslab/php-curry": "^0.5.0"
   },
   "repositories": [
     {
