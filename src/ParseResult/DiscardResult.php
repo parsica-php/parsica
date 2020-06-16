@@ -83,7 +83,6 @@ final class DiscardResult implements ParseResult
      * @param Parser<T2> $parser
      *
      * @return ParseResult<T2>
-     * @deprecated has no test?
      */
     public function continueWith(Parser $parser): ParseResult
     {
