@@ -21,13 +21,10 @@ assert($predicate('6'));
 
 Some parsers have case-insensitive versions. These are sufficed with 'I'.
 
-```php 
+```php
 <?php
-// @TODO
-/*
 $parser = stringI('hello world'); 
-$result = $parser->run("hElLO WoRlD"); 
+$result = $parser->try("hElLO WoRlD"); 
 assert($result->output() === "hElLO WoRlD");
-*/
 ```
 

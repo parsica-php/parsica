@@ -90,7 +90,7 @@ function stringI(string $str): Parser
         $chars,
         fn(Parser $l, Parser $r) : Parser => $l->append($r),
         success()
-    );
+    )->label("stringI($str)");
 }
 
 /**
