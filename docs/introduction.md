@@ -23,7 +23,7 @@ This library helps you build your own parsers, in a concise, declarative way. Be
 
 There are many ways to build a parser for your own use case, ranging from formal grammars that get compiled into a parser, to regular expressions, to writing a parser entirely from scratch. They all have their own tradeoffs and limitations. 
 
-One of the great benefits of the parser combinator style is that they're generally easier to write, understand, and maintain. You start from building blocks, such as `digitChar()`, which returns a function that parses a single digit.  
+One of the great benefits of the parser combinator style is that, once you get the hang of it, they're generally easier to write, understand, and maintain. You start from building blocks, such as `digitChar()`, which returns a function that parses a single digit.  
 
 ```php
 <?php 
