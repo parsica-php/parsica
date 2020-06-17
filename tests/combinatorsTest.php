@@ -5,12 +5,14 @@ namespace Tests\Mathias\ParserCombinator;
 use InvalidArgumentException;
 use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
-use function Mathias\ParserCombinator\{any,
+use function Mathias\ParserCombinator\{alphaChar,
+    any,
     anySingle,
     anySingleBut,
     atLeastOne,
     char,
     collect,
+    digitChar,
     either,
     float,
     identity,
@@ -20,10 +22,13 @@ use function Mathias\ParserCombinator\{any,
     oneOf,
     oneOfS,
     optional,
+    punctuationChar,
     sequence,
     skipSpace,
     string,
-    takeRest};
+    stringI,
+    takeRest,
+    whitespace};
 
 final class combinatorsTest extends TestCase
 {
@@ -57,17 +62,6 @@ final class combinatorsTest extends TestCase
         $this->assertParse("abcdefgh", $parser, "abcd-efgh");
     }
 
-    /** @test */
-    public function optional()
-    {
-        $parser = char('a')->optional();
-        $this->assertSucceedOnEOF($parser);
-        $this->assertParse("a", $parser, "abc");
-        $this->assertRemain("bc", $parser, "abc");
-
-        $this->assertParse("", $parser, "bc");
-        $this->assertRemain("bc", $parser, "bc");
-    }
 
     /** @test */
     public function anySingle()
@@ -232,5 +226,35 @@ final class combinatorsTest extends TestCase
         $this->assertParse(["$", 15.0], $money, "$15");
         $this->assertNotParse($money, "£12.13");
     }
+
+    /** @test */
+    public function skipMany()
+    {
+        //skipMany p applies the parser p zero or more times, skipping its result.
+
+    }
+
+
+    /** @test */
+    public function before()
+    {
+        self::markTestIncomplete();
+        /*
+         * -- | Parse two expressions sequentially, returning the result of the first.
+before :: Parser p1 -> Parser p2 -> Parser p1
+before p1 p2 = do
+  p <- p1
+  p2 >> return p
+         */
+
+        $movies = any(stringI('movie'), stringI('movies'), stringI('film'), stringI('films'))->followedBy(skipSpace());
+        $count = atLeastOne(digitChar());
+        $words = any(alphaChar(), punctuationChar(), whitespace());
+        $parser = $words->followedBy(before($count, $movies));
+
+        $input = "I watched 23 MOVIES this week ";
+
+    }
+
 
 }

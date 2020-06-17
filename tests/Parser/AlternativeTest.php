@@ -69,6 +69,18 @@ final class AlternativeTest extends TestCase
     }
 
     /** @test */
+    public function optional()
+    {
+        $parser = char('a')->optional();
+        $this->assertSucceedOnEOF($parser);
+        $this->assertParse("a", $parser, "abc");
+        $this->assertRemain("bc", $parser, "abc");
+
+        $this->assertParse("", $parser, "bc");
+        $this->assertRemain("bc", $parser, "bc");
+    }
+
+    /** @test */
     public function many()
     {
         $parser = many(alphaChar());
