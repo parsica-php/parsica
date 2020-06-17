@@ -26,12 +26,12 @@ final class Parser
      */
     private $parserFunction;
 
-    /** @var 'not-recursive'|'awaiting-recurse'|'recursion-was-setup' */
+    /** @var 'non-recursive'|'awaiting-recurse'|'recursion-was-setup' */
     private string $recursionStatus;
 
     /**
      * @param callable(string) : ParseResult<T> $parserFunction
-     * @param 'not-recursive'|'awaiting-recurse'|'recursion-was-setup' $recursionStatus
+     * @param 'non-recursive'|'awaiting-recurse'|'recursion-was-setup' $recursionStatus
      */
     private function __construct(callable $parserFunction, string $recursionStatus)
     {
@@ -65,7 +65,7 @@ final class Parser
     public function recurse(Parser $parser): Parser
     {
         switch ($this->recursionStatus) {
-            case 'not-recursive':
+            case 'non-recursive':
                 throw new Exception(
                     "You can't recurse on a non-recursive parser. Create a recursive parser first using recursive(), "
                     . "then call ->recurse() on it."
@@ -119,7 +119,7 @@ final class Parser
      */
     public static function make(callable $parserFunction): Parser
     {
-        return new Parser($parserFunction, 'not-recursive');
+        return new Parser($parserFunction, 'non-recursive');
     }
 
     /**
