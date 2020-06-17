@@ -274,19 +274,6 @@ final class Parser
      * Try the first parser, and failing that, try the second parser. Returns the first succeeding result, or the first
      * failing result.
      *
-     * @param Parser<T> $other
-     *
-     * @return Parser<T>
-     */
-    public function alternative(Parser $other): Parser
-    {
-        return $this->or($other);
-    }
-
-    /**
-     * Try the first parser, and failing that, try the second parser. Returns the first succeeding result, or the first
-     * failing result.
-     *
      * Caveat: The order matters!
      * string('http')->or(string('https')
      *

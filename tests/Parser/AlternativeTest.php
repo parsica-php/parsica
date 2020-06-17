@@ -22,9 +22,9 @@ final class AlternativeTest extends TestCase
     use ParserAssertions;
 
     /** @test */
-    public function alternative()
+    public function or()
     {
-        $parser = char('a')->alternative(char('b'));
+        $parser = char('a')->or(char('b'));
         $this->assertParse("a", $parser, "a123");
         $this->assertParse("b", $parser, "b123");
         $this->assertNotParse($parser, "123");
