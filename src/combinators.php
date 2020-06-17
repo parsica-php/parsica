@@ -3,7 +3,6 @@
 namespace Mathias\ParserCombinator;
 
 use Mathias\ParserCombinator\Parser\Parser;
-use Mathias\ParserCombinator\ParseResult\ParseResult;
 use function Mathias\ParserCombinator\ParseResult\{succeed};
 
 /**
@@ -221,4 +220,28 @@ function repeat(int $n, Parser $parser): Parser
         fn(Parser $l, Parser $r): Parser => $l->append($r),
         nothing()
     )->label("repeat($n)");
+}
+
+/**
+ * Parse something zero or more times, and output an array of the successful outputs.
+ */
+function many(Parser $parser): Parser
+{
+    return some($parser)->or(pure([]));
+}
+
+/**
+ * Parse something one or more times, and output an array of the successful outputs.
+ */
+function some(Parser $parser): Parser
+{
+    $rec = recursive();
+    return $parser->fmap(fn($x) => [$x])->append(
+        $rec->recurse(
+            either(
+                $parser->fmap(fn($x) => [$x])->append($rec),
+                pure([])
+            )
+        )
+    );
 }

@@ -4,11 +4,18 @@ namespace Tests\Mathias\ParserCombinator\Parser;
 
 use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
+use function Mathias\ParserCombinator\alphaChar;
 use function Mathias\ParserCombinator\char;
+use function Mathias\ParserCombinator\digitChar;
 use function Mathias\ParserCombinator\either;
 use function Mathias\ParserCombinator\eof;
 use function Mathias\ParserCombinator\ignore;
+use function Mathias\ParserCombinator\keepFirst;
+use function Mathias\ParserCombinator\many;
+use function Mathias\ParserCombinator\punctuationChar;
+use function Mathias\ParserCombinator\some;
 use function Mathias\ParserCombinator\string;
+use function Mathias\ParserCombinator\whitespace;
 
 final class AlternativeTest extends TestCase
 {
@@ -61,5 +68,42 @@ final class AlternativeTest extends TestCase
         $this->assertRemain("://verraes.net", $parser, $input);
     }
 
+    /** @test */
+    public function many()
+    {
+        $parser = many(alphaChar());
+        $this->assertParse([], $parser, "123");
+        $this->assertParse(["H", "e", "l", "l", "o"], $parser, "Hello");
+
+        $parser = many(alphaChar()->append(digitChar()));
+        $this->assertParse([], $parser, "1a2b3c");
+        $this->assertParse(["a1", "b2", "c3"], $parser, "a1b2c3");
+
+    }
+
+    /** @test */
+    public function some()
+    {
+        $parser = many(
+            keepFirst(
+                some(alphaChar())->fmap(fn($a) => implode('', $a)),
+                punctuationChar()->optional()
+            )
+        );
+        $input = "abc,def,ghi";
+        $expected = ["abc","def","ghi"];
+        $this->assertParse($expected, $parser, $input);
+    }
+
+    /** @test */
+    public function some_2()
+    {
+        $parser = some(string("foo"));
+        $this->assertNotParse($parser, "bla");
+        $this->assertParse(["foo"], $parser, "foo");
+        $this->assertParse(["foo"], $parser, "foobar");
+        $this->assertParse(["foo", "foo"], $parser, "foofoo");
+        $this->assertParse(["foo", "foo"], $parser, "foofoobar");
+    }
 
 }
