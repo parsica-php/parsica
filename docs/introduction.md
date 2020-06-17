@@ -12,7 +12,7 @@ echo $result->output() . " is a valid smiley!";
 ```
 
 
-A parser is a function that takes some unstructured input (like a string) and turns it into structured output. This output could be as simple as a slightly better structured string, or an array, an object, up to a complete abstract syntax tree. You can then use this data structure for subsequent processing.
+A parser is a function that takes some unstructured input (like a string) and turns it into structured output, that's easier to work with. This output could be as simple as a slightly better structured string, or an array, an object, up to a complete abstract syntax tree. You can then use this data structure for subsequent processing.
 
 You're probably using parsers all the time, such as `json_decode()`. And even just casting a string to a float<sup>[1](#floatval)</sup> is parsing. 
 
@@ -23,7 +23,7 @@ This library helps you build your own parsers, in a concise, declarative way. Be
 
 There are many ways to build a parser for your own use case, ranging from formal grammars that get compiled into a parser, to regular expressions, to writing a parser entirely from scratch. They all have their own tradeoffs and limitations. 
 
-One of the great benefits of parser combinators is that, once you know how, they're very easy to write, understand, and maintain. You start from building blocks, such as `digit()`, which returns a function that parses a single digit.  
+One of the great benefits of the parser combinator style is that they're generally easier to write, understand, and maintain. You start from building blocks, such as `digitChar()`, which returns a function that parses a single digit.  
 
 ```php
 <?php 
@@ -66,7 +66,7 @@ To make this work, we need a small change in our original definition of a parser
 
 > A parser is a function<sup>[2](#object)</sup> that takes some unstructured input (such as a string), and returns a more structured output, as well as the remaining unparsed part of the input.
 
-This way, each parser function can parse a chunk of the input, and leave the remainder to another parser. The combinators deal with executing all the parser they combined. 
+This way, each parser function can parse a chunk of the input, and leave the remainder to another parser. The combinators take care of the heavy lifting: pass the input to the parser functions, pass the remainder to the next one, decide what to do with errors (eg, fail or backtrack or try another parser), ...   
 
 We can inspect the remainder:
 
