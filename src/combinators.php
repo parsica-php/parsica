@@ -232,6 +232,8 @@ function many(Parser $parser): Parser
 
 /**
  * Parse something one or more times, and output an array of the successful outputs.
+ *
+ * @psalm-suppress MixedArgumentTypeCoercion
  */
 function some(Parser $parser): Parser
 {
