@@ -351,6 +351,8 @@ final class Parser
      * @param Parser<T2> $parser
      *
      * @return Parser<T3>
+     *
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function apply(Parser $parser): Parser
     {
