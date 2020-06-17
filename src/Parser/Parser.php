@@ -306,7 +306,7 @@ final class Parser
                 );
         });
 
-        // @TODO For a more performant version, we'll probably need to replace the above impementation with this one.
+        // @TODO For a more performant version, we'll probably need to replace the above implementation with this one.
         // The reason is that the above implementation runs both parsers, even if the first one succeeds.
         // The implementation below only runs the second parser if the first one fails.
         /*
