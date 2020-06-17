@@ -216,7 +216,7 @@ final class combinatorsTest extends TestCase
     public function any_()
     {
         $symbol = any(string("€"), string("$"));
-        $amount = float()->fmap('floatval');
+        $amount = float()->map('floatval');
         $money = collect($symbol, $amount);
 
         $this->assertFailOnEOF($money);

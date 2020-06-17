@@ -8,7 +8,7 @@ use function Mathias\ParserCombinator\Predicates\isDigit;
 use function Mathias\ParserCombinator\Predicates\isHexDigit;
 
 /**
- * Parse 0-9. Returns the digit as a string. Use ->fmap('intval')
+ * Parse 0-9. Returns the digit as a string. Use ->map('intval')
  * or similar to cast it to a numeric type.
  *
  * @return Parser<string>
@@ -19,7 +19,7 @@ function digitChar(): Parser
 }
 
 /**
- * Parse a float. Returns the float as a string. Use ->fmap('floatval')
+ * Parse a float. Returns the float as a string. Use ->map('floatval')
  * or similar to cast it to a numeric type.
  *
  * @return Parser<string>

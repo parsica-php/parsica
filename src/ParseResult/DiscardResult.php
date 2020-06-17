@@ -67,7 +67,7 @@ final class DiscardResult implements ParseResult
         return $other;
     }
 
-    public function fmap(callable $transform): ParseResult
+    public function map(callable $transform): ParseResult
     {
         return $this;
     }

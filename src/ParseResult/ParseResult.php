@@ -40,7 +40,7 @@ interface ParseResult
      *
      * @return ParseResult<T2>
      */
-    public function fmap(callable $transform): ParseResult;
+    public function map(callable $transform): ParseResult;
 
     /**
      * Return the first successful ParseResult if any, and otherwise return the first failing one.

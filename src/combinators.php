@@ -163,7 +163,7 @@ function collect(Parser ...$parsers): Parser
     /** @psalm-suppress MissingClosureParamType */
     $toArray = fn($v): array => [$v];
     $arrayParsers = array_map(
-        fn(Parser $parser): Parser => $parser->fmap($toArray),
+        fn(Parser $parser): Parser => $parser->map($toArray),
         $parsers
     );
     return assemble(...$arrayParsers)->label('collect()');
@@ -238,10 +238,10 @@ function many(Parser $parser): Parser
 function some(Parser $parser): Parser
 {
     $rec = recursive();
-    return $parser->fmap(fn($x) => [$x])->append(
+    return $parser->map(fn($x) => [$x])->append(
         $rec->recurse(
             either(
-                $parser->fmap(fn($x) => [$x])->append($rec),
+                $parser->map(fn($x) => [$x])->append($rec),
                 pure([])
             )
         )

@@ -203,7 +203,7 @@ final class Parser
     {
         /** @var Parser<T2> $parser */
         $parser = Parser::make(function (string $input) use ($f) : ParseResult {
-            $result = $this->fmap($f)->run($input);
+            $result = $this->map($f)->run($input);
             if ($result->isSuccess()) {
                 $p2 = $result->output();
                 return $result->continueWith($p2);
@@ -223,9 +223,9 @@ final class Parser
      *
      * @return Parser<T2>
      */
-    public function fmap(callable $transform): Parser
+    public function map(callable $transform): Parser
     {
-        return Parser::make(fn(string $input): ParseResult => $this->run($input)->fmap($transform));
+        return Parser::make(fn(string $input): ParseResult => $this->run($input)->map($transform));
     }
 
     /**
@@ -237,7 +237,7 @@ final class Parser
     }
 
     /**
-     * Map the parser into a new object instance
+     * Construct a class with thee parser's output as the constructor argument
      *
      * @template T2
      *
@@ -245,9 +245,9 @@ final class Parser
      *
      * @return Parser<T2>
      */
-    public function fmapClass(string $className): Parser
+    public function construct(string $className): Parser
     {
-        return $this->fmap(
+        return $this->map(
         /** @param mixed $val */
             fn($val) => new $className($val)
         );
@@ -344,6 +344,6 @@ final class Parser
      */
     public function apply(Parser $parser): Parser
     {
-        return $this->bind(fn(callable $f) => $parser->fmap($f));
+        return $this->bind(fn(callable $f) => $parser->map($f));
     }
 }

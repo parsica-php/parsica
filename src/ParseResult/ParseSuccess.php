@@ -116,7 +116,7 @@ final class ParseSuccess implements ParseResult
      *
      * @return ParseResult<T2>
      */
-    public function fmap(callable $transform): ParseResult
+    public function map(callable $transform): ParseResult
     {
         return succeed($transform($this->output), $this->remainder);
     }

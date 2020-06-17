@@ -17,7 +17,7 @@ final class recursionTest extends TestCase
         $opening = char('[')->ignore();
         $closing = char(']')->ignore();
         $comma = char(',')->ignore();
-        $digit = digitChar()->fmap('intval');
+        $digit = digitChar()->map('intval');
 
         $pair = recursive();
         $pair->recurse(collect(
@@ -46,7 +46,7 @@ final class recursionTest extends TestCase
         $openingCurly = char('{')->ignore();
         $closingCurly = char('}')->ignore();
         $comma = char(',')->ignore();
-        $digit = digitChar()->fmap('intval');
+        $digit = digitChar()->map('intval');
 
         $curlyPair = recursive();
         $squarePair = recursive();

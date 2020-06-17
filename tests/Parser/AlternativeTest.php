@@ -98,7 +98,7 @@ final class AlternativeTest extends TestCase
     {
         $parser = many(
             keepFirst(
-                some(alphaChar())->fmap(fn($a) => implode('', $a)),
+                some(alphaChar())->map(fn($a) => implode('', $a)),
                 punctuationChar()->optional()
             )
         );

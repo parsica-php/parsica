@@ -22,8 +22,8 @@ final class AppendTest extends TestCase
     /** @test */
     public function append_array()
     {
-        $a = char('a')->fmap(fn($x) => [$x]);
-        $b = char('b')->fmap(fn($x) => [$x]);
+        $a = char('a')->map(fn($x) => [$x]);
+        $b = char('b')->map(fn($x) => [$x]);
         $this->assertParse(['a', 'b'], $a->append($b), "abc");
     }
 
@@ -31,8 +31,8 @@ final class AppendTest extends TestCase
     /** @test */
     public function append_non_semigroup()
     {
-        $a = char('a')->fmapClass(NotASemigroup::class);
-        $b = char('b')->fmapClass(NotASemigroup::class);
+        $a = char('a')->construct(NotASemigroup::class);
+        $b = char('b')->construct(NotASemigroup::class);
         $this->expectException(Exception::class);
         $a->append($b)->run('abc');
     }

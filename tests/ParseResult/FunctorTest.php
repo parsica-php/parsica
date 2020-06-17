@@ -12,19 +12,19 @@ final class FunctorTest extends TestCase
     use ParserAssertions;
 
     /** @test */
-    public function fmap_over_ParseSuccess()
+    public function map_over_ParseSuccess()
     {
         $succeed = succeed("parsed", "remainder");
         $expected = succeed("PARSED", "remainder");
-        $this->assertEquals($expected, $succeed->fmap('strtoupper'));
+        $this->assertEquals($expected, $succeed->map('strtoupper'));
     }
 
     /** @test */
-    public function fmap_over_ParseFailure()
+    public function map_over_ParseFailure()
     {
         $fail = fail("expected", "got");
         $expected = fail("expected", "got");
-        $this->assertEquals($expected, $fail->fmap('strtoupper'));
+        $this->assertEquals($expected, $fail->map('strtoupper'));
     }
 
 }

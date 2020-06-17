@@ -136,7 +136,7 @@ assert(floatval("abc") == 0);
 
 ```php
 <?php
-$parser = float()->fmap(fn($v) => floatval($v));
+$parser = float()->map(fn($v) => floatval($v));
 try {
     // works: 
     $result = $parser->try("1.23");

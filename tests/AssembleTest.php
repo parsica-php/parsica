@@ -41,8 +41,8 @@ final class AssembleTest extends TestCase
         $toArray = fn($v) => [$v];
 
         $parser = assemble(
-            string('first')->fmap($toArray),
-            string('second')->fmap($toArray),
+            string('first')->map($toArray),
+            string('second')->map($toArray),
         );
 
         $input = "firstsecond";
@@ -57,9 +57,9 @@ final class AssembleTest extends TestCase
         $toArray = fn($v) => [$v];
         $parser = assemble(
             char('[')->ignore(),
-            string('first')->fmap($toArray),
+            string('first')->map($toArray),
             char(',')->ignore(),
-            string('second')->fmap($toArray),
+            string('second')->map($toArray),
             char(']')->ignore(),
         );
 

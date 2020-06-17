@@ -18,13 +18,13 @@ final class SimpleDateTest extends TestCase
     /** @test */
     public function simple_date()
     {
-        $jan = (string("January")->or(string("Jan")))->fmap(fn($v) => 1);
-        $feb = (string("February")->or(string("Feb")))->fmap(fn($v) => 2);
-        $mar = (string("March")->or(string("Mar")))->fmap(fn($v) => 3);
+        $jan = (string("January")->or(string("Jan")))->map(fn($v) => 1);
+        $feb = (string("February")->or(string("Feb")))->map(fn($v) => 2);
+        $mar = (string("March")->or(string("Mar")))->map(fn($v) => 3);
         // ... you get the gist
 
         $month = any($jan, $feb, $mar);
-        $day = repeat(2, digitChar())->fmap('intval');
+        $day = repeat(2, digitChar())->map('intval');
         $p1 = collect(
             $month,
             skipSpace(),

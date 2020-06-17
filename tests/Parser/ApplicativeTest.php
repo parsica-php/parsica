@@ -33,7 +33,7 @@ final class ApplicativeTest extends TestCase
     public function sequential_application_2()
     {
         $multiply = curry(fn($x, $y) => $x * $y);
-        $number = digitChar()->fmap(fn($s) => intval($s));
+        $number = digitChar()->map(fn($s) => intval($s));
 
         // Parser<callable(a, b):c> -> Parser<a> -> Parser<b> -> Parser<c>
         $parser = pure($multiply)->apply($number)->apply($number);

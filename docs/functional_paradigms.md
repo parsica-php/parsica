@@ -30,7 +30,7 @@ There are no generics in PHP 7.4, but we use thee Psalm static typechecker to si
 
 ## Functors
 
-`ParseResult` and `Parser` are functors, using the `fmap` method. 
+`ParseResult` and `Parser` are functors, using the `map` method. 
 
 For `ParseResult`, the function is only applied to the output if `ParseResult::isSuccess()` is true, and ignored in other cases. 
 

@@ -13,11 +13,11 @@ final class FunctorTest extends TestCase
     use ParserAssertions;
 
     /** @test */
-    public function fmap()
+    public function map()
     {
         $parser =
             char('a')->followedBy(char('b'))
-                ->fmap('strtoupper');
+                ->map('strtoupper');
 
         $expected = "B";
 
@@ -25,10 +25,10 @@ final class FunctorTest extends TestCase
     }
 
     /** @test */
-    public function fmapClass()
+    public function construct()
     {
         $parser = sequence(char('a'), char('b'))
-            ->fmapClass(__NAMESPACE__ . '\\MyType1');
+            ->construct(__NAMESPACE__ . '\\MyType1');
 
         $expected = new MyType1("b");
 
@@ -40,7 +40,7 @@ final class FunctorTest extends TestCase
     {
         $parser = sequence(
             char('€'),
-            float()->fmap('floatval')->fmapClass(SimpleEur::class)
+            float()->map('floatval')->construct(SimpleEur::class)
         );
         $this->assertParse(new SimpleEur(1.25), $parser, "€1.25");
 

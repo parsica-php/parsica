@@ -73,7 +73,7 @@ final class ParseFailure extends Exception implements ParseResult
      *
      * @return ParseResult<T2>
      */
-    public function fmap(callable $transform): ParseResult
+    public function map(callable $transform): ParseResult
     {
         return fail($this->expected, $this->got);
     }
