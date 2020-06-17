@@ -6,6 +6,7 @@ use Exception;
 use Mathias\ParserCombinator\ParseResult\ParseFailure;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
 use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
+use function Mathias\ParserCombinator\pure;
 
 /**
  * A parser is any function that takes a string input and returns a {@see ParseResult}. The Parser class is a wrapper
@@ -123,15 +124,15 @@ final class Parser
     }
 
     /**
-     * @return Parser<T>
+     * @return self
+     *
      * @see optional()
+     *
+     * @return self<string>
      */
-    public function optional(): Parser
+    public function optional(): self
     {
-        return Parser::make(function (string $input): ParseResult {
-            $r1 = $this->run($input);
-            return $r1->isSuccess() ? $r1 : succeed("", $input);
-        });
+        return $this->or(pure(""));
     }
 
     /**
