@@ -352,8 +352,8 @@ final class Parser
      *
      * @return Parser<T3>
      */
-    public function apply(Parser $parser) : Parser
+    public function apply(Parser $parser): Parser
     {
-       return $this->bind(fn(callable $f) => $parser->fmap($f));
+        return $this->bind(fn(callable $f) => $parser->fmap($f));
     }
 }
