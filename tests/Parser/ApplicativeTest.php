@@ -5,7 +5,7 @@ namespace Tests\Mathias\ParserCombinator\Parser;
 use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
 use function Cypress\Curry\curry;
-use function Mathias\ParserCombinator\{anything, digitChar, pure, string};
+use function Mathias\ParserCombinator\{anything, char, digitChar, keepFirst, keepSecond, pure, string};
 
 final class ApplicativeTest extends TestCase
 {
@@ -54,5 +54,24 @@ final class ApplicativeTest extends TestCase
         $this->assertParse("357", $parser, "735");
         $this->assertParse("abc", $parser, "cba");
     }
+
+    /** @test */
+    public function keepFirst()
+    {
+        $parser = keepFirst(char('a'), char('b'));
+        $this->assertParse("a", $parser, "abc");
+        $this->assertRemain("c", $parser, "abc");
+        $this->assertNotParse($parser, "ac");
+    }
+
+    /** @test */
+    public function keepSecond()
+    {
+        $parser = keepSecond(char('a'), char('b'));
+        $this->assertParse("b", $parser, "abc");
+        $this->assertRemain("c", $parser, "abc");
+        $this->assertNotParse($parser, "ac");
+    }
+
 }
 

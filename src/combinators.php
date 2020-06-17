@@ -100,6 +100,22 @@ function sequence(Parser $first, Parser $second): Parser
 }
 
 /**
+ * Sequence two parsers, and return the output of the first one.
+ */
+function keepFirst(Parser $first, Parser $second): Parser
+{
+    return $first->bind(fn($a) => $second->bind(fn($_) => pure($a)))->label('keepFirst');
+}
+
+/**
+ * Sequence two parsers, and return the output of the second one.
+ */
+function keepSecond(Parser $first, Parser $second): Parser
+{
+    return $first->sequence($second)->label("keepSecond");
+}
+
+/**
  * Either parse the first thing or the second thing
  *
  * @param Parser<T> $first
@@ -176,6 +192,7 @@ function any(Parser ...$parsers): Parser
  * One or more repetitions of Parser
  *
  * @template T
+ *
  * @param Parser<T> $parser
  *
  * @return Parser<T>
