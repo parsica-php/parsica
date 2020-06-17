@@ -60,7 +60,8 @@ Similarly, mapping over `Parser` is really mapping over the future `ParseResult`
 `Parser<T>` is an applicative functor.
 
 - `pure()` is a parser that will always output its argument, no matter what the input was. Type: `T -> Parser<T>`.
-- `apply()` is sequential application. `pure(callable)->apply($parser)` is a parser that applies `callable` to the output of `$parser`. It works for callables with multiple arguments, if the callable is curried: `pure(curry($f))->apply($p1)->apply($p2)`. We used [matteosister/php-curry](https://github.com/matteosister/php-curry) to test this, but any method for currying functions should work.
+- `apply()` is sequential application, aka `<*>`. `pure($callable)->apply($parser)` is a parser that applies `$callable` to the output of `$parser`. It works for callables with multiple arguments, if the callable is curried: `pure(curry($callable))->apply($p1)->apply($p2)`. We used [matteosister/php-curry](https://github.com/matteosister/php-curry) to test this, but any method for currying functions should work.
+- `keepFirst()` and `keepSecond()` are `<*` and `*>` respectively. Both parsers need to succeed but only the result from one of them is returned.
 
 ### Laws
 
