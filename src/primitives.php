@@ -6,7 +6,7 @@ use Mathias\ParserCombinator\Assert\Assert;
 use Mathias\ParserCombinator\Parser\Parser;
 use Mathias\ParserCombinator\Parser\TakeWhile;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
-use function Mathias\ParserCombinator\ParseResult\{discard, fail, succeed};
+use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
 use function Mathias\ParserCombinator\Predicates\{isEqual, notPred};
 
 /**
@@ -223,7 +223,7 @@ function takeRest(): Parser
  */
 function nothing(): Parser
 {
-    return Parser::make(fn(string $input) => discard($input));
+    return Parser::make(fn(string $input) => succeed(null, $input));
 }
 
 /**

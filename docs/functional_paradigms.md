@@ -24,10 +24,6 @@ There are no generics in PHP 7.4, but we use thee Psalm static typechecker to si
 
 `ParseResult<T>` is approximately an `Either<ParseFailure, ParseSuccess<T>>` type.  
 
-## Maybe
-
-`ParseResult<T>` is also double serving as a kind of `Maybe<T>`. You can think of a successful parseresult as `Just<T>`, and a discarded parse result as `Nothing`. 
-
 ## Functors
 
 `ParseResult` and `Parser` are functors, using the `map` method. 

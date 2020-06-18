@@ -73,8 +73,6 @@ final class ParseSuccess implements ParseResult
     {
         if ($other->isFail()) {
             return $other;
-        } elseif ($other->isDiscarded()) {
-            return succeed($this->output(), $other->remainder());
         } else {
             /** @psalm-suppress ArgumentTypeCoercion */
             return $this->appendSuccess($other);
@@ -158,18 +156,5 @@ final class ParseSuccess implements ParseResult
     {
         $t = gettype($this->output);
         return $t == 'object' ? get_class($this->output) : $t;
-    }
-
-    public function isDiscarded(): bool
-    {
-        return false;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function discard(): ParseResult
-    {
-        return new DiscardResult($this->remainder());
     }
 }

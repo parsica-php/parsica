@@ -36,21 +36,6 @@ final class AppendTest extends TestCase
         $this->expectException(Exception::class);
         $a->append($b)->run('abc');
     }
-
-    /** @test */
-    public function append_nothing()
-    {
-        $parser = nothing()->append(char('a'));
-        $this->assertParse("a", $parser, "ab");
-        $this->assertRemain("b", $parser, "ab");
-
-        $parser = char('a')->append(nothing());
-        $this->assertParse("a", $parser, "ab");
-        $this->assertRemain("b", $parser, "ab");
-
-        $parser = nothing()->append(nothing());
-        $this->assertRemain("ab", $parser, "ab");
-    }
 }
 
 final class NotASemigroup

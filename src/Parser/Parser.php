@@ -5,6 +5,7 @@ namespace Mathias\ParserCombinator\Parser;
 use Exception;
 use Mathias\ParserCombinator\ParseResult\ParseFailure;
 use Mathias\ParserCombinator\ParseResult\ParseResult;
+use function Mathias\ParserCombinator\keepFirst;
 use function Mathias\ParserCombinator\ParseResult\{fail};
 use function Mathias\ParserCombinator\pure;
 
@@ -95,20 +96,6 @@ final class Parser
     {
         $f = $this->parserFunction;
         return $f($input);
-    }
-
-    /**
-     * Parse something, strip it from the remaining input, but discard the parsed output.
-     *
-     * @return Parser<T>
-     *
-     * @deprecated @todo probably need to get risd of Discard in favour of skipWhile etc
-     */
-    public function ignore(): Parser
-    {
-        return Parser::make(function (string $input): ParseResult {
-            return $this->run($input)->discard();
-        });
     }
 
     /**
@@ -346,5 +333,20 @@ final class Parser
     public function apply(Parser $parser): Parser
     {
         return $this->bind(fn(callable $f) => $parser->map($f));
+    }
+
+    /**
+     * Sequence two parsers, and return the output of the first one, ignore the second.
+     *
+     * @template T2
+     *
+     * @param Parser<T2> $other
+     *
+     * @return Parser<T>
+     * @see keepFirst()
+     */
+    public function thenIgnore(Parser $other): Parser
+    {
+        return keepFirst($this, $other);
     }
 }

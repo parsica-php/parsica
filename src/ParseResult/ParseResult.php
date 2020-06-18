@@ -53,20 +53,10 @@ interface ParseResult
 
     /**
      * @template T2
+     *
      * @param Parser<T2> $parser
      *
      * @return ParseResult<T2>
      */
     public function continueWith(Parser $parser): ParseResult;
-
-    /**
-     * Discard a successful result or return the failed result.
-     * @deprecated @todo probably need to get risd of Discard in favour of skipWhile etc
-     */
-    public function discard(): ParseResult;
-
-    /**
-     * @deprecated @todo probably need to get risd of Discard in favour of skipWhile etc
-     */
-    public function isDiscarded(): bool;
 }

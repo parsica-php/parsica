@@ -51,13 +51,10 @@ assert($output === "ab");
 <?php
 $parser = 
     collect(
-        string("Hello"), 
-        ignore(char(",")),
-        skipSpace(),
-        string("world"),
-        ignore(char("!")),
+        string("Hello")->thenIgnore(char(",")),
+        string("world")->thenIgnore(char("!")),
     );
-$result = $parser->try("Hello, world!");
+$result = $parser->try("Hello,world!");
 $output = $result->output();
 assert($output == ["Hello", "world"]);   
 ```

@@ -16,9 +16,7 @@ use function Mathias\ParserCombinator\{alphaChar,
     either,
     float,
     identity,
-    ignore,
     keepFirst,
-    keepSecond,
     many,
     noneOf,
     noneOfS,
@@ -47,19 +45,17 @@ final class combinatorsTest extends TestCase
     }
 
     /** @test */
-    public function ignore()
+    public function thenIgnore()
     {
-        $parser = ignore(char('a'));
-        $this->assertFailOnEOF($parser);
-        $this->assertRemain("bc", $parser, "abc");
-
         $parser = string('abcd')
-            ->append(ignore(char('-')))
+            ->thenIgnore(char('-'))
             ->append(string('efgh'));
         $this->assertParse("abcdefgh", $parser, "abcd-efgh");
+        $this->assertNotParse($parser, "abcdefgh");
 
+        // smae with optional dash
         $parser = string('abcd')
-            ->append(ignore(optional(char('-'))))
+            ->thenIgnore(optional(char('-')))
             ->append(string('efgh'));
         $this->assertParse("abcdefgh", $parser, "abcdefgh");
         $this->assertParse("abcdefgh", $parser, "abcd-efgh");
@@ -176,11 +172,10 @@ final class combinatorsTest extends TestCase
         $parser =
             collect(
                 string("Hello")
-                    ->append(skipSpace())
-                    ->append(char(',')->ignore())
+                    ->append(skipSpace())->thenIgnore(char(','))
                     ->append(skipSpace()),
                 string("world")
-                    ->append(char('!')->ignore())
+                    ->thenIgnore(char('!'))
             );
 
         $expected = ["Hello", "world"];

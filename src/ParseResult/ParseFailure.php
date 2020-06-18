@@ -101,17 +101,4 @@ final class ParseFailure extends Exception implements ParseResult
     {
         return $this;
     }
-
-    public function isDiscarded(): bool
-    {
-        return false;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function discard(): ParseResult
-    {
-        return $this;
-    }
 }

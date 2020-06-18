@@ -27,13 +27,4 @@ final class ParseResultTest extends TestCase
         $this->assertTrue($result->isFail());
     }
 
-    /** @test */
-    public function DiscardResult_continueWith()
-    {
-        $input = "abc";
-        $discard = char('a')->ignore()->run($input);
-        $result = $discard->continueWith(char('b'));
-        $this->assertTrue($result->isSuccess());
-        $this->assertEquals("c", $result->remainder());
-    }
 }

@@ -27,8 +27,7 @@ final class AssembleTest extends TestCase
     public function assemble_string_ignore()
     {
         $parser = assemble(
-            string('first'),
-            char('-')->ignore(),
+            string('first')->thenIgnore(char('-')),
             string('second'),
         );
         $this->assertParse("firstsecond", $parser, "first-second");
@@ -47,20 +46,21 @@ final class AssembleTest extends TestCase
 
         $input = "firstsecond";
         $expected = ["first", "second"];
-
         $this->assertParse($expected, $parser, $input);
     }
 
     /** @test */
     public function assemble_different_types_but_the_others_are_ignored()
     {
+        // @todo this could be more elegant
         $toArray = fn($v) => [$v];
         $parser = assemble(
-            char('[')->ignore(),
-            string('first')->map($toArray),
-            char(',')->ignore(),
-            string('second')->map($toArray),
-            char(']')->ignore(),
+            char('[')->sequence(
+                string('first')->map($toArray)
+            ),
+            char(',')->sequence(
+                string('second')->map($toArray)
+            )->thenIgnore(char(']')),
         );
 
         $input = "[first,second]";

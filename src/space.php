@@ -81,7 +81,7 @@ function eol(): Parser
  */
 function skipSpace(): Parser
 {
-    return takeWhile(isSpace())->ignore();
+    return skipWhile(isSpace());
 }
 
 /**
@@ -92,7 +92,7 @@ function skipSpace(): Parser
  */
 function skipHSpace(): Parser
 {
-    return takeWhile(isHSpace())->ignore();
+    return skipWhile(isHSpace());
 }
 
 /**
@@ -102,7 +102,7 @@ function skipHSpace(): Parser
  */
 function skipSpace1(): Parser
 {
-    return takeWhile1(isSpace())->label("skipSpace1")->ignore();
+    return skipWhile1(isSpace())->label("skipSpace1");
 }
 
 /**
@@ -113,5 +113,5 @@ function skipSpace1(): Parser
  */
 function skipHSpace1(): Parser
 {
-    return takeWhile1(isHSpace())->label("skipHSpace1")->ignore();
+    return skipWhile1(isHSpace())->label("skipHSpace1");
 }

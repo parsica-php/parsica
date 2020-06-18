@@ -20,22 +20,6 @@ function identity(Parser $parser): Parser
 }
 
 /**
- * Parse something, strip it from the remaining input, but discard the output.
- *
- * @param Parser<T> $parser
- *
- * @return Parser<T>
- *
- * @deprecated @todo probably need to get risd of Discard in favour of skipWhile etc
- *
- * @template T
- */
-function ignore(Parser $parser): Parser
-{
-    return $parser->ignore();
-}
-
-/**
  * A parser that will have the argument as its output, no matter what the input was. It doesn't consume any input.
  *
  * @template T
@@ -102,6 +86,8 @@ function sequence(Parser $first, Parser $second): Parser
 
 /**
  * Sequence two parsers, and return the output of the first one.
+ *
+ * @see Parser::thenIgnore()
  */
 function keepFirst(Parser $first, Parser $second): Parser
 {
@@ -144,10 +130,14 @@ function either(Parser $first, Parser $second): Parser
  */
 function assemble(Parser ...$parsers): Parser
 {
+    if(0 == count($parsers)) {
+        throw new \InvalidArgumentException("assemble() expects at least one Parser");
+    }
+    $first = array_shift($parsers);
     return array_reduce(
         $parsers,
         fn(Parser $l, Parser $r): Parser => $l->append($r),
-        nothing()
+        $first
     )->label('assemble()');
 }
 
