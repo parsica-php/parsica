@@ -6,10 +6,12 @@ use InvalidArgumentException;
 use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\{alphaChar,
+    alphaNumChar,
     any,
     anySingle,
     anySingleBut,
     atLeastOne,
+    between,
     char,
     collect,
     digitChar,
@@ -245,5 +247,11 @@ final class combinatorsTest extends TestCase
         $this->assertParse(23, $parser, $input);
     }
 
-
+    /** @test */
+    public function between()
+    {
+        $parser = between(char('{'), atLeastOne(alphaNumChar()), char('}'));
+        $input = "{foo}";
+        $this->assertParse("foo", $parser, $input);
+    }
 }

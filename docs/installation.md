@@ -30,13 +30,13 @@ Import parsers and combinators:
 
 You can combine multiple imports in one statement: 
 `
-`use function Mathias\ParserCombinator\{char, string, between};`
+`use function Mathias\ParserCombinator\{between, char, atLeastOne, alphaChar};`
 
 Finally, add some code:
 
 ```php
 <?php
-$parser = between(char('{'), stringOf(alphaChar()), char('}'));
+$parser = between(char('{'), atLeastOne(alphaChar()), char('}'));
 $result = $parser->try("{Hello}");
 echo $result->output();
 // outputs "Hello"

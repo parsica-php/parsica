@@ -15,7 +15,6 @@ use function Mathias\ParserCombinator\{
     skipSpace,
     string,
     stringI,
-    stringOf,
     sequence,
     float,
     recursive,

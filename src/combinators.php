@@ -2,6 +2,7 @@
 
 namespace Mathias\ParserCombinator;
 
+use InvalidArgumentException;
 use Mathias\ParserCombinator\Parser\Parser;
 use function Mathias\ParserCombinator\ParseResult\{succeed};
 
@@ -130,8 +131,8 @@ function either(Parser $first, Parser $second): Parser
  */
 function assemble(Parser ...$parsers): Parser
 {
-    if(0 == count($parsers)) {
-        throw new \InvalidArgumentException("assemble() expects at least one Parser");
+    if (0 == count($parsers)) {
+        throw new InvalidArgumentException("assemble() expects at least one Parser");
     }
     $first = array_shift($parsers);
     return array_reduce(
@@ -238,4 +239,22 @@ function some(Parser $parser): Parser
             )
         )
     );
+}
+
+/**
+ * Parse $open, followed by $middle, followed by $close, and return the result of $middle. Useful for eg. "(value)".
+ *
+ * @template TO
+ * @template TM
+ * @template TC
+ *
+ * @param Parser<TO> $open
+ * @param Parser<TM> $middle
+ * @param Parser<TC> $close
+ *
+ * @return Parser<TM>
+ */
+function between(Parser $open, Parser $middle, Parser $close): Parser
+{
+    return keepSecond($open, keepFirst($middle, $close));
 }
