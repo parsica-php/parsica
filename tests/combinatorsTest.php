@@ -231,7 +231,7 @@ final class combinatorsTest extends TestCase
     public function skipMany()
     {
         //skipMany p applies the parser p zero or more times, skipping its result.
-
+        self::markTestIncomplete();
     }
 
 
