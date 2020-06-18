@@ -32,6 +32,35 @@ function satisfy(callable $predicate, string $expected = "satisfy(predicate)"): 
     });
 }
 
+/**
+ * Skip 0 or more characters as long as the predicate holds.
+ *
+ * @template T
+ *
+ * @param callable(string) : bool $predicate
+ * @param string $expected
+ *
+ * @return Parser<T>
+ */
+function skipWhile(callable $predicate): Parser
+{
+    return TakeWhile::_skipWhile($predicate);
+}
+
+/**
+ * Skip 1 or more characters as long as the predicate holds.
+ *
+ * @template T
+ *
+ * @param callable(string) : bool $predicate
+ * @param string $expected
+ *
+ * @return Parser<T>
+ */
+function skipWhile1(callable $predicate): Parser
+{
+    return TakeWhile::_skipWhile1($predicate);
+}
 
 /**
  * Keep parsing 0 or more characters as long as the predicate holds.

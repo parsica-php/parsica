@@ -10,9 +10,12 @@ use function Mathias\ParserCombinator\{anything,
     failure,
     nothing,
     satisfy,
+    skipWhile,
+    skipWhile1,
     success,
     takeWhile,
-    takeWhile1};
+    takeWhile1
+};
 use function Mathias\ParserCombinator\Predicates\{isEqual, notPred};
 
 
@@ -123,4 +126,54 @@ final class primitivesTest extends TestCase
         $this->assertParse("", $or, "failure or success is success");
     }
 
+    /** @test */
+    public function skipWhile()
+    {
+        $parser = skipWhile(isEqual('a'));
+
+        $this->assertParse("", $parser, "xyz");
+        $this->assertRemain("xyz", $parser, "xyz");
+        $this->assertParse("", $parser, "xaaa");
+        $this->assertRemain("xaaa", $parser, "xaaa");
+        $this->assertParse("", $parser, "axyz");
+        $this->assertRemain("xyz", $parser, "axyz");
+        $this->assertParse("", $parser, "aaaxyz");
+        $this->assertRemain("xyz", $parser, "aaaxyz");
+        $this->assertParse("", $parser, "aaa");
+        $this->assertRemain("", $parser, "aaa");
+    }
+
+    /** @test */
+    public function skipWhile_using_not()
+    {
+        $parser = skipWhile(notPred(isEqual('a')));
+
+        $this->assertParse("", $parser, "xyz");
+        $this->assertRemain("", $parser, "xyz");
+        $this->assertParse("", $parser, "xaaa");
+        $this->assertRemain("aaa", $parser, "xaaa");
+        $this->assertParse("", $parser, "axyz");
+        $this->assertRemain("axyz", $parser, "axyz");
+        $this->assertParse("", $parser, "aaaxyz");
+        $this->assertRemain("aaaxyz", $parser, "aaaxyz");
+        $this->assertParse("", $parser, "aaa");
+        $this->assertRemain("aaa", $parser, "aaa");
+    }
+
+
+    /** @test */
+    public function skipWhile1()
+    {
+        $parser = skipWhile1(isEqual('a'));
+
+        $this->assertFailOnEOF($parser);
+        $this->assertNotParse($parser, "xyz");
+        $this->assertParse("", $parser, "axyz");
+        $this->assertRemain("xyz", $parser, "axyz");
+        $this->assertParse("", $parser, "aaaxyz");
+        $this->assertRemain("xyz", $parser, "aaaxyz");
+        $this->assertParse("", $parser, "aaa");
+        $this->assertRemain("", $parser, "aaa");
+        $this->assertNotParse($parser, "");
+    }
 }

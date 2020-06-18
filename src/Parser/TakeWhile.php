@@ -26,8 +26,7 @@ final class TakeWhile
          * @see \Tests\Mathias\ParserCombinator\primitivesTest::not_sure_how_takeWhile_should_deal_with_EOF()
          */
         return Parser::make(
-            fn(string $input): ParseResult =>
-                //self::isEOF($input) ?
+            fn(string $input): ParseResult => //self::isEOF($input) ?
                 //    fail("takeWhile(predicate)", "EOF") :
             self::parseRemainingInput($input, $predicate)
         );
@@ -75,6 +74,53 @@ final class TakeWhile
             fn(string $input): ParseResult => !self::matchFirst($predicate, $input) ?
                 fail("takeWhile1(predicate)", $input) :
                 self::parseRemainingInput($input, $predicate)
+        );
+    }
+
+    /**
+     * Skip 0 or more characters as long as the predicate holds.
+     *
+     * @template T
+     *
+     * @param callable(string) : bool $predicate
+     *
+     * @return Parser<T>
+     */
+    public static function _skipWhile(callable $predicate): Parser
+    {
+        return Parser::make(
+            fn(string $input): ParseResult => self::skipRemainingInput($input, $predicate)
+        );
+    }
+
+    /**
+     * @param callable(string) : bool $predicate
+     */
+    private static function skipRemainingInput(string $input, callable $predicate): ParseResult
+    {
+        $output = "";
+        $remaining = $input;
+        while (!self::isEOF($remaining) && self::matchFirst($predicate, $remaining)) {
+            $remaining = mb_substr($remaining, 1);
+        }
+        return succeed($output, $remaining);
+    }
+
+    /**
+     * Skip 1 or more characters as long as the predicate holds.
+     *
+     * @template T
+     *
+     * @param callable(string) : bool $predicate
+     *
+     * @return Parser<T>
+     */
+    public static function _skipWhile1(callable $predicate): Parser
+    {
+        return Parser::make(
+            fn(string $input): ParseResult => !self::matchFirst($predicate, $input) ?
+                fail("skipWhile1(predicate)", $input) :
+                self::skipRemainingInput($input, $predicate)
         );
     }
 
