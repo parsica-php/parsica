@@ -105,7 +105,7 @@ function sequence(Parser $first, Parser $second): Parser
  */
 function keepFirst(Parser $first, Parser $second): Parser
 {
-    return $first->bind(fn($a) => $second->bind(fn($_) => pure($a)))->label('keepFirst');
+    return $first->bind(fn($a) => $second->sequence(pure($a)))->label('keepFirst');
 }
 
 /**
