@@ -1,7 +1,7 @@
 {
   "name": "mathias/parser-combinator",
-  "version": "0.2",
   "description": "The easiest way to build robust parsers.",
+  "license": "MIT",
   "authors": [
     {
       "name": "Mathias Verraes",
