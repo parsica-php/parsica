@@ -5,7 +5,7 @@ namespace Tests\Mathias\ParserCombinator;
 use Exception;
 use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
-use function Mathias\ParserCombinator\{char, collect, digitChar, recursive};
+use function Mathias\ParserCombinator\{between, char, collect, digitChar, recursive};
 
 final class recursionTest extends TestCase
 {
@@ -14,20 +14,22 @@ final class recursionTest extends TestCase
     /** @test */
     public function recursion_on_nested_structures()
     {
-        //@todo between
-        $opening = char('[')->ignore();
-        $closing = char(']')->ignore();
-        $comma = char(',')->ignore();
+        $opening = char('[');
+        $closing = char(']');
+        $comma = char(',');
         $digit = digitChar()->map('intval');
 
         $pair = recursive();
-        $pair->recurse(collect(
-            $opening,
-            $digit->or($pair),
-            $comma,
-            $digit->or($pair),
-            $closing,
-        ));
+        $pair->recurse(
+            between(
+                $opening,
+                collect(
+                    $digit->or($pair)->thenIgnore($comma),
+                    $digit->or($pair)
+                ),
+                $closing
+            )
+        );
 
         $input = "[1,2]";
         $this->assertParse([1, 2], $pair, $input);
@@ -42,35 +44,27 @@ final class recursionTest extends TestCase
     /** @test */
     public function nesting_multiple_recursive_parsers()
     {
-        //@todo between
-        $openingSquare = char('[')->ignore();
-        $closingSquare = char(']')->ignore();
-        $openingCurly = char('{')->ignore();
-        $closingCurly = char('}')->ignore();
-        $comma = char(',')->ignore();
+        $openingSquare = char('[');
+        $closingSquare = char(']');
+        $openingCurly = char('{');
+        $closingCurly = char('}');
+        $comma = char(',');
         $digit = digitChar()->map('intval');
 
         $curlyPair = recursive();
         $squarePair = recursive();
-
         $anyPair = $curlyPair->or($squarePair);
+
         $expr = $digit->or($anyPair);
+        $inner = collect($expr->thenIgnore($comma), $expr);
 
-        $curlyPair->recurse(collect(
-            $openingCurly,
-            $expr,
-            $comma,
-            $expr,
-            $closingCurly,
-        ));
+        $curlyPair->recurse(
+            between($openingCurly, $inner, $closingCurly)
+        );
 
-        $squarePair->recurse(collect(
-            $openingSquare,
-            $expr,
-            $comma,
-            $expr,
-            $closingSquare,
-        ));
+        $squarePair->recurse(
+            between($openingSquare, $inner, $closingSquare)
+        );
 
         $input = "[1,{2,[{3,4},{5,6}]}]";
         $this->assertParse([1, [2, [[3, 4], [5, 6]]]], $anyPair, $input);
