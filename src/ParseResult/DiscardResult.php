@@ -9,6 +9,7 @@ use Mathias\ParserCombinator\Parser\Parser;
 /**
  * Discard is a special case of ParseSuccess. It represents a success but discards the result.
  *
+ * @deprecated @todo probably need to get risd of Discard in favour of skipWhile etc
  * @template T
  */
 final class DiscardResult implements ParseResult

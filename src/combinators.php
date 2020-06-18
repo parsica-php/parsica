@@ -21,6 +21,7 @@ function identity(Parser $parser): Parser
 
 /**
  * Parse something, strip it from the remaining input, but discard the output.
+ * @deprecated @todo probably need to get risd of Discard in favour of skipWhile etc
  *
  * @template T
  *

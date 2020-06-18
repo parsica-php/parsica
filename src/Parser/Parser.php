@@ -101,6 +101,8 @@ final class Parser
      * Parse something, strip it from the remaining input, but discard the parsed output.
      *
      * @return Parser<T>
+     *
+     * @deprecated @todo probably need to get risd of Discard in favour of skipWhile etc
      */
     public function ignore(): Parser
     {
