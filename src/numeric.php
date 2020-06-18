@@ -23,6 +23,8 @@ function digitChar(): Parser
  * or similar to cast it to a numeric type.
  *
  * @return Parser<string>
+ *
+ * @deprecated @TODO doesn't support signed numbers yet
  */
 function float(): Parser
 {
@@ -40,6 +42,8 @@ function float(): Parser
  * Parse a binary character 0 or 1.
  *
  * @return Parser<string>
+ *
+ * @deprecated @TODO doesn't support signed numbers yet
  */
 function binDigitChar(): Parser
 {
@@ -50,6 +54,8 @@ function binDigitChar(): Parser
  * Parse an octodecimal character 0-7.
  *
  * @return Parser<string>
+ *
+ * @deprecated @TODO doesn't support signed numbers yet
  */
 function octDigitChar(): Parser
 {
@@ -60,6 +66,8 @@ function octDigitChar(): Parser
  * Parse a hexadecimal numeric character 0123456789abcdefABCDEF.
  *
  * @return Parser<string>
+ *
+ * @deprecated @TODO doesn't support signed numbers yet
  */
 function hexDigitChar(): Parser
 {
