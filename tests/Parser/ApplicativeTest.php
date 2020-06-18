@@ -5,7 +5,7 @@ namespace Tests\Mathias\ParserCombinator\Parser;
 use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
 use function Cypress\Curry\curry;
-use function Mathias\ParserCombinator\{anything, char, digitChar, keepFirst, keepSecond, pure, string};
+use function Mathias\ParserCombinator\{anything, char, digitChar, keepFirst, keepSecond, pure, skipSpace, string};
 
 final class ApplicativeTest extends TestCase
 {
@@ -62,6 +62,13 @@ final class ApplicativeTest extends TestCase
         $this->assertParse("a", $parser, "abc");
         $this->assertRemain("c", $parser, "abc");
         $this->assertNotParse($parser, "ac");
+    }
+
+    /** @test */
+    public function keepFirst_with_ignore()
+    {
+        $parser = keepFirst(char('a'), skipSpace());
+        $this->assertParse("a", $parser, "a     ");
     }
 
     /** @test */
