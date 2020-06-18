@@ -99,26 +99,14 @@ final class Parser
     }
 
     /**
-     * Make a new parser. This is the constructor for all regular use.
+     * Optionally parse something, but still succeed if the thing is not there.
      *
-     * @template T2
+     * @psalm-suppress InvalidReturnStatement
      *
-     * @param callable(string) : ParseResult<T2> $parserFunction
-     *
-     * @return Parser<T2>
-     */
-    public static function make(callable $parserFunction): Parser
-    {
-        return new Parser($parserFunction, 'non-recursive');
-    }
-
-    /**
-     * @return self
-     *
-     * @return self<string>
+     * @return Parser<T>
      * @see optional()
      */
-    public function optional(): self
+    public function optional(): Parser
     {
         return $this->or(pure(""));
     }
@@ -160,6 +148,20 @@ final class Parser
             return $r2->isSuccess() ? $r2 : $r1;
         });
         */
+    }
+
+    /**
+     * Make a new parser. This is the constructor for all regular use.
+     *
+     * @template T2
+     *
+     * @param callable(string) : ParseResult<T2> $parserFunction
+     *
+     * @return Parser<T2>
+     */
+    public static function make(callable $parserFunction): Parser
+    {
+        return new Parser($parserFunction, 'non-recursive');
     }
 
     /**
