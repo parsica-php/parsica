@@ -54,4 +54,14 @@ final class Assert
             throw new InvalidArgumentException($message);
         }
     }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public static function atLeastOneArg(array $args, string $source)
+    {
+        if (0 == count($args)) {
+            throw new InvalidArgumentException("$source expects at least one Parser");
+        }
+    }
 }

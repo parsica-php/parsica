@@ -2,7 +2,7 @@
 
 namespace Mathias\ParserCombinator;
 
-use InvalidArgumentException;
+use Mathias\ParserCombinator\Assert\Assert;
 use Mathias\ParserCombinator\Parser\Parser;
 use function Mathias\ParserCombinator\ParseResult\{succeed};
 
@@ -131,9 +131,7 @@ function either(Parser $first, Parser $second): Parser
  */
 function assemble(Parser ...$parsers): Parser
 {
-    if (0 == count($parsers)) {
-        throw new InvalidArgumentException("assemble() expects at least one Parser");
-    }
+    Assert::atLeastOneArg($parsers, "assemble()");
     $first = array_shift($parsers);
     return array_reduce(
         $parsers,
