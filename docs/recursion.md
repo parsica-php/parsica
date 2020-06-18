@@ -28,13 +28,15 @@ $pair = recursive();
 
 // Then define the parser
 $pair->recurse(
-    collect(
-        ignore(char('[')),
-        digitChar()->or($pair),
-        ignore(char(',')),
-        digitChar()->or($pair),
-        ignore(char(']')),
-    )
+    between(
+        char('['),
+        collect(
+            digitChar()->or($pair)
+                ->thenIgnore(char(',')),
+            digitChar()->or($pair)
+        ),
+        char(']')
+    ),
 );
 
 $result = $pair->run("[1,[2,[3,4]]]");
@@ -47,32 +49,25 @@ It's possible to nest multiple recursive parsers. Simply initialise them all fir
 <?php
 $curlyPair = recursive();
 $squarePair = recursive();
-
 $anyPair = $curlyPair->or($squarePair);
 
+$inner = collect(
+     digitChar()->or($anyPair)
+         ->thenIgnore(char(',')),
+     digitChar()->or($anyPair)
+ );
+
 $curlyPair->recurse(
-    collect(
-        ignore(char('{')),
-        digitChar()->or($anyPair),
-        ignore(char(',')),
-        digitChar()->or($anyPair),
-        ignore(char('}')),
-    )
+    between(char('{'), $inner, char('}')),
 );
 
 $squarePair->recurse(
-    collect(
-        ignore(char('[')),
-        digitChar()->or($anyPair),
-        ignore(char(',')),
-        digitChar()->or($anyPair),
-        ignore(char(']')),  
-    )
+    between(char('['), $inner, char(']')),
+
 );
 
-$result = $anyPair->run("[1,[2,[3,4]]]");
-assert($result->output() == [1, [2, [3, 4]]]);
-$result = $anyPair->run("{1,{2,{3,4}}}");
+$mixed = "{1,[2,{3,4}]}";
+$result = $anyPair->run($mixed);
 assert($result->output() == [1, [2, [3, 4]]]);
 ```
 
