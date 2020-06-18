@@ -197,6 +197,8 @@ function atLeastOne(Parser $parser): Parser
 /**
  * Parse something exactly n times
  *
+ * @TODO this could probably be more elegant.
+ *
  * @template T
  *
  * @param Parser<T> $parser
@@ -207,9 +209,9 @@ function atLeastOne(Parser $parser): Parser
 function repeat(int $n, Parser $parser): Parser
 {
     return array_reduce(
-        array_fill(0, $n, $parser),
+        array_fill(0, $n - 1, $parser),
         fn(Parser $l, Parser $r): Parser => $l->append($r),
-        nothing()
+        $parser
     )->label("repeat($n)");
 }
 
