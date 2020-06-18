@@ -26,10 +26,10 @@ final class SimpleDateTest extends TestCase
         $month = any($jan, $feb, $mar);
         $day = repeat(2, digitChar())->map('intval');
         $p1 = collect(
-            $month,
-            skipSpace(),
+            $month->thenIgnore(skipSpace()),
             $day
         );
+
         $this->assertParse([1, 28], $p1, "January 28");
         $this->assertParse([1, 28], $p1, "Jan 28");
         $this->assertParse([2, 28], $p1, "February 28");
