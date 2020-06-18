@@ -4,7 +4,9 @@ declare(strict_types=1);
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Mathias\ParserCombinator\ParseResult\ParseResult;
-use function Mathias\ParserCombinator\{anything,
+use function Mathias\ParserCombinator\{
+    anything,
+    alphaChar,
     char,
     collect,
     digitChar,
@@ -13,17 +15,18 @@ use function Mathias\ParserCombinator\{anything,
     skipSpace,
     string,
     stringI,
+    stringOf,
     sequence,
     float,
     recursive,
     skipSpace1,
     punctuationChar,
     atLeastOne,
-    optional
+    optional,
+    between
 };
 use function Mathias\ParserCombinator\Predicates\{isEqual, orPred};
 use Mathias\ParserCombinator\ParseResult\ParseFailure;
 
 assert_options(ASSERT_ACTIVE, 1);
 assert_options(ASSERT_QUIET_EVAL, 1);
-
