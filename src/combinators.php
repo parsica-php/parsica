@@ -21,13 +21,14 @@ function identity(Parser $parser): Parser
 
 /**
  * Parse something, strip it from the remaining input, but discard the output.
- * @deprecated @todo probably need to get risd of Discard in favour of skipWhile etc
- *
- * @template T
  *
  * @param Parser<T> $parser
  *
  * @return Parser<T>
+ *
+ * @deprecated @todo probably need to get risd of Discard in favour of skipWhile etc
+ *
+ * @template T
  */
 function ignore(Parser $parser): Parser
 {
