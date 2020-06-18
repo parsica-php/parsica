@@ -17,6 +17,9 @@ use function Mathias\ParserCombinator\{alphaChar,
     float,
     identity,
     ignore,
+    keepFirst,
+    keepSecond,
+    many,
     noneOf,
     noneOfS,
     oneOf,
@@ -236,24 +239,15 @@ final class combinatorsTest extends TestCase
 
 
     /** @test */
-    public function before()
+    public function keepFirst__inside_a_nested_parser()
     {
-        self::markTestIncomplete();
-        /*
-         * -- | Parse two expressions sequentially, returning the result of the first.
-before :: Parser p1 -> Parser p2 -> Parser p1
-before p1 p2 = do
-  p <- p1
-  p2 >> return p
-         */
-
         $movies = any(stringI('movie'), stringI('movies'), stringI('film'), stringI('films'))->followedBy(skipSpace());
-        $count = atLeastOne(digitChar());
-        $words = any(alphaChar(), punctuationChar(), whitespace());
-        $parser = $words->followedBy(before($count, $movies));
+        $number = atLeastOne(digitChar())->map('intval');
+        $words = many(any(alphaChar(), punctuationChar(), whitespace()));
+        $parser = $words->followedBy(keepFirst($number, skipSpace()->followedBy($movies)));
 
         $input = "I watched 23 MOVIES this week ";
-
+        $this->assertParse(23, $parser, $input);
     }
 
 
