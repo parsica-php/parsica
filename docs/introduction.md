@@ -1,4 +1,4 @@
-# Introduction
+# What are parser combinators?
 
 ## Parsers
 
@@ -61,7 +61,7 @@ assert($output == ["Hello", "world"]);
 
 To make this work, we need a small change in our original definition of a parser.
 
-> A parser is a function<sup>[2](#object)</sup> that takes some unstructured input (such as a string), and returns a more structured output, as well as the remaining unparsed part of the input.
+> A parser is a function that takes some unstructured input (such as a string), and returns a more structured output, as well as the remaining unparsed part of the input.
 
 This way, each parser function can parse a chunk of the input, and leave the remainder to another parser. The combinators take care of the heavy lifting: pass the input to the parser functions, pass the remainder to the next one, decide what to do with errors (eg, fail or backtrack or try another parser), ...   
 
@@ -143,7 +143,3 @@ try {
     $result = $parser->try("abc");
 } catch (ParseFailure $e) {}
 ```
-
-#### <a name="object">Note 2</a> 
-
-In our case, functions like `char('a')` return a `Parser` object with a method `try($input)`, so strictly speaking, `try` is the parser.  

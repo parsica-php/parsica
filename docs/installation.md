@@ -4,7 +4,6 @@
 
 - PHP 7.4 or higher
 - [The multibyte string extension for PHP (aka mbstring)](https://www.php.net/manual/en/book.mbstring.php)
-- [Composer](https://getcomposer.org/)
 
 ## Composer
  
