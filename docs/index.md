@@ -17,8 +17,8 @@ The easiest way to build robust parsers.
 1. [Order Matters](tutorial/order_matters.md)
 1. [Recursion](tutorial/recursion.md)
 1. [Performance](tutorial/performance.md)
-1. [Functional Paradigms](tutorial/functional_paradigms.md)
 1. [Naming Conventions](tutorial/naming_conventions.md)
+1. [Functional Paradigms](tutorial/functional_paradigms.md)
 1. Check out the examples in the `/tests` folder.
 
 ## Contribute
