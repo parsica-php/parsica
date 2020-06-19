@@ -1,8 +1,10 @@
-# Parser Combinator
-
+# Parsica - PHP Parser Combinators
+ 
 The easiest way to build robust parsers.
 
-[Documentation](docs/index.md)
+[Documentation](https://parsica.verraes.net/)
+
+### Example
 
 ```php
 <?php
