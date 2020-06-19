@@ -1,5 +1,4 @@
 ---
-id: status
 title: Development Status
 sidebar_label: Development Status
 ---

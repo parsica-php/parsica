@@ -1,5 +1,4 @@
 ---
-id: introduction
 title: What are parser combinators?
 sidebar_label: What are parser combinators?
 ---

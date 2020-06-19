@@ -1,5 +1,4 @@
 ---
-id: index
 title: Parsica - PHP Parser Combinators
 sidebar_label: About Parsica
 ---
