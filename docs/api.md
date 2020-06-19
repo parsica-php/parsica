@@ -20,20 +20,6 @@ function char(string $c) : Parser
 ```
 
 
-### charI
-
-Parse a single character, case-insensitive and case-preserving. On success it returns the string cased as the
-actually parsed input.
-eg charI('a'')->run("ABC") will succeed with "A", not "a".
-
-
-
-
-```php
-function charI(string $c) : Parser
-```
-
-
 ### controlChar
 
 Parse a control character (a non-printing character of the Latin-1 subset of Unicode).
@@ -244,6 +230,18 @@ Either parse the first thing or the second thing
 
 ```php
 function either(Parser $first, Parser $second) : Parser
+```
+
+
+### append
+
+Combine the parser with another parser of the same type, which will cause the results to be appended.
+
+
+
+
+```php
+function append(Parser $left, Parser $right) : Parser
 ```
 
 
@@ -918,45 +916,10 @@ function stringI(string $str) : Parser
 
 ## ParseResult Instance Methods
 
-### isSuccess
-
-```php
-public function isSuccess() : bool
-```
-
-
-### isFail
-
-```php
-public function isFail() : bool
-```
-
-
 ### output
 
 ```php
 public function output()
-```
-
-
-### remainder
-
-```php
-public function remainder() : string
-```
-
-
-### expected
-
-```php
-public function expected() : string
-```
-
-
-### got
-
-```php
-public function got() : string
 ```
 
 

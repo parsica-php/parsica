@@ -34,13 +34,13 @@ function char(string $c): Parser
 /**
  * Parse a single character, case-insensitive and case-preserving. On success it returns the string cased as the
  * actually parsed input.
+ *
  * eg charI('a'')->run("ABC") will succeed with "A", not "a".
  *
  * @param string $c A single character
  *
  * @return Parser<string>
  * @see char()
- *
  */
 function charI(string $c): Parser
 {
