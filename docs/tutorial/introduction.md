@@ -3,7 +3,6 @@ title: What are parser combinators?
 sidebar_label: What are parser combinators?
 ---
 
-
 ## Parsers
 
 ```php
@@ -18,7 +17,7 @@ echo $result->output() . " is a valid smiley!";
 
 A parser is a function that takes some unstructured input (like a string) and turns it into structured output, that's easier to work with. This output could be as simple as a slightly better structured string, or an array, an object, up to a complete abstract syntax tree. You can then use this data structure for subsequent processing.
 
-You're probably using parsers all the time, such as `json_decode()`. And even just casting a string to a float<sup>[1](#floatval)</sup> is parsing. 
+You're probably using parsers all the time, such as `json_decode()`. And even just casting a string to a float <sup>[footnote 1](#floatval)</sup> really is parsing. 
 
 Parsica helps you build your own parsers, in a concise, declarative way. Behind the scenes it takes care of things like error handling, so you can focus on the parser itself. 
 
