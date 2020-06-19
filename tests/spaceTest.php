@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinator;
+namespace Tests\Verraes\Parsica;
 
-use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
-use function Mathias\ParserCombinator\{crlf, eol, newline, skipHSpace, skipHSpace1, skipSpace, skipSpace1, tab};
+use function Verraes\Parsica\{crlf, eol, newline, skipHSpace, skipHSpace1, skipSpace, skipSpace1, tab};
 
 final class spaceTest extends TestCase
 {

@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinator;
+namespace Tests\Verraes\Parsica;
 
 use Exception;
-use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
-use function Mathias\ParserCombinator\{between, char, collect, digitChar, recursive};
+use function Verraes\Parsica\{between, char, collect, digitChar, recursive};
 
 final class recursionTest extends TestCase
 {

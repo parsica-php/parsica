@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinator;
+namespace Tests\Verraes\Parsica;
 
-use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
-use function Mathias\ParserCombinator\{anything,
+use function Verraes\Parsica\{anything,
     eof,
     everything,
     failure,
@@ -16,7 +16,7 @@ use function Mathias\ParserCombinator\{anything,
     takeWhile,
     takeWhile1
 };
-use function Mathias\ParserCombinator\{isEqual, notPred};
+use function Verraes\Parsica\{isEqual, notPred};
 
 
 final class primitivesTest extends TestCase

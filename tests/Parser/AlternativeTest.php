@@ -1,21 +1,21 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinator\Parser;
+namespace Tests\Verraes\Parsica\Parser;
 
-use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
-use function Mathias\ParserCombinator\alphaChar;
-use function Mathias\ParserCombinator\char;
-use function Mathias\ParserCombinator\digitChar;
-use function Mathias\ParserCombinator\either;
-use function Mathias\ParserCombinator\eof;
-use function Mathias\ParserCombinator\ignore;
-use function Mathias\ParserCombinator\keepFirst;
-use function Mathias\ParserCombinator\many;
-use function Mathias\ParserCombinator\punctuationChar;
-use function Mathias\ParserCombinator\some;
-use function Mathias\ParserCombinator\string;
-use function Mathias\ParserCombinator\whitespace;
+use function Verraes\Parsica\alphaChar;
+use function Verraes\Parsica\char;
+use function Verraes\Parsica\digitChar;
+use function Verraes\Parsica\either;
+use function Verraes\Parsica\eof;
+use function Verraes\Parsica\ignore;
+use function Verraes\Parsica\keepFirst;
+use function Verraes\Parsica\many;
+use function Verraes\Parsica\punctuationChar;
+use function Verraes\Parsica\some;
+use function Verraes\Parsica\string;
+use function Verraes\Parsica\whitespace;
 
 final class AlternativeTest extends TestCase
 {

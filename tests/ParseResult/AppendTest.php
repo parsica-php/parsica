@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinator\ParseResult;
+namespace Tests\Verraes\Parsica\ParseResult;
 
-use Mathias\ParserCombinator\Internal\Fail;
-use Mathias\ParserCombinator\Internal\Succeed;
-use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use Verraes\Parsica\Internal\Fail;
+use Verraes\Parsica\Internal\Succeed;
+use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
 
 final class AppendTest extends TestCase

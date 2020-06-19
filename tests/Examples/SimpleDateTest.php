@@ -1,15 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinator\Examples;
+namespace Tests\Verraes\Parsica\Examples;
 
-use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
-use function Mathias\ParserCombinator\any;
-use function Mathias\ParserCombinator\collect;
-use function Mathias\ParserCombinator\digitChar;
-use function Mathias\ParserCombinator\repeat;
-use function Mathias\ParserCombinator\skipSpace;
-use function Mathias\ParserCombinator\string;
+use function Verraes\Parsica\any;
+use function Verraes\Parsica\collect;
+use function Verraes\Parsica\digitChar;
+use function Verraes\Parsica\repeat;
+use function Verraes\Parsica\skipSpace;
+use function Verraes\Parsica\string;
 
 final class SimpleDateTest extends TestCase
 {

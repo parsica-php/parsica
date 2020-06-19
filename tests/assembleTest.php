@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinator;
+namespace Tests\Verraes\Parsica;
 
-use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
-use function Mathias\ParserCombinator\assemble;
-use function Mathias\ParserCombinator\char;
-use function Mathias\ParserCombinator\string;
+use function Verraes\Parsica\assemble;
+use function Verraes\Parsica\char;
+use function Verraes\Parsica\string;
 
 final class assembleTest extends TestCase
 {

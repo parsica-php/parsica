@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator;
+namespace Verraes\Parsica;
 
 /**
  * Parse a float. Returns the float as a string. Use ->map('floatval')

@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinator\Parser;
+namespace Tests\Verraes\Parsica\Parser;
 
-use Mathias\ParserCombinator\Internal\Fail;
+use Verraes\Parsica\Internal\Fail;
 use PHPUnit\Framework\TestCase;
-use function Mathias\ParserCombinator\char;
-use function Mathias\ParserCombinator\skipSpace;
-use function Mathias\ParserCombinator\string;
+use function Verraes\Parsica\char;
+use function Verraes\Parsica\skipSpace;
+use function Verraes\Parsica\string;
 
 final class RunningParsersTest extends TestCase
 {

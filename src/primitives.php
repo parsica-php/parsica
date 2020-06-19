@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator;
+namespace Verraes\Parsica;
 
-use Mathias\ParserCombinator\Internal\Assert;
-use Mathias\ParserCombinator\Internal\Fail;
-use Mathias\ParserCombinator\Internal\Succeed;
-use Mathias\ParserCombinator\Internal\TakeWhile;
-use function Mathias\ParserCombinator\{isEqual, notPred};
+use Verraes\Parsica\Internal\Assert;
+use Verraes\Parsica\Internal\Fail;
+use Verraes\Parsica\Internal\Succeed;
+use Verraes\Parsica\Internal\TakeWhile;
+use function Verraes\Parsica\{isEqual, notPred};
 
 /**
  * A parser that satisfies a predicate. Useful as a building block for writing things like char(), digit()...

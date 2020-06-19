@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator\PHPUnit;
+namespace Verraes\Parsica\PHPUnit;
 
 use Exception;
-use Mathias\ParserCombinator\Parser;
+use Verraes\Parsica\Parser;
 
 /**
  * Convenience assertion methods. When writing tests for your own parsers, extend from this instead of PHPUnit's TestCase.
@@ -42,7 +42,7 @@ trait ParserAssertions
      * @param string $message
      *
      * @throws Exception
-     * @see \Tests\Mathias\ParserCombinator\PHPUnit\ParserTestCaseTest::strict_equality
+     * @see \Tests\Verraes\Parsica\PHPUnit\ParserTestCaseTest::strict_equality
      *
      * @psalm-suppress MixedArgument
      * @psalm-suppress MixedAssignment

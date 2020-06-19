@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator\Internal;
+namespace Verraes\Parsica\Internal;
 
 use InvalidArgumentException;
 

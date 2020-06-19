@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinator\Parser;
+namespace Tests\Verraes\Parsica\Parser;
 
-use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
 use function Cypress\Curry\curry;
-use function Mathias\ParserCombinator\{anything, char, digitChar, keepFirst, keepSecond, pure, skipSpace, string};
+use function Verraes\Parsica\{anything, char, digitChar, keepFirst, keepSecond, pure, skipSpace, string};
 
 final class ApplicativeTest extends TestCase
 {

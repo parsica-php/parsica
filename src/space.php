@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator;
+namespace Verraes\Parsica;
 
-use function Mathias\ParserCombinator\{isBlank, isHSpace, isSpace, isWhitespace};
+use function Verraes\Parsica\{isBlank, isHSpace, isSpace, isWhitespace};
 
 /**
  * Parse a single space character.

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinator\PHPUnit;
+namespace Tests\Verraes\Parsica\PHPUnit;
 
-use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
 
 final class ParserTestCaseTest extends TestCase

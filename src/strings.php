@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator;
+namespace Verraes\Parsica;
 
-use Mathias\ParserCombinator\Internal\Assert;
-use Mathias\ParserCombinator\Internal\Fail;
-use Mathias\ParserCombinator\Internal\Succeed;
-use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
+use Verraes\Parsica\Internal\Assert;
+use Verraes\Parsica\Internal\Fail;
+use Verraes\Parsica\Internal\Succeed;
+use function Verraes\Parsica\ParseResult\{fail, succeed};
 
 /**
  * Parse a non-empty string.

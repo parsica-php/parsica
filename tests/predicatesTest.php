@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinator;
+namespace Tests\Verraes\Parsica;
 
-use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
-use function Mathias\ParserCombinator\{andPred, isEqual, notPred, orPred, satisfy};
+use function Verraes\Parsica\{andPred, isEqual, notPred, orPred, satisfy};
 
 final class predicatesTest extends TestCase
 {

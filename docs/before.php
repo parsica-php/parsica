@@ -3,8 +3,8 @@ declare(strict_types=1);
 // This code is executed by UpToDocs before each code block
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Mathias\ParserCombinator\ParserFailure;
-use function Mathias\ParserCombinator\{
+use Verraes\Parsica\ParserFailure;
+use function Verraes\Parsica\{
     between,
     char,
     digitChar ,

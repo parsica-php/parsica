@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator;
+namespace Verraes\Parsica;
 
-use Mathias\ParserCombinator\Internal\Assert;
-use Mathias\ParserCombinator\Internal\Succeed;
-use function Mathias\ParserCombinator\ParseResult\{succeed};
+use Verraes\Parsica\Internal\Assert;
+use Verraes\Parsica\Internal\Succeed;
+use function Verraes\Parsica\ParseResult\{succeed};
 
 /**
  * Identity parser, returns the Parser as is.

@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator\Internal;
+namespace Verraes\Parsica\Internal;
 
-use Mathias\ParserCombinator\Parser;
-use Mathias\ParserCombinator\ParseResult;
-use function Mathias\ParserCombinator\ParseResult\fail;
-use function Mathias\ParserCombinator\ParseResult\succeed;
+use Verraes\Parsica\Parser;
+use Verraes\Parsica\ParseResult;
+use function Verraes\Parsica\ParseResult\fail;
+use function Verraes\Parsica\ParseResult\succeed;
 
 /**
  * @internal
@@ -24,7 +24,7 @@ final class TakeWhile
     public static function _takeWhile(callable $predicate): Parser
     {
         /**
-         * @see \Tests\Mathias\ParserCombinator\primitivesTest::not_sure_how_takeWhile_should_deal_with_EOF()
+         * @see \Tests\Verraes\Parsica\primitivesTest::not_sure_how_takeWhile_should_deal_with_EOF()
          */
         return Parser::make(
             fn(string $input): ParseResult => //self::isEOF($input) ?

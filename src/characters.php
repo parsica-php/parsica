@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator;
+namespace Verraes\Parsica;
 
-use Mathias\ParserCombinator\Internal\Assert;
-use function Mathias\ParserCombinator\{isAlpha,
+use Verraes\Parsica\Internal\Assert;
+use function Verraes\Parsica\{isAlpha,
     isAlphaNum,
     isCharCode,
     isControl,

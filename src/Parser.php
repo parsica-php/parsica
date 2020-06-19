@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator;
+namespace Verraes\Parsica;
 
 use Exception;
-use Mathias\ParserCombinator\Internal\Fail;
-use function Mathias\ParserCombinator\ParseResult\{fail};
+use Verraes\Parsica\Internal\Fail;
+use function Verraes\Parsica\ParseResult\{fail};
 
 /**
  * A parser is any function that takes a string input and returns a {@see ParseResult}. The Parser class is a wrapper

@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinator\ParseResult;
+namespace Tests\Verraes\Parsica\ParseResult;
 
 use PHPUnit\Framework\TestCase;
-use function Mathias\ParserCombinator\char;
+use function Verraes\Parsica\char;
 
 final class ParseResultTest extends TestCase
 {

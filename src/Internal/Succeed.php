@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator\Internal;
+namespace Verraes\Parsica\Internal;
 
 use BadMethodCallException;
 use Exception;
-use Mathias\ParserCombinator\Parser;
-use Mathias\ParserCombinator\ParseResult;
-use Mathias\ParserCombinator\ParseResult\T;
+use Verraes\Parsica\Parser;
+use Verraes\Parsica\ParseResult;
+use Verraes\Parsica\ParseResult\T;
 
 /**
  * @internal

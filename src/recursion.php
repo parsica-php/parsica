@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator;
+namespace Verraes\Parsica;
 
 /**
  * Create a recursive parser. Used in combination with recurse(Parser).

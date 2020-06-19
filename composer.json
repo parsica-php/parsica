@@ -1,6 +1,6 @@
 {
 
-  "name": "mathias/parser-combinator",
+  "name": "mathias/parsica",
   "description": "The easiest way to build robust parsers.",
   "license": "MIT",
   "authors": [
@@ -21,7 +21,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Mathias\\ParserCombinator\\": "src/"
+      "Verraes\\Parsica\\": "src/"
     },
     "files": [
       "src/predicates.php",
@@ -36,7 +36,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\Mathias\\ParserCombinator\\": "tests/"
+      "Tests\\Verraes\\Parsica\\": "tests/"
     }
   }
 }

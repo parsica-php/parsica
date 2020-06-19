@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinator\Parser;
+namespace Tests\Verraes\Parsica\Parser;
 
-use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
-use function Mathias\ParserCombinator\anySingle;
-use function Mathias\ParserCombinator\bind;
-use function Mathias\ParserCombinator\char;
-use function Mathias\ParserCombinator\pure;
-use function Mathias\ParserCombinator\sequence;
+use function Verraes\Parsica\anySingle;
+use function Verraes\Parsica\bind;
+use function Verraes\Parsica\char;
+use function Verraes\Parsica\pure;
+use function Verraes\Parsica\sequence;
 
 final class MonadTest extends TestCase
 {

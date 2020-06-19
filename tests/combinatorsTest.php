@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Mathias\ParserCombinator;
+namespace Tests\Verraes\Parsica;
 
 use InvalidArgumentException;
-use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
+use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
-use function Mathias\ParserCombinator\{alphaChar,
+use function Verraes\Parsica\{alphaChar,
     alphaNumChar,
     any,
     anySingle,
