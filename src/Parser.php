@@ -99,6 +99,7 @@ final class Parser
     /**
      * Optionally parse something, but still succeed if the thing is not there.
      *
+     * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
      *
      * @return Parser<T>
@@ -287,15 +288,10 @@ final class Parser
      * @param Parser<T> $other
      *
      * @return Parser<T>
-     * @see ParseResult::append
      */
     public function append(Parser $other): Parser
     {
-        return Parser::make(function (string $input) use ($other): ParseResult {
-            $r1 = $this->run($input);
-            $r2 = $r1->continueWith($other);
-            return $r1->append($r2);
-        });
+        return append($this, $other);
     }
 
     /**

@@ -121,6 +121,25 @@ function either(Parser $first, Parser $second): Parser
 }
 
 /**
+ * Combine the parser with another parser of the same type, which will cause the results to be appended.
+ *
+ * @template T
+ *
+ * @param Parser<T> $left
+ * @param Parser<T> $right
+ *
+ * @return Parser<T>
+ */
+function append(Parser $left, Parser $right): Parser
+{
+    return Parser::make(function (string $input) use ($left, $right): ParseResult {
+        $r1 = $left->run($input);
+        $r2 = $r1->continueWith($right);
+        return $r1->append($r2);
+    });
+}
+
+/**
  * Append all the passed parsers.
  *
  * @template T
@@ -133,11 +152,8 @@ function assemble(Parser ...$parsers): Parser
 {
     Assert::atLeastOneArg($parsers, "assemble()");
     $first = array_shift($parsers);
-    return array_reduce(
-        $parsers,
-        fn(Parser $l, Parser $r): Parser => $l->append($r),
-        $first
-    )->label('assemble()');
+    return array_reduce($parsers, __NAMESPACE__.'\\append', $first)
+        ->label('assemble()');
 }
 
 /**
