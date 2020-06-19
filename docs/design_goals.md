@@ -1,4 +1,8 @@
-# Design Goals
+---
+id: design_goals
+title: Design Goals
+sidebar_label: Design Goals
+---
 
 Parsica aims to be the mainstream choice for anyone to create parsers. We want to support all use cases. When parsing a short string, Parsica should be worth picking over regular expressions; when parsing an entire language, it should be worth picking over a handwritten imperative parser. The API should be self-evident, it should be easy to get it right and hard to get it wrong. 
 

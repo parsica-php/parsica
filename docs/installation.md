@@ -1,4 +1,8 @@
-# Install Parsica
+---
+id: installation
+title: Installation
+sidebar_label: Installation
+---
 
 ## Requirements
 

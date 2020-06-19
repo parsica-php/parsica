@@ -1,4 +1,8 @@
-# Functional Paradigms
+---
+id: functional_paradigms
+title: Functional Paradigms
+sidebar_label: Functional Paradigms
+---
 
 @TODO Add tests to illustrate the laws.
 

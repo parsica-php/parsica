@@ -1,4 +1,9 @@
-# Order matters
+---
+id: order_matters
+title: Order matters
+sidebar_label: Order matters
+---
+
 
 The order of clauses in an or() matters. If we do the following parser definition, the parser will consume "http", even if the strings starts with "https", leaving "s://..." as the remainder.
 
