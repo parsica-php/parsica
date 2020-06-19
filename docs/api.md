@@ -20,6 +20,20 @@ function char(string $c) : Parser
 ```
 
 
+### charI
+
+Parse a single character, case-insensitive and case-preserving. On success it returns the string cased as the
+actually parsed input.
+
+eg charI('a'')->run("ABC") will succeed with "A", not "a".
+
+
+
+```php
+function charI(string $c) : Parser
+```
+
+
 ### controlChar
 
 Parse a control character (a non-printing character of the Latin-1 subset of Unicode).

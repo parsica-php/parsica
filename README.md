@@ -4,6 +4,11 @@ The easiest way to build robust parsers.
 
 [Documentation](docs/index.md)
 
-## Badges
-
-[![Test](https://github.com/mathiasverraes/parser-combinator/workflows/Test/badge.svg?branch=master)](https://github.com/mathiasverraes/parser-combinator/actions?query=workflow%3ATest)
+```php
+<?php
+$parser = char(':')
+            ->append(atLeastOne(punctuationChar()))
+            ->label('smiley');
+$result = $parser->try(':*{)'); 
+echo $result->output() . " is a valid smiley!";
+```
