@@ -8,7 +8,7 @@ use function Mathias\ParserCombinator\assemble;
 use function Mathias\ParserCombinator\char;
 use function Mathias\ParserCombinator\string;
 
-final class AssembleTest extends TestCase
+final class assembleTest extends TestCase
 {
     use ParserAssertions;
 
