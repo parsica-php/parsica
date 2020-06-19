@@ -2,8 +2,6 @@
 
 namespace Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\Parser\Parser;
-
 /**
  * Create a recursive parser. Used in combination with recurse(Parser).
  *

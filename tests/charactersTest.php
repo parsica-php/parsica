@@ -2,7 +2,7 @@
 
 namespace Tests\Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\Parser\Parser;
+use Mathias\ParserCombinator\Parser;
 use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\{alphaChar,

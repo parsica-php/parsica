@@ -3,7 +3,7 @@
 namespace Mathias\ParserCombinator\PHPUnit;
 
 use Exception;
-use Mathias\ParserCombinator\Parser\Parser;
+use Mathias\ParserCombinator\Parser;
 
 /**
  * Convenience assertion methods. When writing tests for your own parsers, extend from this instead of PHPUnit's TestCase.

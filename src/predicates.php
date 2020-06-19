@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator\Predicates;
+namespace Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\Assert\Assert;
+use Mathias\ParserCombinator\Internal\Assert;
 
 /**
  * Creates an equality predicate

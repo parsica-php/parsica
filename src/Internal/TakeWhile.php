@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator\Parser;
+namespace Mathias\ParserCombinator\Internal;
 
-use Mathias\ParserCombinator\ParseResult\ParseResult;
+use Mathias\ParserCombinator\Parser;
+use Mathias\ParserCombinator\ParseResult;
 use function Mathias\ParserCombinator\ParseResult\fail;
 use function Mathias\ParserCombinator\ParseResult\succeed;
 
@@ -27,7 +28,7 @@ final class TakeWhile
          */
         return Parser::make(
             fn(string $input): ParseResult => //self::isEOF($input) ?
-                //    fail("takeWhile(predicate)", "EOF") :
+                //    new Fail("takeWhile(predicate)", "EOF") :
             self::parseRemainingInput($input, $predicate)
         );
     }
@@ -43,7 +44,7 @@ final class TakeWhile
             $chunk .= mb_substr($remaining, 0, 1);
             $remaining = mb_substr($remaining, 1);
         }
-        return succeed($chunk, $remaining);
+        return new Succeed($chunk, $remaining);
     }
 
     private static function isEOF(string $input): bool
@@ -72,7 +73,7 @@ final class TakeWhile
     {
         return Parser::make(
             fn(string $input): ParseResult => !self::matchFirst($predicate, $input) ?
-                fail("takeWhile1(predicate)", $input) :
+                new Fail("takeWhile1(predicate)", $input) :
                 self::parseRemainingInput($input, $predicate)
         );
     }
@@ -103,7 +104,7 @@ final class TakeWhile
         while (!self::isEOF($remaining) && self::matchFirst($predicate, $remaining)) {
             $remaining = mb_substr($remaining, 1);
         }
-        return succeed($output, $remaining);
+        return new Succeed($output, $remaining);
     }
 
     /**
@@ -119,7 +120,7 @@ final class TakeWhile
     {
         return Parser::make(
             fn(string $input): ParseResult => !self::matchFirst($predicate, $input) ?
-                fail("skipWhile1(predicate)", $input) :
+                new Fail("skipWhile1(predicate)", $input) :
                 self::skipRemainingInput($input, $predicate)
         );
     }

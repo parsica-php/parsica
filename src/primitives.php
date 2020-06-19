@@ -2,12 +2,11 @@
 
 namespace Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\Assert\Assert;
-use Mathias\ParserCombinator\Parser\Parser;
-use Mathias\ParserCombinator\Parser\TakeWhile;
-use Mathias\ParserCombinator\ParseResult\ParseResult;
-use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
-use function Mathias\ParserCombinator\Predicates\{isEqual, notPred};
+use Mathias\ParserCombinator\Internal\Assert;
+use Mathias\ParserCombinator\Internal\Fail;
+use Mathias\ParserCombinator\Internal\Succeed;
+use Mathias\ParserCombinator\Internal\TakeWhile;
+use function Mathias\ParserCombinator\{isEqual, notPred};
 
 /**
  * A parser that satisfies a predicate. Useful as a building block for writing things like char(), digit()...
@@ -15,20 +14,19 @@ use function Mathias\ParserCombinator\Predicates\{isEqual, notPred};
  * @template T
  *
  * @param callable(string) : bool $predicate
- * @param string $expected
  *
  * @return Parser<T>
  */
-function satisfy(callable $predicate, string $expected = "satisfy(predicate)"): Parser
+function satisfy(callable $predicate): Parser
 {
-    return Parser::make(function (string $input) use ($predicate, $expected) : ParseResult {
+    return Parser::make(function (string $input) use ($predicate) : ParseResult {
         if (mb_strlen($input) === 0) {
-            return fail($expected, "EOF");
+            return new Fail("satisfy(predicate)", "EOF");
         }
         $token = mb_substr($input, 0, 1);
         return $predicate($token)
-            ? succeed($token, mb_substr($input, 1))
-            : fail($expected, $token);
+            ? new Succeed($token, mb_substr($input, 1))
+            : new Fail("satisfy(predicate)", $token);
     });
 }
 
@@ -104,9 +102,8 @@ function anySingle(): Parser
 {
     return satisfy(
     /** @param mixed $_ */
-        fn($_) => true,
-        "anySingle"
-    );
+        fn($_) => true
+    )->label("anySingle");
 }
 
 /**
@@ -117,7 +114,7 @@ function anySingle(): Parser
  */
 function anything(): Parser
 {
-    return satisfy(fn(string $_) => true, 'anything');
+    return satisfy(fn(string $_) => true)->label("anything");
 }
 
 
@@ -130,7 +127,7 @@ function anything(): Parser
  */
 function anySingleBut(string $x): Parser
 {
-    return satisfy(notPred(isEqual($x)), "anySingleBut($x)");
+    return satisfy(notPred(isEqual($x)))->label("anySingleBut($x)");
 }
 
 /**
@@ -145,10 +142,7 @@ function anySingleBut(string $x): Parser
 function oneOf(array $chars): Parser
 {
     Assert::singleChars($chars);
-    return satisfy(
-        fn(string $x) => in_array($x, $chars),
-        "oneOf(" . implode('', $chars) . ")"
-    );
+    return satisfy(fn(string $x) => in_array($x, $chars))->label("oneOf(" . implode('', $chars) . ")");
 }
 
 /**
@@ -182,10 +176,8 @@ function oneOfS(string $chars): Parser
 function noneOf(array $chars): Parser
 {
     Assert::singleChars($chars);
-    return satisfy(
-        fn(string $x) => !in_array($x, $chars),
-        "noneOf(" . implode('', $chars) . ")"
-    );
+    return satisfy(fn(string $x) => !in_array($x, $chars))
+        ->label("noneOf(" . implode('', $chars) . ")");
 }
 
 /**
@@ -223,7 +215,7 @@ function takeRest(): Parser
  */
 function nothing(): Parser
 {
-    return Parser::make(fn(string $input) => succeed(null, $input));
+    return Parser::make(fn(string $input) => new Succeed(null, $input));
 }
 
 /**
@@ -231,7 +223,7 @@ function nothing(): Parser
  */
 function everything(): Parser
 {
-    return Parser::make(fn(string $input) => succeed($input, ""));
+    return Parser::make(fn(string $input) => new Succeed($input, ""));
 }
 
 /**
@@ -239,7 +231,7 @@ function everything(): Parser
  */
 function success(): Parser
 {
-    return Parser::make(fn(string $input) => succeed('', $input))->label('success');
+    return Parser::make(fn(string $input) => new Succeed('', $input))->label('success');
 }
 
 /**
@@ -247,7 +239,7 @@ function success(): Parser
  */
 function failure(): Parser
 {
-    return Parser::make(fn(string $input) => fail('', $input))->label('failure');
+    return Parser::make(fn(string $input) => new Fail('', $input))->label('failure');
 }
 
 /**
@@ -259,7 +251,7 @@ function failure(): Parser
 function eof(): Parser
 {
     return Parser::make(fn(string $input): ParseResult => mb_strlen($input) === 0
-        ? succeed("", "")
-        : fail("eof", $input)
+        ? new Succeed("", "")
+        : new Fail("eof", $input)
     );
 }

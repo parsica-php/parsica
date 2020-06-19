@@ -2,8 +2,7 @@
 
 namespace Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\Parser\Parser;
-use function Mathias\ParserCombinator\Predicates\{isBlank, isHSpace, isSpace, isWhitespace};
+use function Mathias\ParserCombinator\{isBlank, isHSpace, isSpace, isWhitespace};
 
 /**
  * Parse a single space character.

@@ -2,21 +2,19 @@
 
 namespace Mathias\ParserCombinator;
 
-use Exception;
-use Mathias\ParserCombinator\Assert\Assert;
-use Mathias\ParserCombinator\Parser\Parser;
-use Mathias\ParserCombinator\ParseResult\ParseResult;
-use function Mathias\ParserCombinator\ParseResult\{fail, succeed};
-use function Mathias\ParserCombinator\Predicates\{isAlpha,
+use Mathias\ParserCombinator\Internal\Assert;
+use function Mathias\ParserCombinator\{isAlpha,
     isAlphaNum,
+    isCharCode,
     isControl,
+    isDigit,
     isEqual,
+    isHexDigit,
     isLower,
     isPrintable,
     isPunctuation,
     isUpper,
-    orPred
-};
+    orPred};
 
 /**
  * Parse a single character.
@@ -30,7 +28,7 @@ use function Mathias\ParserCombinator\Predicates\{isAlpha,
 function char(string $c): Parser
 {
     Assert::singleChar($c);
-    return satisfy(isEqual($c), "char($c)");
+    return satisfy(isEqual($c))->label("char($c)");
 }
 
 /**
@@ -47,55 +45,9 @@ function char(string $c): Parser
 function charI(string $c): Parser
 {
     Assert::singleChar($c);
-    return satisfy(
-        orPred(isEqual(mb_strtolower($c)), isEqual(mb_strtoupper($c))),
-        "charI($c)"
-    );
+    return satisfy(orPred(isEqual(mb_strtolower($c)), isEqual(mb_strtoupper($c))))->label("charI($c)");
 }
 
-/**
- * Parse a non-empty string.
- *
- * @return Parser<string>
- * @see stringI()
- *
- */
-function string(string $str): Parser
-{
-    Assert::nonEmpty($str);
-    $len = mb_strlen($str);
-    /** @var Parser<string> $parser */
-    $parser = Parser::make(
-        fn(string $input): ParseResult => mb_substr($input, 0, $len) === $str
-            ? succeed($str, mb_substr($input, $len))
-            : fail("string($str)", $input)
-    );
-    return $parser;
-}
-
-/**
- * Parse a non-empty string, case-insensitive and case-preserving. On success it returns the string cased as the
- * actually parsed input.
- * eg stringI("foobar")->run("foObAr") will succeed with "foObAr"
- *
- * @return Parser<string>
- * @see string()
- *
- */
-function stringI(string $str): Parser
-{
-    Assert::nonEmpty($str);
-    /** @var list<string> $split */
-    $split = mb_str_split($str);
-    $chars = array_map(fn(string $c) : Parser => charI($c), $split);
-    /** @var Parser<string> $parser */
-    $parser = array_reduce(
-        $chars,
-        fn(Parser $l, Parser $r): Parser => $l->append($r),
-        success()
-    )->label("stringI($str)");
-    return $parser;
-}
 
 /**
  * Parse a control character (a non-printing character of the Latin-1 subset of Unicode).
@@ -165,4 +117,48 @@ function printChar(): Parser
 function punctuationChar(): Parser
 {
     return satisfy(isPunctuation())->label("punctuationChar");
+}
+
+
+/**
+ * Parse 0-9. Returns the digit as a string. Use ->map('intval')
+ * or similar to cast it to a numeric type.
+ *
+ * @return Parser<string>
+ */
+function digitChar(): Parser
+{
+    return satisfy(isDigit())->label('digit');
+}
+
+/**
+ * Parse a binary character 0 or 1.
+ *
+ * @return Parser<string>
+ */
+function binDigitChar(): Parser
+{
+    return satisfy(isCharCode([0x30, 0x31]))->label("binDigitChar");
+}
+
+/**
+ * Parse an octodecimal character 0-7.
+ *
+ * @return Parser<string>
+ *
+ * @deprecated @TODO doesn't support signed numbers yet
+ */
+function octDigitChar(): Parser
+{
+    return satisfy(isCharCode(range(0x30, 0x37)))->label("octDigitChar");
+}
+
+/**
+ * Parse a hexadecimal numeric character 0123456789abcdefABCDEF.
+ *
+ * @return Parser<string>
+ */
+function hexDigitChar(): Parser
+{
+    return satisfy(isHexDigit())->label("hexDigitChar");
 }

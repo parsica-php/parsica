@@ -2,7 +2,7 @@
 
 namespace Tests\Mathias\ParserCombinator\Parser;
 
-use Mathias\ParserCombinator\ParseResult\ParseFailure;
+use Mathias\ParserCombinator\Internal\Fail;
 use PHPUnit\Framework\TestCase;
 use function Mathias\ParserCombinator\char;
 use function Mathias\ParserCombinator\skipSpace;
@@ -17,7 +17,7 @@ final class RunningParsersTest extends TestCase
         $result = $parser->try("a");
         $this->assertSame("a", $result->output());
 
-        $this->expectException(ParseFailure::class);
+        $this->expectException(Fail::class);
         $result = $parser->try("b");
     }
 

@@ -1,13 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator\Parser;
+namespace Mathias\ParserCombinator;
 
 use Exception;
-use Mathias\ParserCombinator\ParseResult\ParseFailure;
-use Mathias\ParserCombinator\ParseResult\ParseResult;
-use function Mathias\ParserCombinator\keepFirst;
+use Mathias\ParserCombinator\Internal\Fail;
 use function Mathias\ParserCombinator\ParseResult\{fail};
-use function Mathias\ParserCombinator\pure;
 
 /**
  * A parser is any function that takes a string input and returns a {@see ParseResult}. The Parser class is a wrapper
@@ -45,6 +42,7 @@ final class Parser
      * Make a recursive parser. Use {@see recursive()}.
      *
      * @return Parser<T>
+     * @internal
      */
     public static function recursive(): Parser
     {
@@ -151,13 +149,14 @@ final class Parser
     }
 
     /**
-     * Make a new parser. This is the constructor for all regular use.
-     *
-     * @template T2
+     * Make a new parser.
      *
      * @param callable(string) : ParseResult<T2> $parserFunction
      *
      * @return Parser<T2>
+     * @internal
+     * @template T2
+     *
      */
     public static function make(callable $parserFunction): Parser
     {
@@ -213,7 +212,7 @@ final class Parser
             $result = $this->run($input);
             return ($result->isSuccess())
                 ? $result
-                : fail($label, $input);
+                : new Fail($label, $input);
         });
     }
 
@@ -304,7 +303,7 @@ final class Parser
      *
      * @return ParseResult<T>
      *
-     * @throws ParseFailure
+     * @throws Fail
      */
     public function try(string $input): ParseResult
     {

@@ -1,15 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator\ParseResult;
+namespace Mathias\ParserCombinator\Internal;
 
 use BadMethodCallException;
 use Exception;
-use Mathias\ParserCombinator\Parser\Parser;
+use Mathias\ParserCombinator\Parser;
+use Mathias\ParserCombinator\ParseResult;
+use Mathias\ParserCombinator\ParserFailure;
 
 /**
  * @template T
  */
-final class ParseFailure extends Exception implements ParseResult
+final class Fail extends Exception implements ParserFailure, ParseResult
 {
     private string $expected;
     private string $got;
@@ -75,7 +77,7 @@ final class ParseFailure extends Exception implements ParseResult
      */
     public function map(callable $transform): ParseResult
     {
-        return fail($this->expected, $this->got);
+        return new Fail($this->expected, $this->got);
     }
 
     /**

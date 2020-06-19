@@ -3,29 +3,25 @@ declare(strict_types=1);
 // This code is executed by UpToDocs before each code block
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Mathias\ParserCombinator\ParseResult\ParseResult;
+use Mathias\ParserCombinator\ParserFailure;
 use function Mathias\ParserCombinator\{
-    anything,
-    alphaChar,
+    between,
     char,
+    digitChar ,
     collect,
-    digitChar,
-    ignore,
-    noneOf,
-    skipSpace,
-    string,
-    stringI,
     sequence,
     float,
+    orPred ,
+    stringI,
+    string,
     recursive,
-    skipSpace1,
-    punctuationChar,
     atLeastOne,
+    alphaChar,
+    punctuationChar,
+    isEqual,
     optional,
-    between
 };
-use function Mathias\ParserCombinator\Predicates\{isEqual, orPred};
-use Mathias\ParserCombinator\ParseResult\ParseFailure;
 
 assert_options(ASSERT_ACTIVE, 1);
 assert_options(ASSERT_QUIET_EVAL, 1);
+

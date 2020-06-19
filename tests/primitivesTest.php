@@ -16,7 +16,7 @@ use function Mathias\ParserCombinator\{anything,
     takeWhile,
     takeWhile1
 };
-use function Mathias\ParserCombinator\Predicates\{isEqual, notPred};
+use function Mathias\ParserCombinator\{isEqual, notPred};
 
 
 final class primitivesTest extends TestCase

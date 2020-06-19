@@ -2,8 +2,8 @@
 
 namespace Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\Assert\Assert;
-use Mathias\ParserCombinator\Parser\Parser;
+use Mathias\ParserCombinator\Internal\Assert;
+use Mathias\ParserCombinator\Internal\Succeed;
 use function Mathias\ParserCombinator\ParseResult\{succeed};
 
 /**
@@ -31,7 +31,7 @@ function identity(Parser $parser): Parser
  */
 function pure($output): Parser
 {
-    return Parser::make(fn(string $input) => succeed($output, $input));
+    return Parser::make(fn(string $input) => new Succeed($output, $input));
 }
 
 /**

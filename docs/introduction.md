@@ -141,5 +141,5 @@ try {
  
     // throws a ParseFailure exception with message "Expected: float, got abc"
     $result = $parser->try("abc");
-} catch (ParseFailure $e) {}
+} catch (ParserFailure $e) {}
 ```

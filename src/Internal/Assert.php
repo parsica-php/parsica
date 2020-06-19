@@ -1,9 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator\Assert;
+namespace Mathias\ParserCombinator\Internal;
 
 use InvalidArgumentException;
 
+/**
+ * @internal
+ */
 final class Assert
 {
     /**

@@ -1,15 +1,19 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator\ParseResult;
+namespace Mathias\ParserCombinator\Internal;
 
 use BadMethodCallException;
 use Exception;
-use Mathias\ParserCombinator\Parser\Parser;
+use Mathias\ParserCombinator\Parser;
+use Mathias\ParserCombinator\ParseResult;
+use Mathias\ParserCombinator\ParseResult\T;
 
 /**
+ * @internal
+ *
  * @template T
  */
-final class ParseSuccess implements ParseResult
+final class Succeed implements ParseResult
 {
     /**
      * @var T
@@ -84,7 +88,7 @@ final class ParseSuccess implements ParseResult
      *
      * @psalm-suppress MixedArgumentTypeCoercion
      */
-    private function appendSuccess(ParseSuccess $other): ParseResult
+    private function appendSuccess(Succeed $other): ParseResult
     {
         $type1 = $this->type();
         $type2 = $other->type();
@@ -93,10 +97,10 @@ final class ParseSuccess implements ParseResult
         switch ($type1) {
             case 'string':
                 /** @psalm-suppress MixedOperand */
-                return succeed($this->output() . $other->output(), $other->remainder());
+                return new Succeed($this->output() . $other->output(), $other->remainder());
             case 'array':
                 /** @psalm-suppress MixedArgument */
-                return succeed(
+                return new Succeed(
                     array_merge($this->output(), $other->output()),
                     $other->remainder()
                 );
@@ -116,7 +120,7 @@ final class ParseSuccess implements ParseResult
      */
     public function map(callable $transform): ParseResult
     {
-        return succeed($transform($this->output), $this->remainder);
+        return new Succeed($transform($this->output), $this->remainder);
     }
 
     /**

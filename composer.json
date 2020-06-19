@@ -1,4 +1,5 @@
 {
+
   "name": "mathias/parser-combinator",
   "description": "The easiest way to build robust parsers.",
   "license": "MIT",
@@ -23,14 +24,14 @@
       "Mathias\\ParserCombinator\\": "src/"
     },
     "files": [
-      "src/ParseResult/functions.php",
-      "src/Predicates/predicates.php",
+      "src/predicates.php",
       "src/characters.php",
       "src/combinators.php",
       "src/numeric.php",
       "src/primitives.php",
       "src/recursion.php",
-      "src/space.php"
+      "src/space.php",
+      "src/strings.php"
     ]
   },
   "autoload-dev": {

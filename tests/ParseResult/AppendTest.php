@@ -2,11 +2,10 @@
 
 namespace Tests\Mathias\ParserCombinator\ParseResult;
 
+use Mathias\ParserCombinator\Internal\Fail;
+use Mathias\ParserCombinator\Internal\Succeed;
 use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
-use function Mathias\ParserCombinator\ParseResult\discard;
-use function Mathias\ParserCombinator\ParseResult\fail;
-use function Mathias\ParserCombinator\ParseResult\succeed;
 
 final class AppendTest extends TestCase
 {
@@ -15,14 +14,14 @@ final class AppendTest extends TestCase
     /** @test */
     public function append_strings()
     {
-        $succeed1 = succeed("Parsed1", "Remain1");
-        $succeed2 = succeed("Parsed2", "Remain2");
-        $fail1 = fail("Expected1", "Got1");
-        $fail2 = fail("Expected2", "Got2");
+        $succeed1 = new Succeed("Parsed1", "Remain1");
+        $succeed2 = new Succeed("Parsed2", "Remain2");
+        $fail1 = new Fail("Expected1", "Got1");
+        $fail2 = new Fail("Expected2", "Got2");
 
-        $this->assertStrictlyEquals(succeed("Parsed1Parsed2", "Remain2"), $succeed1->append($succeed2));
-        $this->assertStrictlyEquals(fail("Expected1", "Got1"), $succeed1->append($fail1));
-        $this->assertStrictlyEquals(fail("Expected1", "Got1"), $fail1->append($succeed2));
-        $this->assertStrictlyEquals(fail("Expected1", "Got1"), $fail1->append($fail2));
+        $this->assertStrictlyEquals(new Succeed("Parsed1Parsed2", "Remain2"), $succeed1->append($succeed2));
+        $this->assertStrictlyEquals(new Fail("Expected1", "Got1"), $succeed1->append($fail1));
+        $this->assertStrictlyEquals(new Fail("Expected1", "Got1"), $fail1->append($succeed2));
+        $this->assertStrictlyEquals(new Fail("Expected1", "Got1"), $fail1->append($fail2));
     }
 }

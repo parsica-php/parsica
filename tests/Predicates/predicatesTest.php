@@ -4,8 +4,7 @@ namespace Tests\Mathias\ParserCombinator\Predicates;
 
 use Mathias\ParserCombinator\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
-use function Mathias\ParserCombinator\{satisfy};
-use function Mathias\ParserCombinator\Predicates\{andPred, isEqual, notPred, orPred};
+use function Mathias\ParserCombinator\{satisfy, andPred, isEqual, notPred, orPred};
 
 final class predicatesTest extends TestCase
 {

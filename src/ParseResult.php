@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Mathias\ParserCombinator\ParseResult;
+namespace Mathias\ParserCombinator;
 
-use Mathias\ParserCombinator\Parser\Parser;
+use Mathias\ParserCombinator\ParseResult\T;
 
 /**
  * @template T
