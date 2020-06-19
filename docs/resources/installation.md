@@ -3,6 +3,37 @@ title: Installation
 sidebar_label: Installation
 ---
 
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs
+  defaultValue="cli"
+  values={[
+    { label: 'Command line', value: 'cli', },
+    { label: 'composer.json', value: 'composer', },
+  ]
+}>
+<TabItem value="cli">
+
+```bash
+composer require mathiasverraes/parsica
+```
+
+</TabItem>
+<TabItem value="composer">
+
+```json
+"require": {
+    "mathiasverraes/parsica": "dev-main"
+}
+```
+
+</TabItem>
+
+</Tabs>
+
+
 ## Requirements
 
 - PHP 7.4 or higher
@@ -10,17 +41,6 @@ sidebar_label: Installation
 
 (@TODO: add polyfill for mbstring).
 
-## Composer
- 
-`composer require mathiasverraes/parsica`
-
-Or add this to your `composer.json` file and run `composer update` 
-
-```json
-"require": {
-    "mathiasverraes/parsica": "dev-main"
-}
-```
 
 ## Usage
 
