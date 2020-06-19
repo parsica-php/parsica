@@ -4,7 +4,7 @@ sidebar_label: About Parsica
 ---
 
  
-The easiest way to build robust parsers.
+The easiest way to build robust parsers in PHP.
 
 ## Resources
 

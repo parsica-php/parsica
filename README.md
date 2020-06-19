@@ -1,6 +1,6 @@
-# Parsica - PHP Parser Combinators
+# Parsica
  
-The easiest way to build robust parsers.
+The easiest way to build robust parsers in PHP.
 
 [Documentation](https://parsica.verraes.net/)
 
