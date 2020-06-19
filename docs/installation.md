@@ -1,4 +1,4 @@
-# Isntall Parsica
+# Install Parsica
 
 ## Requirements
 
