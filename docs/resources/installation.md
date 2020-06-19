@@ -1,5 +1,5 @@
 ---
-id: installation
+id: resources/installation
 title: Installation
 sidebar_label: Installation
 ---

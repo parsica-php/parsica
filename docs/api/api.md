@@ -1,5 +1,5 @@
 ---
-id: api
+id: api/api
 title: Parsica API
 sidebar_label: Parsica API
 ---

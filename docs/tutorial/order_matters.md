@@ -1,5 +1,5 @@
 ---
-id: order_matters
+id: tutorial/order_matters
 title: Order matters
 sidebar_label: Order matters
 ---

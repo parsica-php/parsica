@@ -1,5 +1,5 @@
 ---
-id: recursion
+id: tutorial/recursion
 title: Recursion
 sidebar_label: Recursion
 ---

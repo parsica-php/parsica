@@ -1,5 +1,5 @@
 ---
-id: status
+id: contribute/status
 title: Development Status
 sidebar_label: Development Status
 ---
