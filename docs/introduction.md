@@ -16,7 +16,7 @@ A parser is a function that takes some unstructured input (like a string) and tu
 
 You're probably using parsers all the time, such as `json_decode()`. And even just casting a string to a float<sup>[1](#floatval)</sup> is parsing. 
 
-This library helps you build your own parsers, in a concise, declarative way. Behind the scenes it takes care of things like error handling, so you can focus on the parser itself. 
+Parsica helps you build your own parsers, in a concise, declarative way. Behind the scenes it takes care of things like error handling, so you can focus on the parser itself. 
 
 
 ## Building a parser
@@ -129,7 +129,7 @@ The above looks fine at first sight, but `floatval()` really isn't a very good p
 assert(floatval("abc") == 0);
 ```
 
-`floatval()` claims that the float of `"abc"` is `0`, which really should be an error. So you can only use `floatval` when you already know that the string doesn't contain anything non-float. This library can help you do that:
+`floatval()` claims that the float of `"abc"` is `0`, which really should be an error. So you can only use `floatval` when you already know that the string doesn't contain anything non-float. Parsica can help you do that:
 
 ```php
 <?php

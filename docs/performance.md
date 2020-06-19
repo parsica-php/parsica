@@ -1,6 +1,6 @@
 # Performance
 
-At the time of writing, no effort has been made to measure the performance. That doesn't mean it's slow; it means that we don't know yet. If you're going to use this on large amounts of data, do some profiling yourself first. Compute == carbon, and we'd like to keep this planet a little longer. You can help by contributing your profiling and optimisations. 
+At the time of writing, no effort has been made to measure the performance of Parsica. That doesn't mean it's slow; it means that we don't know yet. If you're going to use this on large amounts of data, do some profiling yourself first. Compute == carbon, and we'd like to keep this planet a little longer. You can help by contributing your profiling and optimisations. 
  
 We have some ideas that will allow us to make it very efficient, and we intend to do that before getting to a 1.0 release.
 

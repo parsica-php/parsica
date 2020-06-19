@@ -1,19 +1,21 @@
-# Installation
+# Isntall Parsica
 
 ## Requirements
 
 - PHP 7.4 or higher
 - [The multibyte string extension for PHP (aka mbstring)](https://www.php.net/manual/en/book.mbstring.php)
 
+(@TODO: add polyfill for mbstring).
+
 ## Composer
  
-`composer require mathiasverraes/parser-combinator`
+`composer require mathiasverraes/parsica`
 
 Or add this to your `composer.json` file and run `composer update` 
 
 ```json
 "require": {
-    "mathiasverraes/uptodocs": "dev-main"
+    "mathiasverraes/parsica": "dev-main"
 }
 ```
 
@@ -28,7 +30,7 @@ Import parsers and combinators:
 `use function Verraes\Parsica\char;`
 
 You can combine multiple imports in one statement: 
-`
+
 `use function Verraes\Parsica\{between, char, atLeastOne, alphaChar};`
 
 Finally, add some code:

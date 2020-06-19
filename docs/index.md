@@ -1,5 +1,5 @@
-# Parser Combinator
-
+# Parsica - PHP Parser Combinators
+ 
 The easiest way to build robust parsers.
 
 ## Resources

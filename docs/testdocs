@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Execute the docs to make sure all code examples are in sync with the library code.
+# Execute the docs to make sure all code examples are in sync with the Parsica code.
 
 hasFailed=0
 
