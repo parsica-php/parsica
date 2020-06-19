@@ -9,7 +9,7 @@ The easiest way to build robust parsers in PHP.
 ## Resources
 
 1. [Installation & Requirements](resources/installation.md)
-1. [API Documentation](api/api.md)
+1. [API Reference](api/api.md)
 
 ## Tutorial
 
