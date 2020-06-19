@@ -1,5 +1,5 @@
 ---
-id: tutorial/naming_conventions
+id: naming_conventions
 title: Naming Conventions
 sidebar_label: Naming Conventions 
 ---

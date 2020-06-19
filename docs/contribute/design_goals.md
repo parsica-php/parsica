@@ -1,5 +1,5 @@
 ---
-id: contribute/design_goals
+id: design_goals
 title: Design Goals
 sidebar_label: Design Goals
 ---

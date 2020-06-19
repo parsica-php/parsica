@@ -1,5 +1,5 @@
 ---
-id: tutorial/functional_paradigms
+id: functional_paradigms
 title: Functional Paradigms
 sidebar_label: Functional Paradigms
 ---

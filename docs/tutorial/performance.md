@@ -1,5 +1,5 @@
 ---
-id: tutorial/performance
+id: performance
 title: Performance
 sidebar_label: Performance
 ---
