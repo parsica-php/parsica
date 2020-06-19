@@ -11,7 +11,7 @@ We have some ideas that will allow us to make it very efficient, and we intend t
 
 ## XDebug
 
-Turn off XDebug, as it will make things much slower. If you do turn on nXDebug, you may get `Maximum function nesting level of '256' reached, aborting!`. Increase the nesting level until the error goes away, either in code or in `php.ini`:
+Turn off XDebug, as it will make things much slower. If you do turn on XDebug, you may get `Maximum function nesting level of '256' reached, aborting!`. Increase the nesting level until the error goes away, either in code or in `php.ini`:
 
 ```php
 <?php
