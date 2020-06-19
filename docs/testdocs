@@ -5,13 +5,15 @@
 hasFailed=0
 
 vendor/bin/uptodocs run README.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/design_goals.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/functional_paradigms.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/installation.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/introduction.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/naming_conventions.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/order_matters.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/performance.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/recursion.md --before=docs/before.php --output-format=github || hasFailed=1
+vendor/bin/uptodocs run docs/contribute/design_goals.md --before=docs/before.php --output-format=github || hasFailed=1
+vendor/bin/uptodocs run docs/contribute/status.md --before=docs/before.php --output-format=github || hasFailed=1
+vendor/bin/uptodocs run docs/resources/installation.md --before=docs/before.php --output-format=github || hasFailed=1
+vendor/bin/uptodocs run docs/tutorial/functional_paradigms.md --before=docs/before.php --output-format=github || hasFailed=1
+vendor/bin/uptodocs run docs/tutorial/introduction.md --before=docs/before.php --output-format=github || hasFailed=1
+vendor/bin/uptodocs run docs/tutorial/naming_conventions.md --before=docs/before.php --output-format=github || hasFailed=1
+vendor/bin/uptodocs run docs/tutorial/order_matters.md --before=docs/before.php --output-format=github || hasFailed=1
+vendor/bin/uptodocs run docs/tutorial/performance.md --before=docs/before.php --output-format=github || hasFailed=1
+vendor/bin/uptodocs run docs/tutorial/recursion.md --before=docs/before.php --output-format=github || hasFailed=1
+vendor/bin/uptodocs run docs/index.md --before=docs/before.php --output-format=github || hasFailed=1
 
 exit $hasFailed
