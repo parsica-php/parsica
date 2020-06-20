@@ -85,7 +85,7 @@ trait ParserAssertions
         } else {
             $this->fail(
                 $message . "\n" .
-                "Parser failed."
+                "Parser failed, and a failing parser doesn't have a remainder."
                 . "\nInput: $input"
                 . "\nExpected remaining: " . var_export($expectedRemaining, true)
                 . "\nParser expected: " . $actualResult->expected()
