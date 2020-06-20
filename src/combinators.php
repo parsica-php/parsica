@@ -229,8 +229,6 @@ function atLeastOne(Parser $parser): Parser
 /**
  * Parse something exactly n times
  *
- * @TODO this could probably be more elegant.
- *
  * @template T
  *
  * @param Parser<T> $parser
@@ -289,4 +287,44 @@ function some(Parser $parser): Parser
 function between(Parser $open, Parser $middle, Parser $close): Parser
 {
     return keepSecond($open, keepFirst($middle, $close));
+}
+
+/**
+ * Parses zero or more occurrences of $parser, separated by $separator. Returns a list of values.
+ *
+ * The sepBy parser always succeed, even if it doesn't find anything. Use {@see sepBy1()} if you want it to find at
+ * least one value.
+ *
+ * @template TS
+ * @template T
+ *
+ * @param Parser<TS> $separator
+ * @param Parser<T> $parser
+ *
+ * @return Parser<list<T>>
+ */
+function sepBy(Parser $separator, Parser $parser) : Parser
+{
+    return sepBy1($separator, $parser)->or(pure([]))->label('sepBy');
+}
+
+
+/**
+ * Parses one or more occurrences of $parser, separated by $separator. Returns a list of values.
+ *
+ * @template TS
+ * @template T
+ *
+ * @param Parser<TS> $separator
+ * @param Parser<T> $parser
+ *
+ * @return Parser<list<T>>
+ *
+ * @psalm-suppress MissingClosureReturnType
+ */
+function sepBy1(Parser $separator, Parser $parser) : Parser
+{
+    /** @psalm-suppress MissingClosureParamType */
+    $prepend = fn($x) => fn(array $xs): array => array_merge([$x], $xs);
+    return pure($prepend)->apply($parser)->apply(many($separator->sequence($parser)))->label('sepBy1');
 }

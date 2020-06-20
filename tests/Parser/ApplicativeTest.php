@@ -5,7 +5,19 @@ namespace Tests\Verraes\Parsica\Parser;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
 use function Cypress\Curry\curry;
-use function Verraes\Parsica\{anything, char, digitChar, keepFirst, keepSecond, pure, skipSpace, string};
+use function Verraes\Parsica\{alphaChar,
+    anything,
+    atLeastOne,
+    char,
+    digitChar,
+    keepFirst,
+    keepSecond,
+    pure,
+    repeat,
+    sepBy,
+    sepBy1,
+    skipSpace,
+    string};
 
 final class ApplicativeTest extends TestCase
 {
@@ -78,6 +90,101 @@ final class ApplicativeTest extends TestCase
         $this->assertParse("b", $parser, "abc");
         $this->assertRemain("c", $parser, "abc");
         $this->assertNotParse($parser, "ac");
+    }
+
+
+
+    /** @test */
+    public function sepBy()
+    {
+        $parser = sepBy(string('||'), atLeastOne(alphaChar()));
+
+        $input = "";
+        $expected = [];
+        $this->assertParse($expected, $parser, $input);
+
+        $input = "foo";
+        $expected = ["foo"];
+        $this->assertParse($expected, $parser, $input);
+
+        $input = "foo||";
+        $expected = ["foo"];
+        $this->assertParse($expected, $parser, $input);
+        $this->assertRemain("||", $parser, $input);
+
+        $input = "foo||bar";
+        $expected = ["foo", "bar"];
+        $this->assertParse($expected, $parser, $input);
+
+        $input = "foo||bar||";
+        $expected = ["foo", "bar"];
+        $this->assertParse($expected, $parser, $input);
+        $this->assertRemain("||", $parser, $input);
+
+        $input = "foo||bar||baz";
+        $expected = ["foo", "bar", "baz"];
+        $this->assertParse($expected, $parser, $input);
+
+        $input = "||";
+        $this->assertParse([], $parser, $input, "The sepBy parser always succeed, even if it doesn't find anything");
+        $this->assertRemain($input, $parser, $input);
+
+        $input = "||bar||baz";
+        $this->assertParse([], $parser, $input);
+        $this->assertRemain($input, $parser, $input);
+
+        $input = "||bar||";
+        $this->assertParse([], $parser, $input);
+        $this->assertRemain($input, $parser, $input);
+
+        $input = "||bar";
+        $this->assertParse([], $parser, $input);
+        $this->assertRemain($input, $parser, $input);
+    }
+
+
+    /** @test */
+    public function sepBy1()
+    {
+        $parser = sepBy1(string('||'), atLeastOne(alphaChar()));
+
+        $input = "";
+        $this->assertNotParse($parser, $input);
+
+        $input = "||";
+        $this->assertNotParse($parser, $input);
+
+        $input = "||bar||baz";
+        $this->assertNotParse($parser, $input);
+
+        $input = "||bar||";
+        $this->assertNotParse($parser, $input);
+
+        $input = "||bar";
+        $this->assertNotParse($parser, $input);
+
+
+        $input = "foo";
+        $expected = ["foo"];
+        $this->assertParse($expected, $parser, $input);
+
+        $input = "foo||";
+        $expected = ["foo"];
+        $this->assertParse($expected, $parser, $input);
+        $this->assertRemain("||", $parser, $input);
+
+        $input = "foo||bar";
+        $expected = ["foo", "bar"];
+        $this->assertParse($expected, $parser, $input);
+
+        $input = "foo||bar||";
+        $expected = ["foo", "bar"];
+        $this->assertParse($expected, $parser, $input);
+        $this->assertRemain("||", $parser, $input);
+
+        $input = "foo||bar||baz";
+        $expected = ["foo", "bar", "baz"];
+        $this->assertParse($expected, $parser, $input);
     }
 
 }
