@@ -13,6 +13,7 @@ use function Verraes\Parsica\{alphaChar,
     atLeastOne,
     between,
     char,
+    choice,
     collect,
     digitChar,
     either,
@@ -216,6 +217,21 @@ final class combinatorsTest extends TestCase
     public function any_()
     {
         $symbol = any(string("€"), string("$"));
+        $amount = float()->map('floatval');
+        $money = collect($symbol, $amount);
+
+        $this->assertFailOnEOF($money);
+        $this->assertParse("€", $symbol, "€");
+        $this->assertParse(15.23, $amount, "15.23");
+        $this->assertParse(["€", 15.23], $money, "€15.23");
+        $this->assertParse(["$", 15.0], $money, "$15");
+        $this->assertNotParse($money, "£12.13");
+    }
+
+    /** @test */
+    public function choice()
+    {
+        $symbol = choice(string("€"), string("$"));
         $amount = float()->map('floatval');
         $money = collect($symbol, $amount);
 

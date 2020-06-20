@@ -195,6 +195,22 @@ function any(Parser ...$parsers): Parser
 }
 
 /**
+ * Tries each parser one by one, returning the result of the first one that succeeds.
+ *
+ * Alias for {@see any()}
+ *
+ * @param Parser<T>[] $parsers
+ *
+ * @return Parser<T>
+ *
+ * @template T
+ */
+function choice(Parser ...$parsers): Parser
+{
+    return any(...$parsers);
+}
+
+/**
  * One or more repetitions of Parser
  *
  * @template T
