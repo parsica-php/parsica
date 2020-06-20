@@ -246,6 +246,31 @@ function repeat(int $n, Parser $parser): Parser
 }
 
 /**
+ * Parse something exactly n times and return as an array
+ *
+ * @TODO This doesn't feel very elegant.
+ *
+ * @template T
+ *
+ * @param Parser<T> $parser
+ *
+ * @return Parser<T>
+ *
+ */
+function repeatList(int $n, Parser $parser): Parser
+{
+
+    $parser = $parser->map(fn($output)=>[$output]);
+
+    $parsers = array_fill(0, $n - 1, $parser);
+    return array_reduce(
+        $parsers,
+        fn(Parser $l, Parser $r): Parser => $l->append($r),
+        $parser
+    )->label("repeatList($n)");
+}
+
+/**
  * Parse something zero or more times, and output an array of the successful outputs.
  */
 function many(Parser $parser): Parser
