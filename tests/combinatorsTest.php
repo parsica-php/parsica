@@ -3,8 +3,9 @@
 namespace Tests\Verraes\Parsica;
 
 use InvalidArgumentException;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
+use Verraes\Parsica\Parser;
+use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\{alphaChar,
     alphaNumChar,
     any,
@@ -33,7 +34,8 @@ use function Verraes\Parsica\{alphaChar,
     string,
     stringI,
     takeRest,
-    whitespace};
+    whitespace
+};
 
 final class combinatorsTest extends TestCase
 {
@@ -293,4 +295,45 @@ final class combinatorsTest extends TestCase
         $this->assertParse("print", $print, "print('Hello World');");
         $this->assertNotParse($print, "printXYZ('Hello World');");
     }
+
+    /** @test */
+    public function lookAhead()
+    {
+        $this->markTestSkipped("This will become relevant when we change alternative() behaviour");
+
+        // TEST:
+        /*
+        $parser = lookAhead(stringI("hello"));
+
+        // On success, lookAhead succeeds without consuming input
+        $this->assertParse("", $parser, "Hello, world!");
+        $this->assertRemain("Hello, world!", $parser, "Hello, world!");
+
+        // On fail, lookAhead fails without consuming input
+        $this->assertNotParse($parser, "Hi, world!");
+        */
+
+        //Impl
+        /**
+         * If $parser succeeds (either consuming input or not), lookAhead behaves like $parser succeeded without consuming
+         * anything. If $parser fails, lookAhead has no effect, i.e. it will fail to consume input if $parser fails consuming
+         * input.
+         *
+         * @template T
+         * @param Parser<T> $parser
+         * @return Parser<T>
+         */
+        /*
+        function lookAhead(Parser $parser): Parser
+        {
+            return Parser::make(
+                fn(string $input): ParseResult => $parser->run($input)->isSuccess()
+                    ? new Succeed("", $input)
+                    : new Fail("lookAhead", $input)
+            );
+        }
+        */
+    }
+
+
 }

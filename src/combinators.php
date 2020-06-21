@@ -363,13 +363,13 @@ function sepBy1(Parser $separator, Parser $parser): Parser
  *
  * `keepFirst(string("print"), notFollowedBy(alphaNumChar()))` will match "print something" but not "printXYZ something"
  *
+ * @param Parser<T> $parser
+ *
+ * @return Parser<string>
  * @see Parser::notFollowedBy()
  *
  * @template T
  *
- * @param Parser<T> $parser
- *
- * @return Parser<string>
  */
 function notFollowedBy(Parser $parser): Parser
 {
