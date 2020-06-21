@@ -190,22 +190,13 @@ final class ApplicativeTest extends TestCase
     /** @test */
     public function repeat_vs_repeatList()
     {
-
         $parser = repeat(5, alphaChar());
         $this->assertParse("hello", $parser, "hello");
-/*
         $parser = repeatList(5, alphaChar());
         $this->assertParse(["h", "e", "l", "l", "o"], $parser, "hello");
-*/
-
-//        $sepBy = many
-
-        $parser = sepBy(char(","), repeat(3, alphaChar()));
-        $this->assertParse(["EUR", "USD", "GBP"], $parser, "EUR,USD,GBP");
 
         $parser = repeatList(3, repeat(3, alphaChar()));
         $this->assertParse(["EUR", "USD", "GBP"], $parser, "EURUSDGBP");
-
     }
 }
 
