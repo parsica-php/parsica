@@ -1,5 +1,5 @@
 ---
-title: Look Ahead
+title: Looking ahead
 ---
 
 ## notFollowedBy
