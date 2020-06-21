@@ -5,7 +5,7 @@ sidebar_label: Functional Paradigms
 
 @TODO Add tests to illustrate the laws.
 
-We use a number of paradigms from functional programming throughout the code. [We've chosen not to expose these to end users](design_goals.md). We list them here for anybody who's interested. 
+Internally, Parsica is designed using paradigms from functional programming.  We list them here for anybody who's interested in FP, but you don't need to know them to work with Parsica. 
 
 Throughout this document, `$parser1 ≡ $parser2` means that you can swap `$parser1` with `$parser2` and vice-versa, and it will not affect the outcome of your program.
 
@@ -15,7 +15,10 @@ Almost all the code is pure and referentially transparent. [A notable exception]
 
 The combinators are all pure. Some combinators are implemented as instance methods on `Parser`, but these are also pure. You can think of them as functions that take `$this` as the first argument.
 
-`$parser1->combinator($parser2) ≡ combinator($parser1, $parser2)`
+```
+$parser1->combinator($parser2) 
+    ≡ combinator($parser1, $parser2)
+```
 
 In fact, very often there are both a function and an instance method for the same combinator, where one is an alias for the other.
 
@@ -46,13 +49,20 @@ Similarly, mapping over `Parser` is really mapping over the future `ParseResult`
 
 #### Identity
 
-`$parser->append(nothing()) ≡ $parser`
+```
+$parser->append(nothing()) ≡ $parser
+```
 
-`nothing()->append($parser) ≡ $parser`
+```
+nothing()->append($parser) ≡ $parser
+```
 
 #### Associativity
 
-`$p1->append($p2)->append($p3) ≡ $p1->append($p2->append($p3))`
+```
+$p1->append($p2)->append($p3) 
+    ≡ $p1->append($p2->append($p3))
+```
 
 ## Applicative Functors
 
@@ -66,25 +76,38 @@ Similarly, mapping over `Parser` is really mapping over the future `ParseResult`
 
 #### Identity
 
-`pure(identity())->apply($parser) ≡ $parser`
+```
+pure(identity())->apply($parser) ≡ $parser
+```
 
 #### Homomorphism
 
-`pure($f)->apply(pure($x)) ≡ pure($f($x))`
+```
+pure($f)->apply(pure($x)) ≡ pure($f($x))
+```
 
 #### Interchange
 
-`$p->apply(pure($x)) ≡ pure(fn($f) => $f($x))->apply($p)`
+```
+$p->apply(pure($x)) 
+    ≡ pure(fn($f) => $f($x))->apply($p)
+```
 
 #### Composition
 
-Assuming `$compose = fn($f, $g) => fn($x) => $f($g($x))`:  
+```
+// Assuming that
+$compose = fn($f, $g) => fn($x) => $f($g($x))  
 
-`pure($compose)->apply($p1)->apply($p2)->apply($p3) ≡ $p1->apply($p2->apply($p3))` 
+pure($compose)->apply($p1)->apply($p2)->apply($p3) 
+    ≡ $p1->apply($p2->apply($p3))
+``` 
 
 #### Map
 
-`pure($f)->apply($parser) ≡ $parser->map($f)`
+```
+pure($f)->apply($parser) ≡ $parser->map($f)
+```
 
 ## Monads
 
@@ -99,12 +122,23 @@ Assuming `$compose = fn($f, $g) => fn($x) => $f($g($x))`:
 
 Left identity: 
 
-`bind(pure($a), $f) ≡ pure($a)->bind($f) ≡ $f($a)` 
+```
+bind(pure($a), $f) 
+    ≡ pure($a)->bind($f) 
+    ≡ $f($a)
+``` 
 
 Right identity: 
 
-`bind($parser, 'pure') ≡ $parser->bind('pure') ≡ $parser`	
+```
+bind($parser, 'pure') 
+    ≡ $parser->bind('pure') 
+    ≡ $parser
+```
 
 Associativity:
 
-`$parser->bind($f)->bind($g) ≡ $parser->bind(fn($x) (use $f, $g) => $f($x)->bind($g))`
+```
+$parser->bind($f)->bind($g) 
+    ≡ $parser->bind(fn($x) (use $f, $g) => $f($x)->bind($g))
+```
