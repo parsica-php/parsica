@@ -14,6 +14,7 @@ vendor/bin/uptodocs run docs/tutorial/naming_conventions.md --before=docs/before
 vendor/bin/uptodocs run docs/tutorial/order_matters.md --before=docs/before.php --output-format=github || hasFailed=1
 vendor/bin/uptodocs run docs/tutorial/performance.md --before=docs/before.php --output-format=github || hasFailed=1
 vendor/bin/uptodocs run docs/tutorial/recursion.md --before=docs/before.php --output-format=github || hasFailed=1
+vendor/bin/uptodocs run docs/tutorial/building_blocks.md --before=docs/before.php --output-format=github || hasFailed=1
 vendor/bin/uptodocs run docs/index.md --before=docs/before.php --output-format=github || hasFailed=1
 
 exit $hasFailed

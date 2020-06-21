@@ -3,6 +3,9 @@ title: What are parser combinators?
 sidebar_label: What are parser combinators?
 ---
 
+Before you start, make sure you've had a look at the [installation instructions](resources/installation.md).
+
+
 ## Parsers
 
 ```php

@@ -20,6 +20,10 @@ use function Verraes\Parsica\{
     punctuationChar,
     isEqual,
     optional,
+    satisfy,
+    isDigit,
+    isWhitespace,
+    charI
 };
 
 assert_options(ASSERT_ACTIVE, 1);
