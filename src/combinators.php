@@ -3,8 +3,8 @@
 namespace Verraes\Parsica;
 
 use Verraes\Parsica\Internal\Assert;
+use Verraes\Parsica\Internal\Fail;
 use Verraes\Parsica\Internal\Succeed;
-use function Verraes\Parsica\ParseResult\{succeed};
 
 /**
  * Identity parser, returns the Parser as is.
@@ -152,7 +152,7 @@ function assemble(Parser ...$parsers): Parser
 {
     Assert::atLeastOneArg($parsers, "assemble()");
     $first = array_shift($parsers);
-    return array_reduce($parsers, __NAMESPACE__.'\\append', $first)
+    return array_reduce($parsers, __NAMESPACE__ . '\\append', $first)
         ->label('assemble()');
 }
 
@@ -260,7 +260,7 @@ function repeat(int $n, Parser $parser): Parser
 function repeatList(int $n, Parser $parser): Parser
 {
 
-    $parser = $parser->map(fn($output)=>[$output]);
+    $parser = $parser->map(fn($output) => [$output]);
 
     $parsers = array_fill(0, $n - 1, $parser);
     return array_reduce(
@@ -324,11 +324,11 @@ function between(Parser $open, Parser $middle, Parser $close): Parser
  * @template T
  *
  * @param Parser<TS> $separator
- * @param Parser<T> $parser
+ * @param Parser<T>  $parser
  *
  * @return Parser<list<T>>
  */
-function sepBy(Parser $separator, Parser $parser) : Parser
+function sepBy(Parser $separator, Parser $parser): Parser
 {
     return sepBy1($separator, $parser)->or(pure([]))->label('sepBy');
 }
@@ -341,15 +341,41 @@ function sepBy(Parser $separator, Parser $parser) : Parser
  * @template T
  *
  * @param Parser<TS> $separator
- * @param Parser<T> $parser
+ * @param Parser<T>  $parser
  *
  * @return Parser<list<T>>
  *
  * @psalm-suppress MissingClosureReturnType
  */
-function sepBy1(Parser $separator, Parser $parser) : Parser
+function sepBy1(Parser $separator, Parser $parser): Parser
 {
     /** @psalm-suppress MissingClosureParamType */
     $prepend = fn($x) => fn(array $xs): array => array_merge([$x], $xs);
     return pure($prepend)->apply($parser)->apply(many($separator->sequence($parser)))->label('sepBy1');
+}
+
+/**
+ * notFollowedBy only succeeds when $parser fails. It never consumes any input.
+ *
+ * Example:
+ *
+ * `string("print")` will also match "printXYZ"
+ *
+ * `keepFirst(string("print"), notFollowedBy(alphaNumChar()))` will match "print something" but not "printXYZ something"
+ *
+ * @see Parser::notFollowedBy()
+ *
+ * @template T
+ *
+ * @param Parser<T> $parser
+ *
+ * @return Parser<string>
+ */
+function notFollowedBy(Parser $parser): Parser
+{
+    /** @var Parser<string> $p */
+    $p = Parser::make(fn(string $input): ParseResult => $parser->run($input)->isSuccess()
+        ? new Fail('notFollowedBy', $input)
+        : new Succeed("", $input));
+    return $p;
 }

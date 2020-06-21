@@ -2,8 +2,8 @@
 
 namespace Tests\Verraes\Parsica;
 
-use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
+use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\{anything,
     eof,
     everything,
@@ -16,7 +16,7 @@ use function Verraes\Parsica\{anything,
     takeWhile,
     takeWhile1
 };
-use function Verraes\Parsica\{isEqual, notPred};
+use function Verraes\Parsica\{alphaNumChar, isEqual, keepFirst, notFollowedBy, notPred, string};
 
 
 final class primitivesTest extends TestCase
@@ -175,5 +175,27 @@ final class primitivesTest extends TestCase
         $this->assertParse("", $parser, "aaa");
         $this->assertRemain("", $parser, "aaa");
         $this->assertNotParse($parser, "");
+    }
+
+    /** @test */
+    public function notFollowedBy()
+    {
+        $print = string("print");
+        $this->assertParse("print", $print, "print('Hello World');");
+        // This also outputs "print", but it wasn't our intention, because "printXYZ" is not a valid keyword:
+        $this->assertParse("print", $print, "printXYZ('Hello World');");
+
+        // with notFollowedBy:
+        $print = keepFirst(string("print"), notFollowedBy(alphaNumChar()));
+        $this->assertParse("print", $print, "print('Hello World');");
+        $this->assertNotParse($print, "printXYZ('Hello World');");
+    }
+
+    /** @test */
+    public function notFollowedBy_fluent()
+    {
+        $print = string("print")->notFollowedBy(alphaNumChar());
+        $this->assertParse("print", $print, "print('Hello World');");
+        $this->assertNotParse($print, "printXYZ('Hello World');");
     }
 }

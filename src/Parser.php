@@ -346,4 +346,26 @@ final class Parser
     {
         return keepFirst($this, $other);
     }
+
+    /**
+     * notFollowedBy only succeeds when $second fails. It never consumes any input.
+     *
+     * Example:
+     *
+     * `string("print")` will also match "printXYZ"
+     *
+     * `string("print")->notFollowedBy(alphaNumChar()))` will match "print something" but not "printXYZ something"
+     *
+     * @see notFollowedBy()
+     *
+     * @template T2
+     *
+     * @param Parser<T2> $parser
+     *
+     * @return Parser<T>
+     */
+    public function notFollowedBy(Parser $second) : Parser
+    {
+        return keepFirst($this, notFollowedBy($second));
+    }
 }
