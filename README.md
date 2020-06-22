@@ -11,3 +11,12 @@ $parser = between(char('{'), char('}'), atLeastOne(alphaChar()));
 $result = $parser->try("{Hello}");
 echo $result->output(); // Hello
 ```
+
+## Badges
+
+![Twitter Follow](https://img.shields.io/twitter/follow/parsica_php?style=social)
+![Test status](https://img.shields.io/github/workflow/status/mathiasverraes/parsica/Test?label=tests)
+![GitHub](https://img.shields.io/github/license/mathiasverraes/parsica)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/mathiasverraes/parsica)
+
+
