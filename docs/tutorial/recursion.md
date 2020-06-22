@@ -1,6 +1,5 @@
 ---
 title: Recursion
-sidebar_label: Recursion
 ---
 
 Often we want to parse arbitrarily nested structures. Arrays, JSON, XML are such example. To do that, we need to be able to pass the parser to itself. Because of a limitation in PHP, we cannot pass a value around before it is created. The solution is to split this in two steps: create a placeholder for a recursive parser, and then define the parser in terms of itself. 

@@ -36,7 +36,11 @@ use function Verraes\Parsica\{
     repeat,
     upperChar,
     skipHSpace,
-    whitespace
+    whitespace,
+    keepFirst,
+    alphaNumChar,
+    notFollowedBy,
+    choice
 };
 
 assert_options(ASSERT_ACTIVE, 1);

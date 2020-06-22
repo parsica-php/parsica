@@ -22,6 +22,7 @@ This is a rough wishlist of features to do before 1.0:
 
 - [ ] Change the behaviour of or, add try and lookAhead
 - [ ] Better parser assertions
+- [ ] Better exceptions
 - [ ] Character categories
 - [ ] Comparison tests for canonical and performant implementations
 - [ ] Debug trees

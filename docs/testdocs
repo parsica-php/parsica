@@ -2,20 +2,36 @@
 
 # Execute the docs to make sure all code examples are in sync with the Parsica code.
 
+
+#!/usr/bin/env bash
+
+# Execute the docs to make sure all code examples are in sync with the Parsica code.
+
 hasFailed=0
 
-vendor/bin/uptodocs run README.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/contribute/design_goals.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/contribute/status.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/resources/installation.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/tutorial/functional_paradigms.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/tutorial/introduction.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/tutorial/mapping_to_objects.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/tutorial/naming_conventions.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/tutorial/order_matters.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/tutorial/performance.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/tutorial/recursion.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/tutorial/building_blocks.md --before=docs/before.php --output-format=github || hasFailed=1
-vendor/bin/uptodocs run docs/index.md --before=docs/before.php --output-format=github || hasFailed=1
+
+files=(
+    "README.md"
+    "docs/contribute/design_goals.md"
+    "docs/resources/development_status.md"
+    "docs/resources/functional_paradigms.md"
+    "docs/resources/naming_conventions.md"
+    "docs/resources/performance.md"
+    "docs/tutorial/building_blocks.md"
+    "docs/tutorial/introduction.md"
+    "docs/tutorial/look_ahead.md"
+    "docs/tutorial/mapping_to_objects.md"
+    "docs/tutorial/order_matters.md"
+    "docs/tutorial/recursion.md"
+    "docs/tutorial/running_parsers.md"
+    "docs/index.md"
+    "docs/installation.md"
+)
+
+for file in "${files[@]}"
+do
+	vendor/bin/uptodocs run $file --before=docs/before.php --output-format=github || hasFailed=1
+done
 
 exit $hasFailed
+
