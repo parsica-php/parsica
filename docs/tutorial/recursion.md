@@ -33,12 +33,12 @@ $pair = recursive();
 $pair->recurse(
     between(
         char('['),
+        char(']'),
         collect(
             digitChar()->or($pair)
                 ->thenIgnore(char(',')),
             digitChar()->or($pair)
-        ),
-        char(']')
+        )
     ),
 );
 
@@ -61,11 +61,11 @@ $inner = collect(
  );
 
 $curlyPair->recurse(
-    between(char('{'), $inner, char('}')),
+    between(char('{'), char('}'), $inner),
 );
 
 $squarePair->recurse(
-    between(char('['), $inner, char(']')),
+    between(char('['), char(']'), $inner),
 
 );
 

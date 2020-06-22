@@ -22,12 +22,10 @@ final class recursionTest extends TestCase
         $pair = recursive();
         $pair->recurse(
             between(
-                $opening,
-                collect(
+                $opening, $closing, collect(
                     $digit->or($pair)->thenIgnore($comma),
                     $digit->or($pair)
-                ),
-                $closing
+                )
             )
         );
 
@@ -59,11 +57,11 @@ final class recursionTest extends TestCase
         $inner = collect($expr->thenIgnore($comma), $expr);
 
         $curlyPair->recurse(
-            between($openingCurly, $inner, $closingCurly)
+            between($openingCurly, $closingCurly, $inner)
         );
 
         $squarePair->recurse(
-            between($openingSquare, $inner, $closingSquare)
+            between($openingSquare, $closingSquare, $inner)
         );
 
         $input = "[1,{2,[{3,4},{5,6}]}]";

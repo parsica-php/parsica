@@ -304,14 +304,14 @@ function some(Parser $parser): Parser
  * @template TC
  *
  * @param Parser<TO> $open
- * @param Parser<TM> $middle
  * @param Parser<TC> $close
+ * @param Parser<TM> $middle
  *
  * @return Parser<TM>
  */
-function between(Parser $open, Parser $middle, Parser $close): Parser
+function between(Parser $open, Parser $close, Parser $middle): Parser
 {
-    return keepSecond($open, keepFirst($middle, $close));
+    return keepSecond($open, keepFirst($middle, $close))->label('between');
 }
 
 /**

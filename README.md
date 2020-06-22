@@ -7,7 +7,7 @@ The easiest way to build robust parsers in PHP.
 
 ```php
 <?php
-$parser = between(char('{'), atLeastOne(alphaChar()), char('}'));
+$parser = between(char('{'), char('}'), atLeastOne(alphaChar()));
 $result = $parser->try("{Hello}");
 echo $result->output(); // Hello
 ```

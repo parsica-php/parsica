@@ -269,7 +269,7 @@ final class combinatorsTest extends TestCase
     /** @test */
     public function between()
     {
-        $parser = between(char('{'), atLeastOne(alphaNumChar()), char('}'));
+        $parser = between(char('{'), char('}'), atLeastOne(alphaNumChar()));
         $input = "{foo}";
         $this->assertParse("foo", $parser, $input);
     }
