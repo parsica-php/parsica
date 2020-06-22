@@ -29,7 +29,7 @@ The easiest way to build robust parsers in PHP.
 * [Donate via Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NS4GQXUDXRKQJ&source=url). This project was researched and created entirely during unpaid time. Your contribution helps us with continued development.
 * [Design Goals](contribute/design_goals.md)
 * Contribute by submitting code, documentation, examples, ... through pull requests.
-* [Code of Conduct](../CODE_OF_CONDUCT.md)
+* [Code of Conduct](CODE_OF_CONDUCT.md)
 
 ## Support
 
