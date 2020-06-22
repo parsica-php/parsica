@@ -6,7 +6,7 @@ sidebar_label: About Parsica
 The easiest way to build robust parsers in PHP.
 
 * [Installation & Requirements](installation.md)
-* [API Reference](api/api.md)
+* [API Reference](api/index.md)
 
 ## Tutorial
 
