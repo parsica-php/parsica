@@ -9,7 +9,7 @@ The easiest way to build robust parsers in PHP.
 * Official Site: [parsica.verraes.net](https://parsica.verraes.net)
 * Twitter: [@parsica_php](https://twitter.com/parsica_php)
 * GitHub: [mathiasverraes/parsica](https://github.com/mathiasverraes/parsica)
-* [License: MIT](../LICENSE)
+* License: [MIT](LICENSE.md)
 * Donate: [Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NS4GQXUDXRKQJ&source=url)
 
 ## Installation
