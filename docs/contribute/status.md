@@ -14,13 +14,13 @@ This is a rough wishlist of features to do before 1.0:
 - [x] PHPUnit tooling
 - [x] Recursive parsers
 - [x] Versioned documentation
+- [x] Essential combinators
 
 
 - [ ] WIP - Tutorial
-- [ ] WIP - All essential combinators
 
 
-- [ ] Change the behaviour of or(), add try and lookAhead
+- [ ] Change the behaviour of or, add try and lookAhead
 - [ ] Better parser assertions
 - [ ] Character categories
 - [ ] Comparison tests for canonical and performant implementations
