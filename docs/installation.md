@@ -1,6 +1,5 @@
 ---
-title: Installation
-sidebar_label: Installation
+title: Installation & Requirements
 ---
 
 
