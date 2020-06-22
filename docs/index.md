@@ -27,10 +27,12 @@ The easiest way to build robust parsers in PHP.
 ## Contribute
 
 
+* [Development Status](contribute/status.md)
+* [Design Goals](contribute/design_goals.md)
 * [Donate via Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NS4GQXUDXRKQJ&source=url). This project was researched and created entirely during unpaid time. Your contribution helps us with continued development.
 * Contribute by submitting code, documentation, examples, ... through pull requests.
-* [Design Goals](contribute/design_goals.md)
-* [Development Status](contribute/status.md)
+* [Code of Conduct](../CODE_OF_CONDUCT.md)
+* [License: MIT](../LICENSE)
 
 ## Get Support
 
@@ -41,3 +43,5 @@ E-mail [contact@value-object.com](contact@value-object.com).
 #### Community support
 
 Submit questions as Github issues. Please label them with 'support'. Help us help you by submitting short bits of code that demonstrate the problem, and that can easily be copied and run. 
+
+
