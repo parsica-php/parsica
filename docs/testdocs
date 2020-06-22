@@ -10,6 +10,7 @@ vendor/bin/uptodocs run docs/contribute/status.md --before=docs/before.php --out
 vendor/bin/uptodocs run docs/resources/installation.md --before=docs/before.php --output-format=github || hasFailed=1
 vendor/bin/uptodocs run docs/tutorial/functional_paradigms.md --before=docs/before.php --output-format=github || hasFailed=1
 vendor/bin/uptodocs run docs/tutorial/introduction.md --before=docs/before.php --output-format=github || hasFailed=1
+vendor/bin/uptodocs run docs/tutorial/mapping_to_objects.md --before=docs/before.php --output-format=github || hasFailed=1
 vendor/bin/uptodocs run docs/tutorial/naming_conventions.md --before=docs/before.php --output-format=github || hasFailed=1
 vendor/bin/uptodocs run docs/tutorial/order_matters.md --before=docs/before.php --output-format=github || hasFailed=1
 vendor/bin/uptodocs run docs/tutorial/performance.md --before=docs/before.php --output-format=github || hasFailed=1

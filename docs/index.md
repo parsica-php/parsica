@@ -15,6 +15,7 @@ The easiest way to build robust parsers in PHP.
 
 1. [What are parser combinators?](tutorial/introduction.md)
 1. [BuildingBlocks](tutorial/building_blocks.md)
+1. [Mapping to Objects](tutorial/mapping_to_objects.md)
 1. [Order Matters](tutorial/order_matters.md)
 1. [Look Ahead](tutorial/look_ahead.md)
 1. [Recursion](tutorial/recursion.md)

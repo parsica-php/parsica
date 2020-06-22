@@ -23,7 +23,13 @@ use function Verraes\Parsica\{
     satisfy,
     isDigit,
     isWhitespace,
-    charI
+    charI,
+    sepBy,
+    some,
+    repeat,
+    upperChar,
+    skipHSpace,
+    whitespace
 };
 
 assert_options(ASSERT_ACTIVE, 1);
