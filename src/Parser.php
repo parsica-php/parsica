@@ -23,7 +23,6 @@ use function Verraes\Parsica\ParseResult\{fail};
  * At the moment, there is no Parser interface, and no Parser abstract class to extend from. This is intentional, but
  * will be changed if we find use cases where those would be the best solutions.
  *
- * @internal
  * @template T
  */
 final class Parser
