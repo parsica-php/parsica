@@ -11,7 +11,7 @@ Throughout this document, `$parser1 ≡ $parser2` means that you can swap `$pars
 
 ## Purity
 
-Almost all the code is pure and referentially transparent. [A notable exception](recursion.md) is the combo of `recursive()` and `Parser::recurse()`. The latter mutates a `Parser`. We constrained this so that you can't use the parser when it's not set up yet, and after calling `recurse()`, you can't call it again. So not strictly pure, but close enough not to matter much in practice.
+Almost all the code is pure and referentially transparent. [A notable exception](recursion) is the combo of `recursive()` and `Parser::recurse()`. The latter mutates a `Parser`. We constrained this so that you can't use the parser when it's not set up yet, and after calling `recurse()`, you can't call it again. So not strictly pure, but close enough not to matter much in practice.
 
 The combinators are all pure. Some combinators are implemented as instance methods on `Parser`, but these are also pure. You can think of them as functions that take `$this` as the first argument.
 

@@ -8,7 +8,7 @@ There ar two ways of running your parser on an input.
 
 Most of the time, you'll want to use `try`. It will run the parser, return a `ParseResult` on success, and throw a `ParserFailure` exception if the input can't successfully be parsed. 
 
-`ParseResult` has an `output()` method, which has the type `T` for a `Parser<T>` (see [Mapping to Objects](mapping_to_objects.md)). It also has a `remainder()` method, which gives you the part of the input that wasn't consumed by the parser.
+`ParseResult` has an `output()` method, which has the type `T` for a `Parser<T>` (see [Mapping to Objects](mapping_to_objects)). It also has a `remainder()` method, which gives you the part of the input that wasn't consumed by the parser.
  
 `ParserFailure` has the usual `Exception` methods, and  
  
