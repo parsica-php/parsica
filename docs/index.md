@@ -38,7 +38,7 @@ The easiest way to build robust parsers in PHP.
 
 ### Commercial training & support
 
-E-mail [contact@value-object.com](contact@value-object.com).
+E-mail [contact@value-object.com](mailto:contact@value-object.com).
 
 ### Community support
 
