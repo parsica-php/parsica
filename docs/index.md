@@ -9,6 +9,7 @@ The easiest way to build robust parsers in PHP.
 
 * [Installation & Requirements](installation)
 * [API Reference](api/index)
+* [Releases](releases)
 
 ## Tutorial
 
