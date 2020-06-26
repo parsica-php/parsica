@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\ParseResult;
+namespace Tests\Verraes\Parsica\v0_3_0\ParseResult;
 
+use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Internal\Fail;
 use Verraes\Parsica\Internal\Succeed;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
-use PHPUnit\Framework\TestCase;
 
 final class AppendTest extends TestCase
 {

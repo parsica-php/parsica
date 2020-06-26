@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica;
+namespace Tests\Verraes\Parsica\v0_3_0;
 
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
@@ -22,8 +22,7 @@ use function Verraes\Parsica\{anything,
     skipWhile1,
     success,
     takeWhile,
-    takeWhile1
-};
+    takeWhile1};
 use function Verraes\Parsica\{isEqual, notPred};
 
 

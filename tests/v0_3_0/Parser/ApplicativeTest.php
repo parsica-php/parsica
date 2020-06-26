@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Parser;
+namespace Tests\Verraes\Parsica\v0_3_0\Parser;
 
-use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
+use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Cypress\Curry\curry;
 use function Verraes\Parsica\{alphaChar,
     anything,

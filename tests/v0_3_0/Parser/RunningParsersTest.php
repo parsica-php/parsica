@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Parser;
+namespace Tests\Verraes\Parsica\v0_3_0\Parser;
 
-use Verraes\Parsica\Internal\Fail;
 use PHPUnit\Framework\TestCase;
+use Verraes\Parsica\Internal\Fail;
 use function Verraes\Parsica\char;
 use function Verraes\Parsica\skipSpace;
 use function Verraes\Parsica\string;

@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Parser;
+namespace Tests\Verraes\Parsica\v0_3_0\Parser;
 
-use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
+use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\alphaChar;
 use function Verraes\Parsica\char;
 use function Verraes\Parsica\digitChar;
@@ -23,7 +23,6 @@ use function Verraes\Parsica\many;
 use function Verraes\Parsica\punctuationChar;
 use function Verraes\Parsica\some;
 use function Verraes\Parsica\string;
-use function Verraes\Parsica\whitespace;
 
 final class AlternativeTest extends TestCase
 {

@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica;
+namespace Tests\Verraes\Parsica\v0_3_0;
 
-use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
+use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\{crlf, eol, newline, skipHSpace, skipHSpace1, skipSpace, skipSpace1, tab};
 
 final class spaceTest extends TestCase

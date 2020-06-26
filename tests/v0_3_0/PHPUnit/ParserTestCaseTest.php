@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\PHPUnit;
+namespace Tests\Verraes\Parsica\v0_3_0\PHPUnit;
 
-use Verraes\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
+use Verraes\Parsica\PHPUnit\ParserAssertions;
 
 final class ParserTestCaseTest extends TestCase
 {
