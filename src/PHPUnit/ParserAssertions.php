@@ -17,11 +17,14 @@ use Verraes\Parsica\Parser;
  * Convenience assertion methods. When writing tests for your own parsers, extend from this instead of PHPUnit's TestCase.
  *
  * @TODO move to standalone package
+ * @api
  */
 trait ParserAssertions
 {
     /**
      * @param mixed $expectedParsed
+     *
+     * @api
      */
     protected function assertParse($expectedParsed, Parser $parser, string $input, string $message = ""): void
     {
@@ -50,7 +53,8 @@ trait ParserAssertions
      * @param string $message
      *
      * @throws Exception
-     * @see \Tests\Verraes\Parsica\PHPUnit\ParserTestCaseTest::strict_equality
+     * @api
+     * @see \Tests\Verraes\Parsica\v0_3_0\PHPUnit\ParserTestCaseTest::strict_equality
      *
      * @psalm-suppress MixedArgument
      * @psalm-suppress MixedAssignment
@@ -81,6 +85,9 @@ trait ParserAssertions
 
     abstract public static function fail(string $message = ''): void;
 
+    /**
+     * @api
+     */
     protected function assertRemain(string $expectedRemaining, Parser $parser, string $input, string $message = ""): void
     {
         $actualResult = $parser->run($input);
@@ -102,6 +109,9 @@ trait ParserAssertions
         }
     }
 
+    /**
+     * @api
+     */
     protected function assertNotParse(Parser $parser, string $input, ?string $expectedFailure = null, string $message = ""): void
     {
         $actualResult = $parser->run($input);
@@ -121,6 +131,9 @@ trait ParserAssertions
 
     abstract public static function assertTrue($condition, string $message = ''): void;
 
+    /**
+     * @api
+     */
     protected function assertFailOnEOF(Parser $parser, string $message = ""): void
     {
         $actualResult = $parser->run("");
@@ -130,6 +143,9 @@ trait ParserAssertions
         );
     }
 
+    /**
+     * @api
+     */
     protected function assertSucceedOnEOF(Parser $parser, string $message = ""): void
     {
         $actualResult = $parser->run("");

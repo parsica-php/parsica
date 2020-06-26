@@ -17,11 +17,13 @@ use Verraes\Parsica\Internal\Succeed;
 /**
  * Identity parser, returns the Parser as is.
  *
- * @template T
- *
  * @param Parser<T> $parser
  *
  * @return Parser<T>
+ * @api
+ *
+ * @template T
+ *
  */
 function identity(Parser $parser): Parser
 {
@@ -31,11 +33,13 @@ function identity(Parser $parser): Parser
 /**
  * A parser that will have the argument as its output, no matter what the input was. It doesn't consume any input.
  *
- * @template T
- *
  * @param T $output
  *
  * @return Parser<T>
+ * @api
+ *
+ * @template T
+ *
  */
 function pure($output): Parser
 {
@@ -45,11 +49,11 @@ function pure($output): Parser
 /**
  * Optionally parse something, but still succeed if the thing is not there
  *
- * @template T
- *
  * @param Parser<T> $parser
  *
  * @return Parser<T>
+ * @api
+ * @template T
  */
 function optional(Parser $parser): Parser
 {
@@ -62,13 +66,14 @@ function optional(Parser $parser): Parser
  *
  * This is a monadic bind aka flatmap.
  *
- * @template T1
- * @template T2
- *
  * @param Parser<T1> $parser
  * @param callable(T1) : Parser<T2> $f
  *
  * @return Parser<T2>
+ * @api
+ * @template T1
+ * @template T2
+ *
  */
 function bind(Parser $parser, callable $f): Parser
 {
@@ -85,6 +90,7 @@ function bind(Parser $parser, callable $f): Parser
  * @return Parser<T2>
  * @template T1
  * @template T2
+ * @api
  * @see Parser::sequence()
  *
  */
@@ -96,6 +102,7 @@ function sequence(Parser $first, Parser $second): Parser
 /**
  * Sequence two parsers, and return the output of the first one.
  *
+ * @api
  * @see Parser::thenIgnore()
  */
 function keepFirst(Parser $first, Parser $second): Parser
@@ -105,6 +112,8 @@ function keepFirst(Parser $first, Parser $second): Parser
 
 /**
  * Sequence two parsers, and return the output of the second one.
+ *
+ * @api
  */
 function keepSecond(Parser $first, Parser $second): Parser
 {
@@ -118,6 +127,8 @@ function keepSecond(Parser $first, Parser $second): Parser
  * @param Parser<T> $second
  *
  * @return Parser<T>
+ * @api
+ *
  * @see Parser::or()
  *
  * @template T
@@ -131,12 +142,13 @@ function either(Parser $first, Parser $second): Parser
 /**
  * Combine the parser with another parser of the same type, which will cause the results to be appended.
  *
- * @template T
- *
  * @param Parser<T> $left
  * @param Parser<T> $right
  *
  * @return Parser<T>
+ * @api
+ * @template T
+ *
  */
 function append(Parser $left, Parser $right): Parser
 {
@@ -150,11 +162,12 @@ function append(Parser $left, Parser $right): Parser
 /**
  * Append all the passed parsers.
  *
- * @template T
- *
  * @param list<Parser<T>> $parsers
  *
  * @return Parser<T>
+ * @api
+ * @template T
+ *
  */
 function assemble(Parser ...$parsers): Parser
 {
@@ -167,11 +180,12 @@ function assemble(Parser ...$parsers): Parser
 /**
  * Parse into an array that consists of the results of all parsers.
  *
- * @template T
- *
  * @param list<Parser<T>> $parsers
  *
  * @return Parser<T>
+ * @api
+ * @template T
+ *
  */
 function collect(Parser ...$parsers): Parser
 {
@@ -192,6 +206,7 @@ function collect(Parser ...$parsers): Parser
  * @return Parser<T>
  *
  * @template T
+ * @api
  */
 function any(Parser ...$parsers): Parser
 {
@@ -212,6 +227,7 @@ function any(Parser ...$parsers): Parser
  * @return Parser<T>
  *
  * @template T
+ * @api
  */
 function choice(Parser ...$parsers): Parser
 {
@@ -221,11 +237,12 @@ function choice(Parser ...$parsers): Parser
 /**
  * One or more repetitions of Parser
  *
- * @template T
- *
  * @param Parser<T> $parser
  *
  * @return Parser<T>
+ *
+ * @api
+ * @template T
  *
  */
 function atLeastOne(Parser $parser): Parser

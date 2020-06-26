@@ -18,12 +18,16 @@ use Verraes\Parsica\ParserFailure;
 
 /**
  * @template T
+ * @internal
  */
 final class Fail extends Exception implements ParserFailure, ParseResult
 {
     private string $expected;
     private string $got;
 
+    /**
+     * @internal
+     */
     public function __construct(string $expected, string $got)
     {
         $this->expected = $expected;
@@ -31,24 +35,24 @@ final class Fail extends Exception implements ParserFailure, ParseResult
         parent::__construct("Expected: $expected, got $got");
     }
 
-    public function isSuccess(): bool
-    {
-        return false;
-    }
-
-    public function isFail(): bool
-    {
-        return !$this->isSuccess();
-    }
-
     public function expected(): string
     {
         return $this->expected;
     }
 
+    public function isSuccess(): bool
+    {
+        return false;
+    }
+
     public function got(): string
     {
         return $this->got;
+    }
+
+    public function isFail(): bool
+    {
+        return !$this->isSuccess();
     }
 
     /**

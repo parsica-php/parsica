@@ -15,8 +15,10 @@ namespace Verraes\Parsica;
  *
  * For an example see {@see RecursiveParserTest}.
  *
- * @template T
  * @return Parser<T>
+ * @api
+ *
+ * @template T
  */
 function recursive(): Parser
 {

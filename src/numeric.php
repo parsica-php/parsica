@@ -17,6 +17,7 @@ namespace Verraes\Parsica;
  * @return Parser<string>
  *
  * @deprecated @TODO doesn't support signed numbers yet
+ * @api
  */
 function float(): Parser
 {

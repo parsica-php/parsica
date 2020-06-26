@@ -21,6 +21,7 @@ use function Verraes\Parsica\ParseResult\succeed;
 final class TakeWhile
 {
     /**
+     * @internal
      * Keep parsing 0 or more characters as long as the predicate holds.
      *
      * @template T
@@ -32,7 +33,7 @@ final class TakeWhile
     public static function _takeWhile(callable $predicate): Parser
     {
         /**
-         * @see \Tests\Verraes\Parsica\primitivesTest::not_sure_how_takeWhile_should_deal_with_EOF()
+         * @see \Tests\Verraes\Parsica\v0_3_0\primitivesTest::not_sure_how_takeWhile_should_deal_with_EOF()
          */
         return Parser::make(
             fn(string $input): ParseResult => //self::isEOF($input) ?
@@ -69,6 +70,7 @@ final class TakeWhile
     }
 
     /**
+     * @internal
      * Keep parsing 1 or more characters as long as the predicate holds.
      *
      * @template T
@@ -87,6 +89,7 @@ final class TakeWhile
     }
 
     /**
+     * @internal
      * Skip 0 or more characters as long as the predicate holds.
      *
      * @template T
@@ -116,6 +119,7 @@ final class TakeWhile
     }
 
     /**
+     * @internal
      * Skip 1 or more characters as long as the predicate holds.
      *
      * @template T

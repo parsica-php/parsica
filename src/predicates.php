@@ -16,6 +16,8 @@ use Verraes\Parsica\Internal\Assert;
  * Creates an equality predicate
  *
  * @return callable(string) : bool
+ *
+ * @api
  */
 function isEqual(string $x): callable
 {
@@ -29,6 +31,8 @@ function isEqual(string $x): callable
  * @param callable(string) : bool $predicate
  *
  * @return callable(string) : bool
+ *
+ * @api
  */
 function notPred(callable $predicate): callable
 {
@@ -42,6 +46,8 @@ function notPred(callable $predicate): callable
  * @param callable(string) : bool $second
  *
  * @return callable(string) : bool
+ *
+ * @api
  */
 function andPred(callable $first, callable $second): callable
 {
@@ -55,6 +61,8 @@ function andPred(callable $first, callable $second): callable
  * @param callable(string) : bool $second
  *
  * @return callable(string) : bool
+ * @api
+ *
  */
 function orPred(callable $first, callable $second): callable
 {
@@ -67,6 +75,8 @@ function orPred(callable $first, callable $second): callable
  * @param list<int> $chars
  *
  * @return callable(string) : bool
+ * @api
+ *
  * @link https://doc.bccnsoft.com/docs/cppreference2018/en/c/string/wide/iswcntrl.html
  */
 function isCharCode(array $chars): callable
@@ -78,6 +88,8 @@ function isCharCode(array $chars): callable
  * Returns true for a space character, and the control characters \t, \n, \r, \f, \v.
  *
  * @return callable(string) : bool
+ * @api
+ *
  */
 function isSpace(): callable
 {
@@ -88,6 +100,7 @@ function isSpace(): callable
  * Like 'isSpace', but does not accept newlines and carriage returns.
  *
  * @return callable(string) : bool
+ * @api
  * @see isSpace
  */
 function isHSpace(): callable
@@ -99,6 +112,7 @@ function isHSpace(): callable
  * True for 0-9
  *
  * @return callable(string) : bool
+ * @api
  */
 function isDigit(): callable
 {
@@ -109,6 +123,7 @@ function isDigit(): callable
  * Control character predicate (a non-printing character of the Latin-1 subset of Unicode).
  *
  * @return callable(string) : bool
+ * @api
  */
 function isControl(): callable
 {
@@ -119,6 +134,7 @@ function isControl(): callable
  * Returns true for a space or a tab character
  *
  * @return callable(string) : bool
+ * @api
  */
 function isBlank()
 {
@@ -129,6 +145,7 @@ function isBlank()
  * Returns true for a space character, and \t, \n, \r, \f, \v.
  *
  * @return callable(string) : bool
+ * @api
  */
 function isWhitespace()
 {
@@ -139,6 +156,7 @@ function isWhitespace()
  * Returns true for an uppercase character A-Z.
  *
  * @return callable(string) : bool
+ * @api
  */
 function isUpper()
 {
@@ -149,6 +167,7 @@ function isUpper()
  * Returns true for a lowercase character a-z.
  *
  * @return callable(string) : bool
+ * @api
  */
 function isLower()
 {
@@ -159,6 +178,7 @@ function isLower()
  * Returns true for an uppercase or lowercase character A-Z, a-z.
  *
  * @return callable(string) : bool
+ * @api
  */
 function isAlpha()
 {
@@ -169,6 +189,7 @@ function isAlpha()
  * Returns true for an alpha or numeric character A-Z, a-z, 0-9.
  *
  * @return callable(string) : bool
+ * @api
  */
 function isAlphaNum()
 {
@@ -179,6 +200,7 @@ function isAlphaNum()
  * Returns true if the given character is a hexadecimal numeric character 0123456789abcdefABCDEF.
  *
  * @return callable(string) : bool
+ * @api
  */
 function isHexDigit()
 {
@@ -189,6 +211,7 @@ function isHexDigit()
  * Returns true if the given character is a printable ASCII char.
  *
  * @return callable(string) : bool
+ * @api
  */
 function isPrintable()
 {
@@ -199,6 +222,7 @@ function isPrintable()
  * Returns true if the given character is a punctuation character !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
  *
  * @return callable(string) : bool
+ * @api
  */
 function isPunctuation()
 {

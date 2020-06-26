@@ -14,7 +14,6 @@ use Verraes\Parsica\Internal\Assert;
 use Verraes\Parsica\Internal\Fail;
 use Verraes\Parsica\Internal\Succeed;
 use Verraes\Parsica\Internal\TakeWhile;
-use function Verraes\Parsica\{isEqual, notPred};
 
 /**
  * A parser that satisfies a predicate. Useful as a building block for writing things like char(), digit()...
@@ -129,9 +128,10 @@ function anything(): Parser
 /**
  * Match any character but the given one.
  *
+ * @return Parser<string>
+ * @api
  * @template T
  *
- * @return Parser<string>
  */
 function anySingleBut(string $x): Parser
 {
@@ -141,11 +141,12 @@ function anySingleBut(string $x): Parser
 /**
  * Succeeds if the current character is in the supplied list of characters. Returns the parsed character.
  *
- * @template T
- *
  * @param list<string> $chars
  *
  * @return Parser<string>
+ * @api
+ * @template T
+ *
  */
 function oneOf(array $chars): Parser
 {
@@ -157,11 +158,12 @@ function oneOf(array $chars): Parser
  * A compact form of 'oneOf'.
  * oneOfS("abc") == oneOf(['a', 'b', 'c'])
  *
- * @template T
- *
  * @param string $chars
  *
  * @return Parser<string>
+ * @api
+ * @template T
+ *
  */
 function oneOfS(string $chars): Parser
 {
@@ -175,11 +177,12 @@ function oneOfS(string $chars): Parser
  * The dual of 'oneOf'. Succeeds if the current character is not in the supplied list of characters. Returns the
  * parsed character.
  *
- * @template T
- *
  * @param list<string> $chars
  *
  * @return Parser<string>
+ * @api
+ * @template T
+ *
  */
 function noneOf(array $chars): Parser
 {
@@ -192,11 +195,12 @@ function noneOf(array $chars): Parser
  * A compact form of 'noneOf'.
  * noneOfS("abc") == noneOf(['a', 'b', 'c'])
  *
- * @template T
- *
  * @param string $chars
  *
  * @return Parser<string>
+ * @api
+ * @template T
+ *
  */
 function noneOfS(string $chars): Parser
 {
@@ -208,8 +212,9 @@ function noneOfS(string $chars): Parser
 /**
  * Consume the rest of the input and return it as a string. This parser never fails, but may return the empty string.
  *
- * @template T
  * @return Parser<string>
+ * @api
+ * @template T
  */
 function takeRest(): Parser
 {
@@ -220,6 +225,8 @@ function takeRest(): Parser
  * Parse nothing, but still succeed.
  *
  * This serves as the zero parser in `append()` operations.
+ *
+ * @api
  */
 function nothing(): Parser
 {
@@ -228,6 +235,8 @@ function nothing(): Parser
 
 /**
  * Parse everything; that is, consume the rest of the input until the end.
+ *
+ * @api
  */
 function everything(): Parser
 {
@@ -236,6 +245,8 @@ function everything(): Parser
 
 /**
  * Always succeed, no matter what the input was.
+ *
+ * @api
  */
 function success(): Parser
 {
@@ -244,6 +255,8 @@ function success(): Parser
 
 /**
  * Always fail, no matter what the input was.
+ *
+ * @api
  */
 function failure(): Parser
 {
@@ -253,8 +266,9 @@ function failure(): Parser
 /**
  * Parse the end of the input
  *
- * @template T
  * @return Parser<T>
+ * @api
+ * @template T
  */
 function eof(): Parser
 {

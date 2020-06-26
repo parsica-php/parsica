@@ -12,7 +12,6 @@ namespace Verraes\Parsica;
 
 use Exception;
 use Verraes\Parsica\Internal\Fail;
-use function Verraes\Parsica\ParseResult\{fail};
 
 /**
  * A parser is any function that takes a string input and returns a {@see ParseResult}. The Parser class is a wrapper
@@ -24,6 +23,7 @@ use function Verraes\Parsica\ParseResult\{fail};
  * will be changed if we find use cases where those would be the best solutions.
  *
  * @template T
+ * @api
  */
 final class Parser
 {
@@ -68,6 +68,8 @@ final class Parser
     /**
      * Recurse on a parser. Used in combination with {@see recursive()}. After calling this method, this parser behaves
      * like a regular parser.
+     *
+     * @api
      */
     public function recurse(Parser $parser): Parser
     {
@@ -96,6 +98,7 @@ final class Parser
      * Run the parser on an input
      *
      * @return ParseResult<T>
+     * @api
      */
     public function run(string $input): ParseResult
     {
@@ -111,6 +114,7 @@ final class Parser
      *
      * @return Parser<T>
      * @see optional()
+     * @api
      */
     public function optional(): Parser
     {
@@ -127,6 +131,7 @@ final class Parser
      * @param Parser<T> $other
      *
      * @return Parser<T>
+     * @api
      */
     public function or(Parser $other): Parser
     {
@@ -180,6 +185,7 @@ final class Parser
      * @param Parser<T2> $second
      *
      * @return Parser<T2>
+     * @api
      */
     public function followedBy(Parser $second): Parser
     {
@@ -196,6 +202,7 @@ final class Parser
      *
      * @return Parser<T2>
      * @see sequence()
+     * @api
      */
     public function sequence(Parser $second): Parser
     {
@@ -212,6 +219,7 @@ final class Parser
      * eg (char(':')->followedBy(char(')')).followedBy(char(')')).
      *
      * @return Parser<T>
+     * @api
      */
     public function label(string $label): Parser
     {
@@ -234,6 +242,7 @@ final class Parser
      *
      * @return Parser<T2>
      * @see bind()
+     * @api
      */
     public function bind(callable $f): Parser
     {
@@ -258,6 +267,7 @@ final class Parser
      * @param callable(T) : T2 $transform
      *
      * @return Parser<T2>
+     * @api
      */
     public function map(callable $transform): Parser
     {
@@ -265,7 +275,9 @@ final class Parser
     }
 
     /**
-     * Take the remaining input from the result and parse it
+     * Take the remaining input from the result and parse it.
+     *
+     * @api
      */
     public function continueFrom(ParseResult $result): ParseResult
     {
@@ -280,6 +292,7 @@ final class Parser
      * @param class-string<T2> $className
      *
      * @return Parser<T2>
+     * @api
      */
     public function construct(string $className): Parser
     {
@@ -295,6 +308,7 @@ final class Parser
      * @param Parser<T> $other
      *
      * @return Parser<T>
+     * @api
      */
     public function append(Parser $other): Parser
     {
@@ -306,7 +320,8 @@ final class Parser
      *
      * @return ParseResult<T>
      *
-     * @throws Fail
+     * @throws ParserFailure
+     * @api
      */
     public function try(string $input): ParseResult
     {
@@ -333,6 +348,7 @@ final class Parser
      * @return Parser<T3>
      *
      * @psalm-suppress MixedArgumentTypeCoercion
+     * @api
      */
     public function apply(Parser $parser): Parser
     {
@@ -348,6 +364,7 @@ final class Parser
      *
      * @return Parser<T>
      * @see keepFirst()
+     * @api
      */
     public function thenIgnore(Parser $other): Parser
     {
@@ -363,15 +380,16 @@ final class Parser
      *
      * `string("print")->notFollowedBy(alphaNumChar()))` will match "print something" but not "printXYZ something"
      *
-     * @see notFollowedBy()
-     *
-     * @template T2
-     *
      * @param Parser<T2> $parser
      *
      * @return Parser<T>
+     * @see notFollowedBy()
+     *
+     * @template T2
+     * @api
+     *
      */
-    public function notFollowedBy(Parser $second) : Parser
+    public function notFollowedBy(Parser $second): Parser
     {
         return keepFirst($this, notFollowedBy($second));
     }

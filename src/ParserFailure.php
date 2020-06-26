@@ -16,11 +16,15 @@ interface ParserFailure extends Throwable
 {
     /**
      * The input that the parser encountered when it failed.
+     *
+     * @api
      */
     public function got(): string;
 
     /**
      * Information about what the parser expected at the position where it failed.
+     *
+     * @api
      */
     public function expected(): string;
 }

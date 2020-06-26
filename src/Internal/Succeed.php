@@ -14,7 +14,6 @@ use BadMethodCallException;
 use Exception;
 use Verraes\Parsica\Parser;
 use Verraes\Parsica\ParseResult;
-use Verraes\Parsica\ParseResult\T;
 
 /**
  * @internal
@@ -32,6 +31,8 @@ final class Succeed implements ParseResult
 
     /**
      * @param T $output
+     *
+     * @internal
      */
     public function __construct($output, string $remainder)
     {

@@ -10,12 +10,11 @@
 
 namespace Verraes\Parsica;
 
-use function Verraes\Parsica\{isBlank, isHSpace, isSpace, isWhitespace};
-
 /**
  * Parse a single space character.
  *
  * @return Parser<string>
+ * @api
  */
 function space(): Parser
 {
@@ -26,6 +25,7 @@ function space(): Parser
  * Parse a single tab character.
  *
  * @return Parser<string>
+ * @api
  */
 function tab(): Parser
 {
@@ -36,6 +36,7 @@ function tab(): Parser
  *  Parse a space or tab.
  *
  * @return Parser<string>
+ * @api
  */
 function blank(): Parser
 {
@@ -46,6 +47,7 @@ function blank(): Parser
  *  Parse a space character, and \t, \n, \r, \f, \v.
  *
  * @return Parser<string>
+ * @api
  */
 function whitespace(): Parser
 {
@@ -57,6 +59,7 @@ function whitespace(): Parser
  * Parse a newline character.
  *
  * @return Parser<string>
+ * @api
  */
 function newline(): Parser
 {
@@ -65,6 +68,8 @@ function newline(): Parser
 
 /**
  * Parse a carriage return character and a newline character. Return the two characters. {\r\n}
+ *
+ * @api
  */
 function crlf(): Parser
 {
@@ -75,6 +80,7 @@ function crlf(): Parser
  * Parse a newline or a crlf.
  *
  * @return Parser<string>
+ * @api
  */
 function eol(): Parser
 {
@@ -85,6 +91,7 @@ function eol(): Parser
  * Skip zero or more white space characters.
  *
  * @return Parser<string>
+ * @api
  */
 function skipSpace(): Parser
 {
@@ -95,6 +102,7 @@ function skipSpace(): Parser
  * Like 'skipSpace', but does not accept newlines and carriage returns.
  *
  * @return Parser<string>
+ * @api
  * @see skipSpace
  */
 function skipHSpace(): Parser
@@ -106,6 +114,7 @@ function skipHSpace(): Parser
  * Skip one or more white space characters.
  *
  * @return Parser<string>
+ * @api
  */
 function skipSpace1(): Parser
 {
@@ -116,6 +125,7 @@ function skipSpace1(): Parser
  * Like 'skipSpace1', but does not accept newlines and carriage returns.
  *
  * @return Parser<string>
+ * @api
  * @see skipSpace1
  */
 function skipHSpace1(): Parser

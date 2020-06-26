@@ -13,12 +13,12 @@ namespace Verraes\Parsica;
 use Verraes\Parsica\Internal\Assert;
 use Verraes\Parsica\Internal\Fail;
 use Verraes\Parsica\Internal\Succeed;
-use function Verraes\Parsica\ParseResult\{fail, succeed};
 
 /**
  * Parse a non-empty string.
  *
  * @return Parser<string>
+ * @api
  * @see stringI()
  *
  */
@@ -41,15 +41,15 @@ function string(string $str): Parser
  * eg stringI("foobar")->run("foObAr") will succeed with "foObAr"
  *
  * @return Parser<string>
+ * @api
  * @see string()
- *
  */
 function stringI(string $str): Parser
 {
     Assert::nonEmpty($str);
     /** @var list<string> $split */
     $split = mb_str_split($str);
-    $chars = array_map(fn(string $c) : Parser => charI($c), $split);
+    $chars = array_map(fn(string $c): Parser => charI($c), $split);
     /** @var Parser<string> $parser */
     $parser = array_reduce(
         $chars,

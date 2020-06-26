@@ -11,18 +11,6 @@
 namespace Verraes\Parsica;
 
 use Verraes\Parsica\Internal\Assert;
-use function Verraes\Parsica\{isAlpha,
-    isAlphaNum,
-    isCharCode,
-    isControl,
-    isDigit,
-    isEqual,
-    isHexDigit,
-    isLower,
-    isPrintable,
-    isPunctuation,
-    isUpper,
-    orPred};
 
 /**
  * Parse a single character.
@@ -30,6 +18,7 @@ use function Verraes\Parsica\{isAlpha,
  * @param string $c A single character
  *
  * @return Parser<string>
+ * @api
  * @see charI()
  *
  */
@@ -48,6 +37,8 @@ function char(string $c): Parser
  * @param string $c A single character
  *
  * @return Parser<string>
+ * @api
+ *
  * @see char()
  */
 function charI(string $c): Parser
@@ -61,6 +52,7 @@ function charI(string $c): Parser
  * Parse a control character (a non-printing character of the Latin-1 subset of Unicode).
  *
  * @return Parser<string>
+ * @api
  */
 function controlChar(): Parser
 {
@@ -71,6 +63,7 @@ function controlChar(): Parser
  * Parse an uppercase character A-Z.
  *
  * @return Parser<string>
+ * @api
  */
 function upperChar(): Parser
 {
@@ -81,6 +74,7 @@ function upperChar(): Parser
  * Parse a lowercase character a-z.
  *
  * @return Parser<string>
+ * @api
  */
 function lowerChar(): Parser
 {
@@ -91,6 +85,7 @@ function lowerChar(): Parser
  * Parse an uppercase or lowercase character A-Z, a-z.
  *
  * @return Parser<string>
+ * @api
  */
 function alphaChar(): Parser
 {
@@ -101,6 +96,7 @@ function alphaChar(): Parser
  * Parse an alpha or numeric character A-Z, a-z, 0-9.
  *
  * @return Parser<string>
+ * @api
  */
 function alphaNumChar(): Parser
 {
@@ -111,6 +107,7 @@ function alphaNumChar(): Parser
  * Parse a printable ASCII char.
  *
  * @return Parser<string>
+ * @api
  */
 function printChar(): Parser
 {
@@ -121,6 +118,7 @@ function printChar(): Parser
  * Parse a single punctuation character !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
  *
  * @return Parser<string>
+ * @api
  */
 function punctuationChar(): Parser
 {
@@ -133,6 +131,7 @@ function punctuationChar(): Parser
  * or similar to cast it to a numeric type.
  *
  * @return Parser<string>
+ * @api
  */
 function digitChar(): Parser
 {
@@ -143,6 +142,7 @@ function digitChar(): Parser
  * Parse a binary character 0 or 1.
  *
  * @return Parser<string>
+ * @api
  */
 function binDigitChar(): Parser
 {
@@ -154,7 +154,7 @@ function binDigitChar(): Parser
  *
  * @return Parser<string>
  *
- * @deprecated @TODO doesn't support signed numbers yet
+ * @api
  */
 function octDigitChar(): Parser
 {
@@ -165,6 +165,7 @@ function octDigitChar(): Parser
  * Parse a hexadecimal numeric character 0123456789abcdefABCDEF.
  *
  * @return Parser<string>
+ * @api
  */
 function hexDigitChar(): Parser
 {
