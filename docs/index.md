@@ -7,9 +7,9 @@ The easiest way to build robust parsers in PHP.
 
 **Note:** Parsica is very early stage, expect things to break. 
 
+* [Releases](releases)
 * [Installation & Requirements](installation)
 * [API Reference](api/index)
-* [Releases](releases)
 
 ## Tutorial
 
