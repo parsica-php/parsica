@@ -21,22 +21,22 @@ use function Verraes\Parsica\ParseResult\succeed;
 final class TakeWhile
 {
     /**
-     * @internal
      * Keep parsing 0 or more characters as long as the predicate holds.
-     *
-     * @template T
      *
      * @param callable(string) : bool $predicate
      *
      * @return Parser<T>
+     * @internal
+     *
+     * @template T
      */
     public static function _takeWhile(callable $predicate): Parser
     {
         /**
-         * @see \Tests\Verraes\Parsica\v0_3_0\primitivesTest::not_sure_how_takeWhile_should_deal_with_EOF()
+         * @see \Tests\Verraes\Parsica\v0_4_0\primitivesTest::not_sure_how_takeWhile_should_deal_with_EOF()
          */
         return Parser::make(
-            fn(string $input): ParseResult => //self::isEOF($input) ?
+            fn(Stream $input): ParseResult => //self::isEOF($input) ?
                 //    new Fail("takeWhile(predicate)", "EOF") :
             self::parseRemainingInput($input, $predicate)
         );
@@ -45,95 +45,111 @@ final class TakeWhile
     /**
      * @param callable(string) : bool $predicate
      */
-    private static function parseRemainingInput(string $input, callable $predicate): ParseResult
+    private static function parseRemainingInput(Stream $input, callable $predicate): ParseResult
     {
         $chunk = "";
         $remaining = $input;
-        while (!self::isEOF($remaining) && self::matchFirst($predicate, $remaining)) {
-            $chunk .= mb_substr($remaining, 0, 1);
-            $remaining = mb_substr($remaining, 1);
+        while (!$remaining->isEOF() && self::testOneToken($predicate, $remaining)) {
+            $t = $remaining->take1();
+            $chunk .= $t->token();
+            $remaining = $t->stream();
         }
         return new Succeed($chunk, $remaining);
     }
 
-    private static function isEOF(string $input): bool
-    {
-        return mb_strlen($input) === 0;
-    }
 
     /**
      * @param callable(string) : bool $predicate
      */
-    private static function matchFirst(callable $predicate, string $str): bool
+    private static function testOneToken(callable $predicate, Stream $stream): bool
     {
-        return $predicate(mb_substr($str, 0, 1));
+        return $predicate($stream->take1()->token());
     }
 
     /**
-     * @internal
      * Keep parsing 1 or more characters as long as the predicate holds.
-     *
-     * @template T
      *
      * @param callable(string) : bool $predicate
      *
      * @return Parser<T>
+     * @internal
+     *
+     * @template T
      */
     public static function _takeWhile1(callable $predicate): Parser
     {
         return Parser::make(
-            fn(string $input): ParseResult => !self::matchFirst($predicate, $input) ?
-                new Fail("takeWhile1(predicate)", $input) :
-                self::parseRemainingInput($input, $predicate)
+            function (Stream $input) use ($predicate): ParseResult {
+                // @todo generalise this?
+                try {
+                    $isToken = self::testOneToken($predicate, $input);
+                } catch (EndOfStream $e) {
+                    return new Fail("takeWhile1(predicate)", $input);
+                }
+                return !$isToken ?
+                    new Fail("takeWhile1(predicate)", $input) :
+                    self::parseRemainingInput($input, $predicate);
+            }
         );
     }
 
     /**
-     * @internal
      * Skip 0 or more characters as long as the predicate holds.
-     *
-     * @template T
      *
      * @param callable(string) : bool $predicate
      *
      * @return Parser<T>
+     * @internal
+     *
+     * @template T
+     *
      */
     public static function _skipWhile(callable $predicate): Parser
     {
         return Parser::make(
-            fn(string $input): ParseResult => self::skipRemainingInput($input, $predicate)
+            fn(Stream $input): ParseResult => self::skipRemainingInput($input, $predicate)
         );
     }
 
     /**
      * @param callable(string) : bool $predicate
      */
-    private static function skipRemainingInput(string $input, callable $predicate): ParseResult
+    private static function skipRemainingInput(Stream $input, callable $predicate): ParseResult
     {
         $output = "";
         $remaining = $input;
-        while (!self::isEOF($remaining) && self::matchFirst($predicate, $remaining)) {
-            $remaining = mb_substr($remaining, 1);
+        while (!$remaining->isEOF() && self::testOneToken($predicate, $remaining)) {
+            $t = $remaining->take1();
+            $remaining = $t->stream();
         }
         return new Succeed($output, $remaining);
     }
 
     /**
-     * @internal
      * Skip 1 or more characters as long as the predicate holds.
-     *
-     * @template T
      *
      * @param callable(string) : bool $predicate
      *
      * @return Parser<T>
+     * @internal
+     *
+     * @template T
+     *
      */
     public static function _skipWhile1(callable $predicate): Parser
     {
         return Parser::make(
-            fn(string $input): ParseResult => !self::matchFirst($predicate, $input) ?
-                new Fail("skipWhile1(predicate)", $input) :
-                self::skipRemainingInput($input, $predicate)
+            function (Stream $input) use ($predicate): ParseResult {
+                // @todo generalise this?
+                try {
+                    $isToken = self::testOneToken($predicate, $input);
+                } catch (EndOfStream $e) {
+                    return new Fail("takeWhile1(predicate)", $input);
+                }
+                return !$isToken ?
+                    new Fail("skipWhile1(predicate)", $input) :
+                    self::skipRemainingInput($input, $predicate);
+            }
         );
     }
 

@@ -27,14 +27,14 @@ final class Succeed implements ParseResult
      */
     private $output;
 
-    private string $remainder;
+    private Stream $remainder;
 
     /**
      * @param T $output
      *
      * @internal
      */
-    public function __construct($output, string $remainder)
+    public function __construct($output, Stream $remainder)
     {
         $this->output = $output;
         $this->remainder = $remainder;
@@ -48,7 +48,7 @@ final class Succeed implements ParseResult
         return $this->output;
     }
 
-    public function remainder(): string
+    public function remainder(): Stream
     {
         return $this->remainder;
     }
@@ -68,7 +68,7 @@ final class Succeed implements ParseResult
         throw new BadMethodCallException("Can't read the expectation of a succeeded ParseResult.");
     }
 
-    public function got(): string
+    public function got(): Stream
     {
         throw new BadMethodCallException("Can't read the expectation of a succeeded ParseResult.");
     }

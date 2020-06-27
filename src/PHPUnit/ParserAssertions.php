@@ -11,6 +11,7 @@
 namespace Verraes\Parsica\PHPUnit;
 
 use Exception;
+use Verraes\Parsica\Internal\StringStream;
 use Verraes\Parsica\Parser;
 
 /**
@@ -28,6 +29,7 @@ trait ParserAssertions
      */
     protected function assertParse($expectedParsed, Parser $parser, string $input, string $message = ""): void
     {
+        $input = new StringStream($input);
         $actualResult = $parser->run($input);
         if ($actualResult->isSuccess()) {
             $this->assertStrictlyEquals(
@@ -90,6 +92,7 @@ trait ParserAssertions
      */
     protected function assertRemain(string $expectedRemaining, Parser $parser, string $input, string $message = ""): void
     {
+        $input = new StringStream($input);
         $actualResult = $parser->run($input);
         if ($actualResult->isSuccess()) {
             $this->assertEquals(
@@ -114,6 +117,7 @@ trait ParserAssertions
      */
     protected function assertNotParse(Parser $parser, string $input, ?string $expectedFailure = null, string $message = ""): void
     {
+        $input = new StringStream($input);
         $actualResult = $parser->run($input);
         $this->assertTrue(
             $actualResult->isFail(),
@@ -136,7 +140,7 @@ trait ParserAssertions
      */
     protected function assertFailOnEOF(Parser $parser, string $message = ""): void
     {
-        $actualResult = $parser->run("");
+        $actualResult = $parser->run(new StringStream(""));
         $this->assertTrue(
             $actualResult->isFail(),
             $message . "\n" . "Expected the parser to fail on EOL."
@@ -148,7 +152,7 @@ trait ParserAssertions
      */
     protected function assertSucceedOnEOF(Parser $parser, string $message = ""): void
     {
-        $actualResult = $parser->run("");
+        $actualResult = $parser->run(new StringStream(""));
         $this->assertTrue(
             $actualResult->isSuccess(),
             $message . "\n" . "Expected the parser to succeed on EOL."

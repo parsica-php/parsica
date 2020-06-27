@@ -12,7 +12,7 @@ Before you start, make sure you've had a look at the [installation instructions]
 $parser = char(':')
             ->append(atLeastOne(punctuationChar()))
             ->label('smiley');
-$result = $parser->try(':*{)'); 
+$result = $parser->tryString(':*{)'); 
 echo $result->output() . " is a valid smiley!";
 ```
 
@@ -34,7 +34,7 @@ One of the great benefits of the parser combinator style is that, once you get t
 <?php 
 $parser = digitChar();
 $input = "1. Write Docs";
-$result = $parser->try($input);
+$result = $parser->tryString($input);
 $output = $result->output();
 assert($output === "1");
 assert(is_string($output));
@@ -47,7 +47,7 @@ Parser Combinators are functions (or methods) that combine parsers into new pars
 ```php
 <?php
 $parser = char('a')->append(char('b'));
-$result = $parser->try("abc");
+$result = $parser->tryString("abc");
 $output = $result->output();
 assert($output === "ab");
 ```
@@ -59,7 +59,7 @@ $parser =
         string("Hello")->thenIgnore(char(",")),
         string("world")->thenIgnore(char("!")),
     );
-$result = $parser->try("Hello,world!");
+$result = $parser->tryString("Hello,world!");
 $output = $result->output();
 assert($output == ["Hello", "world"]);   
 ```
@@ -75,13 +75,13 @@ We can inspect the remainder:
 ```php
 <?php
 $parser = sequence(char('a'), char('b'));
-$result = $parser->try("abc");
+$result = $parser->tryString("abc");
 
 assert($result->output() === "b");
 assert($result->remainder() === "c");
  ```
 
-So when we run our parser using `$parser->try($input)`, the `sequence()` combinator first tries to run `char('a')` on the input `"abc"`. If it succeeds, it takes the remainder `"bc"` and successfully runs `char('b')` on it and returns the result. That result consists of the output from the last parser `"b"`, and the remainder `"c"`.
+So when we run our parser using `$parser->tryString($input)`, the `sequence()` combinator first tries to run `char('a')` on the input `"abc"`. If it succeeds, it takes the remainder `"bc"` and successfully runs `char('b')` on it and returns the result. That result consists of the output from the last parser `"b"`, and the remainder `"c"`.
 
 In imperative code, it would look something like this:
 
@@ -141,10 +141,10 @@ assert(floatval("abc") == 0);
 $parser = float()->map(fn($v) => floatval($v));
 try {
     // works: 
-    $result = $parser->try("1.23");
+    $result = $parser->tryString("1.23");
     assert($result->output() == 1.23);
  
     // throws a ParseFailure exception with message "Expected: float, got abc"
-    $result = $parser->try("abc");
+    $result = $parser->tryString("abc");
 } catch (ParserFailure $e) {}
 ```

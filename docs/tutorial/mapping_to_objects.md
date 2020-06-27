@@ -9,7 +9,7 @@ Most of the parsers that come with Parsica, return strings as outputs.
 ```php
 <?php
 $parser = digitChar()->append(alphaChar());
-$result = $parser->try('1A');
+$result = $parser->tryString('1A');
 assert(gettype($result->output() == 'string'));
 assert($parser instanceof Verraes\Parsica\Parser);
 ```
@@ -23,7 +23,7 @@ Here's an example of a parser of type `Parser<array<string>>`:
 ```php
 <?php
 $parser = sepBy(char(','), atLeastOne(digitChar()));
-$result = $parser->try('123,9,55');
+$result = $parser->tryString('123,9,55');
 assert($result->output() == ["123", "9", "55"]);
 ```
 
@@ -37,7 +37,7 @@ We can use it for manipulating the output. Here's a simple example:
 <?php
 $parser = atLeastOne(alphaChar())
     ->map(fn(string $val) => strtolower($val));
-$result = $parser->try('PaRsIcA');
+$result = $parser->tryString('PaRsIcA');
 assert($result->output() == "parsica");
 ```
 
@@ -51,7 +51,7 @@ We can now use this to cast the parser's output to scalars:
 <?php
 $parser = atLeastOne(digitChar())
     ->map(fn(string $val) => intval($val));
-$result = $parser->try("123"); // input is still a string
+$result = $parser->tryString("123"); // input is still a string
 assert($result->output() == 123); // output is an int
 ```
 
@@ -64,7 +64,7 @@ $parser = sepBy(
     atLeastOne(digitChar())
         ->map(fn($val) => intval($val))
 );
-$result = $parser->try('123,9,55');
+$result = $parser->tryString('123,9,55');
 assert($result->output() == [123, 9, 55]); // array of ints
 ```
 
@@ -114,7 +114,7 @@ $money = collect($currency, skipHSpace()->followedBy($amount));
 // Let's change $money to type Parser<Money>
 $money = $money->map(fn(array $a) => new Money($a[1], $a[0]));
 
-$result = $money->try('EUR 12.34');
+$result = $money->tryString('EUR 12.34');
 assert($result->output() == new Money(12.34, new Currency('EUR')));
 
 // We can now composer our Parser<Money> in larger parsers
@@ -123,7 +123,7 @@ $priceList = collect(
     string("exVAT ")->followedBy($money)->thenIgnore(whitespace()),
     string("incVAT ")->followedBy($money)
 );
-$result = $priceList->try('exVAT EUR 100.00 incVAT EUR 121.00');
+$result = $priceList->tryString('exVAT EUR 100.00 incVAT EUR 121.00');
 
 ```
 

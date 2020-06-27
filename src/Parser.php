@@ -12,6 +12,8 @@ namespace Verraes\Parsica;
 
 use Exception;
 use Verraes\Parsica\Internal\Fail;
+use Verraes\Parsica\Internal\Stream;
+use Verraes\Parsica\Internal\StringStream;
 
 /**
  * A parser is any function that takes a string input and returns a {@see ParseResult}. The Parser class is a wrapper
@@ -28,7 +30,7 @@ use Verraes\Parsica\Internal\Fail;
 final class Parser
 {
     /**
-     * @var callable(string) : ParseResult<T> $parserF
+     * @var callable(Stream) : ParseResult<T> $parserF
      */
     private $parserFunction;
 
@@ -36,7 +38,7 @@ final class Parser
     private string $recursionStatus;
 
     /**
-     * @param callable(string) : ParseResult<T> $parserFunction
+     * @param callable(Stream) : ParseResult<T> $parserFunction
      * @param 'non-recursive'|'awaiting-recurse'|'recursion-was-setup' $recursionStatus
      */
     private function __construct(callable $parserFunction, string $recursionStatus)
@@ -55,7 +57,7 @@ final class Parser
     {
         return new Parser(
         // Make a placeholder parser that will throw when you try to run it.
-            function (string $input): ParseResult {
+            function (Stream $input): ParseResult {
                 throw new Exception(
                     "Can't run a recursive parser that hasn't been setup properly yet. "
                     . "A parser created by recursive(), must then be called with ->recurse(Parser) "
@@ -84,7 +86,7 @@ final class Parser
             case 'awaiting-recurse':
                 // Replace the placeholder parser from recursive() with a call to the inner parser. This must be dynamic,
                 // because it's possible that the inner parser is also a recursive parser that has not been setup yet.
-                $this->parserFunction = fn(string $input): ParseResult => $parser->run($input);
+                $this->parserFunction = fn(Stream $input): ParseResult => $parser->run($input);
                 $this->recursionStatus = 'recursion-was-setup';
                 break;
             default:
@@ -100,7 +102,7 @@ final class Parser
      * @return ParseResult<T>
      * @api
      */
-    public function run(string $input): ParseResult
+    public function run(Stream $input): ParseResult
     {
         $f = $this->parserFunction;
         return $f($input);
@@ -138,7 +140,7 @@ final class Parser
         // This is the canonical implementation: run both parsers, and pick the first succeeding one, by delegating
         // this work to ParseResult::alternative.
 
-        return Parser::make(function (string $input) use ($other): ParseResult {
+        return Parser::make(function (Stream $input) use ($other): ParseResult {
             // @TODO When the first parser succeeds, this implementation unnecessarily evaluates $other anyway.
             return $this->run($input)
                 ->alternative(
@@ -164,7 +166,7 @@ final class Parser
     /**
      * Make a new parser.
      *
-     * @param callable(string) : ParseResult<T2> $parserFunction
+     * @param callable(Stream) : ParseResult<T2> $parserFunction
      *
      * @return Parser<T2>
      * @internal
@@ -224,7 +226,7 @@ final class Parser
     public function label(string $label): Parser
     {
         // @todo perhaps something like $parser->onSuccess($f)->onFailure($g) ?
-        return Parser::make(function (string $input) use ($label) : ParseResult {
+        return Parser::make(function (Stream $input) use ($label) : ParseResult {
             $result = $this->run($input);
             return ($result->isSuccess())
                 ? $result
@@ -247,7 +249,7 @@ final class Parser
     public function bind(callable $f): Parser
     {
         /** @var Parser<T2> $parser */
-        $parser = Parser::make(function (string $input) use ($f) : ParseResult {
+        $parser = Parser::make(function (Stream $input) use ($f) : ParseResult {
             $result = $this->map($f)->run($input);
             if ($result->isSuccess()) {
                 $p2 = $result->output();
@@ -271,7 +273,7 @@ final class Parser
      */
     public function map(callable $transform): Parser
     {
-        return Parser::make(fn(string $input): ParseResult => $this->run($input)->map($transform));
+        return Parser::make(fn(Stream $input): ParseResult => $this->run($input)->map($transform));
     }
 
     /**
@@ -316,7 +318,24 @@ final class Parser
     }
 
     /**
-     * Try to parse the input, or throw an exception;
+     * Try to parse a string. Alias of `try(new StringStream($string))`.
+     *
+     * @TODO Try should fail when it doesn't consume the whole input.
+     *
+     * @param string $input
+     *
+     * @return ParseResult<T>
+     *
+     * @throws ParserFailure
+     * @api
+     */
+    public function tryString(string $input): ParseResult
+    {
+        return $this->try(new StringStream($input));
+    }
+
+    /**
+     * Try to parse the input, or throw an exception.
      *
      * @TODO Try should fail when it doesn't consume the whole input.
      *
@@ -325,7 +344,7 @@ final class Parser
      * @throws ParserFailure
      * @api
      */
-    public function try(string $input): ParseResult
+    public function try(Stream $input): ParseResult
     {
         $result = $this->run($input);
         if ($result->isFail()) {
