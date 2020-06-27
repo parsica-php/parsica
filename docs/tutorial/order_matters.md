@@ -10,7 +10,7 @@ The order of clauses in an or() matters. If we do the following parser definitio
 <?php
 $parser = string('http')->or(string('https'));
 $input = "https://verraes.net";
-$result = $parser->run($input);
+$result = $parser->tryString($input);
 assert($result->output() === "http");
 assert($result->remainder() === "s://verraes.net");
 ```
@@ -21,7 +21,7 @@ The solution is to consider the order of or clauses:
 <?php
 $parser = string('https')->or(string('http'));
 $input = "https://verraes.net";
-$result = $parser->run($input);
+$result = $parser->tryString($input);
 assert($result->output() === "https");
 assert($result->remainder() === "://verraes.net");
 ```

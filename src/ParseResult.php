@@ -10,6 +10,8 @@
 
 namespace Verraes\Parsica;
 
+use Verraes\Parsica\Internal\Stream;
+
 /**
  * @template T
  */
@@ -42,7 +44,7 @@ interface ParseResult
      *
      * @api
      */
-    public function remainder(): string;
+    public function remainder(): Stream;
 
     /*
      * A message that indicates what the failed parser expected to find at its position in the input. It contains the
@@ -60,7 +62,7 @@ interface ParseResult
      *
      * @api
      */
-    public function got(): string;
+    public function got(): Stream;
 
     /**
      * Append the output of two successful ParseResults. If one or both have failed, it returns the first failed

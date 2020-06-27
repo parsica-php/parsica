@@ -11,6 +11,7 @@
 namespace Verraes\Parsica;
 
 use Throwable;
+use Verraes\Parsica\Internal\Stream;
 
 interface ParserFailure extends Throwable
 {
@@ -19,7 +20,7 @@ interface ParserFailure extends Throwable
      *
      * @api
      */
-    public function got(): string;
+    public function got(): Stream;
 
     /**
      * Information about what the parser expected at the position where it failed.

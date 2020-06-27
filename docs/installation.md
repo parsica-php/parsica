@@ -60,7 +60,7 @@ Finally, add some code:
 ```php
 <?php
 $parser = between(char('{'), char('}'), atLeastOne(alphaChar()));
-$result = $parser->try("{Hello}");
+$result = $parser->tryString("{Hello}");
 echo $result->output();
 // outputs "Hello"
 ```

@@ -10,10 +10,10 @@ Say you want to match the `print` keyword in a programming language. You can exp
 <?php
 $print = string("print");
 
-$result = $print->run("print('Hello World');");
+$result = $print->tryString("print('Hello World');");
 assert($result->output() == "print");
 
-$result = $print->run("printXYZ('Hello World');");
+$result = $print->tryString("printXYZ('Hello World');");
 assert($result->output() == "print"); // oops!
 ```
 
@@ -24,7 +24,7 @@ We can solve it by using the `notFollowedBy` combinator.
 ```php
 <?php
 $print = keepFirst(string("print"), notFollowedBy(alphaNumChar()));
-$result = $print->run("printXYZ('Hello World');");
+$result = $print->run(new StringStream("printXYZ('Hello World');"));
 assert($result->isFail());
 ```
 
@@ -33,7 +33,7 @@ There's a fluent interface as well:
 ```php
 <?php
 $print = string("print")->notFollowedBy(alphaNumChar());
-$result = $print->run("printXYZ('Hello World');");
+$result = $print->run(new StringStream("printXYZ('Hello World');"));
 assert($result->isFail());
 ```
 
@@ -50,9 +50,9 @@ $parser = choice(
     $keyword('sprintf')
 );
 
-$result = $parser->try("print('Hello World');");
+$result = $parser->tryString("print('Hello World');");
 assert($result->output() == "print");
 
-$result = $parser->try("printf('Hello %s', 'world');");
+$result = $parser->tryString("printf('Hello %s', 'world');");
 assert($result->output() == "printf");
 ```

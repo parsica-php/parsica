@@ -10,7 +10,7 @@ The simplest building block is a parser that only considers the first character 
 <?php
 $parser = satisfy(isEqual('a'));
 $input = "abc";
-$result = $parser->try($input);
+$result = $parser->tryString($input);
 assert($result->output() == "a");
 assert($result->remainder() == "bc");
 ``` 
@@ -40,9 +40,9 @@ $parser = char('a');
 ```php
 <?php
 $parser = charI('a');
-$result = $parser->try("ABC");
+$result = $parser->tryString("ABC");
 assert($result->output() == "A");
-$result = $parser->try("abc");
+$result = $parser->tryString("abc");
 assert($result->output() == "a");
 ```
 
@@ -52,7 +52,7 @@ Parsica provides various parsers for groups of characters, like `alphaNumChar`, 
 ```php
 <?php
 $parser = digitChar('a');
-$result = $parser->try('123');
+$result = $parser->tryString('123');
 assert($result->output() == "1");
 assert(is_string($result->output()));
 ```

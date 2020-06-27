@@ -23,12 +23,12 @@ use Verraes\Parsica\ParserFailure;
 final class Fail extends Exception implements ParserFailure, ParseResult
 {
     private string $expected;
-    private string $got;
+    private Stream $got;
 
     /**
      * @internal
      */
-    public function __construct(string $expected, string $got)
+    public function __construct(string $expected, Stream $got)
     {
         $this->expected = $expected;
         $this->got = $got;
@@ -45,7 +45,7 @@ final class Fail extends Exception implements ParserFailure, ParseResult
         return false;
     }
 
-    public function got(): string
+    public function got(): Stream
     {
         return $this->got;
     }
@@ -63,7 +63,7 @@ final class Fail extends Exception implements ParserFailure, ParseResult
         throw new BadMethodCallException("Can't read the output of a failed ParseResult.");
     }
 
-    public function remainder(): string
+    public function remainder(): Stream
     {
         throw new BadMethodCallException("Can't read the remainder of a failed ParseResult.");
     }

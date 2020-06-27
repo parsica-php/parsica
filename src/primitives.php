@@ -11,7 +11,10 @@
 namespace Verraes\Parsica;
 
 use Verraes\Parsica\Internal\Assert;
+use Verraes\Parsica\Internal\EndOfStream;
 use Verraes\Parsica\Internal\Fail;
+use Verraes\Parsica\Internal\Stream;
+use Verraes\Parsica\Internal\StringStream;
 use Verraes\Parsica\Internal\Succeed;
 use Verraes\Parsica\Internal\TakeWhile;
 
@@ -26,14 +29,15 @@ use Verraes\Parsica\Internal\TakeWhile;
  */
 function satisfy(callable $predicate): Parser
 {
-    return Parser::make(function (string $input) use ($predicate) : ParseResult {
-        if (mb_strlen($input) === 0) {
-            return new Fail("satisfy(predicate)", "EOF");
+    return Parser::make(function (Stream $input) use ($predicate) : ParseResult {
+        try {
+            $t = $input->take1();
+        } catch(EndOfStream $e) {
+            return new Fail("satisfy(predicate)", $input);
         }
-        $token = mb_substr($input, 0, 1);
-        return $predicate($token)
-            ? new Succeed($token, mb_substr($input, 1))
-            : new Fail("satisfy(predicate)", $token);
+        return $predicate($t->token())
+            ? new Succeed($t->token(), $t->stream())
+            : new Fail("satisfy(predicate)", $input);
     });
 }
 
@@ -230,7 +234,7 @@ function takeRest(): Parser
  */
 function nothing(): Parser
 {
-    return Parser::make(fn(string $input) => new Succeed(null, $input));
+    return Parser::make(fn(Stream $input) => new Succeed(null, $input));
 }
 
 /**
@@ -240,7 +244,7 @@ function nothing(): Parser
  */
 function everything(): Parser
 {
-    return Parser::make(fn(string $input) => new Succeed($input, ""));
+    return Parser::make(fn(Stream $input) => new Succeed((string) $input, new StringStream("")));
 }
 
 /**
@@ -250,7 +254,7 @@ function everything(): Parser
  */
 function success(): Parser
 {
-    return Parser::make(fn(string $input) => new Succeed('', $input))->label('success');
+    return Parser::make(fn(Stream $input) => new Succeed('', $input))->label('success');
 }
 
 /**
@@ -260,7 +264,7 @@ function success(): Parser
  */
 function failure(): Parser
 {
-    return Parser::make(fn(string $input) => new Fail('', $input))->label('failure');
+    return Parser::make(fn(Stream $input) => new Fail('', $input))->label('failure');
 }
 
 /**
@@ -272,8 +276,8 @@ function failure(): Parser
  */
 function eof(): Parser
 {
-    return Parser::make(fn(string $input): ParseResult => mb_strlen($input) === 0
-        ? new Succeed("", "")
+    return Parser::make(fn(Stream $input): ParseResult => $input->isEOF()
+        ? new Succeed("", $input)
         : new Fail("eof", $input)
     );
 }

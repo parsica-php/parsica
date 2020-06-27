@@ -12,6 +12,7 @@ namespace Tests\Verraes\Parsica\v0_4_0\ParseResult;
 
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Internal\Fail;
+use Verraes\Parsica\Internal\StringStream;
 use Verraes\Parsica\Internal\Succeed;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 
@@ -22,10 +23,10 @@ final class AlternativeTest extends TestCase
     /** @test */
     public function alternative()
     {
-        $succeed1 = new Succeed("S1", "");
-        $succeed2 = new Succeed("S2", "");
-        $fail1 = new Fail("F1", "");
-        $fail2 = new Fail("F2", "");
+        $succeed1 = new Succeed("S1", new StringStream(""));
+        $succeed2 = new Succeed("S2", new StringStream(""));
+        $fail1 = new Fail("F1", new StringStream(""));
+        $fail2 = new Fail("F2", new StringStream(""));
 
         $this->assertStrictlyEquals($succeed1, $succeed1->alternative($succeed2));
         $this->assertStrictlyEquals($succeed1, $succeed1->alternative($fail1));

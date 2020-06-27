@@ -12,6 +12,7 @@ namespace Verraes\Parsica;
 
 use Verraes\Parsica\Internal\Assert;
 use Verraes\Parsica\Internal\Fail;
+use Verraes\Parsica\Internal\Stream;
 use Verraes\Parsica\Internal\Succeed;
 
 /**
@@ -43,7 +44,7 @@ function identity(Parser $parser): Parser
  */
 function pure($output): Parser
 {
-    return Parser::make(fn(string $input) => new Succeed($output, $input));
+    return Parser::make(fn(Stream $input) => new Succeed($output, $input));
 }
 
 /**
@@ -152,7 +153,7 @@ function either(Parser $first, Parser $second): Parser
  */
 function append(Parser $left, Parser $right): Parser
 {
-    return Parser::make(function (string $input) use ($left, $right): ParseResult {
+    return Parser::make(function (Stream $input) use ($left, $right): ParseResult {
         $r1 = $left->run($input);
         $r2 = $r1->continueWith($right);
         return $r1->append($r2);
@@ -399,7 +400,7 @@ function sepBy1(Parser $separator, Parser $parser): Parser
 function notFollowedBy(Parser $parser): Parser
 {
     /** @var Parser<string> $p */
-    $p = Parser::make(fn(string $input): ParseResult => $parser->run($input)->isSuccess()
+    $p = Parser::make(fn(Stream $input): ParseResult => $parser->run($input)->isSuccess()
         ? new Fail('notFollowedBy', $input)
         : new Succeed("", $input));
     return $p;

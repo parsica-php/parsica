@@ -11,13 +11,15 @@
 namespace Verraes\Parsica;
 
 use Verraes\Parsica\Internal\Assert;
+use Verraes\Parsica\Internal\EndOfStream;
 use Verraes\Parsica\Internal\Fail;
+use Verraes\Parsica\Internal\Stream;
 use Verraes\Parsica\Internal\Succeed;
 
 /**
  * Parse a non-empty string.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  * @see stringI()
  *
@@ -28,9 +30,16 @@ function string(string $str): Parser
     $len = mb_strlen($str);
     /** @var Parser<string> $parser */
     $parser = Parser::make(
-        fn(string $input): ParseResult => mb_substr($input, 0, $len) === $str
-            ? new Succeed($str, mb_substr($input, $len))
-            : new Fail("string($str)", $input)
+        function (Stream $input) use ($len, $str): ParseResult {
+            try {
+                $t = $input->takeN($len);
+            } catch (EndOfStream $e) {
+                return new Fail("string($str)", $input);
+            }
+            return $t->chunk() === $str
+                ? new Succeed($str, $t->stream())
+                : new Fail("string($str)", $input);
+        }
     );
     return $parser;
 }
