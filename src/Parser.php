@@ -318,6 +318,8 @@ final class Parser
     /**
      * Try to parse the input, or throw an exception;
      *
+     * @TODO Try should fail when it doesn't consume the whole input.
+     *
      * @return ParseResult<T>
      *
      * @throws ParserFailure
