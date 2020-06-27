@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\v0_3_0\Parser;
+namespace Tests\Verraes\Parsica\v0_4_0\Parser;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
