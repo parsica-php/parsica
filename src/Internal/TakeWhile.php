@@ -12,8 +12,6 @@ namespace Verraes\Parsica\Internal;
 
 use Verraes\Parsica\Parser;
 use Verraes\Parsica\ParseResult;
-use function Verraes\Parsica\ParseResult\fail;
-use function Verraes\Parsica\ParseResult\succeed;
 
 /**
  * @internal
@@ -32,12 +30,8 @@ final class TakeWhile
      */
     public static function _takeWhile(callable $predicate): Parser
     {
-        /**
-         * @see \Tests\Verraes\Parsica\v0_4_0\primitivesTest::not_sure_how_takeWhile_should_deal_with_EOF()
-         */
         return Parser::make(
-            fn(Stream $input): ParseResult => //self::isEOF($input) ?
-                //    new Fail("takeWhile(predicate)", "EOF") :
+            fn(Stream $input): ParseResult =>
             self::parseRemainingInput($input, $predicate)
         );
     }

@@ -99,9 +99,8 @@ final class primitivesTest extends TestCase
     }
 
     /** @test */
-    public function not_sure_how_takeWhile_should_deal_with_EOF()
+    public function takeWile_succeeds_on_EOF()
     {
-        // For now let's have it succeed until we figure it out.
         $parser = takeWhile(isEqual('a'));
         $this->assertSucceedOnEOF($parser);
 
