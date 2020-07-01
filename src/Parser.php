@@ -403,8 +403,6 @@ final class Parser
      * Other use cases are logging, caching, performing an action whenever a value is matched in a long running input
      * stream, ...
      *
-     * @template T
-     *
      * @psalm-param callable(T): void $receiver
      *
      * @psalm-return Parser<T>
