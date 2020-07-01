@@ -159,7 +159,7 @@ final class Succeed implements ParseResult
     /**
      * The type of the ParseResult
      *
-     * @return class-string<T>
+     * @return string|class-string<T>
      *
      * @psalm-suppress MoreSpecificReturnType
      * @psalm-suppress LessSpecificReturnStatement

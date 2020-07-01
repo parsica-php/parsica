@@ -20,6 +20,7 @@ The easiest way to build robust parsers in PHP.
 1. [Order Matters](tutorial/order_matters)
 1. [Recursion](tutorial/recursion)
 1. [Look Ahead](tutorial/look_ahead)
+1. [Side Effects and Events](tutorial/side_effects)
 
 ## Resources
 

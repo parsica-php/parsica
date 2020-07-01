@@ -21,22 +21,24 @@
         "ext-mbstring": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.0",
-        "vimeo/psalm": "^3.11",
+        "cypresslab/php-curry": "^0.5.0",
         "mathiasverraes/uptodocs": "dev-main",
-        "cypresslab/php-curry": "^0.5.0"
+        "phpunit/phpunit": "^9.0",
+        "psr/event-dispatcher": "^1.0",
+        "vimeo/psalm": "^3.11"
     },
     "autoload": {
         "psr-4": {
             "Verraes\\Parsica\\": "src/"
         },
         "files": [
-            "src/predicates.php",
             "src/characters.php",
             "src/combinators.php",
             "src/numeric.php",
+            "src/predicates.php",
             "src/primitives.php",
             "src/recursion.php",
+            "src/sideEffects.php",
             "src/space.php",
             "src/strings.php"
         ]
