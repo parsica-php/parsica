@@ -406,8 +406,9 @@ final class Parser
      * @psalm-param callable(T): void $receiver
      *
      * @psalm-return Parser<T>
+     * @api
      */
-    public function emit(callable $receiver) : Parser
+    public function emit(callable $receiver): Parser
     {
         return emit($this, $receiver);
     }

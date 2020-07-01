@@ -22,6 +22,7 @@ namespace Verraes\Parsica;
  * @param callable(T): void $receiver
  *
  * @return Parser<T>
+ * @api
  */
 function emit(Parser $parser, callable $receiver): Parser
 {
