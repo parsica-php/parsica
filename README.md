@@ -2,7 +2,11 @@
  
 The easiest way to build robust parsers in PHP.
 
-[https://parsica.verraes.net/](https://parsica.verraes.net/)
+```bash
+composer require mathiasverraes/parsica
+```
+
+Documentation: [parsica.verraes.net](https://parsica.verraes.net/)
 
 
 ```php
@@ -12,7 +16,6 @@ $result = $parser->try("{Hello}");
 echo $result->output(); // Hello
 ```
 
-## Badges
 
 ![Twitter Follow](https://img.shields.io/twitter/follow/parsica_php?style=social)
 ![Test status](https://img.shields.io/github/workflow/status/mathiasverraes/parsica/Test?label=tests)
