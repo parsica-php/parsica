@@ -13,10 +13,12 @@ namespace Verraes\Parsica\Internal;
 final class StringStream implements Stream
 {
     private string $string;
+    private Position $position;
 
-    public function __construct(string $string)
+    public function __construct(string $string, ?Position $position = null)
     {
         $this->string = $string;
+        $this->position = $position ?? Position::initial();
     }
 
     /**
@@ -26,10 +28,25 @@ final class StringStream implements Stream
     {
         $this->guardEndOfStream();
 
+        $token = mb_substr($this->string, 0, 1);
+        $position = $this->position->update($token);
+
         return new Take1(
-            mb_substr($this->string, 0, 1),
-            new StringStream(mb_substr($this->string, 1))
+            $token,
+            new StringStream(mb_substr($this->string, 1), $position)
         );
+    }
+
+    private function guardEndOfStream(): void
+    {
+        if ($this->isEOF()) {
+            throw new EndOfStream("End of stream was reached  in " . $this->position->pretty());
+        }
+    }
+
+    public function isEOF(): bool
+    {
+        return mb_strlen($this->string) === 0;
     }
 
     /**
@@ -43,22 +60,14 @@ final class StringStream implements Stream
 
         $this->guardEndOfStream();
 
+
+        $chunk = mb_substr($this->string, 0, $n);
+        $position = $this->position->update($chunk);
+
         return new TakeN(
-            mb_substr($this->string, 0, $n),
-            new StringStream(mb_substr($this->string, $n))
+            $chunk,
+            new StringStream(mb_substr($this->string, $n), $position)
         );
-    }
-
-    private function guardEndOfStream(): void
-    {
-        if ($this->isEOF()) {
-            throw new EndOfStream("End of stream was reached.");
-        }
-    }
-
-    public function isEOF(): bool
-    {
-        return mb_strlen($this->string) === 0;
     }
 
     public function __toString(): string
@@ -66,4 +75,11 @@ final class StringStream implements Stream
         return $this->string;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function position(): Position
+    {
+        return $this->position;
+    }
 }

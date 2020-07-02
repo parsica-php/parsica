@@ -45,4 +45,11 @@ interface Stream
      * Test if the stream is at its end.
      */
     public function isEOF(): bool;
+
+    /**
+     * The position of the parser in the stream.
+     *
+     * @internal
+     */
+    public function position() : Position;
 }
