@@ -24,14 +24,14 @@ final class StringStream implements Stream
     /**
      * @inheritDoc
      */
-    public function take1(): Take1
+    public function take1(): TakeResult
     {
         $this->guardEndOfStream();
 
         $token = mb_substr($this->string, 0, 1);
         $position = $this->position->update($token);
 
-        return new Take1(
+        return new TakeResult(
             $token,
             new StringStream(mb_substr($this->string, 1), $position)
         );
@@ -52,10 +52,10 @@ final class StringStream implements Stream
     /**
      * @inheritDoc
      */
-    public function takeN(int $n): TakeN
+    public function takeN(int $n): TakeResult
     {
         if ($n <= 0) {
-            return new TakeN("", $this);
+            return new TakeResult("", $this);
         }
 
         $this->guardEndOfStream();
@@ -64,7 +64,7 @@ final class StringStream implements Stream
         $chunk = mb_substr($this->string, 0, $n);
         $position = $this->position->update($chunk);
 
-        return new TakeN(
+        return new TakeResult(
             $chunk,
             new StringStream(mb_substr($this->string, $n), $position)
         );

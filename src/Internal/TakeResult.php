@@ -11,24 +11,24 @@
 namespace Verraes\Parsica\Internal;
 
 /**
- * The result of Stream::take1
+ * The result of Stream::take*() functions
  *
  * @internal
  */
-final class Take1
+final class TakeResult
 {
-    private string $token;
+    private string $chunk;
     private Stream $stream;
 
-    function __construct(string $token, Stream $stream)
+    function __construct(string $chunk, Stream $stream)
     {
-        $this->token = $token;
+        $this->chunk = $chunk;
         $this->stream = $stream;
     }
 
-    function token(): string
+    function chunk(): string
     {
-        return $this->token;
+        return $this->chunk;
     }
 
     function stream(): Stream

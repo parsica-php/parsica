@@ -20,7 +20,7 @@ interface Stream
      *
      * @throw EndOfStream
      */
-    public function take1(): Take1;
+    public function take1(): TakeResult;
 
     /*
      * Try to extract a chunk of length $n, or if the stream is too short, the rest of the stream.
@@ -34,7 +34,7 @@ interface Stream
      *
      * @throw EndOfStream
      */
-    public function takeN(int $n): TakeN;
+    public function takeN(int $n): TakeResult;
 
     /**
      * @deprecated We will need to get rid of this again at some point, we can't assume all streams will be strings
