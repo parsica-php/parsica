@@ -30,7 +30,7 @@ final class Succeed implements ParseResult
     private Stream $remainder;
 
     /**
-     * @param T $output
+     * @psalm-param T $output
      *
      * @internal
      */
@@ -101,7 +101,20 @@ final class Succeed implements ParseResult
     {
         $type1 = $this->type();
         $type2 = $other->type();
-        if ($type1 !== $type2) throw new Exception("Append only works for ParseResult<T> instances with the same type T, got ParseResult<$type1> and ParseResult<$type2>.");
+
+        // Ignore nulls
+        if($type1 === 'NULL' && $type2 === 'NULL') {
+            return new Succeed(null, $other->remainder());
+        } elseif($type1 !== 'NULL' && $type2 === 'NULL') {
+            return new Succeed($this->output(), $other->remainder());
+        } elseif($type1 === 'NULL' && $type2 !== 'NULL') {
+            return new Succeed($other->output(), $other->remainder());
+        }
+
+        // Only append for the same type
+        if ($type1 !== $type2) {
+            throw new Exception("Append only works for ParseResult<T> instances with the same type T, got ParseResult<$type1> and ParseResult<$type2>.");
+        }
 
         switch ($type1) {
             case 'string':

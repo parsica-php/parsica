@@ -33,4 +33,20 @@ final class AppendTest extends TestCase
         $this->assertStrictlyEquals(new Fail("Expected1", new StringStream("Got1")), $fail1->append($succeed2));
         $this->assertStrictlyEquals(new Fail("Expected1", new StringStream("Got1")), $fail1->append($fail2));
     }
+    /** @test */
+    public function append_with_null()
+    {
+        $null1 = new Succeed(null, new StringStream("Remain Null 1"));
+        $null2 = new Succeed(null, new StringStream("Remain Null 2"));
+        $string = new Succeed("String", new StringStream("Remain String"));
+
+        $first = $string->append($null1);
+        $this->assertStrictlyEquals(new Succeed("String", new StringStream("Remain Null 1")), $first);
+
+        $second = $null1->append($string);
+        $this->assertStrictlyEquals(new Succeed("String", new StringStream("Remain String")), $second);
+
+        $both = $null1->append($null2);
+        $this->assertStrictlyEquals(new Succeed(null, new StringStream("Remain Null 2")), $both);
+    }
 }
