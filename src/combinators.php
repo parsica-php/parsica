@@ -312,10 +312,11 @@ function many(Parser $parser): Parser
 function some(Parser $parser): Parser
 {
     $rec = recursive();
-    return $parser->map(fn($x) => [$x])->append(
+    $pArray = $parser->map(fn($x) => [$x]);
+    return $pArray->append(
         $rec->recurse(
             either(
-                $parser->map(fn($x) => [$x])->append($rec),
+                $pArray->append($rec),
                 pure([])
             )
         )
