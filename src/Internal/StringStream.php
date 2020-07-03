@@ -62,11 +62,40 @@ final class StringStream implements Stream
 
 
         $chunk = mb_substr($this->string, 0, $n);
-        $position = $this->position->update($chunk);
+        return new TakeResult(
+            $chunk,
+            new StringStream(
+                mb_substr($this->string, $n),
+                $this->position->update($chunk)
+            )
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function takeWhile(callable $predicate): TakeResult
+    {
+        if($this->isEOF()) {
+            return new TakeResult("", $this);
+        }
+
+        $remaining = $this->string;
+        $nextToken = mb_substr($remaining, 0, 1);
+        $chunk = "";
+        while ($predicate($nextToken)) {
+            $chunk .= $nextToken;
+            $remaining = mb_substr($remaining, 1);
+            if (mb_strlen($remaining) > 0) {
+                $nextToken = mb_substr($remaining, 0, 1);
+            } else {
+                break;
+            }
+        }
 
         return new TakeResult(
             $chunk,
-            new StringStream(mb_substr($this->string, $n), $position)
+            new StringStream($remaining, $this->position->update($chunk))
         );
     }
 

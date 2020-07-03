@@ -36,6 +36,18 @@ interface Stream
      */
     public function takeN(int $n): TakeResult;
 
+
+    /**
+     * Extract a chunk of the stream, by taking tokens as long as the predicate holds. Return the chunk and the rest of
+     * the stream.
+     *
+     * @TODO This method isn't strictly necessary but let's see.
+     *
+     * @psalm-param callable(string):bool $predicate
+     *
+     */
+    public function takeWhile(callable $predicate) : TakeResult;
+
     /**
      * @deprecated We will need to get rid of this again at some point, we can't assume all streams will be strings
      */

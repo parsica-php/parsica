@@ -34,9 +34,9 @@ function identity(Parser $parser): Parser
 /**
  * A parser that will have the argument as its output, no matter what the input was. It doesn't consume any input.
  *
- * @param T $output
+ * @psalm-param T $output
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  * @api
  *
  * @template T

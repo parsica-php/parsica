@@ -16,7 +16,6 @@ use Verraes\Parsica\Internal\Fail;
 use Verraes\Parsica\Internal\Stream;
 use Verraes\Parsica\Internal\StringStream;
 use Verraes\Parsica\Internal\Succeed;
-use Verraes\Parsica\Internal\TakeWhile;
 
 /**
  * A parser that satisfies a predicate. Useful as a building block for writing things like char(), digit()...
@@ -35,8 +34,8 @@ function satisfy(callable $predicate): Parser
         } catch(EndOfStream $e) {
             return new Fail("satisfy(predicate)", $input);
         }
-        return $predicate($t->token())
-            ? new Succeed($t->token(), $t->stream())
+        return $predicate($t->chunk())
+            ? new Succeed($t->chunk(), $t->stream())
             : new Fail("satisfy(predicate)", $input);
     });
 }
@@ -46,14 +45,14 @@ function satisfy(callable $predicate): Parser
  *
  * @template T
  *
- * @param callable(string) : bool $predicate
- * @param string $expected
+ * @psalm-param callable(string) : bool $predicate
+ * @psalm-param string $expected
  *
  * @return Parser<T>
  */
 function skipWhile(callable $predicate): Parser
 {
-    return TakeWhile::_skipWhile($predicate);
+    return takeWhile($predicate)->followedBy(pure(""));
 }
 
 /**
@@ -61,14 +60,13 @@ function skipWhile(callable $predicate): Parser
  *
  * @template T
  *
- * @param callable(string) : bool $predicate
- * @param string $expected
+ * @psalm-param callable(string) : bool $predicate
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  */
 function skipWhile1(callable $predicate): Parser
 {
-    return TakeWhile::_skipWhile1($predicate);
+    return takeWhile1($predicate)->followedBy(pure(""));
 }
 
 /**
@@ -83,7 +81,12 @@ function skipWhile1(callable $predicate): Parser
  */
 function takeWhile(callable $predicate): Parser
 {
-    return TakeWhile::_takeWhile($predicate);
+    return Parser::make(
+        function (Stream $input) use ($predicate): ParseResult {
+            $t = $input->takeWhile($predicate);
+            return new Succeed($t->chunk(), $t->stream());
+        }
+    );
 }
 
 
@@ -99,7 +102,23 @@ function takeWhile(callable $predicate): Parser
  */
 function takeWhile1(callable $predicate): Parser
 {
-    return TakeWhile::_takeWhile1($predicate);
+    return Parser::make(
+        function (Stream $input) use ($predicate): ParseResult {
+
+            try {
+                $firstTokenHolds = $predicate($input->take1()->chunk());
+            } catch (EndOfStream $e) {
+                return new Fail("takeWhile1(predicate)", $input);
+            }
+
+            if($firstTokenHolds)
+            {
+                $t = $input->takeWhile($predicate);
+                return new Succeed($t->chunk(), $t->stream());
+            }
+            return new Fail("takeWhile1(predicate)", $input);
+        }
+    );
 }
 
 /**
