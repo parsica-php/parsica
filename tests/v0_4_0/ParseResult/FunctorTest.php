@@ -31,8 +31,9 @@ final class FunctorTest extends TestCase
     /** @test */
     public function map_over_ParseFailure()
     {
-        $fail = new Fail("expected", new StringStream("got"));
-        $expected = new Fail("expected", new StringStream("got"));
+        $remainder = new StringStream("");
+        $fail = new Fail("expected", new StringStream("got"), $remainder);
+        $expected = new Fail("expected", new StringStream("got"), $remainder);
         $this->assertEquals($expected, $fail->map('strtoupper'));
     }
 

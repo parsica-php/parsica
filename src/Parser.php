@@ -225,12 +225,11 @@ final class Parser
      */
     public function label(string $label): Parser
     {
-        // @todo perhaps something like $parser->onSuccess($f)->onFailure($g) ?
         return Parser::make(function (Stream $input) use ($label) : ParseResult {
             $result = $this->run($input);
             return ($result->isSuccess())
                 ? $result
-                : new Fail($label, $input);
+                : new Fail($label, $input, $result->remainder());
         });
     }
 

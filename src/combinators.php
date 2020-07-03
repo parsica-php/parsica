@@ -400,8 +400,11 @@ function sepBy1(Parser $separator, Parser $parser): Parser
 function notFollowedBy(Parser $parser): Parser
 {
     /** @var Parser<string> $p */
-    $p = Parser::make(fn(Stream $input): ParseResult => $parser->run($input)->isSuccess()
-        ? new Fail('notFollowedBy', $input)
-        : new Succeed("", $input));
+    $p = Parser::make(function (Stream $input) use ($parser): ParseResult {
+        $result = $parser->run($input);
+        return $result->isSuccess()
+            ? new Fail('notFollowedBy', $input, $result->remainder())
+            : new Succeed("", $input);
+    });
     return $p;
 }

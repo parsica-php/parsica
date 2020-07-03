@@ -42,5 +42,24 @@ ERROR;
         $this->assertEquals($expected, $result->errorMessage());
     }
 
+    /** @test */
+    public function multiline_input()
+    {
+        $parser = many(newline())->sequence(char('a'));
+        $input = new StringStream("\n\n\nbcd\nxyz", Position::initial("/path/to/file"));
+        $result = $parser->run($input);
+        $expected = <<<ERROR
+/path/to/file:1:1
+  |
+4 | bcd
+  | ^
+Unexpected 'b'
+Expecting 'a'
+
+ERROR;
+
+        $this->assertEquals($expected, $result->errorMessage());
+    }
+
 
 }
