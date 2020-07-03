@@ -17,6 +17,9 @@ use Verraes\Parsica\ParseResult;
 use Verraes\Parsica\ParserFailure;
 
 /**
+ * The return value of a failed parser.
+ *
+ * @TODO make our own Throwable implementation that uses the parsed files as the exceptions file etc?
  * @template T
  * @internal
  */
