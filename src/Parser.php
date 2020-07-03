@@ -104,8 +104,7 @@ final class Parser
      */
     public function run(Stream $input): ParseResult
     {
-        $f = $this->parserFunction;
-        return $f($input);
+        return ($this->parserFunction)($input);
     }
 
     /**
