@@ -37,6 +37,9 @@ final class StringStream implements Stream
         );
     }
 
+    /**
+     * @throws EndOfStream
+     */
     private function guardEndOfStream(): void
     {
         if ($this->isEOF()) {
