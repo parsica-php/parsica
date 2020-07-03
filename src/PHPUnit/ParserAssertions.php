@@ -23,7 +23,7 @@ use Verraes\Parsica\Parser;
 trait ParserAssertions
 {
     /**
-     * @param mixed $expectedParsed
+     * @psalm-param mixed $expectedParsed
      *
      * @api
      */
@@ -50,9 +50,9 @@ trait ParserAssertions
     }
 
     /**
-     * @param mixed  $expected
-     * @param mixed  $actual
-     * @param string $message
+     * @psalm-param mixed  $expected
+     * @psalm-param mixed  $actual
+     * @psalm-param string $message
      *
      * @throws Exception
      * @api

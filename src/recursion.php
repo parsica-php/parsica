@@ -15,7 +15,7 @@ namespace Verraes\Parsica;
  *
  * For an example see {@see RecursiveParserTest}.
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  * @api
  *
  * @template T

@@ -15,7 +15,7 @@ use Verraes\Parsica\Internal\Assert;
 /**
  * Creates an equality predicate
  *
- * @return callable(string) : bool
+ * @psalm-return callable(string) : bool
  *
  * @api
  */
@@ -28,9 +28,9 @@ function isEqual(string $x): callable
 /**
  * Negates a predicate.
  *
- * @param callable(string) : bool $predicate
+ * @psalm-param callable(string) : bool $predicate
  *
- * @return callable(string) : bool
+ * @psalm-return callable(string) : bool
  *
  * @api
  */
@@ -42,10 +42,10 @@ function notPred(callable $predicate): callable
 /**
  * Boolean And predicate.
  *
- * @param callable(string) : bool $first
- * @param callable(string) : bool $second
+ * @psalm-param callable(string) : bool $first
+ * @psalm-param callable(string) : bool $second
  *
- * @return callable(string) : bool
+ * @psalm-return callable(string) : bool
  *
  * @api
  */
@@ -57,10 +57,10 @@ function andPred(callable $first, callable $second): callable
 /**
  * Boolean Or predicate.
  *
- * @param callable(string) : bool $first
- * @param callable(string) : bool $second
+ * @psalm-param callable(string) : bool $first
+ * @psalm-param callable(string) : bool $second
  *
- * @return callable(string) : bool
+ * @psalm-return callable(string) : bool
  * @api
  *
  */
@@ -72,9 +72,9 @@ function orPred(callable $first, callable $second): callable
 /**
  * Predicate that checks if a character is in an array of character codes.
  *
- * @param list<int> $chars
+ * @psalm-param list<int> $chars
  *
- * @return callable(string) : bool
+ * @psalm-return callable(string) : bool
  * @api
  *
  * @link https://doc.bccnsoft.com/docs/cppreference2018/en/c/string/wide/iswcntrl.html
@@ -87,7 +87,7 @@ function isCharCode(array $chars): callable
 /**
  * Returns true for a space character, and the control characters \t, \n, \r, \f, \v.
  *
- * @return callable(string) : bool
+ * @psalm-return callable(string) : bool
  * @api
  *
  */
@@ -99,7 +99,7 @@ function isSpace(): callable
 /**
  * Like 'isSpace', but does not accept newlines and carriage returns.
  *
- * @return callable(string) : bool
+ * @psalm-return callable(string) : bool
  * @api
  * @see isSpace
  */
@@ -111,7 +111,7 @@ function isHSpace(): callable
 /**
  * True for 0-9
  *
- * @return callable(string) : bool
+ * @psalm-return callable(string) : bool
  * @api
  */
 function isDigit(): callable
@@ -122,7 +122,7 @@ function isDigit(): callable
 /**
  * Control character predicate (a non-printing character of the Latin-1 subset of Unicode).
  *
- * @return callable(string) : bool
+ * @psalm-return callable(string) : bool
  * @api
  */
 function isControl(): callable
@@ -133,7 +133,7 @@ function isControl(): callable
 /**
  * Returns true for a space or a tab character
  *
- * @return callable(string) : bool
+ * @psalm-return callable(string) : bool
  * @api
  */
 function isBlank()
@@ -144,7 +144,7 @@ function isBlank()
 /**
  * Returns true for a space character, and \t, \n, \r, \f, \v.
  *
- * @return callable(string) : bool
+ * @psalm-return callable(string) : bool
  * @api
  */
 function isWhitespace()
@@ -155,7 +155,7 @@ function isWhitespace()
 /**
  * Returns true for an uppercase character A-Z.
  *
- * @return callable(string) : bool
+ * @psalm-return callable(string) : bool
  * @api
  */
 function isUpper()
@@ -166,7 +166,7 @@ function isUpper()
 /**
  * Returns true for a lowercase character a-z.
  *
- * @return callable(string) : bool
+ * @psalm-return callable(string) : bool
  * @api
  */
 function isLower()
@@ -177,7 +177,7 @@ function isLower()
 /**
  * Returns true for an uppercase or lowercase character A-Z, a-z.
  *
- * @return callable(string) : bool
+ * @psalm-return callable(string) : bool
  * @api
  */
 function isAlpha()
@@ -188,7 +188,7 @@ function isAlpha()
 /**
  * Returns true for an alpha or numeric character A-Z, a-z, 0-9.
  *
- * @return callable(string) : bool
+ * @psalm-return callable(string) : bool
  * @api
  */
 function isAlphaNum()
@@ -199,7 +199,7 @@ function isAlphaNum()
 /**
  * Returns true if the given character is a hexadecimal numeric character 0123456789abcdefABCDEF.
  *
- * @return callable(string) : bool
+ * @psalm-return callable(string) : bool
  * @api
  */
 function isHexDigit()
@@ -210,7 +210,7 @@ function isHexDigit()
 /**
  * Returns true if the given character is a printable ASCII char.
  *
- * @return callable(string) : bool
+ * @psalm-return callable(string) : bool
  * @api
  */
 function isPrintable()
@@ -221,7 +221,7 @@ function isPrintable()
 /**
  * Returns true if the given character is a punctuation character !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
  *
- * @return callable(string) : bool
+ * @psalm-return callable(string) : bool
  * @api
  */
 function isPunctuation()

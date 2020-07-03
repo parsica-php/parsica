@@ -22,9 +22,9 @@ use Verraes\Parsica\Internal\Succeed;
  *
  * @template T
  *
- * @param callable(string) : bool $predicate
+ * @psalm-param callable(string) : bool $predicate
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  */
 function satisfy(callable $predicate): Parser
 {
@@ -48,7 +48,7 @@ function satisfy(callable $predicate): Parser
  * @psalm-param callable(string) : bool $predicate
  * @psalm-param string $expected
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  */
 function skipWhile(callable $predicate): Parser
 {
@@ -74,10 +74,10 @@ function skipWhile1(callable $predicate): Parser
  *
  * @template T
  *
- * @param callable(string) : bool $predicate
- * @param string $expected
+ * @psalm-param callable(string) : bool $predicate
+ * @psalm-param string $expected
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  */
 function takeWhile(callable $predicate): Parser
 {
@@ -95,10 +95,10 @@ function takeWhile(callable $predicate): Parser
  *
  * @template T
  *
- * @param callable(string) : bool $predicate
- * @param string $expected
+ * @psalm-param callable(string) : bool $predicate
+ * @psalm-param string $expected
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  */
 function takeWhile1(callable $predicate): Parser
 {
@@ -126,12 +126,12 @@ function takeWhile1(callable $predicate): Parser
  *
  * @template T
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  */
 function anySingle(): Parser
 {
     return satisfy(
-    /** @param mixed $_ */
+    /** @psalm-param mixed $_ */
         fn($_) => true
     )->label("anySingle");
 }
@@ -140,7 +140,7 @@ function anySingle(): Parser
  * Parse and return a single character of anything.
  *
  * @TODO This is an alias of anySingle. Should we get rid of one of them?
- * @return Parser<string>
+ * @psalm-return Parser<string>
  */
 function anything(): Parser
 {
@@ -151,7 +151,7 @@ function anything(): Parser
 /**
  * Match any character but the given one.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  * @template T
  *
@@ -164,9 +164,9 @@ function anySingleBut(string $x): Parser
 /**
  * Succeeds if the current character is in the supplied list of characters. Returns the parsed character.
  *
- * @param list<string> $chars
+ * @psalm-param list<string> $chars
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  * @template T
  *
@@ -181,9 +181,9 @@ function oneOf(array $chars): Parser
  * A compact form of 'oneOf'.
  * oneOfS("abc") == oneOf(['a', 'b', 'c'])
  *
- * @param string $chars
+ * @psalm-param string $chars
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  * @template T
  *
@@ -200,9 +200,9 @@ function oneOfS(string $chars): Parser
  * The dual of 'oneOf'. Succeeds if the current character is not in the supplied list of characters. Returns the
  * parsed character.
  *
- * @param list<string> $chars
+ * @psalm-param list<string> $chars
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  * @template T
  *
@@ -218,9 +218,9 @@ function noneOf(array $chars): Parser
  * A compact form of 'noneOf'.
  * noneOfS("abc") == noneOf(['a', 'b', 'c'])
  *
- * @param string $chars
+ * @psalm-param string $chars
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  * @template T
  *
@@ -235,7 +235,7 @@ function noneOfS(string $chars): Parser
 /**
  * Consume the rest of the input and return it as a string. This parser never fails, but may return the empty string.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  * @template T
  */
@@ -289,7 +289,7 @@ function failure(): Parser
 /**
  * Parse the end of the input
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  * @api
  * @template T
  */

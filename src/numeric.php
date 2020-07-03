@@ -14,7 +14,7 @@ namespace Verraes\Parsica;
  * Parse a float. Returns the float as a string. Use ->map('floatval')
  * or similar to cast it to a numeric type.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  *
  * @deprecated @TODO doesn't support signed numbers yet
  * @api

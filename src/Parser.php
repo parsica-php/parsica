@@ -38,8 +38,8 @@ final class Parser
     private string $recursionStatus;
 
     /**
-     * @param callable(Stream) : ParseResult<T> $parserFunction
-     * @param 'non-recursive'|'awaiting-recurse'|'recursion-was-setup' $recursionStatus
+     * @psalm-param callable(Stream) : ParseResult<T> $parserFunction
+     * @psalm-param 'non-recursive'|'awaiting-recurse'|'recursion-was-setup' $recursionStatus
      */
     private function __construct(callable $parserFunction, string $recursionStatus)
     {
@@ -50,7 +50,7 @@ final class Parser
     /**
      * Make a recursive parser. Use {@see recursive()}.
      *
-     * @return Parser<T>
+     * @psalm-return Parser<T>
      * @internal
      */
     public static function recursive(): Parser
@@ -99,7 +99,7 @@ final class Parser
     /**
      * Run the parser on an input
      *
-     * @return ParseResult<T>
+     * @psalm-return ParseResult<T>
      * @api
      */
     public function run(Stream $input): ParseResult
@@ -114,7 +114,7 @@ final class Parser
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
      *
-     * @return Parser<T>
+     * @psalm-return Parser<T>
      * @see optional()
      * @api
      */
@@ -130,9 +130,9 @@ final class Parser
      * Caveat: The order matters!
      * string('http')->or(string('https')
      *
-     * @param Parser<T> $other
+     * @psalm-param Parser<T> $other
      *
-     * @return Parser<T>
+     * @psalm-return Parser<T>
      * @api
      */
     public function or(Parser $other): Parser
@@ -166,9 +166,9 @@ final class Parser
     /**
      * Make a new parser.
      *
-     * @param callable(Stream) : ParseResult<T2> $parserFunction
+     * @psalm-param callable(Stream) : ParseResult<T2> $parserFunction
      *
-     * @return Parser<T2>
+     * @psalm-return Parser<T2>
      * @internal
      * @template T2
      *
@@ -184,9 +184,9 @@ final class Parser
      *
      * @template T2
      *
-     * @param Parser<T2> $second
+     * @psalm-param Parser<T2> $second
      *
-     * @return Parser<T2>
+     * @psalm-return Parser<T2>
      * @api
      */
     public function followedBy(Parser $second): Parser
@@ -200,16 +200,16 @@ final class Parser
      *
      * @template T2
      *
-     * @param Parser<T2> $second
+     * @psalm-param Parser<T2> $second
      *
-     * @return Parser<T2>
+     * @psalm-return Parser<T2>
      * @see sequence()
      * @api
      */
     public function sequence(Parser $second): Parser
     {
         return $this->bind(
-        /** @param mixed $_ */
+        /** @psalm-param mixed $_ */
             function ($_) use ($second) {
                 return $second;
             }
@@ -220,7 +220,7 @@ final class Parser
      * Label a parser. When a parser fails, instead of a generated error message, you'll see your label.
      * eg (char(':')->followedBy(char(')')).followedBy(char(')')).
      *
-     * @return Parser<T>
+     * @psalm-return Parser<T>
      * @api
      */
     public function label(string $label): Parser
@@ -240,9 +240,9 @@ final class Parser
      *
      * @template T2
      *
-     * @param callable(T) : Parser<T2> $f
+     * @psalm-param callable(T) : Parser<T2> $f
      *
-     * @return Parser<T2>
+     * @psalm-return Parser<T2>
      * @see bind()
      * @api
      */
@@ -266,9 +266,9 @@ final class Parser
      *
      * @template T2
      *
-     * @param callable(T) : T2 $transform
+     * @psalm-param callable(T) : T2 $transform
      *
-     * @return Parser<T2>
+     * @psalm-return Parser<T2>
      * @api
      */
     public function map(callable $transform): Parser
@@ -291,15 +291,15 @@ final class Parser
      *
      * @template T2
      *
-     * @param class-string<T2> $className
+     * @psalm-param class-string<T2> $className
      *
-     * @return Parser<T2>
+     * @psalm-return Parser<T2>
      * @api
      */
     public function construct(string $className): Parser
     {
         return $this->map(
-        /** @param mixed $val */
+        /** @psalm-param mixed $val */
             fn($val) => new $className($val)
         );
     }
@@ -307,9 +307,9 @@ final class Parser
     /**
      * Combine the parser with another parser of the same type, which will cause the results to be appended.
      *
-     * @param Parser<T> $other
+     * @psalm-param Parser<T> $other
      *
-     * @return Parser<T>
+     * @psalm-return Parser<T>
      * @api
      */
     public function append(Parser $other): Parser
@@ -322,9 +322,9 @@ final class Parser
      *
      * @TODO Try should fail when it doesn't consume the whole input.
      *
-     * @param string $input
+     * @psalm-param string $input
      *
-     * @return ParseResult<T>
+     * @psalm-return ParseResult<T>
      *
      * @throws ParserFailure
      * @api
@@ -339,7 +339,7 @@ final class Parser
      *
      * @TODO Try should fail when it doesn't consume the whole input.
      *
-     * @return ParseResult<T>
+     * @psalm-return ParseResult<T>
      *
      * @throws ParserFailure
      * @api
@@ -364,9 +364,9 @@ final class Parser
      * @template T2
      * @template T3
      *
-     * @param Parser<T2> $parser
+     * @psalm-param Parser<T2> $parser
      *
-     * @return Parser<T3>
+     * @psalm-return Parser<T3>
      *
      * @psalm-suppress MixedArgumentTypeCoercion
      * @api
@@ -381,9 +381,9 @@ final class Parser
      *
      * @template T2
      *
-     * @param Parser<T2> $other
+     * @psalm-param Parser<T2> $other
      *
-     * @return Parser<T>
+     * @psalm-return Parser<T>
      * @see keepFirst()
      * @api
      */
@@ -401,9 +401,9 @@ final class Parser
      *
      * `string("print")->notFollowedBy(alphaNumChar()))` will match "print something" but not "printXYZ something"
      *
-     * @param Parser<T2> $parser
+     * @psalm-param Parser<T2> $parser
      *
-     * @return Parser<T>
+     * @psalm-return Parser<T>
      * @see notFollowedBy()
      *
      * @template T2

@@ -49,7 +49,7 @@ function string(string $str): Parser
  * actually parsed input.
  * eg stringI("foobar")->run("foObAr") will succeed with "foObAr"
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  * @see string()
  */

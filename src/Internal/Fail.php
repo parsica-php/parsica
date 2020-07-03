@@ -56,7 +56,7 @@ final class Fail extends Exception implements ParserFailure, ParseResult
     }
 
     /**
-     * @return T
+     * @psalm-return T
      */
     public function output()
     {
@@ -69,9 +69,9 @@ final class Fail extends Exception implements ParserFailure, ParseResult
     }
 
     /**
-     * @param ParseResult<T> $other
+     * @psalm-param ParseResult<T> $other
      *
-     * @return ParseResult<T>
+     * @psalm-return ParseResult<T>
      */
     public function append(ParseResult $other): ParseResult
     {
@@ -83,9 +83,9 @@ final class Fail extends Exception implements ParserFailure, ParseResult
      *
      * @template T2
      *
-     * @param callable(T) : T2 $transform
+     * @psalm-param callable(T) : T2 $transform
      *
-     * @return ParseResult<T2>
+     * @psalm-return ParseResult<T2>
      */
     public function map(callable $transform): ParseResult
     {
@@ -95,9 +95,9 @@ final class Fail extends Exception implements ParserFailure, ParseResult
     /**
      * Return the first successful ParseResult if any, and otherwise return the first failing one.
      *
-     * @param ParseResult<T> $other
+     * @psalm-param ParseResult<T> $other
      *
-     * @return ParseResult<T>
+     * @psalm-return ParseResult<T>
      */
     public function alternative(ParseResult $other): ParseResult
     {
@@ -107,9 +107,9 @@ final class Fail extends Exception implements ParserFailure, ParseResult
     /**
      * @template T2
      *
-     * @param Parser<T2> $parser
+     * @psalm-param Parser<T2> $parser
      *
-     * @return ParseResult<T2>
+     * @psalm-return ParseResult<T2>
      */
     public function continueWith(Parser $parser): ParseResult
     {

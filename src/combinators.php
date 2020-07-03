@@ -18,9 +18,9 @@ use Verraes\Parsica\Internal\Succeed;
 /**
  * Identity parser, returns the Parser as is.
  *
- * @param Parser<T> $parser
+ * @psalm-param Parser<T> $parser
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  * @api
  *
  * @template T
@@ -50,9 +50,9 @@ function pure($output): Parser
 /**
  * Optionally parse something, but still succeed if the thing is not there
  *
- * @param Parser<T> $parser
+ * @psalm-param Parser<T> $parser
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  * @api
  * @template T
  */
@@ -67,10 +67,10 @@ function optional(Parser $parser): Parser
  *
  * This is a monadic bind aka flatmap.
  *
- * @param Parser<T1> $parser
- * @param callable(T1) : Parser<T2> $f
+ * @psalm-param Parser<T1> $parser
+ * @psalm-param callable(T1) : Parser<T2> $f
  *
- * @return Parser<T2>
+ * @psalm-return Parser<T2>
  * @api
  * @template T1
  * @template T2
@@ -85,10 +85,10 @@ function bind(Parser $parser, callable $f): Parser
  * Parse something, then follow by something else. Ignore the result of the first parser and return the result of the
  * second parser.
  *
- * @param Parser<T1> $first
- * @param Parser<T2> $second
+ * @psalm-param Parser<T1> $first
+ * @psalm-param Parser<T2> $second
  *
- * @return Parser<T2>
+ * @psalm-return Parser<T2>
  * @template T1
  * @template T2
  * @api
@@ -124,10 +124,10 @@ function keepSecond(Parser $first, Parser $second): Parser
 /**
  * Either parse the first thing or the second thing
  *
- * @param Parser<T> $first
- * @param Parser<T> $second
+ * @psalm-param Parser<T> $first
+ * @psalm-param Parser<T> $second
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  * @api
  *
  * @see Parser::or()
@@ -143,10 +143,10 @@ function either(Parser $first, Parser $second): Parser
 /**
  * Combine the parser with another parser of the same type, which will cause the results to be appended.
  *
- * @param Parser<T> $left
- * @param Parser<T> $right
+ * @psalm-param Parser<T> $left
+ * @psalm-param Parser<T> $right
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  * @api
  * @template T
  *
@@ -163,9 +163,9 @@ function append(Parser $left, Parser $right): Parser
 /**
  * Append all the passed parsers.
  *
- * @param list<Parser<T>> $parsers
+ * @psalm-param list<Parser<T>> $parsers
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  * @api
  * @template T
  *
@@ -181,9 +181,9 @@ function assemble(Parser ...$parsers): Parser
 /**
  * Parse into an array that consists of the results of all parsers.
  *
- * @param list<Parser<T>> $parsers
+ * @psalm-param list<Parser<T>> $parsers
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  * @api
  * @template T
  *
@@ -202,9 +202,9 @@ function collect(Parser ...$parsers): Parser
 /**
  * Tries each parser one by one, returning the result of the first one that succeeds.
  *
- * @param Parser<T>[] $parsers
+ * @psalm-param Parser<T>[] $parsers
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  *
  * @template T
  * @api
@@ -223,9 +223,9 @@ function any(Parser ...$parsers): Parser
  *
  * Alias for {@see any()}
  *
- * @param Parser<T>[] $parsers
+ * @psalm-param Parser<T>[] $parsers
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  *
  * @template T
  * @api
@@ -238,9 +238,9 @@ function choice(Parser ...$parsers): Parser
 /**
  * One or more repetitions of Parser
  *
- * @param Parser<T> $parser
+ * @psalm-param Parser<T> $parser
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  *
  * @api
  * @template T
@@ -257,9 +257,9 @@ function atLeastOne(Parser $parser): Parser
  *
  * @template T
  *
- * @param Parser<T> $parser
+ * @psalm-param Parser<T> $parser
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  *
  */
 function repeat(int $n, Parser $parser): Parser
@@ -278,9 +278,9 @@ function repeat(int $n, Parser $parser): Parser
  *
  * @template T
  *
- * @param Parser<T> $parser
+ * @psalm-param Parser<T> $parser
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  *
  */
 function repeatList(int $n, Parser $parser): Parser
@@ -329,11 +329,11 @@ function some(Parser $parser): Parser
  * @template TM
  * @template TC
  *
- * @param Parser<TO> $open
- * @param Parser<TC> $close
- * @param Parser<TM> $middle
+ * @psalm-param Parser<TO> $open
+ * @psalm-param Parser<TC> $close
+ * @psalm-param Parser<TM> $middle
  *
- * @return Parser<TM>
+ * @psalm-return Parser<TM>
  */
 function between(Parser $open, Parser $close, Parser $middle): Parser
 {
@@ -349,10 +349,10 @@ function between(Parser $open, Parser $close, Parser $middle): Parser
  * @template TS
  * @template T
  *
- * @param Parser<TS> $separator
- * @param Parser<T>  $parser
+ * @psalm-param Parser<TS> $separator
+ * @psalm-param Parser<T>  $parser
  *
- * @return Parser<list<T>>
+ * @psalm-return Parser<list<T>>
  */
 function sepBy(Parser $separator, Parser $parser): Parser
 {
@@ -366,10 +366,10 @@ function sepBy(Parser $separator, Parser $parser): Parser
  * @template TS
  * @template T
  *
- * @param Parser<TS> $separator
- * @param Parser<T>  $parser
+ * @psalm-param Parser<TS> $separator
+ * @psalm-param Parser<T>  $parser
  *
- * @return Parser<list<T>>
+ * @psalm-return Parser<list<T>>
  *
  * @psalm-suppress MissingClosureReturnType
  */
@@ -389,9 +389,9 @@ function sepBy1(Parser $separator, Parser $parser): Parser
  *
  * `keepFirst(string("print"), notFollowedBy(alphaNumChar()))` will match "print something" but not "printXYZ something"
  *
- * @param Parser<T> $parser
+ * @psalm-param Parser<T> $parser
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @see Parser::notFollowedBy()
  *
  * @template T
