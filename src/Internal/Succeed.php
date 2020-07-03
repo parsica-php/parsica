@@ -183,4 +183,9 @@ final class Succeed implements ParseResult
         $t = gettype($this->output);
         return $t == 'object' ? get_class($this->output) : $t;
     }
+
+    public function errorMessage(): string
+    {
+        throw new BadMethodCallException("A succeeded ParseResult has no error message.");
+    }
 }

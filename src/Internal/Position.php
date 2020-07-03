@@ -65,4 +65,19 @@ final class Position
 
         return new Position($this->filename, $line, $column);
     }
+
+    public function filename(): string
+    {
+        return $this->filename;
+    }
+
+    public function line(): int
+    {
+        return $this->line;
+    }
+
+    public function column(): int
+    {
+        return $this->column;
+    }
 }

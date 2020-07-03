@@ -112,4 +112,6 @@ interface ParseResult
      * @api
      */
     public function continueWith(Parser $parser): ParseResult;
+
+    public function errorMessage() : string;
 }

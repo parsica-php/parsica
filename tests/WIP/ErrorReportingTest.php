@@ -16,6 +16,8 @@ use Verraes\Parsica\Internal\StringStream;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\atLeastOne;
 use function Verraes\Parsica\char;
+use function Verraes\Parsica\many;
+use function Verraes\Parsica\newline;
 
 final class ErrorReportingTest extends TestCase
 {
@@ -24,7 +26,6 @@ final class ErrorReportingTest extends TestCase
     /** @test */
     public function indicate_position_in_error_messages()
     {
-        $this->markTestSkipped();
         $parser = char('a');
         $input = new StringStream("bcd", Position::initial("/path/to/file"));
         $result = $parser->run($input);
@@ -35,10 +36,10 @@ final class ErrorReportingTest extends TestCase
   | ^
 Unexpected 'b'
 Expecting 'a'
+
 ERROR;
 
-        $this->assertEquals($expected, $result->expected());
-
+        $this->assertEquals($expected, $result->errorMessage());
     }
 
 

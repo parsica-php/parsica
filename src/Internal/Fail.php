@@ -35,7 +35,59 @@ final class Fail extends Exception implements ParserFailure, ParseResult
     {
         $this->expected = $expected;
         $this->got = $got;
-        parent::__construct("Expected: $expected, got $got");
+        parent::__construct($this->errorMessage());
+    }
+
+    public function errorMessage(): string
+    {
+        try {
+            $firstChar = $this->got->take1()->chunk();
+            $unexpected = self::replaceControlChar($firstChar);
+            $line = $this->got()->takeWhile(fn($c) => $c != "\n")->chunk();
+        } catch (EndOfStream $e) {
+            $unexpected = $line = "<EOF>";
+        }
+        return sprintf(
+            "%s\n"
+            . "  |\n"
+            . "%s | %s\n"
+            . "  | ^\n"
+            . "Unexpected '%s'\n"
+            . "Expecting '%s'\n",
+            $this->got->position()->pretty(),
+            $this->got->position()->line(),
+            $line,
+            $unexpected,
+            $this->expected
+        );
+    }
+
+    private static function replaceControlChar(string $char): string
+    {
+        switch (mb_ord($char)) {
+            case 0:
+                return "<NUL>";
+            case 7:
+                return "<bell>";
+            case 8:
+                return "<backspace>";
+            case 9:
+                return "<tab>";
+            case 10:
+                return "<line feed>";
+            case 11:
+                return "<vertical tab>";
+            case 12:
+                return "<form feed>";
+            case 13:
+                return "<carriage return>";
+            case 26:
+                return "<EOF>";
+            case 27:
+                return "<ESC>";
+            default:
+                return $char;
+        }
     }
 
     public function expected(): string
@@ -43,14 +95,14 @@ final class Fail extends Exception implements ParserFailure, ParseResult
         return $this->expected;
     }
 
-    public function isSuccess(): bool
-    {
-        return false;
-    }
-
     public function got(): Stream
     {
         return $this->got;
+    }
+
+    public function isSuccess(): bool
+    {
+        return false;
     }
 
     public function isFail(): bool

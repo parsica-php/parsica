@@ -25,7 +25,7 @@ use Verraes\Parsica\Internal\Assert;
 function char(string $c): Parser
 {
     Assert::singleChar($c);
-    return satisfy(isEqual($c))->label("char($c)");
+    return satisfy(isEqual($c))->label($c);
 }
 
 /**
