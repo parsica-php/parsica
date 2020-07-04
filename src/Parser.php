@@ -228,7 +228,7 @@ final class Parser
             $result = $this->run($input);
             return ($result->isSuccess())
                 ? $result
-                : new Fail($label, $input, $result->remainder());
+                : new Fail($label, $input);
         });
     }
 

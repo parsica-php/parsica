@@ -33,11 +33,11 @@ function satisfy(callable $predicate): Parser
         try {
             $t = $input->take1();
         } catch(EndOfStream $e) {
-            return new Fail("satisfy(predicate)", $input, $input);
+            return new Fail("satisfy(predicate)", $input);
         }
         return $predicate($t->chunk())
             ? new Succeed($t->chunk(), $t->stream())
-            : new Fail("satisfy(predicate)", $input, $t->stream());
+            : new Fail("satisfy(predicate)", $input);
     });
 }
 
@@ -109,11 +109,11 @@ function takeWhile1(callable $predicate): Parser
             try {
                 $t = $input->take1();
             } catch (EndOfStream $e) {
-                return new Fail("takeWhile1(predicate)", $input, $input);
+                return new Fail("takeWhile1(predicate)", $input);
             }
 
             if(!$predicate($t->chunk())) {
-                return new Fail("takeWhile1(predicate)", $input, $t->stream());
+                return new Fail("takeWhile1(predicate)", $input);
             }
 
             $t = $input->takeWhile($predicate);
@@ -284,7 +284,7 @@ function success(): Parser
  */
 function failure(): Parser
 {
-    return Parser::make(fn(Stream $input) => new Fail('', $input, $input))->label('failure');
+    return Parser::make(fn(Stream $input) => new Fail('', $input))->label('failure');
 }
 
 /**
@@ -298,6 +298,6 @@ function eof(): Parser
 {
     return Parser::make(fn(Stream $input): ParseResult => $input->isEOF()
         ? new Succeed("", $input)
-        : new Fail("eof", $input, $input)
+        : new Fail("eof", $input)
     );
 }

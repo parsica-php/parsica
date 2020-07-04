@@ -26,8 +26,8 @@ final class AlternativeTest extends TestCase
         $stream = new StringStream("");
         $succeed1 = new Succeed("S1", $stream);
         $succeed2 = new Succeed("S2", $stream);
-        $fail1 = new Fail("F1", $stream, $stream);
-        $fail2 = new Fail("F2", $stream, $stream);
+        $fail1 = new Fail("F1", $stream);
+        $fail2 = new Fail("F2", $stream);
 
         $this->assertStrictlyEquals($succeed1, $succeed1->alternative($succeed2));
         $this->assertStrictlyEquals($succeed1, $succeed1->alternative($fail1));

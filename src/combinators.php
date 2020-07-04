@@ -404,7 +404,7 @@ function notFollowedBy(Parser $parser): Parser
     $p = Parser::make(function (Stream $input) use ($parser): ParseResult {
         $result = $parser->run($input);
         return $result->isSuccess()
-            ? new Fail('notFollowedBy', $input, $result->remainder())
+            ? new Fail('notFollowedBy', $input)
             : new Succeed("", $input);
     });
     return $p;

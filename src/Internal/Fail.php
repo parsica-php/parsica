@@ -27,16 +27,14 @@ final class Fail extends Exception implements ParserFailure, ParseResult
 {
     private string $expected;
     private Stream $got;
-    private Stream $remainder;
 
     /**
      * @internal
      */
-    public function __construct(string $expected, Stream $got, Stream $remainder)
+    public function __construct(string $expected, Stream $got)
     {
         $this->expected = $expected;
         $this->got = $got;
-        $this->remainder = $remainder;
         parent::__construct($this->errorMessage());
     }
 
@@ -121,14 +119,6 @@ final class Fail extends Exception implements ParserFailure, ParseResult
     }
 
     /**
-     * @inheritDoc
-     */
-    public function remainder(): Stream
-    {
-        return $this->remainder;
-    }
-
-    /**
      * @psalm-param ParseResult<T> $other
      *
      * @psalm-return ParseResult<T>
@@ -174,5 +164,13 @@ final class Fail extends Exception implements ParserFailure, ParseResult
     public function continueWith(Parser $parser): ParseResult
     {
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function remainder(): Stream
+    {
+        throw new BadMethodCallException("Can't read the remainder of a failed ParseResult.");
     }
 }

@@ -34,11 +34,11 @@ function string(string $str): Parser
             try {
                 $t = $input->takeN($len);
             } catch (EndOfStream $e) {
-                return new Fail("string($str)", $input, $input);
+                return new Fail("string($str)", $input);
             }
             return $t->chunk() === $str
                 ? new Succeed($str, $t->stream())
-                : new Fail("string($str)", $input, $t->stream());
+                : new Fail("string($str)", $input);
         }
     );
     return $parser;
