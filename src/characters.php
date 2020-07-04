@@ -25,7 +25,7 @@ use Verraes\Parsica\Internal\Assert;
 function char(string $c): Parser
 {
     Assert::singleChar($c);
-    return satisfy(isEqual($c))->label($c);
+    return satisfy(isEqual($c))->label("'$c'");
 }
 
 /**
@@ -44,7 +44,10 @@ function char(string $c): Parser
 function charI(string $c): Parser
 {
     Assert::singleChar($c);
-    return satisfy(orPred(isEqual(mb_strtolower($c)), isEqual(mb_strtoupper($c))))->label("charI($c)");
+    $lower = mb_strtolower($c);
+    $upper = mb_strtoupper($c);
+    $label = $lower==$upper ? $c : "'$lower' or '$upper'";
+    return satisfy(orPred(isEqual($lower), isEqual($upper)))->label($label);
 }
 
 

@@ -53,6 +53,13 @@ final class charactersTest extends TestCase
     }
 
     /** @test */
+    public function charI_label()
+    {
+        $this->assertNotParse(charI('a'), "foo", "'a' or 'A'");
+        $this->assertNotParse(charI('%'), "foo", "'%'");
+    }
+
+    /** @test */
     public function string()
     {
         $this->assertParse("abc", string('abc'), "abcde");
