@@ -12,6 +12,8 @@ namespace Tests\Verraes\Parsica\v0_4_0\Internal;
 
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Internal\Position;
+use Verraes\Parsica\Internal\StringStream;
+use function Verraes\Parsica\char;
 
 final class PositionTest extends TestCase
 {
@@ -32,4 +34,15 @@ final class PositionTest extends TestCase
         $this->assertEquals(4, $position->column());
     }
 
+    /** @test */
+    public function position_in_sequence()
+    {
+        $parser = char('a')->followedBy(char('b'));
+        $input = new StringStream("abc", Position::initial());
+        $result = $parser->run($input);
+
+        $expectedColumn = 3;
+        $actualColumn = $result->remainder()->position()->column();
+        $this->assertEquals($expectedColumn, $actualColumn);
+    }
 }
