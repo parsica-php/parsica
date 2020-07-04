@@ -18,7 +18,8 @@ use Verraes\Parsica\Internal\StringStream;
 use Verraes\Parsica\Internal\Succeed;
 
 /**
- * A parser that satisfies a predicate. Useful as a building block for writing things like char(), digit()...
+ * A parser that satisfies a predicate on a single token. Useful as a building block for writing things like char(),
+ * digit()...
  *
  * @template T
  *
