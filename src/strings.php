@@ -28,7 +28,7 @@ function string(string $str): Parser
 {
     Assert::nonEmpty($str);
     $len = mb_strlen($str);
-    $label = $str;
+    $label = "'$str'";
     /** @psalm-var Parser<string> $parser */
     $parser = Parser::make($label, function (Stream $input) use ($label, $len, $str): ParseResult {
         try {
@@ -56,7 +56,7 @@ function string(string $str): Parser
 function stringI(string $str): Parser
 {
     Assert::nonEmpty($str);
-    /** @var list<string> $split */
+    /** @psalm-var list<string> $split */
     $split = mb_str_split($str);
     $chars = array_map(fn(string $c): Parser => charI($c), $split);
     /** @var Parser<string> $parser */
@@ -64,6 +64,6 @@ function stringI(string $str): Parser
         $chars,
         fn(Parser $l, Parser $r): Parser => $l->append($r),
         success()
-    )->label("stringI($str)");
+    )->label("'$str'");
     return $parser;
 }

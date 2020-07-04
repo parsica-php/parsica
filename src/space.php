@@ -18,7 +18,7 @@ namespace Verraes\Parsica;
  */
 function space(): Parser
 {
-    return char(' ')->label("space");
+    return char(' ')->label("<space>");
 }
 
 /**
@@ -29,7 +29,7 @@ function space(): Parser
  */
 function tab(): Parser
 {
-    return char("\t")->label("tab");
+    return char("\t")->label("<tab>");
 }
 
 /**
@@ -40,7 +40,7 @@ function tab(): Parser
  */
 function blank(): Parser
 {
-    return satisfy(isBlank())->label("blank");
+    return satisfy(isBlank())->label("<blank>");
 }
 
 /**
@@ -51,7 +51,7 @@ function blank(): Parser
  */
 function whitespace(): Parser
 {
-    return satisfy(isWhitespace())->label("whitespace");
+    return satisfy(isWhitespace())->label("<whitespace>");
 }
 
 
@@ -63,7 +63,7 @@ function whitespace(): Parser
  */
 function newline(): Parser
 {
-    return char("\n")->label("newline");
+    return char("\n")->label("<newline>");
 }
 
 /**
@@ -73,7 +73,7 @@ function newline(): Parser
  */
 function crlf(): Parser
 {
-    return string("\r\n")->label("crlf");
+    return string("\r\n")->label("<crlf>");
 }
 
 /**
@@ -84,7 +84,7 @@ function crlf(): Parser
  */
 function eol(): Parser
 {
-    return either(newline(), crlf())->label("eol");
+    return either(newline(), crlf())->label("<EOL>");
 }
 
 /**
@@ -118,7 +118,7 @@ function skipHSpace(): Parser
  */
 function skipSpace1(): Parser
 {
-    return skipWhile1(isSpace())->label("skipSpace1");
+    return skipWhile1(isSpace())->label("<space>");
 }
 
 /**
@@ -130,5 +130,5 @@ function skipSpace1(): Parser
  */
 function skipHSpace1(): Parser
 {
-    return skipWhile1(isHSpace())->label("skipHSpace1");
+    return skipWhile1(isHSpace())->label("<space>");
 }

@@ -46,7 +46,7 @@ function charI(string $c): Parser
     Assert::singleChar($c);
     $lower = mb_strtolower($c);
     $upper = mb_strtoupper($c);
-    $label = $lower==$upper ? $c : "'$lower' or '$upper'";
+    $label = $lower==$upper ? "'$c'" : "'$lower' or '$upper'";
     return satisfy(orPred(isEqual($lower), isEqual($upper)))->label($label);
 }
 
@@ -59,7 +59,7 @@ function charI(string $c): Parser
  */
 function controlChar(): Parser
 {
-    return satisfy(isControl())->label("controlChar");
+    return satisfy(isControl())->label("<controlChar>");
 }
 
 /**
@@ -70,7 +70,7 @@ function controlChar(): Parser
  */
 function upperChar(): Parser
 {
-    return satisfy(isUpper())->label("upperChar");
+    return satisfy(isUpper())->label("A-Z");
 }
 
 /**
@@ -81,7 +81,7 @@ function upperChar(): Parser
  */
 function lowerChar(): Parser
 {
-    return satisfy(isLower())->label("lowerChar");
+    return satisfy(isLower())->label("a-z");
 }
 
 /**
@@ -92,7 +92,7 @@ function lowerChar(): Parser
  */
 function alphaChar(): Parser
 {
-    return satisfy(isAlpha())->label("alphaChar");
+    return satisfy(isAlpha())->label("A-Z or a-z");
 }
 
 /**
@@ -103,7 +103,7 @@ function alphaChar(): Parser
  */
 function alphaNumChar(): Parser
 {
-    return satisfy(isAlphaNum())->label("alphaNumChar");
+    return satisfy(isAlphaNum())->label("A-Z or a-z or 0-9");
 }
 
 /**
@@ -114,7 +114,7 @@ function alphaNumChar(): Parser
  */
 function printChar(): Parser
 {
-    return satisfy(isPrintable())->label("printChar");
+    return satisfy(isPrintable())->label("<printChar>");
 }
 
 /**
@@ -125,7 +125,7 @@ function printChar(): Parser
  */
 function punctuationChar(): Parser
 {
-    return satisfy(isPunctuation())->label("punctuationChar");
+    return satisfy(isPunctuation())->label("<punctuation>");
 }
 
 
@@ -138,7 +138,7 @@ function punctuationChar(): Parser
  */
 function digitChar(): Parser
 {
-    return satisfy(isDigit())->label('digit');
+    return satisfy(isDigit())->label('0-9');
 }
 
 /**
@@ -149,7 +149,7 @@ function digitChar(): Parser
  */
 function binDigitChar(): Parser
 {
-    return satisfy(isCharCode([0x30, 0x31]))->label("binDigitChar");
+    return satisfy(isCharCode([0x30, 0x31]))->label("'0' or '1'");
 }
 
 /**
@@ -161,7 +161,7 @@ function binDigitChar(): Parser
  */
 function octDigitChar(): Parser
 {
-    return satisfy(isCharCode(range(0x30, 0x37)))->label("octDigitChar");
+    return satisfy(isCharCode(range(0x30, 0x37)))->label("0-7");
 }
 
 /**
@@ -172,5 +172,5 @@ function octDigitChar(): Parser
  */
 function hexDigitChar(): Parser
 {
-    return satisfy(isHexDigit())->label("hexDigitChar");
+    return satisfy(isHexDigit())->label("<hexadecimal>");
 }

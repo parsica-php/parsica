@@ -27,7 +27,7 @@ final class LabelTest extends TestCase
         $parser = char('a')->or(char('b'));
         $input = "c";
         $result = $parser->run(new StringStream($input));
-        $this->assertEquals("a or b", $result->expected());
+        $this->assertEquals("'a' or 'b'", $result->expected());
     }
 
     /** @test */
@@ -36,7 +36,7 @@ final class LabelTest extends TestCase
         $parser = string('hello')->or(string('world'));
         $input = "foo";
         $result = $parser->run(new StringStream($input));
-        $this->assertEquals("hello or world", $result->expected());
+        $this->assertEquals("'hello' or 'world'", $result->expected());
     }
 
     /** @test */
@@ -45,7 +45,7 @@ final class LabelTest extends TestCase
         $parser = any(char('a'), char('b'), string ("hello"));
         $input = "foo";
         $result = $parser->run(new StringStream($input));
-        $this->assertEquals("a or b or hello", $result->expected());
+        $this->assertEquals("'a' or 'b' or 'hello'", $result->expected());
     }
 
     /** @test */

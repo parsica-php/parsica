@@ -53,7 +53,7 @@ final class Fail extends Exception implements ParserFailure, ParseResult
             . "%s | %s\n"
             . "  | ^\n"
             . "Unexpected '%s'\n"
-            . "Expecting '%s'\n",
+            . "Expecting %s\n",
             $this->got->position()->pretty(),
             $this->got->position()->line(),
             $line,
