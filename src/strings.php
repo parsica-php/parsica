@@ -47,7 +47,9 @@ function string(string $str): Parser
 /**
  * Parse a non-empty string, case-insensitive and case-preserving. On success it returns the string cased as the
  * actually parsed input.
- * eg stringI("foobar")->run("foObAr") will succeed with "foObAr"
+ * eg stringI("foobar")->tryString("foObAr") will succeed with "foObAr"
+ *
+ * @TODO The implementation could be replaced using Stream::takeWhile
  *
  * @psalm-return Parser<string>
  * @api
