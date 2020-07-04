@@ -90,17 +90,6 @@ interface ParseResult
     public function map(callable $transform): ParseResult;
 
     /**
-     * Return the first successful ParseResult if any, and otherwise return the first failing one.
-     *
-     * @psalm-param ParseResult<T> $other
-     *
-     * @psalm-return ParseResult<T>
-     *
-     * @api
-     */
-    public function alternative(ParseResult $other): ParseResult;
-
-    /**
      * Use the remainder of this ParseResult as the input for a parser.
      *
      * @template T2

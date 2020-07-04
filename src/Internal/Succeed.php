@@ -158,18 +158,6 @@ final class Succeed implements ParseResult
     }
 
     /**
-     * Return the first successful ParseResult if any, and otherwise return the first failing one.
-     *
-     * @psalm-param ParseResult<T> $other
-     *
-     * @psalm-return ParseResult<T>
-     */
-    public function alternative(ParseResult $other): ParseResult
-    {
-        return $this;
-    }
-
-    /**
      * The type of the ParseResult
      *
      * @psalm-return class-string<T>

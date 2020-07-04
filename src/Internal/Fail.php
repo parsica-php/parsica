@@ -143,18 +143,6 @@ final class Fail extends Exception implements ParserFailure, ParseResult
     }
 
     /**
-     * Return the first successful ParseResult if any, and otherwise return the first failing one.
-     *
-     * @psalm-param ParseResult<T> $other
-     *
-     * @psalm-return ParseResult<T>
-     */
-    public function alternative(ParseResult $other): ParseResult
-    {
-        return $other->isSuccess() ? $other : $this;
-    }
-
-    /**
      * @template T2
      *
      * @psalm-param Parser<T2> $parser
