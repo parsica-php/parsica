@@ -249,12 +249,11 @@ final class Parser
         /** @var Parser<T2> $parser */
         $parser = Parser::make(function (Stream $input) use ($f) : ParseResult {
             $result = $this->run($input)->map($f);
-            if ($result->isSuccess()) {
-                $p2 = $result->output();
-                return $result->continueWith($p2);
-            } else {
+            if ($result->isFail()) {
                 return $result;
             }
+            $p2 = $result->output();
+            return $result->continueWith($p2);
         });
         return $parser;
     }
