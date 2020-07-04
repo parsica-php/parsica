@@ -43,7 +43,7 @@ final class StringStream implements Stream
     private function guardEndOfStream(): void
     {
         if ($this->isEOF()) {
-            throw new EndOfStream("End of stream was reached  in " . $this->position->pretty());
+            throw new EndOfStream("End of stream was reached in " . $this->position->pretty());
         }
     }
 
@@ -62,7 +62,6 @@ final class StringStream implements Stream
         }
 
         $this->guardEndOfStream();
-
 
         $chunk = mb_substr($this->string, 0, $n);
         return new TakeResult(

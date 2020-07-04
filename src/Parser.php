@@ -217,7 +217,7 @@ final class Parser
     public function label(string $label): Parser
     {
         $newParserFunction = function (Stream $input) use ($label) : ParseResult {
-            $result =($this->parserFunction)($input);
+            $result = ($this->parserFunction)($input);
             return ($result->isSuccess())
                 ? $result
                 : new Fail($label, $input);
