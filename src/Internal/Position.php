@@ -56,6 +56,7 @@ final class Position
                     $column = 1;
                     break;
                 case "\t":
+                    throw new \Exception("This hasn't been tested");
                     $column = $column + 4 - (($column - 1) % 4);
                     break;
                 default:
