@@ -111,12 +111,12 @@ function takeWhile1(callable $predicate): Parser
                 return new Fail("takeWhile1(predicate)", $input, $input);
             }
 
-            if($predicate($t->chunk()))
-            {
-                $t = $input->takeWhile($predicate);
-                return new Succeed($t->chunk(), $t->stream());
+            if(!$predicate($t->chunk())) {
+                return new Fail("takeWhile1(predicate)", $input, $t->stream());
             }
-            return new Fail("takeWhile1(predicate)", $input, $t->stream());
+
+            $t = $input->takeWhile($predicate);
+            return new Succeed($t->chunk(), $t->stream());
         }
     );
 }
