@@ -28,18 +28,18 @@ function string(string $str): Parser
 {
     Assert::nonEmpty($str);
     $len = mb_strlen($str);
+    $label = $str;
     /** @psalm-var Parser<string> $parser */
-    $parser = Parser::make(
-        function (Stream $input) use ($len, $str): ParseResult {
-            try {
-                $t = $input->takeN($len);
-            } catch (EndOfStream $e) {
-                return new Fail("string($str)", $input);
-            }
-            return $t->chunk() === $str
-                ? new Succeed($str, $t->stream())
-                : new Fail("string($str)", $input);
+    $parser = Parser::make($label, function (Stream $input) use ($label, $len, $str): ParseResult {
+        try {
+            $t = $input->takeN($len);
+        } catch (EndOfStream $e) {
+            return new Fail($label, $input);
         }
+        return $t->chunk() === $str
+            ? new Succeed($str, $t->stream())
+            : new Fail($label, $input);
+    }
     );
     return $parser;
 }

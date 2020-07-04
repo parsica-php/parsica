@@ -37,14 +37,17 @@ final class Parser
     /** @var 'non-recursive'|'awaiting-recurse'|'recursion-was-setup' */
     private string $recursionStatus;
 
+    private string $label;
+
     /**
      * @psalm-param callable(Stream) : ParseResult<T> $parserFunction
      * @psalm-param 'non-recursive'|'awaiting-recurse'|'recursion-was-setup' $recursionStatus
      */
-    private function __construct(callable $parserFunction, string $recursionStatus)
+    private function __construct(callable $parserFunction, string $recursionStatus, string $label)
     {
         $this->parserFunction = $parserFunction;
         $this->recursionStatus = $recursionStatus;
+        $this->label = $label;
     }
 
     /**
@@ -63,8 +66,7 @@ final class Parser
                     . "A parser created by recursive(), must then be called with ->recurse(Parser) "
                     . "before it can be used."
                 );
-            },
-            'awaiting-recurse');
+            }, 'awaiting-recurse', "<unknown>");
     }
 
     /**
@@ -136,30 +138,20 @@ final class Parser
      */
     public function or(Parser $other): Parser
     {
-        // This is the canonical implementation: run both parsers, and pick the first succeeding one, by delegating
-        // this work to ParseResult::alternative.
-
-        return Parser::make(function (Stream $input) use ($other): ParseResult {
-            // @TODO When the first parser succeeds, this implementation unnecessarily evaluates $other anyway.
-            return $this->run($input)
-                ->alternative(
-                    $other->run($input)
-                );
-        });
-
-        // @TODO For a more performant version, we'll probably need to replace the above implementation with this one.
-        // The reason is that the above implementation runs both parsers, even if the first one succeeds.
-        // The implementation below only runs the second parser if the first one fails.
-        /*
-        return Parser::make(function (string $input) use ($other): ParseResult {
+        $label = $this->label . " or " . $other->label;
+        return Parser::make($label, function (Stream $input) use ($label, $other): ParseResult {
             $r1 = $this->run($input);
             if($r1->isSuccess()) {
                 return $r1;
             }
             $r2 = $other->run($input);
-            return $r2->isSuccess() ? $r2 : $r1;
+
+            if($r2->isSuccess()) {
+                return $r2;
+            }
+
+            return new Fail($label, $r2->got());
         });
-        */
     }
 
     /**
@@ -170,11 +162,10 @@ final class Parser
      * @psalm-return Parser<T2>
      * @internal
      * @template T2
-     *
      */
-    public static function make(callable $parserFunction): Parser
+    public static function make(string $label, callable $parserFunction): Parser
     {
-        return new Parser($parserFunction, 'non-recursive');
+        return new Parser($parserFunction, 'non-recursive', $label);
     }
 
     /**
@@ -216,20 +207,23 @@ final class Parser
     }
 
     /**
-     * Label a parser. When a parser fails, instead of a generated error message, you'll see your label.
-     * eg (char(':')->followedBy(char(')')).followedBy(char(')')).
+     * Label a parser. When a parser fails, instead of a generated error message, you'll see your label. The labels
+     * serve the end user of your application, so the labels should make sense to the user who provides the input for
+     * your parser.
      *
      * @psalm-return Parser<T>
      * @api
      */
     public function label(string $label): Parser
     {
-        return Parser::make(function (Stream $input) use ($label) : ParseResult {
-            $result = $this->run($input);
+        $newParserFunction = function (Stream $input) use ($label) : ParseResult {
+            $result =($this->parserFunction)($input);
             return ($result->isSuccess())
                 ? $result
                 : new Fail($label, $input);
-        });
+        };
+
+        return new Parser($newParserFunction, $this->recursionStatus, $label);
     }
 
     /**
@@ -247,7 +241,7 @@ final class Parser
     public function bind(callable $f): Parser
     {
         /** @var Parser<T2> $parser */
-        $parser = Parser::make(function (Stream $input) use ($f) : ParseResult {
+        $parser = Parser::make($this->getLabel(), function (Stream $input) use ($f) : ParseResult {
             $result = $this->run($input)->map($f);
             if ($result->isFail()) {
                 return $result;
@@ -270,7 +264,7 @@ final class Parser
      */
     public function map(callable $transform): Parser
     {
-        return Parser::make(fn(Stream $input): ParseResult => $this->run($input)->map($transform));
+        return Parser::make($this->getLabel(), fn(Stream $input): ParseResult => $this->run($input)->map($transform));
     }
 
     /**
@@ -410,5 +404,15 @@ final class Parser
     public function notFollowedBy(Parser $second): Parser
     {
         return keepFirst($this, notFollowedBy($second));
+    }
+
+    /**
+     * The parser's label.
+     *
+     * @internal
+     */
+    public function getLabel() : string
+    {
+        return $this->label;
     }
 }

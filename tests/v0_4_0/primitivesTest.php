@@ -71,7 +71,7 @@ final class primitivesTest extends TestCase
     public function eof()
     {
         $this->assertParse("", eof(), "");
-        $this->assertNotParse(eof(), "xyz", "eof");
+        $this->assertNotParse(eof(), "xyz", "<EOF>");
     }
 
     /** @test */
@@ -126,9 +126,9 @@ final class primitivesTest extends TestCase
     {
         $this->assertParse("", success(), "doesn't matter what we put in here");
         $this->assertRemain("no input is consumed", success(), "no input is consumed");
-        $this->assertNotParse(failure(), "doesn't matter what we put in here");
+        $this->assertNotParse(failure(""), "doesn't matter what we put in here");
 
-        $or = failure()->or(success());
+        $or = failure("")->or(success());
         $this->assertParse("", $or, "failure or success is success");
     }
 

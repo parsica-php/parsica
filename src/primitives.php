@@ -29,15 +29,16 @@ use Verraes\Parsica\Internal\Succeed;
  */
 function satisfy(callable $predicate): Parser
 {
-    return Parser::make(function (Stream $input) use ($predicate) : ParseResult {
+    $label = "satisfy(predicate)";
+    return Parser::make($label, function (Stream $input) use ($label, $predicate) : ParseResult {
         try {
             $t = $input->take1();
-        } catch(EndOfStream $e) {
-            return new Fail("satisfy(predicate)", $input);
+        } catch (EndOfStream $e) {
+            return new Fail($label, $input);
         }
         return $predicate($t->chunk())
             ? new Succeed($t->chunk(), $t->stream())
-            : new Fail("satisfy(predicate)", $input);
+            : new Fail($label, $input);
     });
 }
 
@@ -83,6 +84,7 @@ function skipWhile1(callable $predicate): Parser
 function takeWhile(callable $predicate): Parser
 {
     return Parser::make(
+        "takeWhile(predicate)",
         function (Stream $input) use ($predicate): ParseResult {
             $t = $input->takeWhile($predicate);
             return new Succeed($t->chunk(), $t->stream());
@@ -103,22 +105,22 @@ function takeWhile(callable $predicate): Parser
  */
 function takeWhile1(callable $predicate): Parser
 {
-    return Parser::make(
-        function (Stream $input) use ($predicate): ParseResult {
+    $label = "takeWhile1(predicate)";
+    return Parser::make($label, function (Stream $input) use ($label, $predicate): ParseResult {
 
-            try {
-                $t = $input->take1();
-            } catch (EndOfStream $e) {
-                return new Fail("takeWhile1(predicate)", $input);
-            }
-
-            if(!$predicate($t->chunk())) {
-                return new Fail("takeWhile1(predicate)", $input);
-            }
-
-            $t = $input->takeWhile($predicate);
-            return new Succeed($t->chunk(), $t->stream());
+        try {
+            $t = $input->take1();
+        } catch (EndOfStream $e) {
+            return new Fail($label, $input);
         }
+
+        if (!$predicate($t->chunk())) {
+            return new Fail($label, $input);
+        }
+
+        $t = $input->takeWhile($predicate);
+        return new Succeed($t->chunk(), $t->stream());
+    }
     );
 }
 
@@ -191,7 +193,7 @@ function oneOf(array $chars): Parser
  */
 function oneOfS(string $chars): Parser
 {
-    /** @var list<string> $split */
+    /** @psalm-var list<string> $split */
     $split = mb_str_split($chars);
     return oneOf($split);
 }
@@ -254,7 +256,7 @@ function takeRest(): Parser
  */
 function nothing(): Parser
 {
-    return Parser::make(fn(Stream $input) => new Succeed(null, $input));
+    return Parser::make("<nothing>", fn(Stream $input) => new Succeed(null, $input));
 }
 
 /**
@@ -264,7 +266,7 @@ function nothing(): Parser
  */
 function everything(): Parser
 {
-    return Parser::make(fn(Stream $input) => new Succeed((string) $input, new StringStream("")));
+    return Parser::make("<everything>", fn(Stream $input) => new Succeed((string)$input, new StringStream("")));
 }
 
 /**
@@ -274,17 +276,20 @@ function everything(): Parser
  */
 function success(): Parser
 {
-    return Parser::make(fn(Stream $input) => new Succeed('', $input))->label('success');
+    return Parser::make("<always succeed>", fn(Stream $input) => new Succeed('', $input));
 }
 
 /**
  * Always fail, no matter what the input was.
  *
+ * @param string $label
+ *
+ * @return Parser
  * @api
  */
-function failure(): Parser
+function failure(string $label): Parser
 {
-    return Parser::make(fn(Stream $input) => new Fail('', $input))->label('failure');
+    return Parser::make($label, fn(Stream $input) => new Fail($label, $input));
 }
 
 /**
@@ -296,8 +301,9 @@ function failure(): Parser
  */
 function eof(): Parser
 {
-    return Parser::make(fn(Stream $input): ParseResult => $input->isEOF()
+    $label = "<EOF>";
+    return Parser::make($label, fn(Stream $input): ParseResult => $input->isEOF()
         ? new Succeed("", $input)
-        : new Fail("eof", $input)
+        : new Fail($label, $input)
     );
 }

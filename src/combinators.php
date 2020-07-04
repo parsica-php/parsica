@@ -44,7 +44,7 @@ function identity(Parser $parser): Parser
  */
 function pure($output): Parser
 {
-    return Parser::make(fn(Stream $input) => new Succeed($output, $input));
+    return Parser::make("<pure>", fn(Stream $input) => new Succeed($output, $input));
 }
 
 /**
@@ -153,7 +153,7 @@ function either(Parser $first, Parser $second): Parser
  */
 function append(Parser $left, Parser $right): Parser
 {
-    return Parser::make(function (Stream $input) use ($left, $right): ParseResult {
+    return Parser::make($right->getLabel(), function (Stream $input) use ($left, $right): ParseResult {
         $r1 = $left->run($input);
         $r2 = $r1->continueWith($right);
         return $r1->append($r2);
@@ -211,11 +211,18 @@ function collect(Parser ...$parsers): Parser
  */
 function any(Parser ...$parsers): Parser
 {
+    if(empty($parsers)) {
+        throw new \InvalidArgumentException("any() expects at least one parser");
+    }
+
+    $labels = array_map(fn(Parser $p) : string => $p->getLabel(), $parsers);
+    $label = implode(' or ', $labels);
+
     return array_reduce(
         $parsers,
         fn(Parser $first, Parser $second): Parser => $first->or($second),
-        failure()
-    )->label('any');
+        failure("")
+    )->label($label);
 }
 
 /**
@@ -401,10 +408,12 @@ function sepBy1(Parser $separator, Parser $parser): Parser
 function notFollowedBy(Parser $parser): Parser
 {
     /** @var Parser<string> $p */
-    $p = Parser::make(function (Stream $input) use ($parser): ParseResult {
+    $label = "notFollowedBy({$parser->getLabel()})";
+
+    $p = Parser::make($label, function (Stream $input) use ($label, $parser): ParseResult {
         $result = $parser->run($input);
         return $result->isSuccess()
-            ? new Fail('notFollowedBy', $input)
+            ? new Fail($label, $input)
             : new Succeed("", $input);
     });
     return $p;

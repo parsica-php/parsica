@@ -56,7 +56,7 @@ final class charactersTest extends TestCase
     public function string()
     {
         $this->assertParse("abc", string('abc'), "abcde");
-        $this->assertNotParse(string('abc'), "babc", "string(abc)");
+        $this->assertNotParse(string('abc'), "babc", "abc");
     }
 
     /** @test */
