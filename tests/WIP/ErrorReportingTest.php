@@ -42,6 +42,45 @@ ERROR;
         $this->assertEquals($expected, $result->errorMessage());
     }
 
+
+    /** @test */
+    public function indicate_position_in_error_messages_inside_a_line()
+    {
+        $parser = char('a')->followedBy(char('b'));
+        $input = new StringStream("acd", Position::initial("/path/to/file"));
+        $result = $parser->run($input);
+        $expected = <<<ERROR
+/path/to/file:1:2
+  |
+1 | cd
+  | ^
+Unexpected 'c'
+Expecting 'b'
+
+ERROR;
+
+        $this->assertEquals($expected, $result->errorMessage());
+    }
+
+    /** @test */
+    public function WISHFUL_THINKING_indicate_position_in_error_messages_inside_a_line()
+    {
+        $parser = char('a')->followedBy(char('b'));
+        $input = new StringStream("acd", Position::initial("/path/to/file"));
+        $result = $parser->run($input);
+        $expected = <<<ERROR
+/path/to/file:1:1
+  |
+1 | acd
+  |  ^
+Unexpected 'c'
+Expecting 'b'
+
+ERROR;
+
+        $this->assertEquals($expected, $result->errorMessage());
+    }
+
     /** @test */
     public function multiline_input()
     {
@@ -61,5 +100,23 @@ ERROR;
         $this->assertEquals($expected, $result->errorMessage());
     }
 
+    /** @test */
+    public function indicate_unexpected_control_char()
+    {
+        $parser = char('a');
+        $input = new StringStream("\n", Position::initial("/path/to/file"));
+        $result = $parser->run($input);
+        $expected = <<<ERROR
+/path/to/file:1:1
+  |
+1 |
+  | ^
+Unexpected '<line feed>'
+Expecting 'a'
+
+ERROR;
+
+        $this->assertEquals($expected, $result->errorMessage());
+    }
 
 }
