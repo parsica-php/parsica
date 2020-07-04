@@ -43,7 +43,7 @@ final class Position
         return $this->filename . ":" . $this->line . ":" . $this->column;
     }
 
-    public function update(string $parsed): Position
+    public function advance(string $parsed): Position
     {
         $column = $this->column;
         $line = $this->line;

@@ -23,13 +23,13 @@ final class PositionTest extends TestCase
         $position = Position::initial();
         $this->assertEquals(1, $position->line());
         $this->assertEquals(1, $position->column());
-        $position = $position->update("a");
+        $position = $position->advance("a");
         $this->assertEquals(1, $position->line());
         $this->assertEquals(2, $position->column());
-        $position = $position->update("\n");
+        $position = $position->advance("\n");
         $this->assertEquals(2, $position->line());
         $this->assertEquals(1, $position->column());
-        $position = $position->update("\n\n\nabc");
+        $position = $position->advance("\n\n\nabc");
         $this->assertEquals(5, $position->line());
         $this->assertEquals(4, $position->column());
     }

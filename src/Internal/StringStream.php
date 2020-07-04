@@ -29,7 +29,7 @@ final class StringStream implements Stream
         $this->guardEndOfStream();
 
         $token = mb_substr($this->string, 0, 1);
-        $position = $this->position->update($token);
+        $position = $this->position->advance($token);
 
         return new TakeResult(
             $token,
@@ -68,7 +68,7 @@ final class StringStream implements Stream
             $chunk,
             new StringStream(
                 mb_substr($this->string, $n),
-                $this->position->update($chunk)
+                $this->position->advance($chunk)
             )
         );
     }
@@ -97,7 +97,7 @@ final class StringStream implements Stream
 
         return new TakeResult(
             $chunk,
-            new StringStream($remaining, $this->position->update($chunk))
+            new StringStream($remaining, $this->position->advance($chunk))
         );
     }
 

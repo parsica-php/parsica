@@ -18,19 +18,20 @@ use function Verraes\Parsica\atLeastOne;
 use function Verraes\Parsica\char;
 use function Verraes\Parsica\many;
 use function Verraes\Parsica\newline;
+use function Verraes\Parsica\string;
 
 final class ErrorReportingTest extends TestCase
 {
     use ParserAssertions;
 
     /** @test */
-    public function indicate_position_in_error_messages()
+    public function failing_on_the_first_token()
     {
         $parser = char('a');
-        $input = new StringStream("bcd", Position::initial("/path/to/file"));
+        $input = new StringStream("bcd");
         $result = $parser->run($input);
         $expected = <<<ERROR
-/path/to/file:1:1
+<input>:1:1
   |
 1 | bcd
   | ^
@@ -42,20 +43,76 @@ ERROR;
         $this->assertEquals($expected, $result->errorMessage());
     }
 
-
     /** @test */
-    public function indicate_position_in_error_messages_inside_a_line()
+    public function failing_with_an_advanced_position()
     {
-        $parser = char('a')->followedBy(char('b'));
-        $input = new StringStream("acd", Position::initial("/path/to/file"));
+        $parser = char('a');
+        $input = new StringStream("bcd", new Position("/path/to/file", 5, 10));
         $result = $parser->run($input);
         $expected = <<<ERROR
-/path/to/file:1:2
+/path/to/file:5:10
   |
-1 | cd
+5 | bcd
   | ^
-Unexpected 'c'
+Unexpected 'b'
+Expecting 'a'
+
+ERROR;
+
+        $this->assertEquals($expected, $result->errorMessage());
+    }
+
+    /** @test */
+    public function works_for_parsers_with_more_than_one_character()
+    {
+        $parser = string("abc");
+        $input = new StringStream("xyz", Position::initial("/path/to/file"));
+        $result = $parser->run($input);
+        $expected = <<<ERROR
+/path/to/file:1:1
+  |
+1 | xyz
+  | ^
+Unexpected 'x'
+Expecting 'abc'
+
+ERROR;
+
+        $this->assertEquals($expected, $result->errorMessage());
+    }
+
+    /** @test */
+    public function advance_the_column_with_followedBy()
+    {
+        $parser = char('a')->sequence(char('b'));
+        $input = new StringStream("axy");
+        $result = $parser->run($input);
+        $expected = <<<ERROR
+<input>:1:2
+  |
+1 | xy
+  | ^
+Unexpected 'x'
 Expecting 'b'
+
+ERROR;
+
+        $this->assertEquals($expected, $result->errorMessage());
+    }
+
+    /** @test */
+    public function works_with_custom_labels()
+    {
+        $parser = char('a')->sequence(char('b'))->label("a followed by b");
+        $input = new StringStream("axy");
+        $result = $parser->run($input);
+        $expected = <<<ERROR
+<input>:1:2
+  |
+1 | xy
+  | ^
+Unexpected 'x'
+Expecting a followed by b
 
 ERROR;
 

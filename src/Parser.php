@@ -203,7 +203,7 @@ final class Parser
             function ($_) use ($second) {
                 return $second;
             }
-        )->label('sequence');
+        );
     }
 
     /**
@@ -217,10 +217,11 @@ final class Parser
     public function label(string $label): Parser
     {
         $newParserFunction = function (Stream $input) use ($label) : ParseResult {
+            /** @var ParseResult $result */
             $result = ($this->parserFunction)($input);
             return ($result->isSuccess())
                 ? $result
-                : new Fail($label, $input);
+                : new Fail($label, $result->got());
         };
 
         return new Parser($newParserFunction, $this->recursionStatus, $label);
