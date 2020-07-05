@@ -18,6 +18,7 @@ use function Verraes\Parsica\atLeastOne;
 use function Verraes\Parsica\char;
 use function Verraes\Parsica\many;
 use function Verraes\Parsica\newline;
+use function Verraes\Parsica\skipSpace;
 use function Verraes\Parsica\string;
 
 final class ErrorReportingTest extends TestCase
@@ -116,6 +117,24 @@ Expecting a followed by b
 
 ERROR;
 
+        $this->assertEquals($expected, $result->errorMessage());
+    }
+
+    /** @test */
+    public function tabs_move_column_position()
+    {
+        $parser = skipSpace()->sequence(char('a'));
+        $input = new StringStream("\t\tb");
+        $result = $parser->run($input);
+        $expected = <<<ERROR
+<input>:1:9
+  |
+1 | b
+  | ^
+Unexpected 'b'
+Expecting 'a'
+
+ERROR;
         $this->assertEquals($expected, $result->errorMessage());
     }
 
