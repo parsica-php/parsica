@@ -30,11 +30,11 @@ use Verraes\Parsica\Internal\StringStream;
 final class Parser
 {
     /**
-     * @var callable(Stream) : ParseResult<T> $parserF
+     * @psalm-var callable(Stream) : ParseResult<T> $parserF
      */
     private $parserFunction;
 
-    /** @var 'non-recursive'|'awaiting-recurse'|'recursion-was-setup' */
+    /** @psalm-var 'non-recursive'|'awaiting-recurse'|'recursion-was-setup' */
     private string $recursionStatus;
 
     private string $label;
@@ -217,7 +217,7 @@ final class Parser
     public function label(string $label): Parser
     {
         $newParserFunction = function (Stream $input) use ($label) : ParseResult {
-            /** @var ParseResult $result */
+            /** @psalm-var ParseResult $result */
             $result = ($this->parserFunction)($input);
             return ($result->isSuccess())
                 ? $result
@@ -241,7 +241,7 @@ final class Parser
      */
     public function bind(callable $f): Parser
     {
-        /** @var Parser<T2> $parser */
+        /** @psalm-var Parser<T2> $parser */
         $parser = Parser::make($this->getLabel(), function (Stream $input) use ($f) : ParseResult {
             $result = $this->run($input)->map($f);
             if ($result->isFail()) {

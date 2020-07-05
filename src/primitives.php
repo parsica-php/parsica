@@ -224,7 +224,7 @@ function noneOf(array $chars): Parser
  */
 function noneOfS(string $chars): Parser
 {
-    /** @var list<string> $split */
+    /** @psalm-var list<string> $split */
     $split = mb_str_split($chars);
     return noneOf($split);
 }
@@ -275,8 +275,6 @@ function success(): Parser
 
 /**
  * Always fail, no matter what the input was.
- *
- * @param string $label
  *
  * @return Parser
  * @api

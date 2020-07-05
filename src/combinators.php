@@ -404,7 +404,7 @@ function sepBy1(Parser $separator, Parser $parser): Parser
  */
 function notFollowedBy(Parser $parser): Parser
 {
-    /** @var Parser<string> $p */
+    /** @psalm-var Parser<string> $p */
     $label = "notFollowedBy({$parser->getLabel()})";
 
     $p = Parser::make($label, function (Stream $input) use ($label, $parser): ParseResult {

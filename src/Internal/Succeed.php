@@ -23,7 +23,7 @@ use Verraes\Parsica\ParseResult;
 final class Succeed implements ParseResult
 {
     /**
-     * @var T
+     * @psalm-var T
      */
     private $output;
 
