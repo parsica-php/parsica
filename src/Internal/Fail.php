@@ -15,6 +15,8 @@ use Exception;
 use Verraes\Parsica\Parser;
 use Verraes\Parsica\ParseResult;
 use Verraes\Parsica\ParserFailure;
+use function Verraes\Parsica\isEqual;
+use function Verraes\Parsica\notPred;
 
 /**
  * The return value of a failed parser.
@@ -43,7 +45,7 @@ final class Fail extends Exception implements ParserFailure, ParseResult
         try {
             $firstChar = $this->got->take1()->chunk();
             $unexpected = Ascii::printable($firstChar);
-            $body = $this->got()->takeWhile(fn($c) => $c != "\n")->chunk();
+            $body = $this->got()->takeWhile(notPred(isEqual("\n")))->chunk();
         } catch (EndOfStream $e) {
             $unexpected = $body = "<EOF>";
         }
