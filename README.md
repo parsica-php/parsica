@@ -6,7 +6,7 @@ The easiest way to build robust parsers in PHP.
 composer require mathiasverraes/parsica
 ```
 
-Documentation: [parsica.verraes.net](https://parsica.verraes.net/)
+Documentation & API: [parsica.verraes.net](https://parsica.verraes.net/)
 
 
 ```php
