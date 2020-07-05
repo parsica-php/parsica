@@ -230,7 +230,7 @@ ERROR;
    |
 10 | ... World! This is a really long line of more than 80 characters, if you...
    |    ^— column 6
-Unexpected ' '
+Unexpected <space>
 Expecting ','
 
 ERROR;

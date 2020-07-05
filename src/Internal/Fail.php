@@ -42,7 +42,7 @@ final class Fail extends Exception implements ParserFailure, ParseResult
     {
         try {
             $firstChar = $this->got->take1()->chunk();
-            $unexpected = self::replaceControlChar($firstChar);
+            $unexpected = Ascii::printable($firstChar);
             $body = $this->got()->takeWhile(fn($c) => $c != "\n")->chunk();
         } catch (EndOfStream $e) {
             $unexpected = $body = "<EOF>";
@@ -62,36 +62,8 @@ final class Fail extends Exception implements ParserFailure, ParseResult
             . "$spaceLength |\n"
             . "$bodyLine\n"
             . "$spaceLength | $leftSpace^— column $columnNumber\n"
-            . "Unexpected '$unexpected'\n"
+            . "Unexpected $unexpected\n"
             . "Expecting $expecting\n";
-    }
-
-    private static function replaceControlChar(string $char): string
-    {
-        switch (mb_ord($char)) {
-            case 0:
-                return "<NUL>";
-            case 7:
-                return "<bell>";
-            case 8:
-                return "<backspace>";
-            case 9:
-                return "<tab>";
-            case 10:
-                return "<line feed>";
-            case 11:
-                return "<vertical tab>";
-            case 12:
-                return "<form feed>";
-            case 13:
-                return "<carriage return>";
-            case 26:
-                return "<EOF>";
-            case 27:
-                return "<ESC>";
-            default:
-                return $char;
-        }
     }
 
     public function got(): Stream
