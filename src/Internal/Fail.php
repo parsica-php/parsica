@@ -47,22 +47,19 @@ final class Fail extends Exception implements ParserFailure, ParseResult
         } catch (EndOfStream $e) {
             $unexpected = $body = "<EOF>";
         }
-        $spaceLength = str_repeat(" ", strlen((string) $this->got->position()->line()));
-        return sprintf(
-            "%s\n"
-            . "%s |\n"
-            . "%s | %s\n"
-            . "%s | ^\n"
-            . "Unexpected '%s'\n"
-            . "Expecting %s\n",
-            $this->got->position()->pretty(),
-            $spaceLength,
-            $this->got->position()->line(),
-            $body,
-            $spaceLength,
-            $unexpected,
-            $this->expected
-        );
+        $lineNumber = $this->got->position()->line();
+        $spaceLength = str_repeat(" ", strlen((string)$lineNumber));
+        $expecting = $this->expected;
+        $position = $this->got->position()->pretty();
+
+        return
+              "$position\n"
+            . "$spaceLength |\n"
+            . "$lineNumber | $body\n"
+            . "$spaceLength | ^\n"
+            . "Unexpected '$unexpected'\n"
+            . "Expecting $expecting\n"
+            ;
     }
 
     private static function replaceControlChar(string $char): string
