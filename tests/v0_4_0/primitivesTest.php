@@ -174,11 +174,11 @@ final class primitivesTest extends TestCase
 
         $this->assertFailOnEOF($parser);
         $this->assertNotParse($parser, "xyz");
-        $this->assertParse("", $parser, "axyz");
+        $this->assertParse(null, $parser, "axyz");
         $this->assertRemain("xyz", $parser, "axyz");
-        $this->assertParse("", $parser, "aaaxyz");
+        $this->assertParse(null, $parser, "aaaxyz");
         $this->assertRemain("xyz", $parser, "aaaxyz");
-        $this->assertParse("", $parser, "aaa");
+        $this->assertParse(null, $parser, "aaa");
         $this->assertRemain("", $parser, "aaa");
         $this->assertNotParse($parser, "");
     }

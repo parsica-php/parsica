@@ -68,7 +68,7 @@ function skipWhile(callable $predicate): Parser
  */
 function skipWhile1(callable $predicate): Parser
 {
-    return takeWhile1($predicate)->followedBy(pure(""));
+    return takeWhile1($predicate)->followedBy(pure(null));
 }
 
 /**
