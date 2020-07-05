@@ -184,7 +184,7 @@ ERROR;
         $input = new StringStream("\n\n\nbcd\nxyz", Position::initial("/path/to/file"));
         $result = $parser->run($input);
         $expected = <<<ERROR
-/path/to/file:1:1
+/path/to/file:4:1
   |
 4 | bcd
   | ^
