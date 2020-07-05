@@ -65,7 +65,7 @@ trait ParserAssertions
     protected function assertStrictlyEquals($expected, $actual, string $message = ''): void
     {
         // Just a POC implementation.
-        if (is_scalar($expected)) {
+        if (is_null($expected) || is_scalar($expected)) {
             $this->assertSame($expected, $actual, $message);
         } elseif (is_object($expected)) {
             $this->assertEquals(get_class($expected), get_class($actual),
