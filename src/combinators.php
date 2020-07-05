@@ -211,11 +211,11 @@ function collect(Parser ...$parsers): Parser
  */
 function any(Parser ...$parsers): Parser
 {
-    if(empty($parsers)) {
+    if (empty($parsers)) {
         throw new \InvalidArgumentException("any() expects at least one parser");
     }
 
-    $labels = array_map(fn(Parser $p) : string => $p->getLabel(), $parsers);
+    $labels = array_map(fn(Parser $p): string => $p->getLabel(), $parsers);
     $label = implode(' or ', $labels);
 
     return array_reduce(
@@ -397,13 +397,10 @@ function sepBy1(Parser $separator, Parser $parser): Parser
  *
  * `keepFirst(string("print"), notFollowedBy(alphaNumChar()))` will match "print something" but not "printXYZ something"
  *
- * @psalm-param Parser<T> $parser
- *
- * @psalm-return Parser<string>
- * @see Parser::notFollowedBy()
- *
  * @template T
- *
+ * @psalm-param Parser<T> $parser
+ * @psalm-return Parser<T>
+ * @see Parser::notFollowedBy()
  */
 function notFollowedBy(Parser $parser): Parser
 {

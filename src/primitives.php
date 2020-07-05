@@ -48,8 +48,6 @@ function satisfy(callable $predicate): Parser
  * @template T
  *
  * @psalm-param callable(string) : bool $predicate
- * @psalm-param string $expected
- *
  * @psalm-return Parser<T>
  */
 function skipWhile(callable $predicate): Parser
@@ -75,10 +73,7 @@ function skipWhile1(callable $predicate): Parser
  * Keep parsing 0 or more characters as long as the predicate holds.
  *
  * @template T
- *
  * @psalm-param callable(string) : bool $predicate
- * @psalm-param string $expected
- *
  * @psalm-return Parser<T>
  */
 function takeWhile(callable $predicate): Parser
@@ -99,7 +94,6 @@ function takeWhile(callable $predicate): Parser
  * @template T
  *
  * @psalm-param callable(string) : bool $predicate
- * @psalm-param string $expected
  *
  * @psalm-return Parser<T>
  */
