@@ -138,6 +138,26 @@ ERROR;
         $this->assertEquals($expected, $result->errorMessage());
     }
 
+
+
+    /** @test */
+    public function line_numbers_space_out()
+    {
+        $parser = skipSpace()->sequence(char('a'));
+        $input = new StringStream(str_repeat("\n", 99) . "b");
+        $result = $parser->run($input);
+        $expected = <<<ERROR
+<input>:100:1
+    |
+100 | b
+    | ^
+Unexpected 'b'
+Expecting 'a'
+
+ERROR;
+        $this->assertEquals($expected, $result->errorMessage());
+    }
+
     /** @test */
     public function WISHFUL_THINKING_indicate_position_in_error_messages_inside_a_line()
     {

@@ -43,20 +43,23 @@ final class Fail extends Exception implements ParserFailure, ParseResult
         try {
             $firstChar = $this->got->take1()->chunk();
             $unexpected = self::replaceControlChar($firstChar);
-            $line = $this->got()->takeWhile(fn($c) => $c != "\n")->chunk();
+            $body = $this->got()->takeWhile(fn($c) => $c != "\n")->chunk();
         } catch (EndOfStream $e) {
-            $unexpected = $line = "<EOF>";
+            $unexpected = $body = "<EOF>";
         }
+        $spaceLength = str_repeat(" ", strlen((string) $this->got->position()->line()));
         return sprintf(
             "%s\n"
-            . "  |\n"
+            . "%s |\n"
             . "%s | %s\n"
-            . "  | ^\n"
+            . "%s | ^\n"
             . "Unexpected '%s'\n"
             . "Expecting %s\n",
             $this->got->position()->pretty(),
+            $spaceLength,
             $this->got->position()->line(),
-            $line,
+            $body,
+            $spaceLength,
             $unexpected,
             $this->expected
         );
