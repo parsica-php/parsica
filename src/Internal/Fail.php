@@ -54,15 +54,16 @@ final class Fail extends Exception implements ParserFailure, ParseResult
         $columnNumber = $this->got->position()->column();
         $leftDots = $columnNumber == 1 ? "" : "...";
         $leftSpace = $columnNumber == 1 ? "" : "   ";
+        $bodyLine = "$lineNumber | $leftDots$body";
+        $bodyLine = strlen($bodyLine) > 80 ? (substr($bodyLine, 0, 77) . "...") : $bodyLine;
 
         return
-              "$position\n"
+            "$position\n"
             . "$spaceLength |\n"
-            . "$lineNumber | $leftDots$body\n"
+            . "$bodyLine\n"
             . "$spaceLength | $leftSpace^— column $columnNumber\n"
             . "Unexpected '$unexpected'\n"
-            . "Expecting $expecting\n"
-            ;
+            . "Expecting $expecting\n";
     }
 
     private static function replaceControlChar(string $char): string
@@ -93,14 +94,14 @@ final class Fail extends Exception implements ParserFailure, ParseResult
         }
     }
 
-    public function expected(): string
-    {
-        return $this->expected;
-    }
-
     public function got(): Stream
     {
         return $this->got;
+    }
+
+    public function expected(): string
+    {
+        return $this->expected;
     }
 
     public function isSuccess(): bool

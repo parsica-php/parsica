@@ -21,6 +21,7 @@ use function Verraes\Parsica\newline;
 use function Verraes\Parsica\repeat;
 use function Verraes\Parsica\skipSpace;
 use function Verraes\Parsica\string;
+use function Verraes\Parsica\whitespace;
 
 final class ErrorReportingTest extends TestCase
 {
@@ -211,6 +212,26 @@ ERROR;
   |    ^— column 3
 Unexpected 'X'
 Expecting 'b'
+
+ERROR;
+
+        $this->assertEquals($expected, $result->errorMessage());
+    }
+
+
+    /** @test */
+    public function truncate_long_lines()
+    {
+        $parser = skipSpace()->sequence(string("Hello"))->sequence(char(','))->sequence(whitespace())->sequence(string("World"));
+        $input = new StringStream("\n\n\n\n\n\n\n\n\nHello World! This is a really long line of more than 80 characters, if you count the spaces.");
+        $result = $parser->run($input);
+        $expected = <<<ERROR
+<input>:10:6
+   |
+10 | ... World! This is a really long line of more than 80 characters, if you...
+   |    ^— column 6
+Unexpected ' '
+Expecting ','
 
 ERROR;
 
