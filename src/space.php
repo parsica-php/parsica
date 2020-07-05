@@ -13,57 +13,57 @@ namespace Verraes\Parsica;
 /**
  * Parse a single space character.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  */
 function space(): Parser
 {
-    return char(' ')->label("space");
+    return char(' ')->label("<space>");
 }
 
 /**
  * Parse a single tab character.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  */
 function tab(): Parser
 {
-    return char("\t")->label("tab");
+    return char("\t")->label("<tab>");
 }
 
 /**
  *  Parse a space or tab.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  */
 function blank(): Parser
 {
-    return satisfy(isBlank())->label("blank");
+    return satisfy(isBlank())->label("<blank>");
 }
 
 /**
  *  Parse a space character, and \t, \n, \r, \f, \v.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  */
 function whitespace(): Parser
 {
-    return satisfy(isWhitespace())->label("whitespace");
+    return satisfy(isWhitespace())->label("<whitespace>");
 }
 
 
 /**
  * Parse a newline character.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  */
 function newline(): Parser
 {
-    return char("\n")->label("newline");
+    return char("\n")->label("<newline>");
 }
 
 /**
@@ -73,24 +73,24 @@ function newline(): Parser
  */
 function crlf(): Parser
 {
-    return string("\r\n")->label("crlf");
+    return string("\r\n")->label("<crlf>");
 }
 
 /**
  * Parse a newline or a crlf.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  */
 function eol(): Parser
 {
-    return either(newline(), crlf())->label("eol");
+    return either(newline(), crlf())->label("<EOL>");
 }
 
 /**
  * Skip zero or more white space characters.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  */
 function skipSpace(): Parser
@@ -101,7 +101,7 @@ function skipSpace(): Parser
 /**
  * Like 'skipSpace', but does not accept newlines and carriage returns.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  * @see skipSpace
  */
@@ -113,22 +113,22 @@ function skipHSpace(): Parser
 /**
  * Skip one or more white space characters.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  */
 function skipSpace1(): Parser
 {
-    return skipWhile1(isSpace())->label("skipSpace1");
+    return skipWhile1(isSpace())->label("<space>");
 }
 
 /**
  * Like 'skipSpace1', but does not accept newlines and carriage returns.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  * @see skipSpace1
  */
 function skipHSpace1(): Parser
 {
-    return skipWhile1(isHSpace())->label("skipHSpace1");
+    return skipWhile1(isHSpace())->label("<space>");
 }

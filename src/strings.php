@@ -11,13 +11,15 @@
 namespace Verraes\Parsica;
 
 use Verraes\Parsica\Internal\Assert;
+use Verraes\Parsica\Internal\EndOfStream;
 use Verraes\Parsica\Internal\Fail;
+use Verraes\Parsica\Internal\Stream;
 use Verraes\Parsica\Internal\Succeed;
 
 /**
  * Parse a non-empty string.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  * @see stringI()
  *
@@ -26,11 +28,18 @@ function string(string $str): Parser
 {
     Assert::nonEmpty($str);
     $len = mb_strlen($str);
-    /** @var Parser<string> $parser */
-    $parser = Parser::make(
-        fn(string $input): ParseResult => mb_substr($input, 0, $len) === $str
-            ? new Succeed($str, mb_substr($input, $len))
-            : new Fail("string($str)", $input)
+    $label = "'$str'";
+    /** @psalm-var Parser<string> $parser */
+    $parser = Parser::make($label, function (Stream $input) use ($label, $len, $str): ParseResult {
+        try {
+            $t = $input->takeN($len);
+        } catch (EndOfStream $e) {
+            return new Fail($label, $input);
+        }
+        return $t->chunk() === $str
+            ? new Succeed($str, $t->stream())
+            : new Fail($label, $input);
+    }
     );
     return $parser;
 }
@@ -38,16 +47,18 @@ function string(string $str): Parser
 /**
  * Parse a non-empty string, case-insensitive and case-preserving. On success it returns the string cased as the
  * actually parsed input.
- * eg stringI("foobar")->run("foObAr") will succeed with "foObAr"
+ * eg stringI("foobar")->tryString("foObAr") will succeed with "foObAr"
  *
- * @return Parser<string>
+ * @TODO The implementation could be replaced using Stream::takeWhile
+ *
+ * @psalm-return Parser<string>
  * @api
  * @see string()
  */
 function stringI(string $str): Parser
 {
     Assert::nonEmpty($str);
-    /** @var list<string> $split */
+    /** @psalm-var list<string> $split */
     $split = mb_str_split($str);
     $chars = array_map(fn(string $c): Parser => charI($c), $split);
     /** @var Parser<string> $parser */
@@ -55,6 +66,6 @@ function stringI(string $str): Parser
         $chars,
         fn(Parser $l, Parser $r): Parser => $l->append($r),
         success()
-    )->label("stringI($str)");
+    )->label("'$str'");
     return $parser;
 }

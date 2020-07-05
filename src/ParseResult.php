@@ -10,6 +10,8 @@
 
 namespace Verraes\Parsica;
 
+use Verraes\Parsica\Internal\Stream;
+
 /**
  * @template T
  */
@@ -32,7 +34,7 @@ interface ParseResult
     /**
      * The output of the parser.
      *
-     * @return T
+     * @psalm-return T
      * @api
      */
     public function output();
@@ -42,7 +44,7 @@ interface ParseResult
      *
      * @api
      */
-    public function remainder(): string;
+    public function remainder(): Stream;
 
     /*
      * A message that indicates what the failed parser expected to find at its position in the input. It contains the
@@ -60,15 +62,15 @@ interface ParseResult
      *
      * @api
      */
-    public function got(): string;
+    public function got(): Stream;
 
     /**
      * Append the output of two successful ParseResults. If one or both have failed, it returns the first failed
      * ParseResult.
      *
-     * @param ParseResult<T> $other
+     * @psalm-param ParseResult<T> $other
      *
-     * @return ParseResult<T>
+     * @psalm-return ParseResult<T>
      *
      * @api
      */
@@ -79,35 +81,26 @@ interface ParseResult
      *
      * @template T2
      *
-     * @param callable(T):T2 $transform
+     * @psalm-param callable(T):T2 $transform
      *
-     * @return ParseResult<T2>
+     * @psalm-return ParseResult<T2>
      *
      * @api
      */
     public function map(callable $transform): ParseResult;
 
     /**
-     * Return the first successful ParseResult if any, and otherwise return the first failing one.
-     *
-     * @param ParseResult<T> $other
-     *
-     * @return ParseResult<T>
-     *
-     * @api
-     */
-    public function alternative(ParseResult $other): ParseResult;
-
-    /**
      * Use the remainder of this ParseResult as the input for a parser.
      *
      * @template T2
      *
-     * @param Parser<T2> $parser
+     * @psalm-param Parser<T2> $parser
      *
-     * @return ParseResult<T2>
+     * @psalm-return ParseResult<T2>
      *
      * @api
      */
     public function continueWith(Parser $parser): ParseResult;
+
+    public function errorMessage() : string;
 }

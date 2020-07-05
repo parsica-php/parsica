@@ -38,7 +38,7 @@ final class Assert
     }
 
     /**
-     * @param list<string> $chars
+     * @psalm-param list<string> $chars
      *
      * @throws InvalidArgumentException
      * @internal

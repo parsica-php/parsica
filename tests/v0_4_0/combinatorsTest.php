@@ -54,7 +54,13 @@ final class combinatorsTest extends TestCase
         $parser = identity(char('a'));
         $this->assertParse("a", $parser, "abc");
         $this->assertRemain("bc", $parser, "abc");
-        $this->assertNotParse($parser, "bc", "char(a)", "identity shouldn't show up in error messages");
+    }
+
+    /** @test */
+    public function identity_does_not_show_up_in_error_messages()
+    {
+        $parser = identity(char('a'));
+        $this->assertNotParse($parser, "bc", "'a'");
     }
 
     /** @test */

@@ -27,28 +27,28 @@ final class Succeed implements ParseResult
      */
     private $output;
 
-    private string $remainder;
+    private Stream $remainder;
 
     /**
-     * @param T $output
+     * @psalm-param T $output
      *
      * @internal
      */
-    public function __construct($output, string $remainder)
+    public function __construct($output, Stream $remainder)
     {
         $this->output = $output;
         $this->remainder = $remainder;
     }
 
     /**
-     * @return T
+     * @psalm-return T
      */
     public function output()
     {
         return $this->output;
     }
 
-    public function remainder(): string
+    public function remainder(): Stream
     {
         return $this->remainder;
     }
@@ -68,15 +68,15 @@ final class Succeed implements ParseResult
         throw new BadMethodCallException("Can't read the expectation of a succeeded ParseResult.");
     }
 
-    public function got(): string
+    public function got(): Stream
     {
         throw new BadMethodCallException("Can't read the expectation of a succeeded ParseResult.");
     }
 
     /**
-     * @param ParseResult<T> $other
+     * @psalm-param ParseResult<T> $other
      *
-     * @return ParseResult<T>
+     * @psalm-return ParseResult<T>
      *
      * @todo get rid of suppression?
      * @psalm-suppress MixedOperand
@@ -101,7 +101,20 @@ final class Succeed implements ParseResult
     {
         $type1 = $this->type();
         $type2 = $other->type();
-        if ($type1 !== $type2) throw new Exception("Append only works for ParseResult<T> instances with the same type T, got ParseResult<$type1> and ParseResult<$type2>.");
+
+        // Ignore nulls
+        if($type1 === 'NULL' && $type2 === 'NULL') {
+            return new Succeed(null, $other->remainder());
+        } elseif($type1 !== 'NULL' && $type2 === 'NULL') {
+            return new Succeed($this->output(), $other->remainder());
+        } elseif($type1 === 'NULL' && $type2 !== 'NULL') {
+            return new Succeed($other->output(), $other->remainder());
+        }
+
+        // Only append for the same type
+        if ($type1 !== $type2) {
+            throw new Exception("Append only works for ParseResult<T> instances with the same type T, got ParseResult<$type1> and ParseResult<$type2>.");
+        }
 
         switch ($type1) {
             case 'string':
@@ -123,9 +136,9 @@ final class Succeed implements ParseResult
      *
      * @template T2
      *
-     * @param callable(T):T2 $transform
+     * @psalm-param callable(T):T2 $transform
      *
-     * @return ParseResult<T2>
+     * @psalm-return ParseResult<T2>
      */
     public function map(callable $transform): ParseResult
     {
@@ -135,9 +148,9 @@ final class Succeed implements ParseResult
     /**
      * @template T2
      *
-     * @param Parser<T2> $parser
+     * @psalm-param Parser<T2> $parser
      *
-     * @return ParseResult<T2>
+     * @psalm-return ParseResult<T2>
      */
     public function continueWith(Parser $parser): ParseResult
     {
@@ -145,21 +158,9 @@ final class Succeed implements ParseResult
     }
 
     /**
-     * Return the first successful ParseResult if any, and otherwise return the first failing one.
-     *
-     * @param ParseResult<T> $other
-     *
-     * @return ParseResult<T>
-     */
-    public function alternative(ParseResult $other): ParseResult
-    {
-        return $this;
-    }
-
-    /**
      * The type of the ParseResult
      *
-     * @return string|class-string<T>
+     * @psalm-return class-string<T>|'NULL'|'string'|'array'
      *
      * @psalm-suppress MoreSpecificReturnType
      * @psalm-suppress LessSpecificReturnStatement
@@ -169,5 +170,10 @@ final class Succeed implements ParseResult
     {
         $t = gettype($this->output);
         return $t == 'object' ? get_class($this->output) : $t;
+    }
+
+    public function errorMessage(): string
+    {
+        throw new BadMethodCallException("A succeeded ParseResult has no error message.");
     }
 }

@@ -23,7 +23,7 @@ final class ParserTest extends TestCase
     public function label()
     {
         $parser = string(":-)");
-        $this->assertNotParse($parser, "x", "string(:-))");
+        $this->assertNotParse($parser, "x", "':-)'");
 
         $labeled = $parser->label("smiley");
         $this->assertNotParse($labeled, "x", "smiley");

@@ -11,29 +11,34 @@
 namespace Verraes\Parsica;
 
 use Verraes\Parsica\Internal\Assert;
+use Verraes\Parsica\Internal\EndOfStream;
 use Verraes\Parsica\Internal\Fail;
+use Verraes\Parsica\Internal\Stream;
+use Verraes\Parsica\Internal\StringStream;
 use Verraes\Parsica\Internal\Succeed;
-use Verraes\Parsica\Internal\TakeWhile;
 
 /**
- * A parser that satisfies a predicate. Useful as a building block for writing things like char(), digit()...
+ * A parser that satisfies a predicate on a single token. Useful as a building block for writing things like char(),
+ * digit()...
  *
  * @template T
  *
- * @param callable(string) : bool $predicate
+ * @psalm-param callable(string) : bool $predicate
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  */
 function satisfy(callable $predicate): Parser
 {
-    return Parser::make(function (string $input) use ($predicate) : ParseResult {
-        if (mb_strlen($input) === 0) {
-            return new Fail("satisfy(predicate)", "EOF");
+    $label = "satisfy(predicate)";
+    return Parser::make($label, function (Stream $input) use ($label, $predicate) : ParseResult {
+        try {
+            $t = $input->take1();
+        } catch (EndOfStream $e) {
+            return new Fail($label, $input);
         }
-        $token = mb_substr($input, 0, 1);
-        return $predicate($token)
-            ? new Succeed($token, mb_substr($input, 1))
-            : new Fail("satisfy(predicate)", $token);
+        return $predicate($t->chunk())
+            ? new Succeed($t->chunk(), $t->stream())
+            : new Fail($label, $input);
     });
 }
 
@@ -42,14 +47,12 @@ function satisfy(callable $predicate): Parser
  *
  * @template T
  *
- * @param callable(string) : bool $predicate
- * @param string $expected
- *
- * @return Parser<T>
+ * @psalm-param callable(string) : bool $predicate
+ * @psalm-return Parser<T>
  */
 function skipWhile(callable $predicate): Parser
 {
-    return TakeWhile::_skipWhile($predicate);
+    return takeWhile($predicate)->followedBy(pure(null));
 }
 
 /**
@@ -57,29 +60,31 @@ function skipWhile(callable $predicate): Parser
  *
  * @template T
  *
- * @param callable(string) : bool $predicate
- * @param string $expected
+ * @psalm-param callable(string) : bool $predicate
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  */
 function skipWhile1(callable $predicate): Parser
 {
-    return TakeWhile::_skipWhile1($predicate);
+    return takeWhile1($predicate)->followedBy(pure(null));
 }
 
 /**
  * Keep parsing 0 or more characters as long as the predicate holds.
  *
  * @template T
- *
- * @param callable(string) : bool $predicate
- * @param string $expected
- *
- * @return Parser<T>
+ * @psalm-param callable(string) : bool $predicate
+ * @psalm-return Parser<T>
  */
 function takeWhile(callable $predicate): Parser
 {
-    return TakeWhile::_takeWhile($predicate);
+    return Parser::make(
+        "takeWhile(predicate)",
+        function (Stream $input) use ($predicate): ParseResult {
+            $t = $input->takeWhile($predicate);
+            return new Succeed($t->chunk(), $t->stream());
+        }
+    );
 }
 
 
@@ -88,14 +93,29 @@ function takeWhile(callable $predicate): Parser
  *
  * @template T
  *
- * @param callable(string) : bool $predicate
- * @param string $expected
+ * @psalm-param callable(string) : bool $predicate
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  */
 function takeWhile1(callable $predicate): Parser
 {
-    return TakeWhile::_takeWhile1($predicate);
+    $label = "takeWhile1(predicate)";
+    return Parser::make($label, function (Stream $input) use ($label, $predicate): ParseResult {
+
+        try {
+            $t = $input->take1();
+        } catch (EndOfStream $e) {
+            return new Fail($label, $input);
+        }
+
+        if (!$predicate($t->chunk())) {
+            return new Fail($label, $input);
+        }
+
+        $t = $input->takeWhile($predicate);
+        return new Succeed($t->chunk(), $t->stream());
+    }
+    );
 }
 
 /**
@@ -103,12 +123,12 @@ function takeWhile1(callable $predicate): Parser
  *
  * @template T
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  */
 function anySingle(): Parser
 {
     return satisfy(
-    /** @param mixed $_ */
+    /** @psalm-param mixed $_ */
         fn($_) => true
     )->label("anySingle");
 }
@@ -117,7 +137,7 @@ function anySingle(): Parser
  * Parse and return a single character of anything.
  *
  * @TODO This is an alias of anySingle. Should we get rid of one of them?
- * @return Parser<string>
+ * @psalm-return Parser<string>
  */
 function anything(): Parser
 {
@@ -128,7 +148,7 @@ function anything(): Parser
 /**
  * Match any character but the given one.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  * @template T
  *
@@ -141,9 +161,9 @@ function anySingleBut(string $x): Parser
 /**
  * Succeeds if the current character is in the supplied list of characters. Returns the parsed character.
  *
- * @param list<string> $chars
+ * @psalm-param list<string> $chars
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  * @template T
  *
@@ -158,16 +178,16 @@ function oneOf(array $chars): Parser
  * A compact form of 'oneOf'.
  * oneOfS("abc") == oneOf(['a', 'b', 'c'])
  *
- * @param string $chars
+ * @psalm-param string $chars
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  * @template T
  *
  */
 function oneOfS(string $chars): Parser
 {
-    /** @var list<string> $split */
+    /** @psalm-var list<string> $split */
     $split = mb_str_split($chars);
     return oneOf($split);
 }
@@ -177,9 +197,9 @@ function oneOfS(string $chars): Parser
  * The dual of 'oneOf'. Succeeds if the current character is not in the supplied list of characters. Returns the
  * parsed character.
  *
- * @param list<string> $chars
+ * @psalm-param list<string> $chars
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  * @template T
  *
@@ -195,9 +215,9 @@ function noneOf(array $chars): Parser
  * A compact form of 'noneOf'.
  * noneOfS("abc") == noneOf(['a', 'b', 'c'])
  *
- * @param string $chars
+ * @psalm-param string $chars
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  * @template T
  *
@@ -212,7 +232,7 @@ function noneOfS(string $chars): Parser
 /**
  * Consume the rest of the input and return it as a string. This parser never fails, but may return the empty string.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  * @template T
  */
@@ -230,7 +250,7 @@ function takeRest(): Parser
  */
 function nothing(): Parser
 {
-    return Parser::make(fn(string $input) => new Succeed(null, $input));
+    return Parser::make("<nothing>", fn(Stream $input) => new Succeed(null, $input));
 }
 
 /**
@@ -240,7 +260,7 @@ function nothing(): Parser
  */
 function everything(): Parser
 {
-    return Parser::make(fn(string $input) => new Succeed($input, ""));
+    return Parser::make("<everything>", fn(Stream $input) => new Succeed((string)$input, new StringStream("")));
 }
 
 /**
@@ -250,30 +270,34 @@ function everything(): Parser
  */
 function success(): Parser
 {
-    return Parser::make(fn(string $input) => new Succeed('', $input))->label('success');
+    return Parser::make("<always succeed>", fn(Stream $input) => new Succeed('', $input));
 }
 
 /**
  * Always fail, no matter what the input was.
  *
+ * @param string $label
+ *
+ * @return Parser
  * @api
  */
-function failure(): Parser
+function failure(string $label): Parser
 {
-    return Parser::make(fn(string $input) => new Fail('', $input))->label('failure');
+    return Parser::make($label, fn(Stream $input) => new Fail($label, $input));
 }
 
 /**
  * Parse the end of the input
  *
- * @return Parser<T>
+ * @psalm-return Parser<T>
  * @api
  * @template T
  */
 function eof(): Parser
 {
-    return Parser::make(fn(string $input): ParseResult => mb_strlen($input) === 0
-        ? new Succeed("", "")
-        : new Fail("eof", $input)
+    $label = "<EOF>";
+    return Parser::make($label, fn(Stream $input): ParseResult => $input->isEOF()
+        ? new Succeed("", $input)
+        : new Fail($label, $input)
     );
 }

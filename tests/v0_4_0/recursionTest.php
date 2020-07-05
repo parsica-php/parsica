@@ -12,6 +12,7 @@ namespace Tests\Verraes\Parsica\v0_4_0;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
+use Verraes\Parsica\Internal\StringStream;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\{between, char, collect, digitChar, recursive};
 
@@ -101,7 +102,7 @@ final class recursionTest extends TestCase
         $p2 = recursive();
         $p1->recurse($p2);
         $this->expectException(Exception::class);
-        $p1->run("test");
+        $p1->run(new StringStream("test"));
     }
 
     /** @test */

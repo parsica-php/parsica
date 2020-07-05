@@ -2,11 +2,15 @@
 title: Running Parsers
 ---
 
-There ar two ways of running your parser on an input. 
+There are different ways of running your parser on an input. 
 
-## Try
+## try() and tryString() 
 
-Most of the time, you'll want to use `try`. It will run the parser, return a `ParseResult` on success, and throw a `ParserFailure` exception if the input can't successfully be parsed. 
+Most of the time, you'll want to use `try`. It will run the parser on an input `Stream`, return a `ParseResult` on success, and throw a `ParserFailure` exception if the input can't successfully be parsed. 
+
+The `Stream` type generalises over a different ways of providing input. The simplest implementation is `StringStream`. This is really a wrapper around a PHP string. 
+
+(In v0.4.0, `StringStream` is also the _only_ implementation of `Stream`, but this will change.)
 
 `ParseResult` has an `output()` method, which has the type `T` for a `Parser<T>` (see [Mapping to Objects](mapping_to_objects)). It also has a `remainder()` method, which gives you the part of the input that wasn't consumed by the parser.
  
@@ -16,17 +20,19 @@ Most of the time, you'll want to use `try`. It will run the parser, return a `Pa
 <?php
 $parser = string('hello');
 try {
-    $result = $parser->try("hello world");
+    $result = $parser->try(new StringStream("hello world"));
+    // Or, use tryString(string), which is an alias of try(StringStream):
+    $result = $parser->tryString("hello world");
     echo $result->output(); // "hello"
-    echo $result->remainder(); // " world"
-    $result = $parser->try("hi world");
+    echo $result->remainder(); // StringStream(" world")
+    $result = $parser->tryString("hi world");
 } catch(ParserFailure $e) {
     echo $e->expected(); // "string(hello)"
-    echo $e->got(); // "hi world"
+    echo $e->got(); // StringStream("hi world")
 }
 ```
 
-## Run
+## run()
 
 `run` is mostly intended for internal use. 
 
@@ -35,7 +41,7 @@ The main difference between `run` and `try` is that `run` doesn't throw exceptio
 ```php
 <?php
 $parser = string("hello");
-$result = $parser->run("some input");
+$result = $parser->run(new StringStream("some input"));
 if($result->isSuccess()) {
     echo $result->output();
     echo $result->remainder();
@@ -57,7 +63,7 @@ To do that, `ParseResult` lets you continue parsing:
 ```php
 <?php
 $parser1 = string("hello");
-$result1 = $parser1->run("hello world");
+$result1 = $parser1->run(new StringStream("hello world"));
 $parser2 = string("world");
 $result2 = $result1->continueWith($parser2);
 ```

@@ -15,9 +15,9 @@ use Verraes\Parsica\Internal\Assert;
 /**
  * Parse a single character.
  *
- * @param string $c A single character
+ * @psalm-param string $c A single character
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  * @see charI()
  *
@@ -25,7 +25,7 @@ use Verraes\Parsica\Internal\Assert;
 function char(string $c): Parser
 {
     Assert::singleChar($c);
-    return satisfy(isEqual($c))->label("char($c)");
+    return satisfy(isEqual($c))->label("'$c'");
 }
 
 /**
@@ -34,9 +34,9 @@ function char(string $c): Parser
  *
  * eg charI('a'')->run("ABC") will succeed with "A", not "a".
  *
- * @param string $c A single character
+ * @psalm-param string $c A single character
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  *
  * @see char()
@@ -44,85 +44,88 @@ function char(string $c): Parser
 function charI(string $c): Parser
 {
     Assert::singleChar($c);
-    return satisfy(orPred(isEqual(mb_strtolower($c)), isEqual(mb_strtoupper($c))))->label("charI($c)");
+    $lower = mb_strtolower($c);
+    $upper = mb_strtoupper($c);
+    $label = $lower==$upper ? "'$c'" : "'$lower' or '$upper'";
+    return satisfy(orPred(isEqual($lower), isEqual($upper)))->label($label);
 }
 
 
 /**
  * Parse a control character (a non-printing character of the Latin-1 subset of Unicode).
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  */
 function controlChar(): Parser
 {
-    return satisfy(isControl())->label("controlChar");
+    return satisfy(isControl())->label("<controlChar>");
 }
 
 /**
  * Parse an uppercase character A-Z.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  */
 function upperChar(): Parser
 {
-    return satisfy(isUpper())->label("upperChar");
+    return satisfy(isUpper())->label("A-Z");
 }
 
 /**
  * Parse a lowercase character a-z.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  */
 function lowerChar(): Parser
 {
-    return satisfy(isLower())->label("lowerChar");
+    return satisfy(isLower())->label("a-z");
 }
 
 /**
  * Parse an uppercase or lowercase character A-Z, a-z.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  */
 function alphaChar(): Parser
 {
-    return satisfy(isAlpha())->label("alphaChar");
+    return satisfy(isAlpha())->label("A-Z or a-z");
 }
 
 /**
  * Parse an alpha or numeric character A-Z, a-z, 0-9.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  */
 function alphaNumChar(): Parser
 {
-    return satisfy(isAlphaNum())->label("alphaNumChar");
+    return satisfy(isAlphaNum())->label("A-Z or a-z or 0-9");
 }
 
 /**
  * Parse a printable ASCII char.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  */
 function printChar(): Parser
 {
-    return satisfy(isPrintable())->label("printChar");
+    return satisfy(isPrintable())->label("<printChar>");
 }
 
 /**
  * Parse a single punctuation character !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  */
 function punctuationChar(): Parser
 {
-    return satisfy(isPunctuation())->label("punctuationChar");
+    return satisfy(isPunctuation())->label("<punctuation>");
 }
 
 
@@ -130,44 +133,44 @@ function punctuationChar(): Parser
  * Parse 0-9. Returns the digit as a string. Use ->map('intval')
  * or similar to cast it to a numeric type.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  */
 function digitChar(): Parser
 {
-    return satisfy(isDigit())->label('digit');
+    return satisfy(isDigit())->label('0-9');
 }
 
 /**
  * Parse a binary character 0 or 1.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  */
 function binDigitChar(): Parser
 {
-    return satisfy(isCharCode([0x30, 0x31]))->label("binDigitChar");
+    return satisfy(isCharCode([0x30, 0x31]))->label("'0' or '1'");
 }
 
 /**
  * Parse an octodecimal character 0-7.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  *
  * @api
  */
 function octDigitChar(): Parser
 {
-    return satisfy(isCharCode(range(0x30, 0x37)))->label("octDigitChar");
+    return satisfy(isCharCode(range(0x30, 0x37)))->label("0-7");
 }
 
 /**
  * Parse a hexadecimal numeric character 0123456789abcdefABCDEF.
  *
- * @return Parser<string>
+ * @psalm-return Parser<string>
  * @api
  */
 function hexDigitChar(): Parser
 {
-    return satisfy(isHexDigit())->label("hexDigitChar");
+    return satisfy(isHexDigit())->label("<hexadecimal>");
 }

@@ -42,7 +42,7 @@ final class charactersTest extends TestCase
     {
         $this->assertParse("a", char('a'), "abc");
         $this->assertRemain("bc", char('a'), "abc");
-        $this->assertNotParse(char('a'), "bc", "char(a)");
+        $this->assertNotParse(char('a'), "bc", "'a'");
     }
 
     /** @test */
@@ -53,10 +53,17 @@ final class charactersTest extends TestCase
     }
 
     /** @test */
+    public function charI_label()
+    {
+        $this->assertNotParse(charI('a'), "foo", "'a' or 'A'");
+        $this->assertNotParse(charI('%'), "foo", "'%'");
+    }
+
+    /** @test */
     public function string()
     {
         $this->assertParse("abc", string('abc'), "abcde");
-        $this->assertNotParse(string('abc'), "babc", "string(abc)");
+        $this->assertNotParse(string('abc'), "babc", "'abc'");
     }
 
     /** @test */

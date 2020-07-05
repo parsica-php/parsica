@@ -15,24 +15,62 @@ use Exception;
 use Verraes\Parsica\Parser;
 use Verraes\Parsica\ParseResult;
 use Verraes\Parsica\ParserFailure;
+use function Verraes\Parsica\isEqual;
+use function Verraes\Parsica\notPred;
 
 /**
+ * The return value of a failed parser.
+ *
+ * @TODO make our own Throwable implementation that uses the parsed files as the exceptions file etc?
  * @template T
  * @internal
  */
 final class Fail extends Exception implements ParserFailure, ParseResult
 {
     private string $expected;
-    private string $got;
+    private Stream $got;
 
     /**
      * @internal
      */
-    public function __construct(string $expected, string $got)
+    public function __construct(string $expected, Stream $got)
     {
         $this->expected = $expected;
         $this->got = $got;
-        parent::__construct("Expected: $expected, got $got");
+        parent::__construct($this->errorMessage());
+    }
+
+    public function errorMessage(): string
+    {
+        try {
+            $firstChar = $this->got->take1()->chunk();
+            $unexpected = Ascii::printable($firstChar);
+            $body = $this->got()->takeWhile(notPred(isEqual("\n")))->chunk();
+        } catch (EndOfStream $e) {
+            $unexpected = $body = "<EOF>";
+        }
+        $lineNumber = $this->got->position()->line();
+        $spaceLength = str_repeat(" ", strlen((string)$lineNumber));
+        $expecting = $this->expected;
+        $position = $this->got->position()->pretty();
+        $columnNumber = $this->got->position()->column();
+        $leftDots = $columnNumber == 1 ? "" : "...";
+        $leftSpace = $columnNumber == 1 ? "" : "   ";
+        $bodyLine = "$lineNumber | $leftDots$body";
+        $bodyLine = strlen($bodyLine) > 80 ? (substr($bodyLine, 0, 77) . "...") : $bodyLine;
+
+        return
+            "$position\n"
+            . "$spaceLength |\n"
+            . "$bodyLine\n"
+            . "$spaceLength | $leftSpace^— column $columnNumber\n"
+            . "Unexpected $unexpected\n"
+            . "Expecting $expecting\n";
+    }
+
+    public function got(): Stream
+    {
+        return $this->got;
     }
 
     public function expected(): string
@@ -45,33 +83,23 @@ final class Fail extends Exception implements ParserFailure, ParseResult
         return false;
     }
 
-    public function got(): string
-    {
-        return $this->got;
-    }
-
     public function isFail(): bool
     {
         return !$this->isSuccess();
     }
 
     /**
-     * @return T
+     * @psalm-return T
      */
     public function output()
     {
         throw new BadMethodCallException("Can't read the output of a failed ParseResult.");
     }
 
-    public function remainder(): string
-    {
-        throw new BadMethodCallException("Can't read the remainder of a failed ParseResult.");
-    }
-
     /**
-     * @param ParseResult<T> $other
+     * @psalm-param ParseResult<T> $other
      *
-     * @return ParseResult<T>
+     * @psalm-return ParseResult<T>
      */
     public function append(ParseResult $other): ParseResult
     {
@@ -83,36 +111,32 @@ final class Fail extends Exception implements ParserFailure, ParseResult
      *
      * @template T2
      *
-     * @param callable(T) : T2 $transform
+     * @psalm-param callable(T) : T2 $transform
      *
-     * @return ParseResult<T2>
+     * @psalm-return ParseResult<T2>
      */
     public function map(callable $transform): ParseResult
     {
-        return new Fail($this->expected, $this->got);
-    }
-
-    /**
-     * Return the first successful ParseResult if any, and otherwise return the first failing one.
-     *
-     * @param ParseResult<T> $other
-     *
-     * @return ParseResult<T>
-     */
-    public function alternative(ParseResult $other): ParseResult
-    {
-        return $other->isSuccess() ? $other : $this;
+        return $this;
     }
 
     /**
      * @template T2
      *
-     * @param Parser<T2> $parser
+     * @psalm-param Parser<T2> $parser
      *
-     * @return ParseResult<T2>
+     * @psalm-return ParseResult<T2>
      */
     public function continueWith(Parser $parser): ParseResult
     {
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function remainder(): Stream
+    {
+        throw new BadMethodCallException("Can't read the remainder of a failed ParseResult.");
     }
 }

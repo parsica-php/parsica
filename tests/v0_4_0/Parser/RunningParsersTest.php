@@ -12,6 +12,7 @@ namespace Tests\Verraes\Parsica\v0_4_0\Parser;
 
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Internal\Fail;
+use Verraes\Parsica\Internal\StringStream;
 use function Verraes\Parsica\char;
 use function Verraes\Parsica\skipSpace;
 use function Verraes\Parsica\string;
@@ -22,18 +23,18 @@ final class RunningParsersTest extends TestCase
     public function try_throws()
     {
         $parser = char('a');
-        $result = $parser->try("a");
+        $result = $parser->try(new StringStream("a"));
         $this->assertSame("a", $result->output());
 
         $this->expectException(Fail::class);
-        $result = $parser->try("b");
+        $result = $parser->try(new StringStream("b"));
     }
 
     /** @test */
     public function continueFrom()
     {
         $parser = string('hello')->sequence(skipSpace());
-        $result = $parser->try("hello world!");
+        $result = $parser->try(new StringStream("hello world!"));
         $parser2 = string("world");
         $result2 = $parser2->continueFrom($result);
         $this->assertEquals("world", $result2->output());

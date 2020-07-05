@@ -12,7 +12,7 @@ Documentation & API: [parsica.verraes.net](https://parsica.verraes.net/)
 ```php
 <?php
 $parser = between(char('{'), char('}'), atLeastOne(alphaChar()));
-$result = $parser->try("{Hello}");
+$result = $parser->tryString("{Hello}");
 echo $result->output(); // Hello
 ```
 

@@ -29,8 +29,8 @@ final class spaceTest extends TestCase
     public function crlf()
     {
         $this->assertParse("\r\n", crlf(), "\r\nabc");
-        $this->assertNotParse(crlf(), "\rabc", "crlf");
-        $this->assertNotParse(crlf(), "\rabc", "crlf");
+        $this->assertNotParse(crlf(), "\rabc", "<crlf>");
+        $this->assertNotParse(crlf(), "\rabc", "<crlf>");
     }
 
     /** @test */
@@ -38,14 +38,14 @@ final class spaceTest extends TestCase
     {
         $this->assertParse("\n", eol(), "\nabc");
         $this->assertParse("\r\n", eol(), "\r\nabc");
-        $this->assertNotParse(eol(), "\rabc", "eol");
+        $this->assertNotParse(eol(), "\rabc", "<EOL>");
     }
 
     /** @test */
     public function tab()
     {
         $this->assertParse("\t", tab(), "\tabc");
-        $this->assertNotParse(tab(), "abc", "tab");
+        $this->assertNotParse(tab(), "abc", "<tab>");
     }
 
     /** @test */
@@ -69,7 +69,7 @@ final class spaceTest extends TestCase
     /** @test */
     public function skipSpace1()
     {
-        $this->assertNotParse(skipSpace1(), "no space", "skipSpace1");
+        $this->assertNotParse(skipSpace1(), "no space", "<space>");
         $this->assertRemain("1 space", skipSpace1(), " 1 space");
         $this->assertRemain("tab", skipSpace1(), "\ttab");
         $this->assertRemain("newline", skipSpace1(), "\nnewline");
@@ -80,7 +80,7 @@ final class spaceTest extends TestCase
     /** @test */
     public function skipHSpace1()
     {
-        $this->assertNotParse(skipHSpace1(), "no space", "skipHSpace1");
+        $this->assertNotParse(skipHSpace1(), "no space", "<space>");
         $this->assertRemain("some space", skipHSpace1(), "\t   some space");
         $this->assertRemain("abc", skipHSpace1(), "\t   abc");
         $this->assertRemain("\nabc", skipHSpace1(), "\t   \nabc");

@@ -12,6 +12,7 @@ namespace Tests\Verraes\Parsica\v0_4_0\Parser;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
+use Verraes\Parsica\Internal\StringStream;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\char;
 
@@ -41,7 +42,7 @@ final class AppendTest extends TestCase
         $a = char('a')->construct(NotASemigroup::class);
         $b = char('b')->construct(NotASemigroup::class);
         $this->expectException(Exception::class);
-        $a->append($b)->run('abc');
+        $a->append($b)->run(new StringStream('abc'));
     }
 }
 

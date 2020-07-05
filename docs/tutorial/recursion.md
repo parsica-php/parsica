@@ -41,7 +41,7 @@ $pair->recurse(
     ),
 );
 
-$result = $pair->run("[1,[2,[3,4]]]");
+$result = $pair->tryString("[1,[2,[3,4]]]");
 assert($result->output() == [1, [2, [3, 4]]]);
 ```
 
@@ -69,7 +69,7 @@ $squarePair->recurse(
 );
 
 $mixed = "{1,[2,{3,4}]}";
-$result = $anyPair->run($mixed);
+$result = $anyPair->tryString($mixed);
 assert($result->output() == [1, [2, [3, 4]]]);
 ```
 
@@ -92,7 +92,7 @@ The end result looks like this:
 <?php
 $rec = recursive();
 $rec->recurse(char('a')->append(optional($rec)));
-$result = $rec->try("aaab");
+$result = $rec->tryString("aaab");
 assert($result->output() == "aaa");
 ```
 
@@ -101,7 +101,7 @@ In fact the code above is how the `atLeastOne()` combinator works, so you can si
 ```php
 <?php
 $parser = atLeastOne(char('a'));
-$result = $parser->try("aaab");
+$result = $parser->tryString("aaab");
 assert($result->output() == "aaa");
 ```
 

@@ -8,19 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica;
+namespace Verraes\Parsica\Internal;
 
-/**
- * Create a recursive parser. Used in combination with recurse(Parser).
- *
- * For an example see {@see RecursiveParserTest}.
- *
- * @psalm-return Parser<T>
- * @api
- *
- * @template T
- */
-function recursive(): Parser
+
+final class EndOfStream extends \Exception
 {
-    return Parser::recursive();
+
 }

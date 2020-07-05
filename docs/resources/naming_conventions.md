@@ -32,7 +32,7 @@ Some parsers have case-insensitive versions. These are sufficed with 'I'.
 ```php
 <?php
 $parser = stringI('hello world'); 
-$result = $parser->try("hElLO WoRlD"); 
+$result = $parser->tryString("hElLO WoRlD"); 
 assert($result->output() === "hElLO WoRlD");
 ```
 

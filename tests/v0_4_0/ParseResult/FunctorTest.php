@@ -12,6 +12,7 @@ namespace Tests\Verraes\Parsica\v0_4_0\ParseResult;
 
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Internal\Fail;
+use Verraes\Parsica\Internal\StringStream;
 use Verraes\Parsica\Internal\Succeed;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 
@@ -22,16 +23,17 @@ final class FunctorTest extends TestCase
     /** @test */
     public function map_over_ParseSuccess()
     {
-        $succeed = new Succeed("parsed", "remainder");
-        $expected = new Succeed("PARSED", "remainder");
+        $succeed = new Succeed("parsed", new StringStream("remainder"));
+        $expected = new Succeed("PARSED", new StringStream("remainder"));
         $this->assertEquals($expected, $succeed->map('strtoupper'));
     }
 
     /** @test */
     public function map_over_ParseFailure()
     {
-        $fail = new Fail("expected", "got");
-        $expected = new Fail("expected", "got");
+        $remainder = new StringStream("");
+        $fail = new Fail("expected", new StringStream("got"));
+        $expected = new Fail("expected", new StringStream("got"));
         $this->assertEquals($expected, $fail->map('strtoupper'));
     }
 
