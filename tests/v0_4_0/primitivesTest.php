@@ -137,15 +137,15 @@ final class primitivesTest extends TestCase
     {
         $parser = skipWhile(isEqual('a'));
 
-        $this->assertParse("", $parser, "xyz");
+        $this->assertParse(null, $parser, "xyz");
         $this->assertRemain("xyz", $parser, "xyz");
-        $this->assertParse("", $parser, "xaaa");
+        $this->assertParse(null, $parser, "xaaa");
         $this->assertRemain("xaaa", $parser, "xaaa");
-        $this->assertParse("", $parser, "axyz");
+        $this->assertParse(null, $parser, "axyz");
         $this->assertRemain("xyz", $parser, "axyz");
-        $this->assertParse("", $parser, "aaaxyz");
+        $this->assertParse(null, $parser, "aaaxyz");
         $this->assertRemain("xyz", $parser, "aaaxyz");
-        $this->assertParse("", $parser, "aaa");
+        $this->assertParse(null, $parser, "aaa");
         $this->assertRemain("", $parser, "aaa");
     }
 
@@ -154,15 +154,15 @@ final class primitivesTest extends TestCase
     {
         $parser = skipWhile(notPred(isEqual('a')));
 
-        $this->assertParse("", $parser, "xyz");
+        $this->assertParse(null, $parser, "xyz");
         $this->assertRemain("", $parser, "xyz");
-        $this->assertParse("", $parser, "xaaa");
+        $this->assertParse(null, $parser, "xaaa");
         $this->assertRemain("aaa", $parser, "xaaa");
-        $this->assertParse("", $parser, "axyz");
+        $this->assertParse(null, $parser, "axyz");
         $this->assertRemain("axyz", $parser, "axyz");
-        $this->assertParse("", $parser, "aaaxyz");
+        $this->assertParse(null, $parser, "aaaxyz");
         $this->assertRemain("aaaxyz", $parser, "aaaxyz");
-        $this->assertParse("", $parser, "aaa");
+        $this->assertParse(null, $parser, "aaa");
         $this->assertRemain("aaa", $parser, "aaa");
     }
 

@@ -54,7 +54,7 @@ function satisfy(callable $predicate): Parser
  */
 function skipWhile(callable $predicate): Parser
 {
-    return takeWhile($predicate)->followedBy(pure(""));
+    return takeWhile($predicate)->followedBy(pure(null));
 }
 
 /**
