@@ -416,4 +416,22 @@ final class Parser
     {
         return $this->label;
     }
+
+    /**
+     * If the parser is successful, call the $receiver function with the output of the function. The resulting parser
+     * behaves identical to the original one. This combinator is useful for expressing side effects during the parsing
+     * process. It can be hooked into existing event publishing libraries by using $receiver as an adapter for those.
+     * Other use cases are logging, caching, performing an action whenever a value is matched in a long running input
+     * stream, ...
+     *
+     * @psalm-param callable(T): void $receiver
+     *
+     * @psalm-return Parser<T>
+     * @api
+     */
+    public function emit(callable $receiver): Parser
+    {
+        return emit($this, $receiver);
+    }
+
 }
