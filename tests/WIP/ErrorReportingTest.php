@@ -18,6 +18,7 @@ use function Verraes\Parsica\atLeastOne;
 use function Verraes\Parsica\char;
 use function Verraes\Parsica\many;
 use function Verraes\Parsica\newline;
+use function Verraes\Parsica\repeat;
 use function Verraes\Parsica\skipSpace;
 use function Verraes\Parsica\string;
 
@@ -35,7 +36,7 @@ final class ErrorReportingTest extends TestCase
 <input>:1:1
   |
 1 | bcd
-  | ^
+  | ^— column 1
 Unexpected 'b'
 Expecting 'a'
 
@@ -53,8 +54,8 @@ ERROR;
         $expected = <<<ERROR
 /path/to/file:5:10
   |
-5 | bcd
-  | ^
+5 | ...bcd
+  |    ^— column 10
 Unexpected 'b'
 Expecting 'a'
 
@@ -73,7 +74,7 @@ ERROR;
 /path/to/file:1:1
   |
 1 | xyz
-  | ^
+  | ^— column 1
 Unexpected 'x'
 Expecting 'abc'
 
@@ -91,8 +92,8 @@ ERROR;
         $expected = <<<ERROR
 <input>:1:2
   |
-1 | xy
-  | ^
+1 | ...xy
+  |    ^— column 2
 Unexpected 'x'
 Expecting 'b'
 
@@ -110,8 +111,8 @@ ERROR;
         $expected = <<<ERROR
 <input>:1:2
   |
-1 | xy
-  | ^
+1 | ...xy
+  |    ^— column 2
 Unexpected 'x'
 Expecting a followed by b
 
@@ -124,13 +125,13 @@ ERROR;
     public function tabs_move_column_position()
     {
         $parser = skipSpace()->sequence(char('a'));
-        $input = new StringStream("\t\tb");
+        $input = new StringStream("\t\tbcdefgh");
         $result = $parser->run($input);
         $expected = <<<ERROR
 <input>:1:9
   |
-1 | b
-  | ^
+1 | ...bcdefgh
+  |    ^— column 9
 Unexpected 'b'
 Expecting 'a'
 
@@ -150,7 +151,7 @@ ERROR;
 <input>:100:1
     |
 100 | b
-    | ^
+    | ^— column 1
 Unexpected 'b'
 Expecting 'a'
 
@@ -168,9 +169,48 @@ ERROR;
 /path/to/file:4:1
   |
 4 | bcd
-  | ^
+  | ^— column 1
 Unexpected 'b'
 Expecting 'a'
+
+ERROR;
+
+        $this->assertEquals($expected, $result->errorMessage());
+    }
+
+
+    /** @test */
+    public function indicate_position()
+    {
+        $parser = repeat(5, char('a'))->sequence(char('b'));
+        $input = new StringStream("aaaaaXYZ");
+        $result = $parser->run($input);
+        $expected = <<<ERROR
+<input>:1:6
+  |
+1 | ...XYZ
+  |    ^— column 6
+Unexpected 'X'
+Expecting 'b'
+
+ERROR;
+
+        $this->assertEquals($expected, $result->errorMessage());
+    }
+
+    /** @test */
+    public function indicate_shorter_position()
+    {
+        $parser = string("aa")->sequence(char('b'));
+        $input = new StringStream("aaXYZ");
+        $result = $parser->run($input);
+        $expected = <<<ERROR
+<input>:1:3
+  |
+1 | ...XYZ
+  |    ^— column 3
+Unexpected 'X'
+Expecting 'b'
 
 ERROR;
 

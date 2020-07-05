@@ -51,12 +51,15 @@ final class Fail extends Exception implements ParserFailure, ParseResult
         $spaceLength = str_repeat(" ", strlen((string)$lineNumber));
         $expecting = $this->expected;
         $position = $this->got->position()->pretty();
+        $columnNumber = $this->got->position()->column();
+        $leftDots = $columnNumber == 1 ? "" : "...";
+        $leftSpace = $columnNumber == 1 ? "" : "   ";
 
         return
               "$position\n"
             . "$spaceLength |\n"
-            . "$lineNumber | $body\n"
-            . "$spaceLength | ^\n"
+            . "$lineNumber | $leftDots$body\n"
+            . "$spaceLength | $leftSpace^— column $columnNumber\n"
             . "Unexpected '$unexpected'\n"
             . "Expecting $expecting\n"
             ;
