@@ -16,7 +16,10 @@ use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\alphaNumChar;
 use function Verraes\Parsica\atLeastOne;
 use function Verraes\Parsica\char;
+use function Verraes\Parsica\either;
+use function Verraes\Parsica\emit;
 use function Verraes\Parsica\many;
+use function Verraes\Parsica\success;
 
 /**
  * https://github.com/mathiasverraes/parsica/issues/6
@@ -46,4 +49,38 @@ final class GH26_Test extends TestCase
 
         $this->assertParse($expected, $parser, $input);
     }
+
+    /**
+     * https://github.com/mathiasverraes/parsica/issues/6#issuecomment-653772920
+     *
+     * @test
+     */
+    public function only_the_first_successful_parser_in_an_either_should_call_emit()
+    {
+        $x = new class {
+            public $first = false;
+            public $second = false;
+        };
+
+        $parser = either(
+            emit(
+                success(),
+                function ($output) use ($x) {
+                    $x->first = true; // is called
+                }
+            ),
+            emit(
+                success(),
+                function ($output) use ($x) {
+                    $x->second = true; // is not called
+                }
+            )
+        );
+        $result = $parser->tryString('test');
+
+        $this->assertEquals(true, $x->first);
+        $this->assertEquals(false, $x->second, "Either should only call emit on the first successful parser");
+
+    }
+
 }
