@@ -14,10 +14,14 @@ use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Parser;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\alphaNumChar;
+use function Verraes\Parsica\any;
 use function Verraes\Parsica\atLeastOne;
+use function Verraes\Parsica\between;
 use function Verraes\Parsica\char;
 use function Verraes\Parsica\either;
 use function Verraes\Parsica\emit;
+use function Verraes\Parsica\eof;
+use function Verraes\Parsica\failure;
 use function Verraes\Parsica\many;
 use function Verraes\Parsica\success;
 
@@ -81,6 +85,77 @@ final class GH26_Test extends TestCase
         $this->assertEquals(true, $x->first);
         $this->assertEquals(false, $x->second, "Either should only call emit on the first successful parser");
 
+    }
+
+    /**
+     * @TODO Set $repeatParser at 500 and fix the performance issues.
+     *
+     * https://github.com/mathiasverraes/parsica/issues/6#issuecomment-653772920
+     *
+     * @test
+     */
+    public function it_should_parse_500_times_in_under_100_ms()
+    {
+        // Number of times we run the parser
+        $repeatParser =  1;//500;
+
+        $propertyName = atLeastOne(alphaNumChar());
+
+        $type = emit(
+            either(
+                eof(),
+                char('@')
+                    ->followedBy($propertyName)
+                    ->thenIgnore(eof()),
+            ),
+            function () {}
+        );
+
+        $map = emit(
+            char('.')->followedBy($propertyName),
+            function () {}
+        );
+
+        $list = emit(
+            between(
+                char('['),
+                char(']'),
+                either(
+                    char('@')
+                        ->followedBy($propertyName)
+                        ->map(fn($value) => [
+                            'discriminatorName' => $value,
+                            'keepKeys'          => true
+                        ]),
+                    $propertyName
+                        ->map(fn($value) => [
+                            'discriminatorName' => $value,
+                            'keepKeys'          => false
+                        ]),
+                )
+            ),
+            function () {}
+        );
+
+        $root = emit(
+            char('$'),
+            function () {}
+        );
+
+        $rest = many(any($map, $list))->followedBy($type);
+
+        $parser = either(
+            failure("message"), // $context->preflightCacheParser(),
+            $root
+        )->followedBy($rest);
+
+        $start = microtime(true);
+        for ($i = 0; $i < $repeatParser; $i++) {
+            $parser->tryString('$.q.w[@1].e[2]@int');
+        }
+        $end = microtime(true);
+
+        $this->assertLessThan(0.1, $end - $start);
     }
 
 }
