@@ -8,11 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica;
+namespace Tests\Verraes\Parsica\v0_4_0\Parser;
 
-use Verraes\Parsica\Internal\StringStream;
-use Verraes\Parsica\Parser;
 use PHPUnit\Framework\TestCase;
+use Verraes\Parsica\StringStream;
 use function Verraes\Parsica\any;
 use function Verraes\Parsica\char;
 use function Verraes\Parsica\failure;

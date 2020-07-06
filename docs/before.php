@@ -11,7 +11,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Verraes\Parsica\ParserFailure;
-use Verraes\Parsica\Internal\StringStream;
+use Verraes\Parsica\StringStream;
 use function Verraes\Parsica\{
     alphaChar,
     alphaNumChar,

@@ -13,7 +13,6 @@ namespace Verraes\Parsica;
 use Verraes\Parsica\Internal\Assert;
 use Verraes\Parsica\Internal\EndOfStream;
 use Verraes\Parsica\Internal\Fail;
-use Verraes\Parsica\Internal\Stream;
 use Verraes\Parsica\Internal\Succeed;
 
 /**

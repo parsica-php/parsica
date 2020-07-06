@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Internal;
+namespace Tests\Verraes\Parsica\v0_4_0\Internal;
 
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Internal\Position;
-use Verraes\Parsica\Internal\StringStream;
+use Verraes\Parsica\StringStream;
 
 final class StringStreamTest extends TestCase
 {

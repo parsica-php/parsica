@@ -8,13 +8,20 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica\Internal;
+namespace Verraes\Parsica;
+
+use Verraes\Parsica\Internal\EndOfStream;
+use Verraes\Parsica\Internal\Position;
+use Verraes\Parsica\Internal\TakeResult;
 
 final class StringStream implements Stream
 {
     private string $string;
     private Position $position;
 
+    /**
+     * @api
+     */
     public function __construct(string $string, ?Position $position = null)
     {
         $this->string = $string;
@@ -23,6 +30,7 @@ final class StringStream implements Stream
 
     /**
      * @inheritDoc
+     * @internal
      */
     public function take1(): TakeResult
     {
@@ -47,6 +55,9 @@ final class StringStream implements Stream
         }
     }
 
+    /**
+     * @inheritDoc
+     */
     public function isEOF(): bool
     {
         return mb_strlen($this->string) === 0;

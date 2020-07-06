@@ -12,8 +12,6 @@ namespace Verraes\Parsica;
 
 use Exception;
 use Verraes\Parsica\Internal\Fail;
-use Verraes\Parsica\Internal\Stream;
-use Verraes\Parsica\Internal\StringStream;
 
 /**
  * A parser is any function that takes a string input and returns a {@see ParseResult}. The Parser class is a wrapper

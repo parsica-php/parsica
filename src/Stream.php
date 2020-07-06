@@ -8,7 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica\Internal;
+namespace Verraes\Parsica;
+
+use Verraes\Parsica\Internal\Position;
+use Verraes\Parsica\Internal\TakeResult;
 
 /**
  * Represents an input stream. This allows us to have different types of input, each with their own optimizations.

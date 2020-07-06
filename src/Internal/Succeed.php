@@ -14,6 +14,7 @@ use BadMethodCallException;
 use Exception;
 use Verraes\Parsica\Parser;
 use Verraes\Parsica\ParseResult;
+use Verraes\Parsica\Stream;
 
 /**
  * @internal

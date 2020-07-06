@@ -10,6 +10,8 @@
 
 namespace Verraes\Parsica\Internal;
 
+use Verraes\Parsica\Stream;
+
 /**
  * The result of Stream::take*() functions
  *

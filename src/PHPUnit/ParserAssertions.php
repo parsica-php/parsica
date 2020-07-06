@@ -11,8 +11,8 @@
 namespace Verraes\Parsica\PHPUnit;
 
 use Exception;
-use Verraes\Parsica\Internal\StringStream;
 use Verraes\Parsica\Parser;
+use Verraes\Parsica\StringStream;
 
 /**
  * Convenience assertion methods. When writing tests for your own parsers, extend from this instead of PHPUnit's TestCase.

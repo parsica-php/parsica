@@ -11,7 +11,7 @@
 namespace Tests\Verraes\Parsica\v0_4_0;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Internal\StringStream;
+use Verraes\Parsica\StringStream;
 use function Verraes\Parsica\char;
 use function Verraes\Parsica\emit;
 

@@ -10,8 +10,6 @@
 
 namespace Verraes\Parsica;
 
-use Verraes\Parsica\Internal\Stream;
-
 /**
  * @template T
  */

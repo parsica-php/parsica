@@ -8,13 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\WIP;
+namespace Tests\Verraes\Parsica\v0_4_0\ParseResult;
 
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Internal\Position;
-use Verraes\Parsica\Internal\StringStream;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\atLeastOne;
+use Verraes\Parsica\StringStream;
 use function Verraes\Parsica\char;
 use function Verraes\Parsica\many;
 use function Verraes\Parsica\newline;

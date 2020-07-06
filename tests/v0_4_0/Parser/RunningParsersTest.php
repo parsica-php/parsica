@@ -12,7 +12,7 @@ namespace Tests\Verraes\Parsica\v0_4_0\Parser;
 
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Internal\Fail;
-use Verraes\Parsica\Internal\StringStream;
+use Verraes\Parsica\StringStream;
 use function Verraes\Parsica\char;
 use function Verraes\Parsica\skipSpace;
 use function Verraes\Parsica\string;

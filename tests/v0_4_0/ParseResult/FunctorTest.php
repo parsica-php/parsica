@@ -12,9 +12,9 @@ namespace Tests\Verraes\Parsica\v0_4_0\ParseResult;
 
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Internal\Fail;
-use Verraes\Parsica\Internal\StringStream;
 use Verraes\Parsica\Internal\Succeed;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
+use Verraes\Parsica\StringStream;
 
 final class FunctorTest extends TestCase
 {

@@ -11,7 +11,6 @@
 namespace Verraes\Parsica;
 
 use Throwable;
-use Verraes\Parsica\Internal\Stream;
 
 interface ParserFailure extends Throwable
 {

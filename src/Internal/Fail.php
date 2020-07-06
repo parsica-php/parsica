@@ -15,6 +15,7 @@ use Exception;
 use Verraes\Parsica\Parser;
 use Verraes\Parsica\ParseResult;
 use Verraes\Parsica\ParserFailure;
+use Verraes\Parsica\Stream;
 use function Verraes\Parsica\isEqual;
 use function Verraes\Parsica\notPred;
 

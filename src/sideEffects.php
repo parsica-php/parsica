@@ -10,8 +10,6 @@
 
 namespace Verraes\Parsica;
 
-use Verraes\Parsica\Internal\Stream;
-
 /**
  * If the parser is successful, call the $receiver function with the output of the parser. The resulting parser
  * behaves identical to the original one. This combinator is useful for expressing side effects during the parsing

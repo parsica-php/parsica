@@ -12,8 +12,8 @@ namespace Tests\Verraes\Parsica\v0_4_0\Parser;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Internal\StringStream;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
+use Verraes\Parsica\StringStream;
 use function Verraes\Parsica\char;
 
 final class AppendTest extends TestCase
