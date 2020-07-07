@@ -124,12 +124,12 @@ final class primitivesTest extends TestCase
     /** @test */
     public function success_and_failure()
     {
-        $this->assertParse("", success(), "doesn't matter what we put in here");
+        $this->assertParse(null, success(), "doesn't matter what we put in here");
         $this->assertRemain("no input is consumed", success(), "no input is consumed");
-        $this->assertNotParse(failure(""), "doesn't matter what we put in here");
+        $this->assertNotParse(failure("reason for failure"), "doesn't matter what we put in here");
 
         $or = failure("")->or(success());
-        $this->assertParse("", $or, "failure or success is success");
+        $this->assertParse(null, $or, "failure or success is success");
     }
 
     /** @test */

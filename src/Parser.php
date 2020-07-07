@@ -112,8 +112,6 @@ final class Parser
     /**
      * Optionally parse something, but still succeed if the thing is not there.
      *
-     * @psalm-suppress InvalidReturnType
-     * @psalm-suppress InvalidReturnStatement
      *
      * @psalm-return Parser<T>
      * @see optional()

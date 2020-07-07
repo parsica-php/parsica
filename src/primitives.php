@@ -268,7 +268,7 @@ function everything(): Parser
  */
 function success(): Parser
 {
-    return Parser::make("<always succeed>", fn(Stream $input) => new Succeed('', $input));
+    return Parser::make("<always succeed>", fn(Stream $input) => new Succeed(null, $input));
 }
 
 /**

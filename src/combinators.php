@@ -57,11 +57,7 @@ function pure($output): Parser
  */
 function optional(Parser $parser): Parser
 {
-    // @TODO this should probably be something like:
-    // pure(null)
-    // or
-    // either($parser, succeed())
-    return either($parser, pure(""));
+    return either($parser, success());
 }
 
 /**
@@ -304,8 +300,7 @@ function repeat(int $n, Parser $parser): Parser
  */
 function repeatList(int $n, Parser $parser): Parser
 {
-
-    $parser = map($parser, fn($output) => [$output]);
+    $parser = map($parser, /** @psalm-param mixed $output */ fn($output) : array => [$output]);
 
     $parsers = array_fill(0, $n - 1, $parser);
     return array_reduce(
