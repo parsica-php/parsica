@@ -327,7 +327,7 @@ function repeatList(int $n, Parser $parser): Parser
  */
 function many(Parser $parser): Parser
 {
-    return some($parser)->or(pure([]));
+    return either(some($parser), pure([]));
 }
 
 /**
