@@ -207,27 +207,6 @@ final class Parser
     }
 
     /**
-     * Label a parser. When a parser fails, instead of a generated error message, you'll see your label. The labels
-     * serve the end user of your application, so the labels should make sense to the user who provides the input for
-     * your parser.
-     *
-     * @psalm-return Parser<T>
-     * @api
-     */
-    public function label(string $label): Parser
-    {
-        $newParserFunction = function (Stream $input) use ($label) : ParseResult {
-            /** @psalm-var ParseResult $result */
-            $result = ($this->parserFunction)($input);
-            return ($result->isSuccess())
-                ? $result
-                : new Fail($label, $result->got());
-        };
-
-        return new Parser($newParserFunction, $this->recursionStatus, $label);
-    }
-
-    /**
      * Create a parser that takes the output from the first parser (if successful) and feeds it to the callable. The
      * callable must return another parser. If the first parser fails, the first parser is returned.
      *
@@ -415,6 +394,27 @@ final class Parser
     public function getLabel() : string
     {
         return $this->label;
+    }
+
+    /**
+     * Label a parser. When a parser fails, instead of a generated error message, you'll see your label. The labels
+     * serve the end user of your application, so the labels should make sense to the user who provides the input for
+     * your parser.
+     *
+     * @psalm-return Parser<T>
+     * @api
+     */
+    public function label(string $label): Parser
+    {
+        $newParserFunction = function (Stream $input) use ($label) : ParseResult {
+            /** @psalm-var ParseResult $result */
+            $result = ($this->parserFunction)($input);
+            return ($result->isSuccess())
+                ? $result
+                : new Fail($label, $result->got());
+        };
+
+        return new Parser($newParserFunction, $this->recursionStatus, $label);
     }
 
     /**
