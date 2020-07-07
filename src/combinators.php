@@ -192,7 +192,7 @@ function collect(Parser ...$parsers): Parser
     /** @psalm-suppress MissingClosureParamType */
     $toArray = fn($v): array => [$v];
     $arrayParsers = array_map(
-        fn(Parser $parser): Parser => $parser->map($toArray),
+        fn(Parser $parser): Parser => map($parser, $toArray),
         $parsers
     );
     return assemble(...$arrayParsers)->label('collect()');
@@ -292,7 +292,7 @@ function repeat(int $n, Parser $parser): Parser
 function repeatList(int $n, Parser $parser): Parser
 {
 
-    $parser = $parser->map(fn($output) => [$output]);
+    $parser = map($parser, fn($output) => [$output]);
 
     $parsers = array_fill(0, $n - 1, $parser);
     return array_reduce(
@@ -318,7 +318,7 @@ function many(Parser $parser): Parser
 function some(Parser $parser): Parser
 {
     $rec = recursive();
-    $pArray = $parser->map(fn($x) => [$x]);
+    $pArray = map($parser, /** @psalm-param mixed $x */ fn($x) : array => [$x]);
     return $pArray->append(
         $rec->recurse(
             either(
@@ -413,4 +413,18 @@ function notFollowedBy(Parser $parser): Parser
             : new Succeed("", $input);
     });
     return $p;
+}
+
+/**
+ * Map a function over the parser (which in turn maps it over the result).
+ *
+ * @template T1
+ * @template T2
+ * @psalm-param callable(T1) : T2 $transform
+ * @psalm-return Parser<T2>
+ * @api
+ */
+function map(Parser $parser, callable $transform): Parser
+{
+    return Parser::make($parser->getLabel(), fn(Stream $input): ParseResult => $parser->run($input)->map($transform));
 }

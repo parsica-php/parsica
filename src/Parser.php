@@ -263,7 +263,7 @@ final class Parser
      */
     public function map(callable $transform): Parser
     {
-        return Parser::make($this->getLabel(), fn(Stream $input): ParseResult => $this->run($input)->map($transform));
+        return map($this, $transform);
     }
 
     /**
