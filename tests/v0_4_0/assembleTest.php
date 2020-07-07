@@ -76,4 +76,18 @@ final class assembleTest extends TestCase
 
         $this->assertParse($expected, $parser, $input);
     }
+
+    /** @test */
+    public function label()
+    {
+        $parser = assemble(
+            string('first'),
+            string('second'),
+        );
+        $this->assertNotParse($parser, "X", "'first'");
+        $this->assertNotParse($parser, "firsX", "'first'");
+        $this->assertNotParse($parser, "firstX", "'second'");
+
+    }
+
 }

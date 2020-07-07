@@ -116,7 +116,7 @@ function sequence(Parser $first, Parser $second): Parser
  */
 function keepFirst(Parser $first, Parser $second): Parser
 {
-    return $first->bind(fn($a) => $second->sequence(pure($a)))->label('keepFirst');
+    return $first->bind(fn($a) => $second->sequence(pure($a)));
 }
 
 /**
@@ -126,7 +126,7 @@ function keepFirst(Parser $first, Parser $second): Parser
  */
 function keepSecond(Parser $first, Parser $second): Parser
 {
-    return $first->sequence($second)->label("keepSecond");
+    return $first->sequence($second);
 }
 
 /**
@@ -195,8 +195,7 @@ function assemble(Parser ...$parsers): Parser
 {
     Assert::atLeastOneArg($parsers, "assemble()");
     $first = array_shift($parsers);
-    return array_reduce($parsers, __NAMESPACE__ . '\\append', $first)
-        ->label('assemble()');
+    return array_reduce($parsers, fn(Parser $p1, Parser $p2): Parser => $p1->append($p2), $first);
 }
 
 /**
@@ -217,7 +216,7 @@ function collect(Parser ...$parsers): Parser
         fn(Parser $parser): Parser => map($parser, $toArray),
         $parsers
     );
-    return assemble(...$arrayParsers)->label('collect()');
+    return assemble(...$arrayParsers);
 }
 
 /**

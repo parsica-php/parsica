@@ -19,7 +19,6 @@ use function Verraes\Parsica\string;
 
 final class LabelTest extends TestCase
 {
-
     /** @test */
     public function or_label()
     {
@@ -41,7 +40,7 @@ final class LabelTest extends TestCase
     /** @test */
     public function any_label()
     {
-        $parser = any(char('a'), char('b'), string ("hello"));
+        $parser = any(char('a'), char('b'), string("hello"));
         $input = "foo";
         $result = $parser->run(new StringStream($input));
         $this->assertEquals("'a' or 'b' or 'hello'", $result->expected());

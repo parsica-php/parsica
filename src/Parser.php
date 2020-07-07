@@ -362,9 +362,9 @@ final class Parser
     }
 
     /**
-     * Label a parser. When a parser fails, instead of a generated error message, you'll see your label. The labels
-     * serve the end user of your application, so the labels should make sense to the user who provides the input for
-     * your parser.
+     * Label a parser. When a parser fails, you'll see your label as the "expected" value. As a best practice, the
+     * labels should make sense to the person who provides the input for your parser. That's often an end user or a
+     * third party, so keep them in mind.
      *
      * @psalm-return Parser<T>
      * @api

@@ -209,10 +209,11 @@ final class combinatorsTest extends TestCase
         $parser =
             collect(
                 string("Hello"),
-                string("world")
+                string("World")
             );
         $this->assertFailOnEOF($parser);
-        $this->assertNotParse($parser, "Helloplanet");
+        $this->assertNotParse($parser, "HiWorld", "'Hello'");
+        $this->assertNotParse($parser, "HelloPlanet", "'World'");
     }
 
     /**
