@@ -10,6 +10,8 @@
 
 namespace Verraes\Parsica;
 
+use Verraes\Parsica\Internal\Position;
+
 /**
  * @template T
  */
@@ -101,4 +103,9 @@ interface ParseResult
     public function continueWith(Parser $parser): ParseResult;
 
     public function errorMessage() : string;
+
+    /**
+     * Get the last position of where the parser ended up when producing this result.
+     */
+    public function position(): Position;
 }

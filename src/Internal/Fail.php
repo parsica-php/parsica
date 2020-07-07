@@ -140,4 +140,12 @@ final class Fail extends Exception implements ParserFailure, ParseResult
     {
         throw new BadMethodCallException("Can't read the remainder of a failed ParseResult.");
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function position(): Position
+    {
+        return $this->got->position();
+    }
 }

@@ -177,4 +177,12 @@ final class Succeed implements ParseResult
     {
         throw new BadMethodCallException("A succeeded ParseResult has no error message.");
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function position(): Position
+    {
+        return $this->remainder->position();
+    }
 }
