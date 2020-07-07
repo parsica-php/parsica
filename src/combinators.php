@@ -275,8 +275,21 @@ function choice(Parser ...$parsers): Parser
  */
 function atLeastOne(Parser $parser): Parser
 {
-    $rec = recursive();
-    return $rec->recurse(append($parser, optional($rec)));
+    return Parser::make(
+        "at least one " . $parser->getLabel(),
+        function (Stream $input) use ($parser) : ParseResult {
+            $result = $parser->run($input);
+            if($result->isFail()) {
+                return $result;
+            }
+            $final = new Succeed("", $result->remainder());
+            while($result->isSuccess()){
+                $final = $final->append($result);
+                $result = $parser->continueFrom($result);
+            }
+            return $final;
+        }
+    );
 }
 
 /**
