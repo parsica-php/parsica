@@ -105,7 +105,7 @@ function bind(Parser $parser, callable $f): Parser
  */
 function sequence(Parser $first, Parser $second): Parser
 {
-    return $first->sequence($second)->label('sequence');
+    return bind($first, /** @psalm-param mixed $_ */ fn($_) => $second);
 }
 
 /**

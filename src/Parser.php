@@ -154,41 +154,33 @@ final class Parser
     }
 
     /**
-     * Alias for `sequence()`. Parse something, then follow by something else. Ignore the result of the first parser and return the result of the
-     * second parser.
+     * Parse something, then follow by something else. Ignore the result of the first parser and return the result of
+     * the second parser.
      *
      * @template T2
-     *
      * @psalm-param Parser<T2> $second
-     *
      * @psalm-return Parser<T2>
      * @api
+     * @see sequence()
      */
     public function followedBy(Parser $second): Parser
     {
-        return $this->sequence($second);
+        return sequence($this, $second);
     }
 
     /**
-     * Parse something, then follow by something else. Ignore the result of the first parser and return the result of the
-     * second parser.
+     * Parse something, then follow by something else. Ignore the result of the first parser and return the result of
+     * the second parser.
      *
      * @template T2
-     *
      * @psalm-param Parser<T2> $second
-     *
      * @psalm-return Parser<T2>
-     * @see sequence()
      * @api
+     * @see sequence()
      */
     public function sequence(Parser $second): Parser
     {
-        return $this->bind(
-        /** @psalm-param mixed $_ */
-            function ($_) use ($second) {
-                return $second;
-            }
-        );
+        return sequence($this, $second);
     }
 
     /**

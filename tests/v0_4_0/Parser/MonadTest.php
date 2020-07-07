@@ -60,6 +60,15 @@ final class MonadTest extends TestCase
     }
 
     /** @test */
+    public function sequence_error_should_show_the_label_of_the_failing_parser()
+    {
+        $parser = char('a')->sequence(char('b'));
+        $this->assertNotParse($parser, "X", "'a'");
+        $this->assertNotParse($parser, "aX", "'b'");
+
+    }
+
+    /** @test */
     public function pure()
     {
         $parser = pure("hi");
