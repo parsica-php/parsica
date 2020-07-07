@@ -11,9 +11,7 @@
 namespace Verraes\Parsica;
 
 /**
- * Create a recursive parser. Used in combination with recurse(Parser).
- *
- * For an example see {@see RecursiveParserTest}.
+ * Create a recursive parser. Used in combination with Parser#recurse().
  *
  * @psalm-return Parser<T>
  * @api
