@@ -3,4 +3,4 @@
 .private/
 .php_cs.cache
 .phpunit.result.cache
-Gherkin/
+Gherkin
