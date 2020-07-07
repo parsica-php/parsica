@@ -57,7 +57,11 @@ function pure($output): Parser
  */
 function optional(Parser $parser): Parser
 {
-    return $parser->optional();
+    // @TODO this should probably be something like:
+    // pure(null)
+    // or
+    // either($parser, succeed())
+    return either($parser, pure(""));
 }
 
 /**
@@ -77,7 +81,16 @@ function optional(Parser $parser): Parser
  */
 function bind(Parser $parser, callable $f): Parser
 {
-    return $parser->bind($f);
+    /** @psalm-var Parser<T2> $finalParser */
+    $finalParser = Parser::make($parser->getLabel(), function (Stream $input) use ($parser, $f) : ParseResult {
+        $result = $parser->run($input)->map($f);
+        if ($result->isFail()) {
+            return $result;
+        }
+        $p2 = $result->output();
+        return $result->continueWith($p2);
+    });
+    return $finalParser;
 }
 
 /**

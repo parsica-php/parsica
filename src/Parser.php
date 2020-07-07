@@ -121,7 +121,7 @@ final class Parser
      */
     public function optional(): Parser
     {
-        return $this->or(pure(""));
+        return optional($this);
     }
 
     /**
@@ -141,12 +141,12 @@ final class Parser
         $label = $this->label . " or " . $other->label;
         return Parser::make($label, function (Stream $input) use ($label, $other): ParseResult {
             $r1 = $this->run($input);
-            if($r1->isSuccess()) {
+            if ($r1->isSuccess()) {
                 return $r1;
             }
             $r2 = $other->run($input);
 
-            if($r2->isSuccess()) {
+            if ($r2->isSuccess()) {
                 return $r2;
             }
 
@@ -220,16 +220,7 @@ final class Parser
      */
     public function bind(callable $f): Parser
     {
-        /** @psalm-var Parser<T2> $parser */
-        $parser = Parser::make($this->getLabel(), function (Stream $input) use ($f) : ParseResult {
-            $result = $this->run($input)->map($f);
-            if ($result->isFail()) {
-                return $result;
-            }
-            $p2 = $result->output();
-            return $result->continueWith($p2);
-        });
-        return $parser;
+        return bind($this, $f);
     }
 
     /**
@@ -269,10 +260,7 @@ final class Parser
      */
     public function construct(string $className): Parser
     {
-        return $this->map(
-        /** @psalm-param mixed $val */
-            fn($val) => new $className($val)
-        );
+        return map($this, /** @psalm-param mixed $val */ fn($val) => new $className($val));
     }
 
     /**
@@ -344,7 +332,7 @@ final class Parser
      */
     public function apply(Parser $parser): Parser
     {
-        return $this->bind(fn(callable $f) => $parser->map($f));
+        return $this->bind(fn(callable $f) => map($parser, $f));
     }
 
     /**
@@ -391,7 +379,7 @@ final class Parser
      *
      * @internal
      */
-    public function getLabel() : string
+    public function getLabel(): string
     {
         return $this->label;
     }
