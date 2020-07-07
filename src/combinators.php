@@ -57,7 +57,7 @@ function pure($output): Parser
  */
 function optional(Parser $parser): Parser
 {
-    return either($parser, succeed());
+    return either($parser, succeed())->label("optional " . $parser->getLabel());
 }
 
 /**
@@ -396,7 +396,7 @@ function between(Parser $open, Parser $close, Parser $middle): Parser
  */
 function sepBy(Parser $separator, Parser $parser): Parser
 {
-    return sepBy1($separator, $parser)->or(pure([]))->label('sepBy');
+    return sepBy1($separator, $parser)->or(pure([]));
 }
 
 
@@ -417,7 +417,8 @@ function sepBy1(Parser $separator, Parser $parser): Parser
 {
     /** @psalm-suppress MissingClosureParamType */
     $prepend = fn($x) => fn(array $xs): array => array_merge([$x], $xs);
-    return pure($prepend)->apply($parser)->apply(many($separator->sequence($parser)))->label('sepBy1');
+    $label = $parser->getLabel().", separated by ". $separator->getLabel();
+    return pure($prepend)->apply($parser)->apply(many($separator->sequence($parser)))->label($label);
 }
 
 /**

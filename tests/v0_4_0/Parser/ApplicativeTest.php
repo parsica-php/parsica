@@ -156,7 +156,7 @@ final class ApplicativeTest extends TestCase
         $parser = sepBy1(string('||'), atLeastOne(alphaChar()));
 
         $input = "";
-        $this->assertNotParse($parser, $input);
+        $this->assertNotParse($parser, $input, "at least one A-Z or a-z, separated by '||'");
 
         $input = "||";
         $this->assertNotParse($parser, $input);

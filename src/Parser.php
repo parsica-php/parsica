@@ -66,7 +66,7 @@ final class Parser
                     . "A parser created by recursive(), must then be called with ->recurse(Parser) "
                     . "before it can be used."
                 );
-            }, 'awaiting-recurse', "<unknown>");
+            }, 'awaiting-recurse', "<recursive>");
     }
 
     /**
@@ -90,6 +90,7 @@ final class Parser
                 // because it's possible that the inner parser is also a recursive parser that has not been setup yet.
                 $this->parserFunction = fn(Stream $input): ParseResult => $parser->run($input);
                 $this->recursionStatus = 'recursion-was-setup';
+                $this->label = $parser->getLabel();
                 break;
             default:
                 throw new Exception("Unexpected recursionStatus value");
