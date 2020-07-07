@@ -75,11 +75,10 @@ final class Succeed implements ParseResult
     }
 
     /**
+     * @inheritDoc
+     *
      * @psalm-param ParseResult<T> $other
-     *
      * @psalm-return ParseResult<T>
-     *
-     * @todo get rid of suppression?
      * @psalm-suppress MixedOperand
      * @psalm-suppress MixedArgumentTypeCoercion
      */

@@ -111,12 +111,20 @@ function sequence(Parser $first, Parser $second): Parser
 /**
  * Sequence two parsers, and return the output of the first one.
  *
+ * @template T1
+ * @template T2
+ * @psalm-param Parser<T1> $first
+ * @psalm-param Parser<T2> $second
+ * @psalm-return Parser<T2>
  * @api
- * @see Parser::thenIgnore()
  */
 function keepFirst(Parser $first, Parser $second): Parser
 {
-    return bind($first, fn($a) => sequence($second, pure($a)));
+    return bind(
+        $first,
+        /** @psalm-suppress MissingClosureParamType */
+        fn($a) : Parser => sequence($second, pure($a))
+    );
 }
 
 /**
@@ -185,16 +193,17 @@ function append(Parser $left, Parser $right): Parser
  * Append all the passed parsers.
  *
  * @psalm-param list<Parser<T>> $parsers
- *
  * @psalm-return Parser<T>
  * @api
  * @template T
- *
+ * @psalm-suppress MixedReturnStatement
+ * @psalm-suppress MixedInferredReturnType
  */
 function assemble(Parser ...$parsers): Parser
 {
     Assert::atLeastOneArg($parsers, "assemble()");
     $first = array_shift($parsers);
+    /** @psalm-suppress InvalidArgument */
     return array_reduce($parsers, fn(Parser $p1, Parser $p2): Parser => append($p1, $p2), $first);
 }
 
@@ -265,13 +274,11 @@ function choice(Parser ...$parsers): Parser
 /**
  * One or more repetitions of Parser
  *
- * @psalm-param Parser<T> $parser
- *
- * @psalm-return Parser<T>
- *
  * @api
+ * @psalm-param Parser<T> $parser
+ * @psalm-return Parser<T>
  * @template T
- *
+ * @psalm-suppress MixedArgumentTypeCoercion
  */
 function atLeastOne(Parser $parser): Parser
 {
@@ -282,7 +289,7 @@ function atLeastOne(Parser $parser): Parser
             if($result->isFail()) {
                 return $result;
             }
-            $final = new Succeed("", $result->remainder());
+            $final = new Succeed(null, $result->remainder());
             while($result->isSuccess()){
                 $final = $final->append($result);
                 $result = $parser->continueFrom($result);

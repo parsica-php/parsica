@@ -316,12 +316,6 @@ final class Parser
     /**
      * Sequence two parsers, and return the output of the first one, ignore the second.
      *
-     * @template T2
-     *
-     * @psalm-param Parser<T2> $other
-     *
-     * @psalm-return Parser<T>
-     * @see keepFirst()
      * @api
      */
     public function thenIgnore(Parser $other): Parser
