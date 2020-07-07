@@ -33,6 +33,7 @@ final class ErrorReportingTest extends TestCase
         $input = new StringStream("bcd");
         $result = $parser->run($input);
         $expected = <<<ERROR
+
 <input>:1:1
   |
 1 | bcd
@@ -52,6 +53,7 @@ ERROR;
         $input = new StringStream("bcd", new Position("/path/to/file", 5, 10));
         $result = $parser->run($input);
         $expected = <<<ERROR
+
 /path/to/file:5:10
   |
 5 | ...bcd
@@ -71,6 +73,7 @@ ERROR;
         $input = new StringStream("xyz", Position::initial("/path/to/file"));
         $result = $parser->run($input);
         $expected = <<<ERROR
+
 /path/to/file:1:1
   |
 1 | xyz
@@ -90,6 +93,7 @@ ERROR;
         $input = new StringStream("axy");
         $result = $parser->run($input);
         $expected = <<<ERROR
+
 <input>:1:2
   |
 1 | ...xy
@@ -109,6 +113,7 @@ ERROR;
         $input = new StringStream("axy");
         $result = $parser->run($input);
         $expected = <<<ERROR
+
 <input>:1:2
   |
 1 | ...xy
@@ -128,6 +133,7 @@ ERROR;
         $input = new StringStream("\t\tbcdefgh");
         $result = $parser->run($input);
         $expected = <<<ERROR
+
 <input>:1:9
   |
 1 | ...bcdefgh
@@ -148,6 +154,7 @@ ERROR;
         $input = new StringStream(str_repeat("\n", 99) . "b");
         $result = $parser->run($input);
         $expected = <<<ERROR
+
 <input>:100:1
     |
 100 | b
@@ -166,6 +173,7 @@ ERROR;
         $input = new StringStream("\n\n\nbcd\nxyz", Position::initial("/path/to/file"));
         $result = $parser->run($input);
         $expected = <<<ERROR
+
 /path/to/file:4:1
   |
 4 | bcd
@@ -186,6 +194,7 @@ ERROR;
         $input = new StringStream("aaaaaXYZ");
         $result = $parser->run($input);
         $expected = <<<ERROR
+
 <input>:1:6
   |
 1 | ...XYZ
@@ -205,6 +214,7 @@ ERROR;
         $input = new StringStream("aaXYZ");
         $result = $parser->run($input);
         $expected = <<<ERROR
+
 <input>:1:3
   |
 1 | ...XYZ
@@ -225,6 +235,7 @@ ERROR;
         $input = new StringStream("\n\n\n\n\n\n\n\n\nHello World! This is a really long line of more than 80 characters, if you count the spaces.");
         $result = $parser->run($input);
         $expected = <<<ERROR
+
 <input>:10:6
    |
 10 | ... World! This is a really long line of more than 80 characters, if you...
