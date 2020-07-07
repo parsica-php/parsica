@@ -116,7 +116,7 @@ function sequence(Parser $first, Parser $second): Parser
  */
 function keepFirst(Parser $first, Parser $second): Parser
 {
-    return $first->bind(fn($a) => $second->sequence(pure($a)));
+    return bind($first, fn($a) => sequence($second, pure($a)));
 }
 
 /**
@@ -126,7 +126,7 @@ function keepFirst(Parser $first, Parser $second): Parser
  */
 function keepSecond(Parser $first, Parser $second): Parser
 {
-    return $first->sequence($second);
+    return sequence($first, $second);
 }
 
 /**
@@ -195,7 +195,7 @@ function assemble(Parser ...$parsers): Parser
 {
     Assert::atLeastOneArg($parsers, "assemble()");
     $first = array_shift($parsers);
-    return array_reduce($parsers, fn(Parser $p1, Parser $p2): Parser => $p1->append($p2), $first);
+    return array_reduce($parsers, fn(Parser $p1, Parser $p2): Parser => append($p1, $p2), $first);
 }
 
 /**
@@ -240,7 +240,7 @@ function any(Parser ...$parsers): Parser
 
     return array_reduce(
         $parsers,
-        fn(Parser $first, Parser $second): Parser => $first->or($second),
+        fn(Parser $first, Parser $second): Parser => either($first, $second),
         fail("")
     )->label($label);
 }
@@ -276,7 +276,7 @@ function choice(Parser ...$parsers): Parser
 function atLeastOne(Parser $parser): Parser
 {
     $rec = recursive();
-    return $rec->recurse($parser->append(optional($rec)));
+    return $rec->recurse(append($parser, optional($rec)));
 }
 
 /**
@@ -293,7 +293,7 @@ function repeat(int $n, Parser $parser): Parser
 {
     return array_reduce(
         array_fill(0, $n - 1, $parser),
-        fn(Parser $l, Parser $r): Parser => $l->append($r),
+        fn(Parser $l, Parser $r): Parser => append($l, $r),
         $parser
     )->label("$n times ".$parser->getLabel());
 }
@@ -317,7 +317,7 @@ function repeatList(int $n, Parser $parser): Parser
     $parsers = array_fill(0, $n - 1, $parser);
     return array_reduce(
         $parsers,
-        fn(Parser $l, Parser $r): Parser => $l->append($r),
+        fn(Parser $l, Parser $r): Parser => append($l, $r),
         $parser
     )->label("$n times ".$parser->getLabel());
 }
@@ -342,7 +342,7 @@ function some(Parser $parser): Parser
     return $pArray->append(
         $rec->recurse(
             either(
-                $pArray->append($rec),
+                append($pArray, $rec),
                 pure([])
             )
         )
