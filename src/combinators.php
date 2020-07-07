@@ -295,7 +295,7 @@ function repeat(int $n, Parser $parser): Parser
         array_fill(0, $n - 1, $parser),
         fn(Parser $l, Parser $r): Parser => $l->append($r),
         $parser
-    )->label("repeat($n)");
+    )->label("$n times ".$parser->getLabel());
 }
 
 /**
@@ -319,7 +319,7 @@ function repeatList(int $n, Parser $parser): Parser
         $parsers,
         fn(Parser $l, Parser $r): Parser => $l->append($r),
         $parser
-    )->label("repeatList($n)");
+    )->label("$n times ".$parser->getLabel());
 }
 
 /**

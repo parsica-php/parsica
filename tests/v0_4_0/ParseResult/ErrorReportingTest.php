@@ -208,6 +208,26 @@ ERROR;
     }
 
     /** @test */
+    public function repeatN()
+    {
+        $parser = repeat(5, char('a'))->sequence(char('b'));
+        $input = new StringStream("aaaaXYZ");
+        $result = $parser->run($input);
+        $expected = <<<ERROR
+
+<input>:1:5
+  |
+1 | ...XYZ
+  |    ^— column 5
+Unexpected 'X'
+Expecting 5 times 'a'
+
+ERROR;
+
+        $this->assertEquals($expected, $result->errorMessage());
+    }
+
+    /** @test */
     public function indicate_shorter_position()
     {
         $parser = string("aa")->sequence(char('b'));
