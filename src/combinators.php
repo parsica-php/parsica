@@ -145,7 +145,20 @@ function keepSecond(Parser $first, Parser $second): Parser
  */
 function either(Parser $first, Parser $second): Parser
 {
-    return $first->or($second)->label('either');
+    $label = $first->getLabel() . " or " . $second->getLabel();
+    return Parser::make($label, function (Stream $input) use ($second, $first, $label): ParseResult {
+        $r1 = $first->run($input);
+        if ($r1->isSuccess()) {
+            return $r1;
+        }
+        $r2 = $second->run($input);
+
+        if ($r2->isSuccess()) {
+            return $r2;
+        }
+
+        return new Fail($label, $r2->got());
+    });
 }
 
 /**

@@ -136,20 +136,7 @@ final class Parser
      */
     public function or(Parser $other): Parser
     {
-        $label = $this->label . " or " . $other->label;
-        return Parser::make($label, function (Stream $input) use ($label, $other): ParseResult {
-            $r1 = $this->run($input);
-            if ($r1->isSuccess()) {
-                return $r1;
-            }
-            $r2 = $other->run($input);
-
-            if ($r2->isSuccess()) {
-                return $r2;
-            }
-
-            return new Fail($label, $r2->got());
-        });
+        return either($this, $other);
     }
 
     /**
