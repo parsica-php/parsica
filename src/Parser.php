@@ -49,10 +49,12 @@ final class Parser
     }
 
     /**
-     * Make a recursive parser. Use {@see recursive()}.
+     *  Create a recursive parser. Used in combination with recurse(Parser).
+     *
+     * @see recursive()
      *
      * @psalm-return Parser<T>
-     * @internal
+     * @api
      */
     public static function recursive(): Parser
     {
