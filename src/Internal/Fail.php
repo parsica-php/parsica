@@ -60,8 +60,8 @@ final class Fail extends Exception implements ParserFailure, ParseResult
         $bodyLine = "$lineNumber | $leftDots$body";
         $bodyLine = strlen($bodyLine) > 80 ? (substr($bodyLine, 0, 77) . "...") : $bodyLine;
 
-        return
-            "$position\n"
+        return "\n"
+            . "$position\n"
             . "$spaceLength |\n"
             . "$bodyLine\n"
             . "$spaceLength | $leftSpace^— column $columnNumber\n"
