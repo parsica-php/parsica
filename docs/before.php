@@ -37,6 +37,7 @@ use function Verraes\Parsica\{
     repeat,
     satisfy,
     sepBy,
+    sepBy1,
     sequence,
     skipHSpace,
     some,
