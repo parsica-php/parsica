@@ -289,6 +289,15 @@ final class combinatorsTest extends TestCase
     }
 
     /** @test */
+    public function between_failure()
+    {
+        $parser = between(char('{'), char('}'), atLeastOne(alphaNumChar()));
+        $this->assertNotParse($parser, "foo}", "'{'");
+        $this->assertNotParse($parser, "{foo", "'}'");
+        $this->assertNotParse($parser, "{}", "A-Z or a-z or 0-9");
+    }
+
+    /** @test */
     public function notFollowedBy()
     {
         $print = string("print");

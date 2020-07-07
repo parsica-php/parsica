@@ -364,7 +364,7 @@ function some(Parser $parser): Parser
  */
 function between(Parser $open, Parser $close, Parser $middle): Parser
 {
-    return keepSecond($open, keepFirst($middle, $close))->label('between');
+    return keepSecond($open, keepFirst($middle, $close));
 }
 
 /**
