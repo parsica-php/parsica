@@ -21,9 +21,9 @@ use function Verraes\Parsica\char;
 use function Verraes\Parsica\either;
 use function Verraes\Parsica\emit;
 use function Verraes\Parsica\eof;
-use function Verraes\Parsica\failure;
+use function Verraes\Parsica\fail;
 use function Verraes\Parsica\many;
-use function Verraes\Parsica\success;
+use function Verraes\Parsica\succeed;
 
 /**
  * https://github.com/mathiasverraes/parsica/issues/6
@@ -68,13 +68,13 @@ final class GH26_Test extends TestCase
 
         $parser = either(
             emit(
-                success(),
+                succeed(),
                 function ($output) use ($x) {
                     $x->first = true; // is called
                 }
             ),
             emit(
-                success(),
+                succeed(),
                 function ($output) use ($x) {
                     $x->second = true; // is not called
                 }
@@ -145,7 +145,7 @@ final class GH26_Test extends TestCase
         $rest = many(any($map, $list))->followedBy($type);
 
         $parser = either(
-            failure("message"), // $context->preflightCacheParser(),
+            fail("message"), // $context->preflightCacheParser(),
             $root
         )->followedBy($rest);
 

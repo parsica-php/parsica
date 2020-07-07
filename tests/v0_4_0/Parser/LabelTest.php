@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\StringStream;
 use function Verraes\Parsica\any;
 use function Verraes\Parsica\char;
-use function Verraes\Parsica\failure;
+use function Verraes\Parsica\fail;
 use function Verraes\Parsica\string;
 
 final class LabelTest extends TestCase
@@ -50,7 +50,7 @@ final class LabelTest extends TestCase
     /** @test */
     public function failure_label()
     {
-        $parser = failure("reason");
+        $parser = fail("reason");
         $result = $parser->run(new StringStream("foo"));
         $this->assertEquals("reason", $result->expected());
     }

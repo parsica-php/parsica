@@ -57,7 +57,7 @@ function pure($output): Parser
  */
 function optional(Parser $parser): Parser
 {
-    return either($parser, success());
+    return either($parser, succeed());
 }
 
 /**
@@ -229,7 +229,7 @@ function any(Parser ...$parsers): Parser
     return array_reduce(
         $parsers,
         fn(Parser $first, Parser $second): Parser => $first->or($second),
-        failure("")
+        fail("")
     )->label($label);
 }
 

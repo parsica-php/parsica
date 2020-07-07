@@ -266,7 +266,7 @@ function everything(): Parser
  *
  * @api
  */
-function success(): Parser
+function succeed(): Parser
 {
     return Parser::make("<always succeed>", fn(Stream $input) => new Succeed(null, $input));
 }
@@ -277,7 +277,7 @@ function success(): Parser
  * @return Parser
  * @api
  */
-function failure(string $label): Parser
+function fail(string $label): Parser
 {
     return Parser::make($label, fn(Stream $input) => new Fail($label, $input));
 }

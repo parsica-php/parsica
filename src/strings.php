@@ -64,7 +64,7 @@ function stringI(string $str): Parser
     $parser = array_reduce(
         $chars,
         fn(Parser $l, Parser $r): Parser => $l->append($r),
-        success()
+        succeed()
     )->label("'$str'");
     return $parser;
 }

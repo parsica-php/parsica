@@ -15,12 +15,12 @@ use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\{anything,
     eof,
     everything,
-    failure,
+    fail,
     nothing,
     satisfy,
     skipWhile,
     skipWhile1,
-    success,
+    succeed,
     takeWhile,
     takeWhile1};
 use function Verraes\Parsica\{isEqual, notPred};
@@ -124,11 +124,11 @@ final class primitivesTest extends TestCase
     /** @test */
     public function success_and_failure()
     {
-        $this->assertParse(null, success(), "doesn't matter what we put in here");
-        $this->assertRemain("no input is consumed", success(), "no input is consumed");
-        $this->assertNotParse(failure("reason for failure"), "doesn't matter what we put in here");
+        $this->assertParse(null, succeed(), "doesn't matter what we put in here");
+        $this->assertRemain("no input is consumed", succeed(), "no input is consumed");
+        $this->assertNotParse(fail("reason for failure"), "doesn't matter what we put in here");
 
-        $or = failure("")->or(success());
+        $or = fail("")->or(succeed());
         $this->assertParse(null, $or, "failure or success is success");
     }
 
