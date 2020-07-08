@@ -27,24 +27,21 @@ trait ParserAssertions
      *
      * @api
      */
-    protected function assertParse($expectedParsed, Parser $parser, string $input, string $message = ""): void
+    protected function assertParse($expectedOutput, Parser $parser, string $input, string $message = ""): void
     {
         $input = new StringStream($input);
         $actualResult = $parser->run($input);
         if ($actualResult->isSuccess()) {
             $this->assertStrictlyEquals(
-                $expectedParsed,
+                $expectedOutput,
                 $actualResult->output(),
-                $message . "\n" . "The parser succeeded but the output doesn't match."
+                $message . "\n" . "The parser succeeded but the output doesn't match your expected output."
             );
         } else {
             $this->fail(
-                $message . "\n" .
-                "Parser failed."
-                . "\nInput: $input"
-                . "\nTest expected: " . print_r($expectedParsed, true)
-                . "\nParser expected: " . $actualResult->expected()
-                . "\nParser got: " . $actualResult->got()
+                $message . "\n"
+                ."The parser failed with the following error message:\n"
+                .$actualResult->errorMessage()."\n"
             );
         }
     }
@@ -102,12 +99,9 @@ trait ParserAssertions
             );
         } else {
             $this->fail(
-                $message . "\n" .
-                "Parser failed, and a failing parser doesn't have a remainder."
-                . "\nInput: $input"
-                . "\nExpected remaining: " . var_export($expectedRemaining, true)
-                . "\nParser expected: " . $actualResult->expected()
-                . "\nGot: " . $actualResult->got()
+                $message . "\n"
+                . "The parser failed with the following error message:\n"
+                .$actualResult->errorMessage()."\n"
             );
         }
     }
@@ -121,7 +115,7 @@ trait ParserAssertions
         $actualResult = $parser->run($input);
         $this->assertTrue(
             $actualResult->isFail(),
-            $message . "\n" . "Parser succeeded but expected a failure.\nInput: $input"
+            $message . "\n" . "The parser succeeded but expected a failure."
         );
 
         if (isset($expectedFailure)) {
