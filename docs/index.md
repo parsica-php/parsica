@@ -11,6 +11,14 @@ The easiest way to build robust parsers in PHP.
 * [Installation & Requirements](installation)
 * [API Reference](api/index)
 
+## Donate
+
+Donate viia my [GitHub Sponsor Page](https://github.com/sponsors/mathiasverraes)
+ or via [Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NS4GQXUDXRKQJ&source=url). 
+ 
+A lot of research & development went into this project. We think it can become the mainstream choice for building reliable parsers in PHP, and serve as a foundation for many advancements. Your support will help us to reach that goal.
+
+
 ## Tutorial
 
 1. [What are parser combinators?](tutorial/introduction)
@@ -41,7 +49,7 @@ The easiest way to build robust parsers in PHP.
 
 ### Commercial training & support
 
-E-mail [contact@value-object.com](mailto:contact@value-object.com).
+E-mail us at [contact@value-object.com](mailto:contact@value-object.com) to discuss options.
 
 ### Community support
 
@@ -54,4 +62,3 @@ Submit questions as Github issues. Please label them with 'support'. Help us hel
 * GitHub: [mathiasverraes/parsica](https://github.com/mathiasverraes/parsica)
 * Packagist: [mathiasverraes/parsica](https://packagist.org/packages/mathiasverraes/parsica)
 * License: [MIT](LICENSE)
-* Donate: [Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NS4GQXUDXRKQJ&source=url)
