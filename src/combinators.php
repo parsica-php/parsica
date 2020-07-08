@@ -272,7 +272,7 @@ function choice(Parser ...$parsers): Parser
 }
 
 /**
- * One or more repetitions of Parser
+ * One or more repetitions of Parser, with the outputs appended.
  *
  * @api
  * @psalm-param Parser<T> $parser
@@ -291,6 +291,34 @@ function atLeastOne(Parser $parser): Parser
             }
             $final = new Succeed(null, $result->remainder());
             while($result->isSuccess()){
+                $final = $final->append($result);
+                $result = $parser->continueFrom($result);
+            }
+            return $final;
+        }
+    );
+}
+
+/**
+ * Zero or more repetitions of Parser, with the outputs appended.
+ *
+ * @deprecated @TODO Untested
+ *
+ * @api
+ * @psalm-param Parser<T> $parser
+ * @psalm-return Parser<T>
+ * @template T
+ * @psalm-suppress MixedArgumentTypeCoercion
+ */
+function zeroOrMore(Parser $parser): Parser
+{
+    return Parser::make(
+        "zero or more " . $parser->getLabel(),
+        function (Stream $input) use ($parser) : ParseResult {
+            $result = new Succeed(null, $input);
+            $final = $result;
+            while($result->isSuccess())
+            {
                 $final = $final->append($result);
                 $result = $parser->continueFrom($result);
             }
