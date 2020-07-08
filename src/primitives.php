@@ -169,7 +169,7 @@ function anySingleBut(string $x): Parser
 function oneOf(array $chars): Parser
 {
     Assert::singleChars($chars);
-    return satisfy(fn(string $x) => in_array($x, $chars))->label("oneOf(" . implode('', $chars) . ")");
+    return satisfy(fn(string $x) => in_array($x, $chars))->label("one of " . implode('', $chars));
 }
 
 /**
