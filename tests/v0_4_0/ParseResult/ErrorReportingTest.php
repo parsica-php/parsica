@@ -34,14 +34,12 @@ final class ErrorReportingTest extends TestCase
         $result = $parser->run($input);
         $expected =
             <<<ERROR
-
             <input>:1:1
               |
             1 | bcd
               | ^— column 1
             Unexpected 'b'
             Expecting 'a'
-
             ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
@@ -55,14 +53,12 @@ final class ErrorReportingTest extends TestCase
         $result = $parser->run($input);
         $expected =
             <<<ERROR
-
             /path/to/file:5:10
               |
             5 | ...bcd
               |    ^— column 10
             Unexpected 'b'
             Expecting 'a'
-
             ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
@@ -76,14 +72,12 @@ final class ErrorReportingTest extends TestCase
         $result = $parser->run($input);
         $expected =
             <<<ERROR
-
             /path/to/file:1:1
               |
             1 | xyz
               | ^— column 1
             Unexpected 'x'
             Expecting 'abc'
-
             ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
@@ -97,14 +91,12 @@ final class ErrorReportingTest extends TestCase
         $result = $parser->run($input);
         $expected =
             <<<ERROR
-
             <input>:1:2
               |
             1 | ...xy
               |    ^— column 2
             Unexpected 'x'
             Expecting 'b'
-
             ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
@@ -118,14 +110,12 @@ final class ErrorReportingTest extends TestCase
         $result = $parser->run($input);
         $expected =
             <<<ERROR
-
             <input>:1:2
               |
             1 | ...xy
               |    ^— column 2
             Unexpected 'x'
             Expecting a followed by b
-
             ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
@@ -139,14 +129,12 @@ final class ErrorReportingTest extends TestCase
         $result = $parser->run($input);
         $expected =
             <<<ERROR
-
             <input>:1:9
               |
             1 | ...bcdefgh
               |    ^— column 9
             Unexpected 'b'
             Expecting 'a'
-
             ERROR;
         $this->assertEquals($expected, $result->errorMessage());
     }
@@ -160,14 +148,12 @@ final class ErrorReportingTest extends TestCase
         $result = $parser->run($input);
         $expected =
             <<<ERROR
-
             <input>:100:1
                 |
             100 | b
                 | ^— column 1
             Unexpected 'b'
             Expecting 'a'
-
             ERROR;
         $this->assertEquals($expected, $result->errorMessage());
     }
@@ -180,14 +166,12 @@ final class ErrorReportingTest extends TestCase
         $result = $parser->run($input);
         $expected =
             <<<ERROR
-
             /path/to/file:4:1
               |
             4 | bcd
               | ^— column 1
             Unexpected 'b'
             Expecting 'a'
-
             ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
@@ -202,14 +186,12 @@ final class ErrorReportingTest extends TestCase
         $result = $parser->run($input);
         $expected =
             <<<ERROR
-
             <input>:1:6
               |
             1 | ...XYZ
               |    ^— column 6
             Unexpected 'X'
             Expecting 'b'
-
             ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
@@ -223,14 +205,12 @@ final class ErrorReportingTest extends TestCase
         $result = $parser->run($input);
         $expected =
             <<<ERROR
-
             <input>:1:5
               |
             1 | ...XYZ
               |    ^— column 5
             Unexpected 'X'
             Expecting 5 times 'a'
-
             ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
@@ -244,14 +224,12 @@ final class ErrorReportingTest extends TestCase
         $result = $parser->run($input);
         $expected =
             <<<ERROR
-
             <input>:1:3
               |
             1 | ...XYZ
               |    ^— column 3
             Unexpected 'X'
             Expecting 'b'
-
             ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
@@ -266,14 +244,12 @@ final class ErrorReportingTest extends TestCase
         $result = $parser->run($input);
         $expected =
             <<<ERROR
-
             <input>:10:6
                |
             10 | ... World! This is a really long line of more than 80 characters, if you...
                |    ^— column 6
             Unexpected <space>
             Expecting ','
-
             ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());

@@ -38,7 +38,7 @@ final class Fail extends Exception implements ParserFailure, ParseResult
     {
         $this->expected = $expected;
         $this->got = $got;
-        parent::__construct($this->errorMessage());
+        parent::__construct("\n".$this->errorMessage());
     }
 
     public function errorMessage(): string
@@ -60,13 +60,13 @@ final class Fail extends Exception implements ParserFailure, ParseResult
         $bodyLine = "$lineNumber | $leftDots$body";
         $bodyLine = strlen($bodyLine) > 80 ? (substr($bodyLine, 0, 77) . "...") : $bodyLine;
 
-        return "\n"
-            . "$position\n"
+        return
+            "$position\n"
             . "$spaceLength |\n"
             . "$bodyLine\n"
             . "$spaceLength | $leftSpace^— column $columnNumber\n"
             . "Unexpected $unexpected\n"
-            . "Expecting $expecting\n";
+            . "Expecting $expecting";
     }
 
     public function got(): Stream
