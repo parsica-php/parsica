@@ -32,16 +32,17 @@ final class ErrorReportingTest extends TestCase
         $parser = char('a');
         $input = new StringStream("bcd");
         $result = $parser->run($input);
-        $expected = <<<ERROR
+        $expected =
+            <<<ERROR
 
-<input>:1:1
-  |
-1 | bcd
-  | ^— column 1
-Unexpected 'b'
-Expecting 'a'
+            <input>:1:1
+              |
+            1 | bcd
+              | ^— column 1
+            Unexpected 'b'
+            Expecting 'a'
 
-ERROR;
+            ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
     }
@@ -52,16 +53,17 @@ ERROR;
         $parser = char('a');
         $input = new StringStream("bcd", new Position("/path/to/file", 5, 10));
         $result = $parser->run($input);
-        $expected = <<<ERROR
+        $expected =
+            <<<ERROR
 
-/path/to/file:5:10
-  |
-5 | ...bcd
-  |    ^— column 10
-Unexpected 'b'
-Expecting 'a'
+            /path/to/file:5:10
+              |
+            5 | ...bcd
+              |    ^— column 10
+            Unexpected 'b'
+            Expecting 'a'
 
-ERROR;
+            ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
     }
@@ -72,16 +74,17 @@ ERROR;
         $parser = string("abc");
         $input = new StringStream("xyz", Position::initial("/path/to/file"));
         $result = $parser->run($input);
-        $expected = <<<ERROR
+        $expected =
+            <<<ERROR
 
-/path/to/file:1:1
-  |
-1 | xyz
-  | ^— column 1
-Unexpected 'x'
-Expecting 'abc'
+            /path/to/file:1:1
+              |
+            1 | xyz
+              | ^— column 1
+            Unexpected 'x'
+            Expecting 'abc'
 
-ERROR;
+            ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
     }
@@ -92,16 +95,17 @@ ERROR;
         $parser = char('a')->sequence(char('b'));
         $input = new StringStream("axy");
         $result = $parser->run($input);
-        $expected = <<<ERROR
+        $expected =
+            <<<ERROR
 
-<input>:1:2
-  |
-1 | ...xy
-  |    ^— column 2
-Unexpected 'x'
-Expecting 'b'
+            <input>:1:2
+              |
+            1 | ...xy
+              |    ^— column 2
+            Unexpected 'x'
+            Expecting 'b'
 
-ERROR;
+            ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
     }
@@ -112,16 +116,17 @@ ERROR;
         $parser = char('a')->sequence(char('b'))->label("a followed by b");
         $input = new StringStream("axy");
         $result = $parser->run($input);
-        $expected = <<<ERROR
+        $expected =
+            <<<ERROR
 
-<input>:1:2
-  |
-1 | ...xy
-  |    ^— column 2
-Unexpected 'x'
-Expecting a followed by b
+            <input>:1:2
+              |
+            1 | ...xy
+              |    ^— column 2
+            Unexpected 'x'
+            Expecting a followed by b
 
-ERROR;
+            ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
     }
@@ -132,19 +137,19 @@ ERROR;
         $parser = skipSpace()->sequence(char('a'));
         $input = new StringStream("\t\tbcdefgh");
         $result = $parser->run($input);
-        $expected = <<<ERROR
+        $expected =
+            <<<ERROR
 
-<input>:1:9
-  |
-1 | ...bcdefgh
-  |    ^— column 9
-Unexpected 'b'
-Expecting 'a'
+            <input>:1:9
+              |
+            1 | ...bcdefgh
+              |    ^— column 9
+            Unexpected 'b'
+            Expecting 'a'
 
-ERROR;
+            ERROR;
         $this->assertEquals($expected, $result->errorMessage());
     }
-
 
 
     /** @test */
@@ -153,16 +158,17 @@ ERROR;
         $parser = skipSpace()->sequence(char('a'));
         $input = new StringStream(str_repeat("\n", 99) . "b");
         $result = $parser->run($input);
-        $expected = <<<ERROR
+        $expected =
+            <<<ERROR
 
-<input>:100:1
-    |
-100 | b
-    | ^— column 1
-Unexpected 'b'
-Expecting 'a'
+            <input>:100:1
+                |
+            100 | b
+                | ^— column 1
+            Unexpected 'b'
+            Expecting 'a'
 
-ERROR;
+            ERROR;
         $this->assertEquals($expected, $result->errorMessage());
     }
 
@@ -172,16 +178,17 @@ ERROR;
         $parser = many(newline())->sequence(char('a'));
         $input = new StringStream("\n\n\nbcd\nxyz", Position::initial("/path/to/file"));
         $result = $parser->run($input);
-        $expected = <<<ERROR
+        $expected =
+            <<<ERROR
 
-/path/to/file:4:1
-  |
-4 | bcd
-  | ^— column 1
-Unexpected 'b'
-Expecting 'a'
+            /path/to/file:4:1
+              |
+            4 | bcd
+              | ^— column 1
+            Unexpected 'b'
+            Expecting 'a'
 
-ERROR;
+            ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
     }
@@ -193,16 +200,17 @@ ERROR;
         $parser = repeat(5, char('a'))->sequence(char('b'));
         $input = new StringStream("aaaaaXYZ");
         $result = $parser->run($input);
-        $expected = <<<ERROR
+        $expected =
+            <<<ERROR
 
-<input>:1:6
-  |
-1 | ...XYZ
-  |    ^— column 6
-Unexpected 'X'
-Expecting 'b'
+            <input>:1:6
+              |
+            1 | ...XYZ
+              |    ^— column 6
+            Unexpected 'X'
+            Expecting 'b'
 
-ERROR;
+            ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
     }
@@ -213,16 +221,17 @@ ERROR;
         $parser = repeat(5, char('a'))->sequence(char('b'));
         $input = new StringStream("aaaaXYZ");
         $result = $parser->run($input);
-        $expected = <<<ERROR
+        $expected =
+            <<<ERROR
 
-<input>:1:5
-  |
-1 | ...XYZ
-  |    ^— column 5
-Unexpected 'X'
-Expecting 5 times 'a'
+            <input>:1:5
+              |
+            1 | ...XYZ
+              |    ^— column 5
+            Unexpected 'X'
+            Expecting 5 times 'a'
 
-ERROR;
+            ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
     }
@@ -233,16 +242,17 @@ ERROR;
         $parser = string("aa")->sequence(char('b'));
         $input = new StringStream("aaXYZ");
         $result = $parser->run($input);
-        $expected = <<<ERROR
+        $expected =
+            <<<ERROR
 
-<input>:1:3
-  |
-1 | ...XYZ
-  |    ^— column 3
-Unexpected 'X'
-Expecting 'b'
+            <input>:1:3
+              |
+            1 | ...XYZ
+              |    ^— column 3
+            Unexpected 'X'
+            Expecting 'b'
 
-ERROR;
+            ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
     }
@@ -254,16 +264,17 @@ ERROR;
         $parser = skipSpace()->sequence(string("Hello"))->sequence(char(','))->sequence(whitespace())->sequence(string("World"));
         $input = new StringStream("\n\n\n\n\n\n\n\n\nHello World! This is a really long line of more than 80 characters, if you count the spaces.");
         $result = $parser->run($input);
-        $expected = <<<ERROR
+        $expected =
+            <<<ERROR
 
-<input>:10:6
-   |
-10 | ... World! This is a really long line of more than 80 characters, if you...
-   |    ^— column 6
-Unexpected <space>
-Expecting ','
+            <input>:10:6
+               |
+            10 | ... World! This is a really long line of more than 80 characters, if you...
+               |    ^— column 6
+            Unexpected <space>
+            Expecting ','
 
-ERROR;
+            ERROR;
 
         $this->assertEquals($expected, $result->errorMessage());
     }
