@@ -45,4 +45,21 @@ final class PositionTest extends TestCase
         $actualColumn = $result->remainder()->position()->column();
         $this->assertEquals($expectedColumn, $actualColumn);
     }
+
+    /** @test */
+    public function position_with_tabs()
+    {
+        $expected = 10;
+        // All of these move the column position to 10
+        $position = Position::initial()->advance("123456789");
+        $this->assertEquals($expected, $position->column());
+        $position = Position::initial()->advance("\t56789");
+        $this->assertEquals($expected, $position->column());
+        $position = Position::initial()->advance("\t\t9");
+        $this->assertEquals($expected, $position->column());
+        $position = Position::initial()->advance("1\t56789");
+        $this->assertEquals($expected, $position->column());
+        $position = Position::initial()->advance("123\t56789");
+        $this->assertEquals($expected, $position->column());
+    }
 }
