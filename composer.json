@@ -5,7 +5,8 @@
     "keywords": [
         "parser",
         "parser-combinator",
-        "parser combinator"
+        "parser combinator",
+        "parsing"
     ],
     "homepage": "https://parsica.verraes.net/",
     "license": "MIT",
