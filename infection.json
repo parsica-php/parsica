@@ -1,0 +1,19 @@
+{
+    "source": {
+        "directories": [
+            "src"
+        ],
+        "excludes": [
+                    "src/PHPUnit/ParserAssertions.php"
+                ]
+    },
+    "timeout": 5,
+    "logs": {
+        "text": "infection.log",
+        "perMutator": "per-mutator.md"
+    },
+    "mutators": {
+        "@default": true
+    },
+    "testFramework":"phpunit"
+}
