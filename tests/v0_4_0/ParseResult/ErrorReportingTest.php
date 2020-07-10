@@ -255,4 +255,23 @@ final class ErrorReportingTest extends TestCase
         $this->assertEquals($expected, $result->errorMessage());
     }
 
+    /** @test */
+    public function dont_truncate_short_enough_lines()
+    {
+        $parser = char('a');
+        $input = new StringStream("1234567890123456789012345678901234567890123456789012345678901234567890123456");
+        $result = $parser->run($input);
+        $expected =
+            <<<ERROR
+            <input>:1:1
+              |
+            1 | 1234567890123456789012345678901234567890123456789012345678901234567890123456
+              | ^— column 1
+            Unexpected '1'
+            Expecting 'a'
+            ERROR;
+
+        $this->assertEquals($expected, $result->errorMessage());
+    }
+
 }
