@@ -17,7 +17,7 @@ use function Verraes\Parsica\isCharCode;
 use function Verraes\Parsica\satisfy;
 use function Verraes\Parsica\zeroOrMore;
 
-final class JSON2Test extends TestCase
+final class JSON_WhitespaceTest extends TestCase
 {
     use ParserAssertions;
 
