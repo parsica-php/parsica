@@ -63,4 +63,16 @@ final class WhitespaceTest extends TestCase
         $this->assertParse($expected, $parser, $input);
     }
 
+    /** @test */
+    public function a_bunch_of_whitespace()
+    {
+        $expected = null;
+        $input = "  \n \r \t a";
+        $parser = ws();
+        $this->assertParse($expected, $parser, $input);
+        $this->assertRemain("a", $parser, $input);
+
+    }
+
+
 }
