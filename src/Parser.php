@@ -70,6 +70,20 @@ final class Parser
     }
 
     /**
+     * Make a new parser.
+     *
+     * @psalm-param callable(Stream) : ParseResult<T2> $parserFunction
+     *
+     * @psalm-return Parser<T2>
+     * @internal
+     * @template T2
+     */
+    public static function make(string $label, callable $parserFunction): Parser
+    {
+        return new Parser($parserFunction, 'non-recursive', $label);
+    }
+
+    /**
      * Recurse on a parser. Used in combination with {@see recursive()}. After calling this method, this parser behaves
      * like a regular parser.
      *
@@ -138,20 +152,6 @@ final class Parser
     public function or(Parser $other): Parser
     {
         return either($this, $other);
-    }
-
-    /**
-     * Make a new parser.
-     *
-     * @psalm-param callable(Stream) : ParseResult<T2> $parserFunction
-     *
-     * @psalm-return Parser<T2>
-     * @internal
-     * @template T2
-     */
-    public static function make(string $label, callable $parserFunction): Parser
-    {
-        return new Parser($parserFunction, 'non-recursive', $label);
     }
 
     /**
@@ -394,4 +394,15 @@ final class Parser
         return emit($this, $receiver);
     }
 
+    /**
+     * Ignore the output of the parser and return the new output instead.
+     *
+     * @psalm-param mixed $output
+     *
+     * @deprecated @TODO needs test
+     */
+    public function voidLeft($output): Parser
+    {
+        return $this->map(fn($_) => $output);
+    }
 }
