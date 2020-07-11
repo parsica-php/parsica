@@ -8,16 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Examples;
+namespace Tests\Verraes\Parsica\JSON;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Parser;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\isCharCode;
-use function Verraes\Parsica\satisfy;
-use function Verraes\Parsica\zeroOrMore;
+use function Verraes\Parsica\JSON\ws;
 
-final class JSON_WhitespaceTest extends TestCase
+final class WhitespaceTest extends TestCase
 {
     use ParserAssertions;
 
@@ -66,9 +63,4 @@ final class JSON_WhitespaceTest extends TestCase
         $this->assertParse($expected, $parser, $input);
     }
 
-}
-
-function ws(): Parser
-{
-    return zeroOrMore(satisfy(isCharCode([0x20, 0x0A, 0x0D, 0x09])))->voidLeft(null);
 }

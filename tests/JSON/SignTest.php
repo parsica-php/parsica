@@ -8,15 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Examples;
+namespace Tests\Verraes\Parsica\JSON;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Parser;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\char;
-use function Verraes\Parsica\nothing;
+use function Verraes\Parsica\JSON\sign;
 
-final class JSON_SignTest extends TestCase
+final class SignTest extends TestCase
 {
     use ParserAssertions;
 
@@ -34,7 +32,7 @@ final class JSON_SignTest extends TestCase
     public function plus_sign()
     {
         $parser = sign();
-        $input = "+123";
+        $input = "+";
         $expected = "+";
         $this->assertParse($expected, $parser, $input);
     }
@@ -50,7 +48,3 @@ final class JSON_SignTest extends TestCase
 
 }
 
-
-function sign(): Parser{
-    return char('+')->or(char('-'))->or(nothing()->voidLeft("+"));
-}

@@ -8,15 +8,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Examples;
+namespace Tests\Verraes\Parsica\JSON;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Parser;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\char;
-use function Verraes\Parsica\keepFirst;
+use function Verraes\Parsica\JSON\token;
 
-final class JSON_TokenTest extends TestCase
+final class TokenTest extends TestCase
 {
     use ParserAssertions;
 
@@ -30,8 +29,3 @@ final class JSON_TokenTest extends TestCase
 
 }
 
-
-function token(Parser $parser): Parser
-{
-    return keepFirst($parser, ws());
-}
