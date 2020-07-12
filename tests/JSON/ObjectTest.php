@@ -11,6 +11,7 @@
 namespace Tests\Verraes\Parsica\JSON;
 
 use PHPUnit\Framework\TestCase;
+use Verraes\Parsica\JSON\JSON;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\JSON\key_value;
 
@@ -22,7 +23,7 @@ final class ObjectTest extends TestCase
     public function key_value()
     {
         $input = '"foo": "bar"';
-        $parser = key_value();
+        $parser = JSON::key_value();
         $this->assertParse(["foo", "bar"], $parser, $input);
     }
 

@@ -11,9 +11,8 @@
 namespace Tests\Verraes\Parsica\JSON;
 
 use PHPUnit\Framework\TestCase;
+use Verraes\Parsica\JSON\JSON;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\JSON\integer;
-use function Verraes\Parsica\JSON\number;
 
 final class NumberTest extends TestCase
 {
@@ -22,28 +21,28 @@ final class NumberTest extends TestCase
     /** @test */
     public function integer()
     {
-        $this->assertParse(0, integer(), "0");
-        $this->assertParse(1, integer(), "1");
-        $this->assertParse(-1, integer(), "-1");
-        $this->assertParse(123, integer(), "123");
-        $this->assertParse(-123, integer(), "-123");
-        $this->assertRemain("1", integer(), "01", "The 0 should parse but not the 1" );
-        $this->assertNotParse(integer(), "-");
+        $this->assertParse(0, JSON::integer(), "0");
+        $this->assertParse(1, JSON::integer(), "1");
+        $this->assertParse(-1, JSON::integer(), "-1");
+        $this->assertParse(123, JSON::integer(), "123");
+        $this->assertParse(-123, JSON::integer(), "-123");
+        $this->assertRemain("1", JSON::integer(), "01", "The 0 should parse but not the 1");
+        $this->assertNotParse(JSON::integer(), "-");
     }
 
     /** @test */
     public function number()
     {
-        $this->assertParse(0.0, number(), "0");
-        $this->assertParse(0.1, number(), "0.1");
-        $this->assertParse(0.15, number(), "0.15");
-        $this->assertParse(0.1, number(), "0.10");
-        $this->assertParse(-0.1, number(), "-0.1");
-        $this->assertParse(1.2345678, number(), "1.2345678");
-        $this->assertParse(-1.2345678, number(), "-1.2345678");
-        $this->assertParse(-1.23456789E+123, number(), "-1.23456789E+123");
-        $this->assertParse(-1.23456789E-123, number(), "-1.23456789e-123");
-        $this->assertParse(-1E-123, number(), "-1E-123");
+        $this->assertParse(0.0, JSON::number(), "0");
+        $this->assertParse(0.1, JSON::number(), "0.1");
+        $this->assertParse(0.15, JSON::number(), "0.15");
+        $this->assertParse(0.1, JSON::number(), "0.10");
+        $this->assertParse(-0.1, JSON::number(), "-0.1");
+        $this->assertParse(1.2345678, JSON::number(), "1.2345678");
+        $this->assertParse(-1.2345678, JSON::number(), "-1.2345678");
+        $this->assertParse(-1.23456789E+123, JSON::number(), "-1.23456789E+123");
+        $this->assertParse(-1.23456789E-123, JSON::number(), "-1.23456789e-123");
+        $this->assertParse(-1E-123, JSON::number(), "-1E-123");
     }
 
 

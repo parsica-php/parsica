@@ -11,6 +11,7 @@
 namespace Tests\Verraes\Parsica\JSON;
 
 use PHPUnit\Framework\TestCase;
+use Verraes\Parsica\JSON\JSON;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\char;
 use function Verraes\Parsica\JSON\token;
@@ -22,7 +23,7 @@ final class TokenTest extends TestCase
     /** @test */
     public function token()
     {
-        $parser = token(char('a'));
+        $parser = JSON::token(char('a'));
         $input = "a  \n   \tb";
         $this->assertRemain("b", $parser, $input);
     }

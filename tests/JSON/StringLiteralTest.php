@@ -11,8 +11,8 @@
 namespace Tests\Verraes\Parsica\JSON;
 
 use PHPUnit\Framework\TestCase;
+use Verraes\Parsica\JSON\JSON;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\JSON\stringLiteral;
 
 final class StringLiteralTest extends TestCase
 {
@@ -36,7 +36,7 @@ final class StringLiteralTest extends TestCase
     /** @test */
     public function empty()
     {
-        $this->assertParse("", stringLiteral(), '""');
+        $this->assertParse("", JSON::stringLiteral(), '""');
     }
 
     /**
@@ -45,16 +45,16 @@ final class StringLiteralTest extends TestCase
      */
     public function escapes(string $input, string $expected)
     {
-        $this->assertParse($expected, stringLiteral(), '"' . $input . '"');
-        $this->assertParse("a" . $expected, stringLiteral(), '"a' . $input . '"');
-        $this->assertParse($expected . "a", stringLiteral(), '"' . $input . 'a"');
+        $this->assertParse($expected, JSON::stringLiteral(), '"' . $input . '"');
+        $this->assertParse("a" . $expected, JSON::stringLiteral(), '"a' . $input . '"');
+        $this->assertParse($expected . "a", JSON::stringLiteral(), '"' . $input . 'a"');
     }
 
     /** @test */
     public function escape_hex()
     {
         $input = '"\\u0BB9\\u0BB2\\u0BCB\\u0020\\u0B89\\u0BB2\\u0B95\\u0BAE\\u0BCD"';
-        $this->assertParse("ஹலோ உலகம்", stringLiteral(), $input);
+        $this->assertParse("ஹலோ உலகம்", JSON::stringLiteral(), $input);
     }
 
 

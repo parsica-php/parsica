@@ -11,6 +11,7 @@
 namespace Tests\Verraes\Parsica\JSON;
 
 use PHPUnit\Framework\TestCase;
+use Verraes\Parsica\JSON\JSON;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\JSON\ws;
 
@@ -23,7 +24,7 @@ final class WhitespaceTest extends TestCase
     {
         $expected = null;
         $input = "";
-        $parser = ws();
+        $parser = JSON::ws();
         $this->assertParse($expected, $parser, $input);
     }
 
@@ -32,7 +33,7 @@ final class WhitespaceTest extends TestCase
     {
         $expected = null;
         $input = " ";
-        $parser = ws();
+        $parser = JSON::ws();
         $this->assertParse($expected, $parser, $input);
     }
 
@@ -41,7 +42,7 @@ final class WhitespaceTest extends TestCase
     {
         $expected = null;
         $input = "\t";
-        $parser = ws();
+        $parser = JSON::ws();
         $this->assertParse($expected, $parser, $input);
     }
 
@@ -50,7 +51,7 @@ final class WhitespaceTest extends TestCase
     {
         $expected = null;
         $input = "\n";
-        $parser = ws();
+        $parser = JSON::ws();
         $this->assertParse($expected, $parser, $input);
     }
 
@@ -59,7 +60,7 @@ final class WhitespaceTest extends TestCase
     {
         $expected = null;
         $input = "\r";
-        $parser = ws();
+        $parser = JSON::ws();
         $this->assertParse($expected, $parser, $input);
     }
 
@@ -68,7 +69,7 @@ final class WhitespaceTest extends TestCase
     {
         $expected = null;
         $input = "  \n \r \t a";
-        $parser = ws();
+        $parser = JSON::ws();
         $this->assertParse($expected, $parser, $input);
         $this->assertRemain("a", $parser, $input);
 

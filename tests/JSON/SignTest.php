@@ -11,6 +11,7 @@
 namespace Tests\Verraes\Parsica\JSON;
 
 use PHPUnit\Framework\TestCase;
+use Verraes\Parsica\JSON\JSON;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\JSON\sign;
 
@@ -21,7 +22,7 @@ final class SignTest extends TestCase
     /** @test */
     public function no_sign()
     {
-        $parser = sign();
+        $parser = JSON::sign();
         $input = "123";
         $expected = "+";
         $this->assertParse($expected, $parser, $input);
@@ -31,7 +32,7 @@ final class SignTest extends TestCase
     /** @test */
     public function plus_sign()
     {
-        $parser = sign();
+        $parser = JSON::sign();
         $input = "+";
         $expected = "+";
         $this->assertParse($expected, $parser, $input);
@@ -39,7 +40,7 @@ final class SignTest extends TestCase
     /** @test */
     public function minus_sign()
     {
-        $parser = sign();
+        $parser = JSON::sign();
         $input = "-123";
         $expected = "-";
         $this->assertParse($expected, $parser, $input);
