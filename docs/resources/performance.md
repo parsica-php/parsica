@@ -22,3 +22,6 @@ ini_set('xdebug.max_nesting_level', '1024');
 xdebug.max_nesting_level=1024
 ```
 
+## Recursion
+
+If you encounter a "Maximum function nesting level" error, the more likely problem is that you're building a recursive parser incorrectly. Have a look at the documentation page about recursion to learn more.
