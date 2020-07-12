@@ -49,6 +49,9 @@ use function Verraes\Parsica\{anySingleBut,
  * $result = $parser->try($source);
  *
  * To understand the terminology and the structure, have a peak at {@see https://www.json.org/json-en.html}
+ *
+ * @psalm-suppress all
+ * @TODO fix psalm annotations
  */
 final class JSON
 {
