@@ -15,7 +15,7 @@
 namespace Verraes\Parsica\JSON;
 
 use Verraes\Parsica\Parser;
-use function Verraes\Parsica\{alphaNumChar,
+use function Verraes\Parsica\{anySingleBut,
     assemble,
     atLeastOne,
     between,
@@ -24,13 +24,17 @@ use function Verraes\Parsica\{alphaNumChar,
     choice,
     collect,
     digitChar,
+    hexDigitChar,
     isCharCode,
     keepFirst,
     oneOfS,
     optional,
     pure,
+    repeat,
     satisfy,
-    zeroOrMore};
+    string,
+    zeroOrMore
+};
 
 
 /**
@@ -105,22 +109,36 @@ function sign(): Parser
     return char('+')->or(char('-'))->or(pure('+'));
 }
 
-/**
- * @deprecated @TODO incomplete
- */
-function string(): Parser
+function stringLiteral(): Parser
 {
-    return between(char('"'), char('"'), zeroOrMore(alphaNumChar()))->label("string");
+    return between(
+        char('"'),
+        char('"'),
+        zeroOrMore(
+            choice(
+                string("\\\"")->map(fn($_) => '"'),
+                string("\\\\")->map(fn($_) => '\\'),
+                string("\\/")->map(fn($_) => '/'),
+                string("\\b")->map(fn($_) => mb_chr(8)),
+                string("\\f")->map(fn($_) => mb_chr(12)),
+                string("\\n")->map(fn($_) => "\n"),
+                string("\\r")->map(fn($_) => "\r"),
+                string("\\t")->map(fn($_) => "\t"),
+                string("\\u")->sequence(repeat(4, hexDigitChar()))->map(fn($o) => mb_chr(hexdec($o))),
+                anySingleBut('"')
+            )
+        )->map(fn($o) => (string)$o) // because the empty json string returns null
+    )->label("string literal");
 }
 
 function key(): Parser
 {
-    return token(string());
+    return token(stringLiteral());
 }
 
 function value(): Parser
 {
-    return token(string());
+    return token(stringLiteral());
 }
 
 function key_value(): Parser
