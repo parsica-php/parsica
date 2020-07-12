@@ -13,7 +13,7 @@ The easiest way to build robust parsers in PHP.
 
 ## Donate
 
-Donate viia my [GitHub Sponsor Page](https://github.com/sponsors/mathiasverraes)
+Donate via my [GitHub Sponsor Page](https://github.com/sponsors/mathiasverraes)
  or via [Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NS4GQXUDXRKQJ&source=url). 
  
 A lot of research & development went into this project. We think it can become the mainstream choice for building reliable parsers in PHP, and serve as a foundation for many advancements. Your support will help us to reach that goal.
