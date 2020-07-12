@@ -397,12 +397,20 @@ final class Parser
     /**
      * Ignore the output of the parser and return the new output instead.
      *
-     * @psalm-param mixed $output
+     * @template T2
+     * @psalm-param T2 $output
      *
      * @deprecated @TODO needs test
+     *
      */
     public function voidLeft($output): Parser
     {
-        return $this->map(fn($_) => $output);
+        return $this->map(
+            /**
+             * @psalm-param T $_
+             * @psalm-return T2
+             */
+            fn($_) => $output
+        );
     }
 }
