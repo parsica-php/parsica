@@ -42,7 +42,7 @@
             "src/recursion.php",
             "src/sideEffects.php",
             "src/space.php",
-            "src/strings.php",
+            "src/strings.php"
         ]
     },
     "autoload-dev": {
