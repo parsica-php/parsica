@@ -35,20 +35,7 @@ use function Verraes\Parsica\{anySingleBut,
 };
 
 /**
- * Fully compliant JSON parser, built entirely in Parsica. The output is compatible with PHP's native json_decode().
- *
- * It was built to illustrate the usage of Parsica on a real world format, and to benchmark Parsica against
- * json_decode(). It will probably never reach the same performance as a C extension, so it shouldn't be used for
- * typical production JSON parsing.
- *
- * It could however be useful as a basis to expand into a custom JSON parser, for example to expand JSON with custom
- * notations or comments, or to return a custom AST instead of json_decode()'s plain PHP objects & arrays.
- *
- * Basic usage:
- * $parser = JSON::json();
- * $result = $parser->try($source);
- *
- * To understand the terminology and the structure, have a peak at {@see https://www.json.org/json-en.html}
+ * JSON parser and utility parsers
  *
  * @psalm-suppress all
  * @TODO fix psalm annotations
@@ -59,6 +46,20 @@ final class JSON
     {
     }
 
+    /**
+     * Fully compliant JSON parser, built entirely in Parsica. The output is compatible with PHP's native json_decode().
+     *
+     * It was built to illustrate the usage of Parsica on a real world format, and to benchmark Parsica against
+     * json_decode(). It will probably never reach the same performance as a C extension, so it shouldn't be used for
+     * typical production JSON parsing.
+     *
+     * It could however be useful as a basis to expand into a custom JSON parser, for example to expand JSON with custom
+     * notations or comments, or to return a custom AST instead of json_decode()'s plain PHP objects & arrays.
+     *
+     * To understand the terminology and the structure, have a peak at {@see https://www.json.org/json-en.html}
+     *
+     * @api
+     */
     public static function json(): Parser
     {
         return JSON::ws()->sequence(JSON::element());
