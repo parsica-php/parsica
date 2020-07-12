@@ -8,7 +8,8 @@
  * file that was distributed with this source code.
  */
 
-use Verraes\Parsica\JSON\JSON;
+use Verraes\Parsica\JSON\JSON as ParsicaJSON;
+use Json as BaseMaxJson;
 
 class JSONBench
 {
@@ -37,17 +38,28 @@ JSON;
      * @Revs(5)
      * @Iterations(3)
      */
-    public function bench_Parsica_JSON()
+    public function bench_json_encode()
     {
-        $result = JSON::json()->tryString($this->data);
+        json_decode($this->data);
     }
 
     /**
      * @Revs(5)
      * @Iterations(3)
      */
-    public function bench_json_encode()
+    public function bench_Parsica_JSON()
     {
-        json_decode($this->data);
+        $result = ParsicaJSON::json()->tryString($this->data);
+    }
+
+
+    /**
+     * @Revs(5)
+     * @Iterations(3)
+     */
+    public function bench_basemax_jpophp()
+    {
+        require_once(__DIR__.'/JPOPHP/JsonParser.php');
+        (new JPOPHP\Json())->decode($this->data);
     }
 }
