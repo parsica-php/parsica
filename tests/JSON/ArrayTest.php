@@ -15,26 +15,31 @@ use Verraes\Parsica\JSON\JSON;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\JSON\key_value;
 
-final class ObjectTest extends TestCase
+final class ArrayTest extends TestCase
 {
     use ParserAssertions;
 
-    /** @test */
-    public function member()
+
+    /**
+     * @test
+     * @dataProvider examples
+     */
+    public function array(string $input, $expected)
     {
-        $input = '"foo":"bar"';
-        $parser = JSON::member();
-        $this->assertParse(["foo", "bar"], $parser, $input);
+        $parser = JSON::array();
+        $this->assertParse($expected, $parser, $input);
     }
 
-    /** @test */
-    public function object()
+    public function examples()
     {
-        $input = '{"foo":"bar","bar":"foo"}';
-        $parser = JSON::object();
-        $this->assertParse((object)["foo" => "bar", "bar" => "foo"], $parser, $input);
+        return [
+            ['[]', []],
+            ['[ ] ', []],
+            ['[ 1 ] ', [1.0]],
+            ['[ true ] ', [true]],
+            ['[ 1.23, "abc", null, false ] ', [ 1.23, "abc", null, false]],
+        ];
     }
-
 
 
 }
