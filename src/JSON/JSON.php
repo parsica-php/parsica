@@ -37,7 +37,6 @@ use function Verraes\Parsica\{anySingleBut,
 /**
  * JSON parser and utility parsers
  *
- * @psalm-suppress all
  * @TODO fix psalm annotations
  */
 final class JSON
@@ -59,12 +58,14 @@ final class JSON
      * To understand the terminology and the structure, have a peak at {@see https://www.json.org/json-en.html}
      *
      * @api
+     * @psalm-suppress all
      */
     public static function json(): Parser
     {
         return JSON::ws()->sequence(JSON::element());
     }
 
+    /** @psalm-suppress all */
     public static function element(): Parser
     {
         // Memoize $element so we can keep reusing it for recursion.
@@ -86,6 +87,7 @@ final class JSON
         return $element;
     }
 
+    /** @psalm-suppress all */
     public static function object(): Parser
     {
         return between(
@@ -105,6 +107,7 @@ final class JSON
         );
     }
 
+    /** @psalm-suppress all */
     public static function array(): Parser
     {
         return between(
@@ -116,16 +119,19 @@ final class JSON
         );
     }
 
+    /** @psalm-suppress all */
     public static function true(): Parser
     {
         return JSON::token(string('true'))->map(fn($_) => true)->label('true');
     }
 
+    /** @psalm-suppress all */
     public static function false(): Parser
     {
         return JSON::token(string('false'))->map(fn($_) => false)->label('false');
     }
 
+    /** @psalm-suppress all */
     public static function null(): Parser
     {
         return JSON::token(string('null'))->map(fn($_) => null)->label('null');
@@ -133,6 +139,7 @@ final class JSON
 
     /**
      * Whitespace
+     * @psalm-suppress all
      */
     public static function ws(): Parser
     {
@@ -142,33 +149,38 @@ final class JSON
 
     /**
      * Apply $parser and consume all the following whitespace.
+     * @psalm-suppress all
      */
     public static function token(Parser $parser): Parser
     {
         return keepFirst($parser, JSON::ws());
     }
 
+    /** @psalm-suppress all */
     public static function oneNine(): Parser
     {
         return oneOfS("123456789");
     }
 
-
+    /** @psalm-suppress all */
     public static function digits(): Parser
     {
         return atLeastOne(digitChar());
     }
 
+    /** @psalm-suppress all */
     public static function integer(): Parser
     {
         return self::_digits()->map('intval')->label("integer");
     }
 
+    /** @psalm-suppress all */
     public static function fraction(): Parser
     {
         return char('.')->append(JSON::digits());
     }
 
+    /** @psalm-suppress all */
     public static function number(): Parser
     {
         return JSON::token(
@@ -182,6 +194,7 @@ final class JSON
 
     /**
      * Optional minus sgn for numbers
+     * @psalm-suppress all
      */
     public static function minus(): Parser
     {
@@ -190,12 +203,14 @@ final class JSON
 
     /**
      * Optional + or -
+     * @psalm-suppress all
      */
     public static function sign(): Parser
     {
         return char('+')->or(char('-'))->or(pure('+'));
     }
 
+    /** @psalm-suppress all */
     public static function stringLiteral(): Parser
     {
         return JSON::token(
@@ -222,6 +237,7 @@ final class JSON
 
     /**
      * The E in 1.23456E-78
+     * @psalm-suppress all
      */
     public static function exponent(): Parser
     {
@@ -232,6 +248,7 @@ final class JSON
         );
     }
 
+    /** @psalm-suppress all */
     public static function member(): Parser
     {
         return collect(
@@ -242,6 +259,7 @@ final class JSON
         );
     }
 
+    /** @psalm-suppress all */
     private static function _digits(): Parser
     {
         return choice(
