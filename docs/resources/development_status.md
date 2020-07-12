@@ -15,10 +15,15 @@ This is a rough wishlist of features to do before 1.0:
 - [x] Recursive parsers
 - [x] Versioned documentation
 - [x] Essential combinators
+- [x] JSON parser
+- [x] Parser position in error messages
 
+### WIP 
 
 - [ ] WIP - Tutorial
+- [ ] Streaming input
 
+### TODO 
 
 - [ ] Change the behaviour of or, add try and lookAhead
 - [ ] Better parser assertions
@@ -27,15 +32,13 @@ This is a rough wishlist of features to do before 1.0:
 - [ ] Comparison tests for canonical and performant implementations
 - [ ] Debug trees
 - [ ] Expression parser helpers
-- [ ] Implementations of some typical real world parsers (markdown, json, ...)
 - [ ] Inliner
 - [ ] Lexer
 - [ ] Monoidal parser types
 - [ ] More [monad combinators](https://hackage.haskell.org/package/base-4.14.0.0/docs/Control-Monad.html#v:-62--61--62-) 
 - [ ] Other popular test frameworks
-- [ ] Parser state, positions
 - [ ] [Permutation phrases](https://www.cs.ox.ac.uk/jeremy.gibbons/wg21/meeting56/loeh-paper.pdf)
+- [ ] Parser state
 - [ ] Profiling & performance
 - [ ] Publish documentation in e-reader and pdf formats
-- [ ] Streaming input
 
