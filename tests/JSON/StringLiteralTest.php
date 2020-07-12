@@ -53,8 +53,8 @@ final class StringLiteralTest extends TestCase
     /** @test */
     public function escape_hex()
     {
-        $input = "\\u0BB9\\u0BB2\\u0BCB\\u0020\\u0B89\\u0BB2\\u0B95\\u0BAE\\u0BCD";
-        $this->assertParse("ஹலோ உலகம்", stringLiteral(), '"' . $input . '"');
+        $input = '"\\u0BB9\\u0BB2\\u0BCB\\u0020\\u0B89\\u0BB2\\u0B95\\u0BAE\\u0BCD"';
+        $this->assertParse("ஹலோ உலகம்", stringLiteral(), $input);
     }
 
 
