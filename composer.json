@@ -51,8 +51,10 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit",
-        "testdocs": "docs/testdocs",
-        "psalm": "vendor/bin/psalm"
+        "test": ["@phpunit", "@psalm", "@uptodocs"],
+        "phpunit": "vendor/bin/phpunit",
+        "psalm": "vendor/bin/psalm",
+        "uptodocs": "docs/testdocs",
+        "benchmark": "phpbench run benchmarks --report=aggregate"
     }
 }
