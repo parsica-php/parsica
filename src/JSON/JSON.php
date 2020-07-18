@@ -228,7 +228,7 @@ final class JSON
                         string("\\r")->map(fn($_) => "\r"),
                         string("\\t")->map(fn($_) => "\t"),
                         string("\\u")->sequence(repeat(4, hexDigitChar()))->map(fn($o) => mb_chr(hexdec($o))),
-                        anySingleBut('"')
+                        anySingleBut('"') // @TODO is a backslash  that is not one of the escapes above legal?
                     )
                 )
             )->map(fn($o) => (string)$o) // because the empty json string returns null

@@ -26,7 +26,7 @@ final class JSONTest extends TestCase
             [' { " a b  " : " c  d " } '],
             [' [ { " a b  " : " c  d " } ] '],
             [' [ { " a b  " : " c  d " } , { "ef" : "gh" } ] '],
-            [<<<'JSON'
+            [<<<JSON
                 [
                     -1.23,
                     null,
@@ -43,9 +43,9 @@ final class JSONTest extends TestCase
                         ]
                     ]
                 ]
-
                 JSON,
             ],
+            [file_get_contents(__DIR__ . '/../../composer.json')],
         ];
     }
 
