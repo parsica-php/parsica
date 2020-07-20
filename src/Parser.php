@@ -185,6 +185,21 @@ final class Parser
     }
 
     /**
+     * Parse something, then follow by something else. Ignore the result of the first parser and return the result of
+     * the second parser. Alias for sequence().
+     *
+     * @template T2
+     * @psalm-param Parser<T2> $second
+     * @psalm-return Parser<T2>
+     * @api
+     * @see sequence()
+     */
+    public function then(Parser $second): Parser
+    {
+        return sequence($this, $second);
+    }
+
+    /**
      * Create a parser that takes the output from the first parser (if successful) and feeds it to the callable. The
      * callable must return another parser. If the first parser fails, the first parser is returned.
      *
