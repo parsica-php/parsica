@@ -3,8 +3,6 @@ title: Functional Paradigms
 sidebar_label: Functional Paradigms
 ---
 
-@TODO Add tests to illustrate the laws.
-
 Internally, Parsica is designed using paradigms from functional programming.  We list them here for anybody who's interested in FP, but you don't need to know them to work with Parsica. 
 
 Throughout this document, `$parser1 ≡ $parser2` means that you can swap `$parser1` with `$parser2` and vice-versa, and it will not affect the outcome of your program.
