@@ -90,7 +90,7 @@ function eol(): Parser
 /**
  * Skip zero or more white space characters.
  *
- * @psalm-return Parser<string>
+ * @psalm-return Parser<null>
  * @api
  */
 function skipSpace(): Parser
@@ -101,7 +101,7 @@ function skipSpace(): Parser
 /**
  * Like 'skipSpace', but does not accept newlines and carriage returns.
  *
- * @psalm-return Parser<string>
+ * @psalm-return Parser<null>
  * @api
  * @see skipSpace
  */
@@ -113,7 +113,7 @@ function skipHSpace(): Parser
 /**
  * Skip one or more white space characters.
  *
- * @psalm-return Parser<string>
+ * @psalm-return Parser<null>
  * @api
  */
 function skipSpace1(): Parser
@@ -124,7 +124,7 @@ function skipSpace1(): Parser
 /**
  * Like 'skipSpace1', but does not accept newlines and carriage returns.
  *
- * @psalm-return Parser<string>
+ * @psalm-return Parser<null>
  * @api
  * @see skipSpace1
  */

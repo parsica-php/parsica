@@ -46,7 +46,7 @@ function satisfy(callable $predicate): Parser
  * @template T
  *
  * @psalm-param callable(string) : bool $predicate
- * @psalm-return Parser<T>
+ * @psalm-return Parser<null>
  */
 function skipWhile(callable $predicate): Parser
 {
@@ -60,7 +60,7 @@ function skipWhile(callable $predicate): Parser
  *
  * @psalm-param callable(string) : bool $predicate
  *
- * @psalm-return Parser<T>
+ * @psalm-return Parser<null>
  */
 function skipWhile1(callable $predicate): Parser
 {
