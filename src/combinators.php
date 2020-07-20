@@ -51,7 +51,7 @@ function pure($output): Parser
  *
  * @psalm-param Parser<T> $parser
  *
- * @psalm-return Parser<T>
+ * @psalm-return Parser<T|null>
  * @api
  * @template T
  */
@@ -168,6 +168,7 @@ function either(Parser $first, Parser $second): Parser
         return new Fail($label, $r2->got());
     });
 }
+
 
 /**
  * Combine the parser with another parser of the same type, which will cause the results to be appended.
