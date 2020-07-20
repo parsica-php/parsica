@@ -269,6 +269,18 @@ final class Parser
     }
 
     /**
+     * Combine the parser with another parser of the same type, which will cause the results to be appended.
+     *
+     * @psalm-param Parser<T|null> $other
+     * @psalm-return Parser<T|null>
+     * @api
+     */
+    public function and(Parser $other): Parser
+    {
+        return append($this, $other);
+    }
+
+    /**
      * Try to parse a string. Alias of `try(new StringStream($string))`.
      *
      * @TODO Try should fail when it doesn't consume the whole input.
