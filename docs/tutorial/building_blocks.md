@@ -58,3 +58,39 @@ assert(is_string($result->output()));
 ```
 
 Note that even though we parsed a `digitChar`, the output is a string, not an int. That's because at this point, we're parsing characters. We'll talk about outputting other types than string later.
+
+
+## Strings
+
+For longer sequences of characters, you can use `string` and `stringI`. Keep in mind that `stringI`is not just case-insensitive, but also case-preserving. 
+
+```php
+<?php
+$parser = stringI("parsica");
+$result = $parser->tryString("PARSICA");
+assert($result->output() == "PARSICA"); 
+$result = $parser->tryString("pArSiCa");
+assert($result->output() == "pArSiCa"); 
+```
+ 
+If you want the output to be consistent, you can use `map` to convert it.
+
+
+```php
+<?php
+$parser = stringI("parsica")
+    ->map(fn($output) => strtolower($output));
+$result = $parser->tryString("pArSiCa");
+assert($result->output() == "parsica"); 
+```
+ 
+
+## Other parsers
+
+Parsica comes with a growing library of other useful parsers, such as numeric types, and spaces. Always make sure to check the API documentation to know what the type of a parser is (aka the tpye of the output that the parser will produce.) For example, parsers like `space`, `tab`, and `newline` all output strings containing the characters they matched. On the other hand, `skipSpace` will output `null`, no matter if it consumed spaces or not. This makes sense because the point is to ignore them, not use them.    
+
+`skipSpace` consumes all kinds of space, whereas `skipHSpace` will stop consuming at newlines and carriage returns. They also come with two friends, `skipSpace1` and `skipHSpace1`, which expect at least on space to present.
+
+
+ 
+ 
