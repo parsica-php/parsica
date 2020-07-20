@@ -36,7 +36,7 @@ final class ApplicativeTest extends TestCase
     public function pure()
     {
         $parser = pure("<3");
-        $this->assertParse("<3", $parser, "(╯°□°)╯");
+        $this->assertParses("(╯°□°)╯", $parser, "<3");
     }
 
     /** @test */
@@ -47,7 +47,7 @@ final class ApplicativeTest extends TestCase
 
         // Parser<callable(a):b> -> Parser<a> -> Parser<b>
         $parser = $upper->apply($hello);
-        $this->assertParse("HELLO", $parser, "hello");
+        $this->assertParses("hello", $parser, "HELLO");
     }
 
     /** @test */
@@ -59,7 +59,7 @@ final class ApplicativeTest extends TestCase
         // Parser<callable(a, b):c> -> Parser<a> -> Parser<b> -> Parser<c>
         $parser = pure($multiply)->apply($number)->apply($number);
         $input = "35";
-        $this->assertParse(15, $parser, $input);
+        $this->assertParses($input, $parser, 15);
     }
 
     /** @test */
@@ -72,33 +72,33 @@ final class ApplicativeTest extends TestCase
         });
 
         $parser = pure($sort3)->apply(anything())->apply(anything())->apply(anything());
-        $this->assertParse("357", $parser, "735");
-        $this->assertParse("abc", $parser, "cba");
+        $this->assertParses("735", $parser, "357");
+        $this->assertParses("cba", $parser, "abc");
     }
 
     /** @test */
     public function keepFirst()
     {
         $parser = keepFirst(char('a'), char('b'));
-        $this->assertParse("a", $parser, "abc");
-        $this->assertRemain("c", $parser, "abc");
-        $this->assertNotParse($parser, "ac");
+        $this->assertParses("abc", $parser, "a");
+        $this->assertRemainder("abc", $parser, "c");
+        $this->assertParseFails("ac", $parser);
     }
 
     /** @test */
     public function keepFirst_with_ignore()
     {
         $parser = keepFirst(char('a'), skipSpace());
-        $this->assertParse("a", $parser, "a     ");
+        $this->assertParses("a     ", $parser, "a");
     }
 
     /** @test */
     public function keepSecond()
     {
         $parser = keepSecond(char('a'), char('b'));
-        $this->assertParse("b", $parser, "abc");
-        $this->assertRemain("c", $parser, "abc");
-        $this->assertNotParse($parser, "ac");
+        $this->assertParses("abc", $parser, "b");
+        $this->assertRemainder("abc", $parser, "c");
+        $this->assertParseFails("ac", $parser);
     }
 
     /** @test */
@@ -108,45 +108,45 @@ final class ApplicativeTest extends TestCase
 
         $input = "";
         $expected = [];
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
 
         $input = "foo";
         $expected = ["foo"];
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
 
         $input = "foo||";
         $expected = ["foo"];
-        $this->assertParse($expected, $parser, $input);
-        $this->assertRemain("||", $parser, $input);
+        $this->assertParses($input, $parser, $expected);
+        $this->assertRemainder($input, $parser, "||");
 
         $input = "foo||bar";
         $expected = ["foo", "bar"];
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
 
         $input = "foo||bar||";
         $expected = ["foo", "bar"];
-        $this->assertParse($expected, $parser, $input);
-        $this->assertRemain("||", $parser, $input);
+        $this->assertParses($input, $parser, $expected);
+        $this->assertRemainder($input, $parser, "||");
 
         $input = "foo||bar||baz";
         $expected = ["foo", "bar", "baz"];
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
 
         $input = "||";
-        $this->assertParse([], $parser, $input, "The sepBy parser always succeed, even if it doesn't find anything");
-        $this->assertRemain($input, $parser, $input);
+        $this->assertParses($input, $parser, [], "The sepBy parser always succeed, even if it doesn't find anything");
+        $this->assertRemainder($input, $parser, $input);
 
         $input = "||bar||baz";
-        $this->assertParse([], $parser, $input);
-        $this->assertRemain($input, $parser, $input);
+        $this->assertParses($input, $parser, []);
+        $this->assertRemainder($input, $parser, $input);
 
         $input = "||bar||";
-        $this->assertParse([], $parser, $input);
-        $this->assertRemain($input, $parser, $input);
+        $this->assertParses($input, $parser, []);
+        $this->assertRemainder($input, $parser, $input);
 
         $input = "||bar";
-        $this->assertParse([], $parser, $input);
-        $this->assertRemain($input, $parser, $input);
+        $this->assertParses($input, $parser, []);
+        $this->assertRemainder($input, $parser, $input);
     }
 
 
@@ -156,42 +156,42 @@ final class ApplicativeTest extends TestCase
         $parser = sepBy1(string('||'), atLeastOne(alphaChar()));
 
         $input = "";
-        $this->assertNotParse($parser, $input, "at least one A-Z or a-z, separated by '||'");
+        $this->assertParseFails($input, $parser, "at least one A-Z or a-z, separated by '||'");
 
         $input = "||";
-        $this->assertNotParse($parser, $input);
+        $this->assertParseFails($input, $parser);
 
         $input = "||bar||baz";
-        $this->assertNotParse($parser, $input);
+        $this->assertParseFails($input, $parser);
 
         $input = "||bar||";
-        $this->assertNotParse($parser, $input);
+        $this->assertParseFails($input, $parser);
 
         $input = "||bar";
-        $this->assertNotParse($parser, $input);
+        $this->assertParseFails($input, $parser);
 
 
         $input = "foo";
         $expected = ["foo"];
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
 
         $input = "foo||";
         $expected = ["foo"];
-        $this->assertParse($expected, $parser, $input);
-        $this->assertRemain("||", $parser, $input);
+        $this->assertParses($input, $parser, $expected);
+        $this->assertRemainder($input, $parser, "||");
 
         $input = "foo||bar";
         $expected = ["foo", "bar"];
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
 
         $input = "foo||bar||";
         $expected = ["foo", "bar"];
-        $this->assertParse($expected, $parser, $input);
-        $this->assertRemain("||", $parser, $input);
+        $this->assertParses($input, $parser, $expected);
+        $this->assertRemainder($input, $parser, "||");
 
         $input = "foo||bar||baz";
         $expected = ["foo", "bar", "baz"];
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
     }
 
 
@@ -199,12 +199,12 @@ final class ApplicativeTest extends TestCase
     public function repeat_vs_repeatList()
     {
         $parser = repeat(5, alphaChar());
-        $this->assertParse("hello", $parser, "hello");
+        $this->assertParses("hello", $parser, "hello");
         $parser = repeatList(5, alphaChar());
-        $this->assertParse(["h", "e", "l", "l", "o"], $parser, "hello");
+        $this->assertParses("hello", $parser, ["h", "e", "l", "l", "o"]);
 
         $parser = repeatList(3, repeat(3, alphaChar()));
-        $this->assertParse(["EUR", "USD", "GBP"], $parser, "EURUSDGBP");
+        $this->assertParses("EURUSDGBP", $parser, ["EUR", "USD", "GBP"]);
     }
 }
 

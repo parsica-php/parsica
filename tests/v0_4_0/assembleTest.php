@@ -27,8 +27,8 @@ final class assembleTest extends TestCase
             string('first'),
             string('second'),
         );
-        $this->assertParse("firstsecond", $parser, "firstsecond");
-        $this->assertRemain("", $parser, "firstsecond");
+        $this->assertParses("firstsecond", $parser, "firstsecond");
+        $this->assertRemainder("firstsecond", $parser, "");
     }
 
     /** @test */
@@ -38,8 +38,8 @@ final class assembleTest extends TestCase
             string('first')->thenIgnore(char('-')),
             string('second'),
         );
-        $this->assertParse("firstsecond", $parser, "first-second");
-        $this->assertRemain("", $parser, "first-second");
+        $this->assertParses("first-second", $parser, "firstsecond");
+        $this->assertRemainder("first-second", $parser, "");
     }
 
     /** @test */
@@ -54,7 +54,7 @@ final class assembleTest extends TestCase
 
         $input = "firstsecond";
         $expected = ["first", "second"];
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
     }
 
     /** @test */
@@ -74,7 +74,7 @@ final class assembleTest extends TestCase
         $input = "[first,second]";
         $expected = ["first", "second"];
 
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
     }
 
     /** @test */
@@ -84,9 +84,9 @@ final class assembleTest extends TestCase
             string('first'),
             string('second'),
         );
-        $this->assertNotParse($parser, "X", "'first'");
-        $this->assertNotParse($parser, "firsX", "'first'");
-        $this->assertNotParse($parser, "firstX", "'second'");
+        $this->assertParseFails("X", $parser, "'first'");
+        $this->assertParseFails("firsX", $parser, "'first'");
+        $this->assertParseFails("firstX", $parser, "'second'");
 
     }
 

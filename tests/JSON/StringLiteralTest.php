@@ -36,7 +36,7 @@ final class StringLiteralTest extends TestCase
     /** @test */
     public function empty()
     {
-        $this->assertParse("", JSON::stringLiteral(), '""');
+        $this->assertParses('""', JSON::stringLiteral(), "");
     }
 
     /**
@@ -45,16 +45,16 @@ final class StringLiteralTest extends TestCase
      */
     public function escapes(string $input, string $expected)
     {
-        $this->assertParse($expected, JSON::stringLiteral(), '"' . $input . '"');
-        $this->assertParse("a" . $expected, JSON::stringLiteral(), '"a' . $input . '"');
-        $this->assertParse($expected . "a", JSON::stringLiteral(), '"' . $input . 'a"');
+        $this->assertParses('"' . $input . '"', JSON::stringLiteral(), $expected);
+        $this->assertParses('"a' . $input . '"', JSON::stringLiteral(), "a" . $expected);
+        $this->assertParses('"' . $input . 'a"', JSON::stringLiteral(), $expected . "a");
     }
 
     /** @test */
     public function escape_hex()
     {
         $input = '"\\u0BB9\\u0BB2\\u0BCB\\u0020\\u0B89\\u0BB2\\u0B95\\u0BAE\\u0BCD"';
-        $this->assertParse("ஹலோ உலகம்", JSON::stringLiteral(), $input);
+        $this->assertParses($input, JSON::stringLiteral(), "ஹலோ உலகம்");
     }
 
 

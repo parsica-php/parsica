@@ -28,14 +28,14 @@ final class MonadTest extends TestCase
         // This parser checks if the second character is the same as the first, by taking the output of the first
         // parser and binding it to a function that produces the second parser from that output.
         $parser = anySingle()->bind(fn(string $c) => char($c));
-        $this->assertParse("a", $parser, "aa");
-        $this->assertParse("b", $parser, "bb");
-        $this->assertNotParse($parser, "ab");
+        $this->assertParses("aa", $parser, "a");
+        $this->assertParses("bb", $parser, "b");
+        $this->assertParseFails("ab", $parser);
 
         $parser = bind(anySingle(), fn(string $c) => char($c));
-        $this->assertParse("a", $parser, "aa");
-        $this->assertParse("b", $parser, "bb");
-        $this->assertNotParse($parser, "ab");
+        $this->assertParses("aa", $parser, "a");
+        $this->assertParses("bb", $parser, "b");
+        $this->assertParseFails("ab", $parser);
     }
 
     /** @test */
@@ -43,28 +43,28 @@ final class MonadTest extends TestCase
     {
         // If the first parser fails, bind() returns the first one.
         $parser = char('x')->bind(fn(string $c) => char($c));
-        $this->assertParse("x", $parser, "xx");
-        $this->assertNotParse($parser, "yx");
+        $this->assertParses("xx", $parser, "x");
+        $this->assertParseFails("yx", $parser);
     }
 
     /** @test */
     public function sequence()
     {
         $parser = char('a')->sequence(char('b'));
-        $this->assertParse("b", $parser, "ab");
-        $this->assertNotParse($parser, "aa");
+        $this->assertParses("ab", $parser, "b");
+        $this->assertParseFails("aa", $parser);
 
         $parser = sequence(char('a'), char('b'));
-        $this->assertParse("b", $parser, "ab");
-        $this->assertNotParse($parser, "aa");
+        $this->assertParses("ab", $parser, "b");
+        $this->assertParseFails("aa", $parser);
     }
 
     /** @test */
     public function sequence_error_should_show_the_label_of_the_failing_parser()
     {
         $parser = char('a')->sequence(char('b'));
-        $this->assertNotParse($parser, "X", "'a'");
-        $this->assertNotParse($parser, "aX", "'b'");
+        $this->assertParseFails("X", $parser, "'a'");
+        $this->assertParseFails("aX", $parser, "'b'");
 
     }
 
@@ -72,7 +72,7 @@ final class MonadTest extends TestCase
     public function pure()
     {
         $parser = pure("hi");
-        $this->assertParse("hi", $parser, "something else");
+        $this->assertParses("something else", $parser, "hi");
 
     }
 

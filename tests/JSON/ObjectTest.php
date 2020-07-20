@@ -24,7 +24,7 @@ final class ObjectTest extends TestCase
     {
         $input = '"foo":"bar"';
         $parser = JSON::member();
-        $this->assertParse(["foo", "bar"], $parser, $input);
+        $this->assertParses($input, $parser, ["foo", "bar"]);
     }
 
     /** @test */
@@ -32,7 +32,7 @@ final class ObjectTest extends TestCase
     {
         $input = '{"foo":"bar","bar":"foo"}';
         $parser = JSON::object();
-        $this->assertParse((object)["foo" => "bar", "bar" => "foo"], $parser, $input);
+        $this->assertParses($input, $parser, (object)["foo" => "bar", "bar" => "foo"]);
     }
 
 

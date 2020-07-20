@@ -34,55 +34,55 @@ final class primitivesTest extends TestCase
     public function satisfy()
     {
         $parser = satisfy(isEqual('x'));
-        $this->assertParse("x", $parser, "xyz");
-        $this->assertRemain("yz", $parser, "xyz");
-        $this->assertNotParse($parser, "yz", "satisfy(predicate)");
-        $this->assertNotParse($parser, "", "satisfy(predicate)");
+        $this->assertParses("xyz", $parser, "x");
+        $this->assertRemainder("xyz", $parser, "yz");
+        $this->assertParseFails("yz", $parser, "satisfy(predicate)");
+        $this->assertParseFails("", $parser, "satisfy(predicate)");
     }
 
     /** @test */
     public function anything_()
     {
-        $this->assertParse("x", anything(), "xyz");
-        $this->assertRemain("yz", anything(), "xyz");
-        $this->assertParse(":", anything(), ":-)");
-        $this->assertRemain("-)", anything(), ":-)");
-        $this->assertNotParse(anything(), "", "anything");
+        $this->assertParses("xyz", anything(), "x");
+        $this->assertRemainder("xyz", anything(), "yz");
+        $this->assertParses(":-)", anything(), ":");
+        $this->assertRemainder(":-)", anything(), "-)");
+        $this->assertParseFails("", anything(), "anything");
     }
 
     /** @test */
     public function nothing()
     {
-        $this->assertRemain("xyz", nothing(), "xyz");
-        $this->assertRemain(":-)", nothing(), ":-)");
+        $this->assertRemainder("xyz", nothing(), "xyz");
+        $this->assertRemainder(":-)", nothing(), ":-)");
     }
 
     /** @test */
     public function everything()
     {
-        $this->assertParse("xyz", everything(), "xyz");
-        $this->assertRemain("", everything(), "xyz");
-        $this->assertParse(":-)", everything(), ":-)");
-        $this->assertRemain("", everything(), ":-)");
-        $this->assertParse("", everything(), "");
+        $this->assertParses("xyz", everything(), "xyz");
+        $this->assertRemainder("xyz", everything(), "");
+        $this->assertParses(":-)", everything(), ":-)");
+        $this->assertRemainder(":-)", everything(), "");
+        $this->assertParses("", everything(), "");
     }
 
     /** @test */
     public function eof()
     {
-        $this->assertParse("", eof(), "");
-        $this->assertNotParse(eof(), "xyz", "<EOF>");
+        $this->assertParses("", eof(), "");
+        $this->assertParseFails("xyz", eof(), "<EOF>");
     }
 
     /** @test */
     public function takeWhile()
     {
         $parser = takeWhile(isEqual('a'));
-        $this->assertParse("", $parser, "xyz");
-        $this->assertParse("", $parser, "xaaa");
-        $this->assertParse("a", $parser, "axyz");
-        $this->assertParse("aaa", $parser, "aaaxyz");
-        $this->assertParse("aaa", $parser, "aaa");
+        $this->assertParses("xyz", $parser, "");
+        $this->assertParses("xaaa", $parser, "");
+        $this->assertParses("axyz", $parser, "a");
+        $this->assertParses("aaaxyz", $parser, "aaa");
+        $this->assertParses("aaa", $parser, "aaa");
     }
 
     /** @test */
@@ -90,12 +90,12 @@ final class primitivesTest extends TestCase
     {
         $parser = takeWhile(notPred(isEqual('a')));
 
-        $this->assertParse("xyz", $parser, "xyza");
-        $this->assertParse("xyz", $parser, "xyz");
-        $this->assertParse("x", $parser, "xaaa");
-        $this->assertParse("", $parser, "axyz");
-        $this->assertParse("", $parser, "aaaxyz");
-        $this->assertParse("", $parser, "aaa");
+        $this->assertParses("xyza", $parser, "xyz");
+        $this->assertParses("xyz", $parser, "xyz");
+        $this->assertParses("xaaa", $parser, "x");
+        $this->assertParses("axyz", $parser, "");
+        $this->assertParses("aaaxyz", $parser, "");
+        $this->assertParses("aaa", $parser, "");
     }
 
     /** @test */
@@ -113,23 +113,23 @@ final class primitivesTest extends TestCase
     {
         $parser = takeWhile1(isEqual('a'));
         $this->assertFailOnEOF($parser);
-        $this->assertNotParse($parser, "xyz", "takeWhile1(predicate)");
-        $this->assertNotParse($parser, "takeWhile1(predicate)");
-        $this->assertParse("a", $parser, "axyz");
-        $this->assertParse("aaa", $parser, "aaaxyz");
-        $this->assertParse("aaa", $parser, "aaa");
-        $this->assertNotParse($parser, "", "takeWhile1(predicate)");
+        $this->assertParseFails("xyz", $parser, "takeWhile1(predicate)");
+        $this->assertParseFails("takeWhile1(predicate)", $parser);
+        $this->assertParses("axyz", $parser, "a");
+        $this->assertParses("aaaxyz", $parser, "aaa");
+        $this->assertParses("aaa", $parser, "aaa");
+        $this->assertParseFails("", $parser, "takeWhile1(predicate)");
     }
 
     /** @test */
     public function success_and_failure()
     {
-        $this->assertParse(null, succeed(), "doesn't matter what we put in here");
-        $this->assertRemain("no input is consumed", succeed(), "no input is consumed");
-        $this->assertNotParse(fail("reason for failure"), "doesn't matter what we put in here");
+        $this->assertParses("doesn't matter what we put in here", succeed(), null);
+        $this->assertRemainder("no input is consumed", succeed(), "no input is consumed");
+        $this->assertParseFails("doesn't matter what we put in here", fail("reason for failure"));
 
         $or = fail("")->or(succeed());
-        $this->assertParse(null, $or, "failure or success is success");
+        $this->assertParses("failure or success is success", $or, null);
     }
 
     /** @test */
@@ -137,16 +137,16 @@ final class primitivesTest extends TestCase
     {
         $parser = skipWhile(isEqual('a'));
 
-        $this->assertParse(null, $parser, "xyz");
-        $this->assertRemain("xyz", $parser, "xyz");
-        $this->assertParse(null, $parser, "xaaa");
-        $this->assertRemain("xaaa", $parser, "xaaa");
-        $this->assertParse(null, $parser, "axyz");
-        $this->assertRemain("xyz", $parser, "axyz");
-        $this->assertParse(null, $parser, "aaaxyz");
-        $this->assertRemain("xyz", $parser, "aaaxyz");
-        $this->assertParse(null, $parser, "aaa");
-        $this->assertRemain("", $parser, "aaa");
+        $this->assertParses("xyz", $parser, null);
+        $this->assertRemainder("xyz", $parser, "xyz");
+        $this->assertParses("xaaa", $parser, null);
+        $this->assertRemainder("xaaa", $parser, "xaaa");
+        $this->assertParses("axyz", $parser, null);
+        $this->assertRemainder("axyz", $parser, "xyz");
+        $this->assertParses("aaaxyz", $parser, null);
+        $this->assertRemainder("aaaxyz", $parser, "xyz");
+        $this->assertParses("aaa", $parser, null);
+        $this->assertRemainder("aaa", $parser, "");
     }
 
     /** @test */
@@ -154,16 +154,16 @@ final class primitivesTest extends TestCase
     {
         $parser = skipWhile(notPred(isEqual('a')));
 
-        $this->assertParse(null, $parser, "xyz");
-        $this->assertRemain("", $parser, "xyz");
-        $this->assertParse(null, $parser, "xaaa");
-        $this->assertRemain("aaa", $parser, "xaaa");
-        $this->assertParse(null, $parser, "axyz");
-        $this->assertRemain("axyz", $parser, "axyz");
-        $this->assertParse(null, $parser, "aaaxyz");
-        $this->assertRemain("aaaxyz", $parser, "aaaxyz");
-        $this->assertParse(null, $parser, "aaa");
-        $this->assertRemain("aaa", $parser, "aaa");
+        $this->assertParses("xyz", $parser, null);
+        $this->assertRemainder("xyz", $parser, "");
+        $this->assertParses("xaaa", $parser, null);
+        $this->assertRemainder("xaaa", $parser, "aaa");
+        $this->assertParses("axyz", $parser, null);
+        $this->assertRemainder("axyz", $parser, "axyz");
+        $this->assertParses("aaaxyz", $parser, null);
+        $this->assertRemainder("aaaxyz", $parser, "aaaxyz");
+        $this->assertParses("aaa", $parser, null);
+        $this->assertRemainder("aaa", $parser, "aaa");
     }
 
 
@@ -173,13 +173,13 @@ final class primitivesTest extends TestCase
         $parser = skipWhile1(isEqual('a'));
 
         $this->assertFailOnEOF($parser);
-        $this->assertNotParse($parser, "xyz");
-        $this->assertParse(null, $parser, "axyz");
-        $this->assertRemain("xyz", $parser, "axyz");
-        $this->assertParse(null, $parser, "aaaxyz");
-        $this->assertRemain("xyz", $parser, "aaaxyz");
-        $this->assertParse(null, $parser, "aaa");
-        $this->assertRemain("", $parser, "aaa");
-        $this->assertNotParse($parser, "");
+        $this->assertParseFails("xyz", $parser);
+        $this->assertParses("axyz", $parser, null);
+        $this->assertRemainder("axyz", $parser, "xyz");
+        $this->assertParses("aaaxyz", $parser, null);
+        $this->assertRemainder("aaaxyz", $parser, "xyz");
+        $this->assertParses("aaa", $parser, null);
+        $this->assertRemainder("aaa", $parser, "");
+        $this->assertParseFails("", $parser);
     }
 }

@@ -28,6 +28,6 @@ final class unicodeTest extends TestCase
     public function parses_unicode()
     {
         $parser = char("🥰");
-        $this->assertParse("🥰", $parser, "🥰 hello");
+        $this->assertParses("🥰 hello", $parser, "🥰");
     }
 }

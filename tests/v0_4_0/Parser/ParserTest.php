@@ -23,16 +23,16 @@ final class ParserTest extends TestCase
     public function label()
     {
         $parser = string(":-)");
-        $this->assertNotParse($parser, "x", "':-)'");
+        $this->assertParseFails("x", $parser, "':-)'");
 
         $labeled = $parser->label("smiley");
-        $this->assertNotParse($labeled, "x", "smiley");
+        $this->assertParseFails("x", $labeled, "smiley");
     }
 
     /** @test */
     public function followedBy()
     {
         $parser = char('a')->followedBy(char('b'));
-        $this->assertParse("b", $parser, "abc");
+        $this->assertParses("abc", $parser, "b");
     }
 }

@@ -25,8 +25,8 @@ final class SignTest extends TestCase
         $parser = JSON::sign();
         $input = "123";
         $expected = "+";
-        $this->assertParse($expected, $parser, $input);
-        $this->assertRemain("123", $parser, $input);
+        $this->assertParses($input, $parser, $expected);
+        $this->assertRemainder($input, $parser, "123");
     }
 
     /** @test */
@@ -35,7 +35,7 @@ final class SignTest extends TestCase
         $parser = JSON::sign();
         $input = "+";
         $expected = "+";
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
     }
     /** @test */
     public function minus_sign()
@@ -43,7 +43,7 @@ final class SignTest extends TestCase
         $parser = JSON::sign();
         $input = "-123";
         $expected = "-";
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
     }
 
 

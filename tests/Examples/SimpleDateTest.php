@@ -38,10 +38,10 @@ final class SimpleDateTest extends TestCase
             $day
         );
 
-        $this->assertParse([1, 28], $p1, "January 28");
-        $this->assertParse([1, 28], $p1, "Jan 28");
-        $this->assertParse([2, 28], $p1, "February 28");
-        $this->assertParse([2, 28], $p1, "Feb 28");
+        $this->assertParses("January 28", $p1, [1, 28]);
+        $this->assertParses("Jan 28", $p1, [1, 28]);
+        $this->assertParses("February 28", $p1, [2, 28]);
+        $this->assertParses("Feb 28", $p1, [2, 28]);
     }
 
 }

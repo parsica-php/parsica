@@ -25,7 +25,7 @@ final class WhitespaceTest extends TestCase
         $expected = null;
         $input = "";
         $parser = JSON::ws();
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
     }
 
     /** @test */
@@ -34,7 +34,7 @@ final class WhitespaceTest extends TestCase
         $expected = null;
         $input = " ";
         $parser = JSON::ws();
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
     }
 
     /** @test */
@@ -43,7 +43,7 @@ final class WhitespaceTest extends TestCase
         $expected = null;
         $input = "\t";
         $parser = JSON::ws();
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
     }
 
     /** @test */
@@ -52,7 +52,7 @@ final class WhitespaceTest extends TestCase
         $expected = null;
         $input = "\n";
         $parser = JSON::ws();
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
     }
 
     /** @test */
@@ -61,7 +61,7 @@ final class WhitespaceTest extends TestCase
         $expected = null;
         $input = "\r";
         $parser = JSON::ws();
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
     }
 
     /** @test */
@@ -70,8 +70,8 @@ final class WhitespaceTest extends TestCase
         $expected = null;
         $input = "  \n \r \t a";
         $parser = JSON::ws();
-        $this->assertParse($expected, $parser, $input);
-        $this->assertRemain("a", $parser, $input);
+        $this->assertParses($input, $parser, $expected);
+        $this->assertRemainder($input, $parser, "a");
 
     }
 

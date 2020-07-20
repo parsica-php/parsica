@@ -25,9 +25,14 @@ trait ParserAssertions
     /**
      * @psalm-param mixed $expectedParsed
      *
+     * @param string $input
+     * @param Parser $parser
+     * @param        $expectedOutput
+     * @param string $message
+     *
      * @api
      */
-    protected function assertParse($expectedOutput, Parser $parser, string $input, string $message = ""): void
+    protected function assertParses(string $input, Parser $parser, $expectedOutput, string $message = ""): void
     {
         $input = new StringStream($input);
         $actualResult = $parser->run($input);
@@ -47,13 +52,15 @@ trait ParserAssertions
     }
 
     /**
+     * Behaves like assertSame for primitives, behaves like assertEquals for objects of the same type, and fails
+     * for everything else.
+     *
      * @psalm-param mixed  $expected
      * @psalm-param mixed  $actual
      * @psalm-param string $message
      *
      * @throws Exception
      * @api
-     * @see \Tests\Verraes\Parsica\v0_3_0\PHPUnit\ParserTestCaseTest::strict_equality
      *
      * @psalm-suppress MixedArgument
      * @psalm-suppress MixedAssignment
@@ -61,7 +68,6 @@ trait ParserAssertions
      */
     protected function assertStrictlyEquals($expected, $actual, string $message = ''): void
     {
-        // Just a POC implementation.
         if (is_null($expected) || is_scalar($expected)) {
             $this->assertSame($expected, $actual, $message);
         } elseif (is_object($expected)) {
@@ -85,9 +91,14 @@ trait ParserAssertions
     abstract public static function fail(string $message = ''): void;
 
     /**
+     * @param string $input
+     * @param Parser $parser
+     * @param string $expectedRemaining
+     * @param string $message
+     *
      * @api
      */
-    protected function assertRemain(string $expectedRemaining, Parser $parser, string $input, string $message = ""): void
+    protected function assertRemainder(string $input, Parser $parser, string $expectedRemaining, string $message = ""): void
     {
         $input = new StringStream($input);
         $actualResult = $parser->run($input);
@@ -107,9 +118,14 @@ trait ParserAssertions
     }
 
     /**
+     * @param string      $input
+     * @param Parser      $parser
+     * @param string|null $expectedFailure
+     * @param string      $message
+     *
      * @api
      */
-    protected function assertNotParse(Parser $parser, string $input, ?string $expectedFailure = null, string $message = ""): void
+    protected function assertParseFails(string $input, Parser $parser, ?string $expectedFailure = null, string $message = ""): void
     {
         $input = new StringStream($input);
         $actualResult = $parser->run($input);

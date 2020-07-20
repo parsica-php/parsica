@@ -40,30 +40,30 @@ final class charactersTest extends TestCase
     /** @test */
     public function char()
     {
-        $this->assertParse("a", char('a'), "abc");
-        $this->assertRemain("bc", char('a'), "abc");
-        $this->assertNotParse(char('a'), "bc", "'a'");
+        $this->assertParses("abc", char('a'), "a");
+        $this->assertRemainder("abc", char('a'), "bc");
+        $this->assertParseFails("bc", char('a'), "'a'");
     }
 
     /** @test */
     public function charI()
     {
-        $this->assertParse("a", charI('a'), "abc");
-        $this->assertParse("A", charI('a'), "ABC");
+        $this->assertParses("abc", charI('a'), "a");
+        $this->assertParses("ABC", charI('a'), "A");
     }
 
     /** @test */
     public function charI_label()
     {
-        $this->assertNotParse(charI('a'), "foo", "'a' or 'A'");
-        $this->assertNotParse(charI('%'), "foo", "'%'");
+        $this->assertParseFails("foo", charI('a'), "'a' or 'A'");
+        $this->assertParseFails("foo", charI('%'), "'%'");
     }
 
     /** @test */
     public function string()
     {
-        $this->assertParse("abc", string('abc'), "abcde");
-        $this->assertNotParse(string('abc'), "babc", "'abc'");
+        $this->assertParses("abcde", string('abc'), "abc");
+        $this->assertParseFails("babc", string('abc'), "'abc'");
     }
 
     /** @test */
@@ -72,8 +72,8 @@ final class charactersTest extends TestCase
         $parser = stringI('hello world');
         $input = "hElLO WoRlD!!1!";
         $expected = "hElLO WoRlD";
-        $this->assertParse($expected, $parser, $input, "stringI() should be case-preserving");
-        $this->assertRemain("!!1!", $parser, $input);
+        $this->assertParses($input, $parser, $expected, "stringI() should be case-preserving");
+        $this->assertRemainder($input, $parser, "!!1!");
     }
 
     public function characterParsers(): array
@@ -119,7 +119,7 @@ final class charactersTest extends TestCase
      */
     public function character_parsers(Parser $parser, string $example)
     {
-        $this->assertParse($example, $parser, $example);
+        $this->assertParses($example, $parser, $example);
     }
 }
 

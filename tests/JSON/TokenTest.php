@@ -25,7 +25,7 @@ final class TokenTest extends TestCase
     {
         $parser = JSON::token(char('a'));
         $input = "a  \n   \tb";
-        $this->assertRemain("b", $parser, $input);
+        $this->assertRemainder($input, $parser, "b");
     }
 
 }

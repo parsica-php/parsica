@@ -27,7 +27,7 @@ final class ArrayTest extends TestCase
     public function array(string $input, $expected)
     {
         $parser = JSON::array();
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
     }
 
     public function examples()

@@ -29,7 +29,7 @@ final class FunctorTest extends TestCase
 
         $expected = "B";
 
-        $this->assertParse($expected, $parser, "abca");
+        $this->assertParses("abca", $parser, $expected);
     }
 
     /** @test */
@@ -40,7 +40,7 @@ final class FunctorTest extends TestCase
 
         $expected = new MyType1("b");
 
-        $this->assertParse($expected, $parser, "abc");
+        $this->assertParses("abc", $parser, $expected);
     }
 
     /** @test */
@@ -50,7 +50,7 @@ final class FunctorTest extends TestCase
             char('€'),
             float()->map('floatval')->construct(SimpleEur::class)
         );
-        $this->assertParse(new SimpleEur(1.25), $parser, "€1.25");
+        $this->assertParses("€1.25", $parser, new SimpleEur(1.25));
 
     }
 }

@@ -21,9 +21,9 @@ final class numericTest extends TestCase
     /** @test */
     public function float()
     {
-        $this->assertParse("0", float(), "0");
-        $this->assertParse("0.1", float(), "0.1");
-        $this->assertParse("123.456", float(), "123.456");
-        $this->assertParse(123.456, float()->map('floatval'), "123.456");
+        $this->assertParses("0", float(), "0");
+        $this->assertParses("0.1", float(), "0.1");
+        $this->assertParses("123.456", float(), "123.456");
+        $this->assertParses("123.456", float()->map('floatval'), 123.456);
     }
 }

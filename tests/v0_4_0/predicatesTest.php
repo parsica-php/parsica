@@ -32,9 +32,9 @@ final class predicatesTest extends TestCase
         $this->assertTrue(notPred(isEqual('x'))('y'));
 
         $parser = satisfy(notPred(isEqual('x')));
-        $this->assertNotParse($parser, "xyz");
-        $this->assertParse("y", $parser, "yz");
-        $this->assertNotParse($parser, "", "satisfy(predicate)");
+        $this->assertParseFails("xyz", $parser);
+        $this->assertParses("yz", $parser, "y");
+        $this->assertParseFails("", $parser, "satisfy(predicate)");
     }
 
     /** @test */

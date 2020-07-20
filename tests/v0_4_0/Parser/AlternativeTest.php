@@ -32,9 +32,9 @@ final class AlternativeTest extends TestCase
     public function or()
     {
         $parser = char('a')->or(char('b'));
-        $this->assertParse("a", $parser, "a123");
-        $this->assertParse("b", $parser, "b123");
-        $this->assertNotParse($parser, "123");
+        $this->assertParses("a123", $parser, "a");
+        $this->assertParses("b123", $parser, "b");
+        $this->assertParseFails("123", $parser);
     }
 
     /** @test */
@@ -45,8 +45,8 @@ final class AlternativeTest extends TestCase
                 string("Jan")->thenIgnore(eof()),
                 string("January")->thenIgnore(eof()),
             );
-        $this->assertParse("Jan", $jan, "Jan");
-        $this->assertParse("January", $jan, "January");
+        $this->assertParses("Jan", $jan, "Jan");
+        $this->assertParses("January", $jan, "January");
 
         // Reverse order
         $jan =
@@ -54,8 +54,8 @@ final class AlternativeTest extends TestCase
                 string("January")->thenIgnore(eof()),
                 string("Jan")->thenIgnore(eof()),
             );
-        $this->assertParse("Jan", $jan, "Jan");
-        $this->assertParse("January", $jan, "January");
+        $this->assertParses("Jan", $jan, "Jan");
+        $this->assertParses("January", $jan, "January");
 
     }
 
@@ -66,37 +66,37 @@ final class AlternativeTest extends TestCase
         // "http", even if the strings starts with "https", leaving "s://..." as the remainder.
         $parser = string('http')->or(string('https'));
         $input = "https://verraes.net";
-        $this->assertRemain("s://verraes.net", $parser, $input);
+        $this->assertRemainder($input, $parser, "s://verraes.net");
 
         // The solution is to consider the order of or clauses:
         $parser = string('https')->or(string('http'));
         $input = "https://verraes.net";
-        $this->assertParse("https", $parser, $input);
-        $this->assertRemain("://verraes.net", $parser, $input);
+        $this->assertParses($input, $parser, "https");
+        $this->assertRemainder($input, $parser, "://verraes.net");
     }
 
     /** @test */
     public function optional()
     {
         $parser = char('a')->optional();
-        $this->assertParse(null, $parser, "", "EOF");
-        $this->assertParse("a", $parser, "abc");
-        $this->assertRemain("bc", $parser, "abc");
+        $this->assertParses("", $parser, null, "EOF");
+        $this->assertParses("abc", $parser, "a");
+        $this->assertRemainder("abc", $parser, "bc");
 
-        $this->assertParse(null, $parser, "bc");
-        $this->assertRemain("bc", $parser, "bc");
+        $this->assertParses("bc", $parser, null);
+        $this->assertRemainder("bc", $parser, "bc");
     }
 
     /** @test */
     public function many()
     {
         $parser = many(alphaChar());
-        $this->assertParse([], $parser, "123");
-        $this->assertParse(["H", "e", "l", "l", "o"], $parser, "Hello");
+        $this->assertParses("123", $parser, []);
+        $this->assertParses("Hello", $parser, ["H", "e", "l", "l", "o"]);
 
         $parser = many(alphaChar()->append(digitChar()));
-        $this->assertParse([], $parser, "1a2b3c");
-        $this->assertParse(["a1", "b2", "c3"], $parser, "a1b2c3");
+        $this->assertParses("1a2b3c", $parser, []);
+        $this->assertParses("a1b2c3", $parser, ["a1", "b2", "c3"]);
 
     }
 
@@ -111,18 +111,18 @@ final class AlternativeTest extends TestCase
         );
         $input = "abc,def,ghi";
         $expected = ["abc","def","ghi"];
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
     }
 
     /** @test */
     public function some_2()
     {
         $parser = some(string("foo"));
-        $this->assertNotParse($parser, "bla");
-        $this->assertParse(["foo"], $parser, "foo");
-        $this->assertParse(["foo"], $parser, "foobar");
-        $this->assertParse(["foo", "foo"], $parser, "foofoo");
-        $this->assertParse(["foo", "foo"], $parser, "foofoobar");
+        $this->assertParseFails("bla", $parser);
+        $this->assertParses("foo", $parser, ["foo"]);
+        $this->assertParses("foobar", $parser, ["foo"]);
+        $this->assertParses("foofoo", $parser, ["foo", "foo"]);
+        $this->assertParses("foofoobar", $parser, ["foo", "foo"]);
     }
 
 }

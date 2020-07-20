@@ -24,7 +24,7 @@ final class AppendTest extends TestCase
     public function append_strings()
     {
         $parser = char('a')->append(char('b'));
-        $this->assertParse("ab", $parser, "abc");
+        $this->assertParses("abc", $parser, "ab");
     }
 
     /** @test */
@@ -32,7 +32,7 @@ final class AppendTest extends TestCase
     {
         $a = char('a')->map(fn($x) => [$x]);
         $b = char('b')->map(fn($x) => [$x]);
-        $this->assertParse(['a', 'b'], $a->append($b), "abc");
+        $this->assertParses("abc", $a->append($b), ['a', 'b']);
     }
 
 

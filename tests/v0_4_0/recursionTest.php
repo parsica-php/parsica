@@ -39,13 +39,13 @@ final class recursionTest extends TestCase
         );
 
         $input = "[1,2]";
-        $this->assertParse([1, 2], $pair, $input);
+        $this->assertParses($input, $pair, [1, 2]);
 
         $input = "[1,[2,[3,4]]]";
-        $this->assertParse([1, [2, [3, 4]]], $pair, $input);
+        $this->assertParses($input, $pair, [1, [2, [3, 4]]]);
 
         $input = "[[[4,3],2],1]";
-        $this->assertParse([[[4, 3], 2], 1], $pair, $input);
+        $this->assertParses($input, $pair, [[[4, 3], 2], 1]);
     }
 
     /** @test */
@@ -74,7 +74,7 @@ final class recursionTest extends TestCase
         );
 
         $input = "[1,{2,[{3,4},{5,6}]}]";
-        $this->assertParse([1, [2, [[3, 4], [5, 6]]]], $anyPair, $input);
+        $this->assertParses($input, $anyPair, [1, [2, [[3, 4], [5, 6]]]]);
     }
 
     /** @test */
@@ -111,8 +111,8 @@ final class recursionTest extends TestCase
         $parser = recursive();
         $parser->recurse(char('a'));
         $labeledParser = $parser->label("test");
-        $this->assertParse("a", $labeledParser, "abc");
-        $this->assertNotParse($labeledParser, "bc", "test");
+        $this->assertParses("abc", $labeledParser, "a");
+        $this->assertParseFails("bc", $labeledParser, "test");
     }
 
     /** @test */
@@ -121,6 +121,6 @@ final class recursionTest extends TestCase
         $p1 = recursive();
         $p2 = char('a')->followedBy($p1->label("test"));
         $this->expectException(Exception::class);
-        $this->assertParse("a", $p2, "abc");
+        $this->assertParses("abc", $p2, "a");
     }
 }

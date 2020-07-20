@@ -51,7 +51,7 @@ final class GH26_Test extends TestCase
         $input = "/a/b/c/file1";
         $expected = ["a", "b", "c", "file1"];
 
-        $this->assertParse($expected, $parser, $input);
+        $this->assertParses($input, $parser, $expected);
     }
 
     /**
