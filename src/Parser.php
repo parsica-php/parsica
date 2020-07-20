@@ -128,7 +128,7 @@ final class Parser
      * Optionally parse something, but still succeed if the thing is not there.
      *
      *
-     * @psalm-return Parser<T>
+     * @psalm-return Parser<T|null>
      * @see optional()
      * @api
      */
@@ -259,8 +259,7 @@ final class Parser
     /**
      * Combine the parser with another parser of the same type, which will cause the results to be appended.
      *
-     * @psalm-param Parser<T> $other
-     *
+     * @psalm-param Parser<T|null> $other
      * @psalm-return Parser<T>
      * @api
      */
