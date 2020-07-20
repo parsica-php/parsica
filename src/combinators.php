@@ -173,10 +173,10 @@ function either(Parser $first, Parser $second): Parser
 /**
  * Combine the parser with another parser of the same type, which will cause the results to be appended.
  *
- * @psalm-param Parser<T> $left
- * @psalm-param Parser<T> $right
+ * @psalm-param Parser<T|null> $left
+ * @psalm-param Parser<T|null> $right
  *
- * @psalm-return Parser<T>
+ * @psalm-return Parser<T|null>
  * @api
  * @template T
  *
@@ -193,8 +193,8 @@ function append(Parser $left, Parser $right): Parser
 /**
  * Append all the passed parsers.
  *
- * @psalm-param list<Parser<T>> $parsers
- * @psalm-return Parser<T>
+ * @psalm-param list<Parser<T|null>> $parsers
+ * @psalm-return Parser<T|null>
  * @api
  * @template T
  * @psalm-suppress MixedReturnStatement
