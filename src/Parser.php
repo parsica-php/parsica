@@ -318,25 +318,24 @@ final class Parser
     }
 
     /**
-     * Sequential application.
+     * Sequential application. Given a parser which outputs a callable, return a new parser that applies the callable on the
+     * output of the second parser.
      *
-     * The first parser must be of type Parser<callable(T2):T3>.
+     * The first parser must be of type Parser<callable(T1):T2>. {@see pure()} can be used to wrap a callable in a Parser.
      *
-     * apply :: f (a -> b) -> f a -> f b
+     * Callables with more than 1 argument need to be curried: pure(curry(fn($x, $y)))->apply($parser2)->apply($parser3)
      *
      * @template T2
      * @template T3
-     *
      * @psalm-param Parser<T2> $parser
-     *
      * @psalm-return Parser<T3>
-     *
      * @psalm-suppress MixedArgumentTypeCoercion
+     *
      * @api
      */
     public function apply(Parser $parser): Parser
     {
-        return $this->bind(fn(callable $f) => map($parser, $f));
+        return apply($this, $parser);
     }
 
     /**

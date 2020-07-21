@@ -90,6 +90,27 @@ function bind(Parser $parser, callable $f): Parser
 }
 
 /**
+ * Sequential application. Given a parser which outputs a callable, return a new parser that applies the callable on the
+ * output of the second parser.
+ *
+ * The first parser must be of type Parser<callable(T1):T2>. {@see pure()} can be used to wrap a callable in a Parser.
+ *
+ * Callables with more than 1 argument need to be curried: pure(curry(fn($x, $y)))->apply($parser2)->apply($parser3)
+ *
+ * @template T1
+ * @template T2
+ * @psalm-param Parser<callable(T1):T2> $parser1
+ * @psalm-param Parser<T1> $parser2
+ * @psalm-return Parser<T2>
+ * @api
+ */
+function apply(Parser $parser1, Parser $parser2): Parser
+{
+    return $parser1->bind(fn(callable $f) => map($parser2, $f));
+}
+
+
+/**
  * Parse something, then follow by something else. Ignore the result of the first parser and return the result of the
  * second parser.
  *
@@ -123,7 +144,7 @@ function keepFirst(Parser $first, Parser $second): Parser
     return bind(
         $first,
         /** @psalm-suppress MissingClosureParamType */
-        fn($a) : Parser => sequence($second, pure($a))
+        fn($a): Parser => sequence($second, pure($a))
     );
 }
 
@@ -287,11 +308,11 @@ function atLeastOne(Parser $parser): Parser
         "at least one " . $parser->getLabel(),
         function (Stream $input) use ($parser) : ParseResult {
             $result = $parser->run($input);
-            if($result->isFail()) {
+            if ($result->isFail()) {
                 return $result;
             }
             $final = new Succeed(null, $result->remainder());
-            while($result->isSuccess()){
+            while ($result->isSuccess()) {
                 $final = $final->append($result);
                 $result = $parser->continueFrom($result);
             }
@@ -318,8 +339,7 @@ function zeroOrMore(Parser $parser): Parser
         function (Stream $input) use ($parser) : ParseResult {
             $result = new Succeed(null, $input);
             $final = $result;
-            while($result->isSuccess())
-            {
+            while ($result->isSuccess()) {
                 $final = $final->append($result);
                 $result = $parser->continueFrom($result);
             }
@@ -344,7 +364,7 @@ function repeat(int $n, Parser $parser): Parser
         array_fill(0, $n - 1, $parser),
         fn(Parser $l, Parser $r): Parser => append($l, $r),
         $parser
-    )->label("$n times ".$parser->getLabel());
+    )->label("$n times " . $parser->getLabel());
 }
 
 /**
@@ -361,14 +381,14 @@ function repeat(int $n, Parser $parser): Parser
  */
 function repeatList(int $n, Parser $parser): Parser
 {
-    $parser = map($parser, /** @psalm-param mixed $output */ fn($output) : array => [$output]);
+    $parser = map($parser, /** @psalm-param mixed $output */ fn($output): array => [$output]);
 
     $parsers = array_fill(0, $n - 1, $parser);
     return array_reduce(
         $parsers,
         fn(Parser $l, Parser $r): Parser => append($l, $r),
         $parser
-    )->label("$n times ".$parser->getLabel());
+    )->label("$n times " . $parser->getLabel());
 }
 
 /**
@@ -387,7 +407,7 @@ function many(Parser $parser): Parser
 function some(Parser $parser): Parser
 {
     $rec = recursive();
-    $pArray = map($parser, /** @psalm-param mixed $x */ fn($x) : array => [$x]);
+    $pArray = map($parser, /** @psalm-param mixed $x */ fn($x): array => [$x]);
     return $pArray->append(
         $rec->recurse(
             either(
@@ -453,7 +473,7 @@ function sepBy1(Parser $separator, Parser $parser): Parser
 {
     /** @psalm-suppress MissingClosureParamType */
     $prepend = fn($x) => fn(array $xs): array => array_merge([$x], $xs);
-    $label = $parser->getLabel().", separated by ". $separator->getLabel();
+    $label = $parser->getLabel() . ", separated by " . $separator->getLabel();
     return pure($prepend)->apply($parser)->apply(many($separator->sequence($parser)))->label($label);
 }
 
