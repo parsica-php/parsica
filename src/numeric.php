@@ -11,6 +11,29 @@
 namespace Verraes\Parsica;
 
 /**
+ * Parse an integer and return it as a string. Use ->map('intval')
+ * or similar to cast it to a numeric type.
+ *
+ * Example: "-123"
+ *
+ * @psalm-return Parser<string>
+ * @api
+ */
+function integer(): Parser
+{
+    $zeroNine = digitChar();
+    $oneNine = oneOfS("123456789");
+    $minus = char('-');
+    $digits = atLeastOne($zeroNine);
+    return choice(
+        $minus->append($oneNine)->append($digits),
+        $minus->append($zeroNine),
+        $oneNine->append($digits),
+        $zeroNine
+    );
+}
+
+/**
  * Parse a float and return it as a string. Use ->map('floatval')
  * or similar to cast it to a numeric type.
  *
@@ -24,15 +47,7 @@ namespace Verraes\Parsica;
 function float(): Parser
 {
     $zeroNine = digitChar();
-    $oneNine = oneOfS("123456789");
-    $minus = char('-');
     $digits = atLeastOne($zeroNine);
-    $integer = choice(
-        $minus->append($oneNine)->append($digits),
-        $minus->append($zeroNine),
-        $oneNine->append($digits),
-        $zeroNine
-    );
     $fraction = char('.')->append($digits);
     $sign = char('+')->or(char('-'))->or(pure('+'));
     $exponent = assemble(
@@ -41,7 +56,7 @@ function float(): Parser
         $digits
     );
     return assemble(
-        $integer,
+        integer(),
         optional($fraction),
         optional($exponent)
     )->label("float");

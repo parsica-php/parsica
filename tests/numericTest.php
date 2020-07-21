@@ -13,10 +13,50 @@ namespace Tests\Verraes\Parsica\v0_4_0;
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\float;
+use function Verraes\Parsica\integer;
+use function Verraes\Parsica\keepFirst;
+use function Verraes\Parsica\skipSpace1;
 
 final class numericTest extends TestCase
 {
     use ParserAssertions;
+
+    /** @test */
+    public function integer()
+    {
+        $parser = integer();
+        $this->assertParses("0", $parser, "0");
+        $this->assertParses("1", $parser, "1");
+        $this->assertParses("10", $parser, "10");
+        $this->assertParses("972115541", $parser, "972115541");
+        $this->assertParses("-0", $parser, "-0");
+        $this->assertParses("-1", $parser, "-1");
+        $this->assertParses("-10", $parser, "-10");
+        $this->assertParses("-972115541", $parser, "-972115541");
+    }
+
+    /** @test */
+    public function integer_maps_to_int()
+    {
+        $parser = integer()->map('intval');
+        $this->assertParses("0", $parser, 0);
+        $this->assertParses("1", $parser, 1);
+        $this->assertParses("10", $parser, 10);
+        $this->assertParses("972115541", $parser, 972115541);
+        $this->assertParses("-0", $parser, 0);
+        $this->assertParses("-1", $parser, -1);
+        $this->assertParses("-10", $parser, -10);
+        $this->assertParses("-972115541", $parser, -972115541);
+    }
+
+    /** @test */
+    public function integer_fails()
+    {
+        $parser = keepFirst(integer(), skipSpace1());
+        $this->assertParseFails("00", $parser);
+        $this->assertParseFails("01", $parser);
+        $this->assertParseFails("+1", $parser);
+    }
 
     /** @test */
     public function float()
@@ -32,6 +72,22 @@ final class numericTest extends TestCase
         $this->assertParses("-1.23456789E+123", $parser, "-1.23456789E+123");
         $this->assertParses("-1.23456789e-123", $parser, "-1.23456789E-123");
         $this->assertParses("-1E-123", $parser, "-1E-123");
+    }
+
+    /** @test */
+    public function float_fails()
+    {
+        $parser = keepFirst(float(), skipSpace1()); // avoid false positives
+        $this->assertParseFails("00", $parser);
+        $this->assertParseFails("0. 15", $parser);
+        $this->assertParseFails("00.10", $parser);
+        $this->assertParseFails(" + 00.10", $parser);
+        $this->assertParseFails(" + 123.456", $parser);
+        $this->assertParseFails("1.234.5678", $parser);
+        $this->assertParseFails(" - 1,2345678", $parser);
+        $this->assertParseFails("--1.234E123", $parser);
+        $this->assertParseFails(" - 1.234e", $parser);
+        $this->assertParseFails(" - 1E-123E - 456", $parser);
     }
 
     /** @test */
