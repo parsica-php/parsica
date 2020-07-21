@@ -19,18 +19,6 @@ final class NumberTest extends TestCase
     use ParserAssertions;
 
     /** @test */
-    public function integer()
-    {
-        $this->assertParses("0", JSON::integer(), 0);
-        $this->assertParses("1", JSON::integer(), 1);
-        $this->assertParses("-1", JSON::integer(), -1);
-        $this->assertParses("123", JSON::integer(), 123);
-        $this->assertParses("-123", JSON::integer(), -123);
-        $this->assertRemainder("01", JSON::integer(), "1", "The 0 should parse but not the 1");
-        $this->assertParseFails("-", JSON::integer());
-    }
-
-    /** @test */
     public function number()
     {
         $this->assertParses("0", JSON::number(), 0.0);
@@ -43,6 +31,7 @@ final class NumberTest extends TestCase
         $this->assertParses("-1.23456789E+123", JSON::number(), -1.23456789E+123);
         $this->assertParses("-1.23456789e-123", JSON::number(), -1.23456789E-123);
         $this->assertParses("-1E-123", JSON::number(), -1E-123);
+        $this->assertParses("-1E-123          ", JSON::number(), -1E-123);
     }
 
 

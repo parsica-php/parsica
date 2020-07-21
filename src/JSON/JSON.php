@@ -12,27 +12,20 @@ namespace Verraes\Parsica\JSON;
 
 use Verraes\Parsica\Parser;
 use function Verraes\Parsica\{anySingleBut,
-    assemble,
-    atLeastOne,
     between,
     char,
-    charI,
     choice,
     collect,
-    digitChar,
+    float,
     hexDigitChar,
     isCharCode,
     keepFirst,
-    oneOfS,
-    optional,
-    pure,
     recursive,
     repeat,
     satisfy,
     sepBy,
     string,
-    zeroOrMore
-};
+    zeroOrMore};
 
 /**
  * JSON parser and utility parsers
@@ -157,57 +150,9 @@ final class JSON
     }
 
     /** @psalm-suppress all */
-    public static function oneNine(): Parser
-    {
-        return oneOfS("123456789");
-    }
-
-    /** @psalm-suppress all */
-    public static function digits(): Parser
-    {
-        return atLeastOne(digitChar());
-    }
-
-    /** @psalm-suppress all */
-    public static function integer(): Parser
-    {
-        return self::_digits()->map('intval')->label("integer");
-    }
-
-    /** @psalm-suppress all */
-    public static function fraction(): Parser
-    {
-        return char('.')->append(JSON::digits());
-    }
-
-    /** @psalm-suppress all */
     public static function number(): Parser
     {
-        return JSON::token(
-            assemble(
-                self::_digits(),
-                optional(JSON::fraction()),
-                optional(JSON::exponent())
-            )
-        )->map('floatval')->label("number");
-    }
-
-    /**
-     * Optional minus sgn for numbers
-     * @psalm-suppress all
-     */
-    public static function minus(): Parser
-    {
-        return char('-');
-    }
-
-    /**
-     * Optional + or -
-     * @psalm-suppress all
-     */
-    public static function sign(): Parser
-    {
-        return char('+')->or(char('-'))->or(pure('+'));
+        return JSON::token(float())->map('floatval')->label("number");
     }
 
     /** @psalm-suppress all */
@@ -235,19 +180,6 @@ final class JSON
         )->label("string literal");
     }
 
-    /**
-     * The E in 1.23456E-78
-     * @psalm-suppress all
-     */
-    public static function exponent(): Parser
-    {
-        return assemble(
-            charI('e'),
-            JSON::sign(),
-            JSON::digits()
-        );
-    }
-
     /** @psalm-suppress all */
     public static function member(): Parser
     {
@@ -259,14 +191,4 @@ final class JSON
         );
     }
 
-    /** @psalm-suppress all */
-    private static function _digits(): Parser
-    {
-        return choice(
-            JSON::minus()->append(JSON::oneNine())->append(JSON::digits()),
-            JSON::minus()->append(digitChar()),
-            JSON::oneNine()->append(JSON::digits()),
-            digitChar()
-        );
-    }
 }

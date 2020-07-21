@@ -11,22 +11,38 @@
 namespace Verraes\Parsica;
 
 /**
- * Parse a float. Returns the float as a string. Use ->map('floatval')
+ * Parse a float and return it as a string. Use ->map('floatval')
  * or similar to cast it to a numeric type.
  *
- * @psalm-return Parser<string>
+ * Example: -123.456E-789
  *
- * @deprecated @TODO doesn't support signed numbers yet
+ * @psalm-return Parser<string>
+ * @psalm-suppress InvalidReturnType
+ * @psalm-suppress InvalidReturnStatement
  * @api
  */
 function float(): Parser
 {
-    return
-        atLeastOne(digitChar())
-            ->append(
-                optional(
-                    char('.')
-                        ->append(atLeastOne(digitChar()))
-                )
-            )->label('float');
+    $zeroNine = digitChar();
+    $oneNine = oneOfS("123456789");
+    $minus = char('-');
+    $digits = atLeastOne($zeroNine);
+    $integer = choice(
+        $minus->append($oneNine)->append($digits),
+        $minus->append($zeroNine),
+        $oneNine->append($digits),
+        $zeroNine
+    );
+    $fraction = char('.')->append($digits);
+    $sign = char('+')->or(char('-'))->or(pure('+'));
+    $exponent = assemble(
+        charI('e')->map('strtoupper'),
+        $sign,
+        $digits
+    );
+    return assemble(
+        $integer,
+        optional($fraction),
+        optional($exponent)
+    )->label("float");
 }
