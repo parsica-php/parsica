@@ -356,7 +356,7 @@ function zeroOrMore(Parser $parser): Parser
  * @psalm-param Parser<T> $parser
  *
  * @psalm-return Parser<T>
- *
+ * @api
  */
 function repeat(int $n, Parser $parser): Parser
 {
@@ -377,7 +377,7 @@ function repeat(int $n, Parser $parser): Parser
  * @psalm-param Parser<T> $parser
  *
  * @psalm-return Parser<T>
- *
+ * @api
  */
 function repeatList(int $n, Parser $parser): Parser
 {
@@ -393,6 +393,8 @@ function repeatList(int $n, Parser $parser): Parser
 
 /**
  * Parse something zero or more times, and output an array of the successful outputs.
+ *
+ * @api
  */
 function many(Parser $parser): Parser
 {
@@ -403,6 +405,8 @@ function many(Parser $parser): Parser
  * Parse something one or more times, and output an array of the successful outputs.
  *
  * @psalm-suppress MixedArgumentTypeCoercion
+ *
+ * @api
  */
 function some(Parser $parser): Parser
 {
@@ -430,6 +434,7 @@ function some(Parser $parser): Parser
  * @psalm-param Parser<TM> $middle
  *
  * @psalm-return Parser<TM>
+ * @api
  */
 function between(Parser $open, Parser $close, Parser $middle): Parser
 {
@@ -449,6 +454,8 @@ function between(Parser $open, Parser $close, Parser $middle): Parser
  * @psalm-param Parser<T>  $parser
  *
  * @psalm-return Parser<list<T>>
+ *
+ * @api
  */
 function sepBy(Parser $separator, Parser $parser): Parser
 {
@@ -468,6 +475,8 @@ function sepBy(Parser $separator, Parser $parser): Parser
  * @psalm-return Parser<list<T>>
  *
  * @psalm-suppress MissingClosureReturnType
+ *
+ * @api
  */
 function sepBy1(Parser $separator, Parser $parser): Parser
 {
@@ -491,6 +500,8 @@ function sepBy1(Parser $separator, Parser $parser): Parser
  * @psalm-return Parser<list<T>>
  *
  * @psalm-suppress MissingClosureReturnType
+ *
+ * @api
  */
 function sepBy2(Parser $separator, Parser $parser): Parser
 {
@@ -513,6 +524,8 @@ function sepBy2(Parser $separator, Parser $parser): Parser
  * @psalm-param Parser<T> $parser
  * @psalm-return Parser<T>
  * @see Parser::notFollowedBy()
+ *
+ * @api
  */
 function notFollowedBy(Parser $parser): Parser
 {
