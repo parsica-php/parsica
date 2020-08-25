@@ -478,6 +478,29 @@ function sepBy1(Parser $separator, Parser $parser): Parser
 }
 
 /**
+ * Parses 2 or more occurrences of $parser, separated by $separator. Returns a list of values.
+ *
+ * @deprecated Untested
+ *
+ * @template TS
+ * @template T
+ *
+ * @psalm-param Parser<TS> $separator
+ * @psalm-param Parser<T>  $parser
+ *
+ * @psalm-return Parser<list<T>>
+ *
+ * @psalm-suppress MissingClosureReturnType
+ */
+function sepBy2(Parser $separator, Parser $parser): Parser
+{
+    /** @psalm-suppress MissingClosureParamType */
+    $prepend = fn($x) => fn(array $xs): array => array_merge([$x], $xs);
+    $label = "at least two of (" . $parser->getLabel() . "), separated by " . $separator->getLabel();
+    return pure($prepend)->apply(keepFirst($parser, $separator))->apply(sepBy1($separator, $parser))->label($label);
+}
+
+/**
  * notFollowedBy only succeeds when $parser fails. It never consumes any input.
  *
  * Example:
