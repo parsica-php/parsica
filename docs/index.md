@@ -23,6 +23,7 @@ A lot of research & development went into this project. We think it can become t
 
 1. [What are parser combinators?](tutorial/introduction)
 1. [Building Blocks](tutorial/building_blocks)
+1. [Using Combinators](tutorial/combinators)
 1. [Running Parsers](tutorial/running_parsers)
 1. [Mapping to Objects](tutorial/mapping_to_objects)
 1. [Order Matters](tutorial/order_matters)
