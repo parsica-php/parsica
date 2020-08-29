@@ -118,7 +118,7 @@ function expression(): Parser
     $multiplyAppl = pure(curry(flip($multiplyFunction)))->apply($multiplyOperator->sequence($parensOrTerm));
     $divisionAppl = pure(curry(flip($divisionFunction)))->apply($divisionOperator->sequence($parensOrTerm));
 
-    return collect(
+    $multiAndDiv = collect(
         $parensOrTerm,
         some($multiplyAppl->or($divisionAppl))
     )->map(fn(array $o) =>
@@ -129,26 +129,6 @@ function expression(): Parser
         )
     );
 
-    /*
-    $divisionAppl = pure($divisionFunction)->apply(keepFirst($parensOrTerm, $divisionOperator))->apply($parensOrTerm);
-    $prec1 = recursive();
-    $prec1->recurse(
-        $multiplyAppl->or($divisionAppl)->or($prec1)
-
-
-    $multiplyOperator->followedBy(
-        pure(fn($l, $r) => new BinaryOp("*", $l, $r))->apply($parensOrTerm)->apply($parensOrTerm)
-    )
-
-    mOp >> pure(f) <*> $porT <*> $port
-
-
-
-    $multimulti=
-        sepBy2($multiplyOperator, $parensOrTerm)
-        ->map(fn($o) => $foldl1($o, $multiplyFunction));
-
-    */
 
 
 
