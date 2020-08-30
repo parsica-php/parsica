@@ -552,3 +552,24 @@ function map(Parser $parser, callable $transform): Parser
 {
     return Parser::make($parser->getLabel(), fn(Stream $input): ParseResult => $parser->run($input)->map($transform));
 }
+
+/**
+ * If $parser succeeds (either consuming input or not), lookAhead behaves like $parser succeeded without consuming
+ * anything. If $parser fails, lookAhead has no effect, i.e. it will fail to consume input if $parser fails consuming
+ * input.
+ *
+ * @template T
+ * @psalm-param Parser<T> $parser
+ * @psalm-return Parser<T>
+ *
+ * @api
+ */
+function lookAhead(Parser $parser): Parser
+{
+    return Parser::make(
+        $parser->getLabel(),
+        fn(Stream $input): ParseResult => $parser->run($input)->isSuccess()
+            ? new Succeed("", $input)
+            : new Fail("lookAhead", $input)
+    );
+}
