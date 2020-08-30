@@ -106,7 +106,7 @@ function bind(Parser $parser, callable $f): Parser
  */
 function apply(Parser $parser1, Parser $parser2): Parser
 {
-    return $parser1->bind(fn(callable $f) => map($parser2, $f));
+    return bind($parser1, fn(callable $f) => map($parser2, $f));
 }
 
 
