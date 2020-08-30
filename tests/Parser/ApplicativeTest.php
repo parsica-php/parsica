@@ -25,6 +25,7 @@ use function Verraes\Parsica\{alphaChar,
     repeatList,
     sepBy,
     sepBy1,
+    sepBy2,
     skipSpace,
     string};
 
@@ -179,6 +180,47 @@ final class ApplicativeTest extends TestCase
         $expected = ["foo"];
         $this->assertParses($input, $parser, $expected);
         $this->assertRemainder($input, $parser, "||");
+
+        $input = "foo||bar";
+        $expected = ["foo", "bar"];
+        $this->assertParses($input, $parser, $expected);
+
+        $input = "foo||bar||";
+        $expected = ["foo", "bar"];
+        $this->assertParses($input, $parser, $expected);
+        $this->assertRemainder($input, $parser, "||");
+
+        $input = "foo||bar||baz";
+        $expected = ["foo", "bar", "baz"];
+        $this->assertParses($input, $parser, $expected);
+    }
+
+    /** @test */
+    public function sepBy2()
+    {
+        $parser = sepBy2(string('||'), atLeastOne(alphaChar()));
+
+        $input = "";
+        $this->assertParseFails($input, $parser, "at least two of (at least one A-Z or a-z), separated by '||'");
+
+        $input = "||";
+        $this->assertParseFails($input, $parser);
+
+        $input = "||bar||baz";
+        $this->assertParseFails($input, $parser);
+
+        $input = "||bar||";
+        $this->assertParseFails($input, $parser);
+
+        $input = "||bar";
+        $this->assertParseFails($input, $parser);
+
+
+        $input = "foo";
+        $this->assertParseFails($input, $parser);
+
+        $input = "foo||";
+        $this->assertParseFails($input, $parser);
 
         $input = "foo||bar";
         $expected = ["foo", "bar"];

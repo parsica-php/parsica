@@ -489,8 +489,6 @@ function sepBy1(Parser $separator, Parser $parser): Parser
 /**
  * Parses 2 or more occurrences of $parser, separated by $separator. Returns a list of values.
  *
- * @deprecated Untested
- *
  * @template TS
  * @template T
  *
