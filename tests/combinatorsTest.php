@@ -29,6 +29,7 @@ use function Verraes\Parsica\{alphaChar,
     float,
     identity,
     keepFirst,
+    lookAhead,
     many,
     noneOf,
     noneOfS,
@@ -322,40 +323,15 @@ final class combinatorsTest extends TestCase
     /** @test */
     public function lookAhead()
     {
-        $this->markTestSkipped("This will become relevant when we change alternative() behaviour");
-
-        // TEST:
-        /*
         $parser = lookAhead(stringI("hello"));
 
         // On success, lookAhead succeeds without consuming input
-        $this->assertParse("", $parser, "Hello, world!");
-        $this->assertRemain("Hello, world!", $parser, "Hello, world!");
+        $this->assertParses("Hello, world!", $parser, "");
+        $this->assertRemainder("Hello, world!", $parser, "Hello, world!");
 
         // On fail, lookAhead fails without consuming input
-        $this->assertNotParse($parser, "Hi, world!");
-        */
+        $this->assertParseFails("Hi, world!", $parser);
 
-        //Impl
-        /**
-         * If $parser succeeds (either consuming input or not), lookAhead behaves like $parser succeeded without consuming
-         * anything. If $parser fails, lookAhead has no effect, i.e. it will fail to consume input if $parser fails consuming
-         * input.
-         *
-         * @template T
-         * @param Parser<T> $parser
-         * @return Parser<T>
-         */
-        /*
-        function lookAhead(Parser $parser): Parser
-        {
-            return Parser::make(
-                fn(string $input): ParseResult => $parser->run($input)->isSuccess()
-                    ? new Succeed("", $input)
-                    : new Fail("lookAhead", $input)
-            );
-        }
-        */
     }
 
 
