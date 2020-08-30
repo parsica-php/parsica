@@ -106,7 +106,15 @@ function bind(Parser $parser, callable $f): Parser
  */
 function apply(Parser $parser1, Parser $parser2): Parser
 {
-    return bind($parser1, fn(callable $f) => map($parser2, $f));
+    /** @psalm-var Parser<T2> $parser */
+    $parser = Parser::make($parser1->getLabel(), function (Stream $input) use ($parser2, $parser1) : ParseResult {
+        $r1 = $parser1->run($input);
+        if ($r1->isFail()) {
+            return $r1;
+        }
+        return $r1->continueWith($parser2)->map($r1->output());
+    });
+    return $parser;
 }
 
 
