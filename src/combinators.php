@@ -106,7 +106,18 @@ function bind(Parser $parser, callable $f): Parser
  */
 function apply(Parser $parser1, Parser $parser2): Parser
 {
-    return $parser1->bind(fn(callable $f) => map($parser2, $f));
+    /** @psalm-var Parser<T2> $parser */
+    $parser = Parser::make($parser1->getLabel(), function (Stream $input) use ($parser2, $parser1) : ParseResult {
+        $r1 = $parser1->run($input);
+        if ($r1->isFail()) {
+            return $r1;
+        }
+        $f = $r1->output();
+        Assert::callable($f, "apply() can only be used when the output of the first parser is a callable with 1 argument. Use currying for functions with more than 1 argument.");
+        // @todo assert that the arity of $f == 1
+        return $r1->continueWith($parser2)->map($f);
+    });
+    return $parser;
 }
 
 

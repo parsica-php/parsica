@@ -10,6 +10,7 @@
 
 namespace Tests\Verraes\Parsica\v0_4_0\Parser;
 
+use \InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Cypress\Curry\curry;
@@ -75,6 +76,14 @@ final class ApplicativeTest extends TestCase
         $parser = pure($sort3)->apply(anything())->apply(anything())->apply(anything());
         $this->assertParses("735", $parser, "357");
         $this->assertParses("cba", $parser, "abc");
+    }
+
+    /** @test */
+    public function sequential_application_throws_when_not_a_callable()
+    {
+        $parser = pure("ceci n'est pas un callable")->apply(anything());
+        $this->expectException(InvalidArgumentException::class);
+        $parser->tryString("foo");
     }
 
     /** @test */

@@ -74,6 +74,17 @@ final class Assert
      * @throws InvalidArgumentException
      * @internal
      */
+    public static function callable($f, string $message) : void
+    {
+        if (!is_callable($f)) {
+            throw new InvalidArgumentException($message);
+        }
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     * @internal
+     */
     public static function atLeastOneArg(array $args, string $source): void
     {
         if (0 == count($args)) {
