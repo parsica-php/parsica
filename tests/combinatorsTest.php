@@ -38,6 +38,10 @@ use function Verraes\Parsica\{alphaChar,
     oneOfS,
     optional,
     punctuationChar,
+    repeat,
+    repeatList,
+    sepBy,
+    sepBy1,
     sequence,
     skipSpace,
     string,
@@ -335,4 +339,109 @@ final class combinatorsTest extends TestCase
     }
 
 
+    /** @test */
+    public function sepBy()
+    {
+        $parser = sepBy(string('||'), atLeastOne(alphaChar()));
+
+        $input = "";
+        $expected = [];
+        $this->assertParses($input, $parser, $expected);
+
+        $input = "foo";
+        $expected = ["foo"];
+        $this->assertParses($input, $parser, $expected);
+
+        $input = "foo||";
+        $expected = ["foo"];
+        $this->assertParses($input, $parser, $expected);
+        $this->assertRemainder($input, $parser, "||");
+
+        $input = "foo||bar";
+        $expected = ["foo", "bar"];
+        $this->assertParses($input, $parser, $expected);
+
+        $input = "foo||bar||";
+        $expected = ["foo", "bar"];
+        $this->assertParses($input, $parser, $expected);
+        $this->assertRemainder($input, $parser, "||");
+
+        $input = "foo||bar||baz";
+        $expected = ["foo", "bar", "baz"];
+        $this->assertParses($input, $parser, $expected);
+
+        $input = "||";
+        $this->assertParses($input, $parser, [], "The sepBy parser always succeed, even if it doesn't find anything");
+        $this->assertRemainder($input, $parser, $input);
+
+        $input = "||bar||baz";
+        $this->assertParses($input, $parser, []);
+        $this->assertRemainder($input, $parser, $input);
+
+        $input = "||bar||";
+        $this->assertParses($input, $parser, []);
+        $this->assertRemainder($input, $parser, $input);
+
+        $input = "||bar";
+        $this->assertParses($input, $parser, []);
+        $this->assertRemainder($input, $parser, $input);
+    }
+
+
+    /** @test */
+    public function sepBy1()
+    {
+        $parser = sepBy1(string('||'), atLeastOne(alphaChar()));
+
+        $input = "";
+        $this->assertParseFails($input, $parser, "at least one A-Z or a-z, separated by '||'");
+
+        $input = "||";
+        $this->assertParseFails($input, $parser);
+
+        $input = "||bar||baz";
+        $this->assertParseFails($input, $parser);
+
+        $input = "||bar||";
+        $this->assertParseFails($input, $parser);
+
+        $input = "||bar";
+        $this->assertParseFails($input, $parser);
+
+
+        $input = "foo";
+        $expected = ["foo"];
+        $this->assertParses($input, $parser, $expected);
+
+        $input = "foo||";
+        $expected = ["foo"];
+        $this->assertParses($input, $parser, $expected);
+        $this->assertRemainder($input, $parser, "||");
+
+        $input = "foo||bar";
+        $expected = ["foo", "bar"];
+        $this->assertParses($input, $parser, $expected);
+
+        $input = "foo||bar||";
+        $expected = ["foo", "bar"];
+        $this->assertParses($input, $parser, $expected);
+        $this->assertRemainder($input, $parser, "||");
+
+        $input = "foo||bar||baz";
+        $expected = ["foo", "bar", "baz"];
+        $this->assertParses($input, $parser, $expected);
+    }
+
+
+    /** @test */
+    public function repeat_vs_repeatList()
+    {
+        $parser = repeat(5, alphaChar());
+        $this->assertParses("hello", $parser, "hello");
+        $parser = repeatList(5, alphaChar());
+        $this->assertParses("hello", $parser, ["h", "e", "l", "l", "o"]);
+
+        $parser = repeatList(3, repeat(3, alphaChar()));
+        $this->assertParses("EURUSDGBP", $parser, ["EUR", "USD", "GBP"]);
+    }
 }
