@@ -11,7 +11,6 @@
 namespace Tests\Verraes\Parsica;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Parser;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 
 use function Verraes\Parsica\eof;

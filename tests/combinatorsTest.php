@@ -334,6 +334,7 @@ final class combinatorsTest extends TestCase
 
         // On fail, lookAhead fails without consuming input
         $this->assertParseFails("Hi, world!", $parser);
+    }
 
     /** @test */
     public function sepBy()
