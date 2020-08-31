@@ -112,7 +112,10 @@ function apply(Parser $parser1, Parser $parser2): Parser
         if ($r1->isFail()) {
             return $r1;
         }
-        return $r1->continueWith($parser2)->map($r1->output());
+        $f = $r1->output();
+        Assert::callable($f, "apply() can only be used when the output of the first parser is a callable with 1 argument. Use currying for functions with more than 1 argument.");
+        // @todo assert that the arity of $f == 1
+        return $r1->continueWith($parser2)->map($f);
     });
     return $parser;
 }
