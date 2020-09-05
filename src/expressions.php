@@ -200,13 +200,7 @@ function expression(): Parser
     );
 
 
-    $expr->recurse(
-        choice(
-            $multiplus,
-            $multiAndDiv,
-            $primary,
-        )
-    );
+    $expr->recurse($multiplus);
 
 
     return $expr;
