@@ -51,6 +51,17 @@ final class ExpressionsTest extends TestCase
             ["4 + 5 * 2 * 3", "(4 + ((5 * 2) * 3))"],
             ["1 * 2 * 3 / 4 * 5", "((((1 * 2) * 3) / 4) * 5)"],
             ["1 / 2 / 3 * 4", "(((1 / 2) / 3) * 4)"],
+
+
+            // assuming non-assoc binary
+            // "a + b + c" -> fail
+
+
+            // assuming non-assoc binary
+            // "a + b - c" -> fail
+
+            // "a * -b"
+
 //            ["1 * 2 * 3 / 4 * 5", "(((1 * 2) * 3) / (4 * 5)"],
         ];
 

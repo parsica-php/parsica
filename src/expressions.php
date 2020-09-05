@@ -1,4 +1,12 @@
 <?php declare(strict_types=1);
+/**
+ * This file is part of the Parsica library.
+ *
+ * Copyright (c) 2020 Mathias Verraes <mathias@verraes.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 use Verraes\Parsica\Parser;
 use function Cypress\Curry\curry;
@@ -8,20 +16,54 @@ use function Verraes\Parsica\choice;
 use function Verraes\Parsica\collect;
 use function Verraes\Parsica\float;
 use function Verraes\Parsica\keepFirst;
+use function Verraes\Parsica\map;
 use function Verraes\Parsica\pure;
 use function Verraes\Parsica\recursive;
 use function Verraes\Parsica\sepBy2;
 use function Verraes\Parsica\skipHSpace;
 use function Verraes\Parsica\some;
 
-/**
- * This file is part of the Parsica library.
- *
- * Copyright (c) 2020 Mathias Verraes <mathias@verraes.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+
+
+/*
+ * i've read the haskell implementation, and I think i got an idea of how it works
+cλementd on mastodon · 4:03 PM
+the main fold is there:
+https://github.com/mrkkrp/megaparsec/blob/5.2.0/Text/Megaparsec/Expr.hs#L87
+
+it builds the grammar, layer after layer, from the bottom up
+then, _at each  precedence level_, it groups the operators based on their arity and associativity: https://github.com/mrkkrp/megaparsec/blob/5.2.0/Text/Megaparsec/Expr.hs#L95
+it starts by trying to parse unary operators
+https://github.com/mrkkrp/megaparsec/blob/5.2.0/Text/Megaparsec/Expr.hs#L96
+cλementd on mastodon · 4:07 PM
+then, it handles right-associative operators, then left-associative operators, then non-associative parsers, and as a last resort succeeds with only the parsed term (the `return x`): https://github.com/mrkkrp/megaparsec/blob/5.2.0/Text/Megaparsec/Expr.hs#L94
+cλementd on mastodon · 4:09 PM
+the left-associative parser is recursive:
+https://github.com/mrkkrp/megaparsec/blob/5.2.0/Text/Megaparsec/Expr.hs#L126
+it parses the operator, a term, and then optionally recurses
+The non-associative parser does not recurse
+https://github.com/mrkkrp/megaparsec/blob/5.2.0/Text/Megaparsec/Expr.hs#L120
+the right-associative parser also recurses, but in a… right associative way
+https://github.com/mrkkrp/megaparsec/blob/5.2.0/Text/Megaparsec/Expr.hs#L137
+cλementd on mastodon · 4:11 PM
+the important part is that each level of parser uses the parser from the level beneath (the `p` parameter in the `pInfix{N,L,R}` functions, and the `term` parameter in `pTerm`.
+as i suspected, the pre/post fix parser is handled separately at each level, before parsing binary ops
+cλementd on mastodon · 4:14 PM
+an important point regarding foldl / foldr
+
+The `foldr splitOp`could very well be written with foldl because slpitOp is associative. foldr is generally preferred to foldl for associative functions. The `foldl` used to layer the parsers is however important because the parser-building function is not associative
+cλementd on mastodon · 4:35 PM
+nvm, splitOp is not associative, but that's not a huge issue in PHP:with linked lists in haskell we want to prepend as much as possible, but with php's arrays, it's not really a problem
+cλementd on mastodon · 4:42 PM
  */
+
+
+
+
+
+
+
+
 
 
 /**
@@ -99,8 +141,8 @@ function expression(): Parser
     $expr = recursive();
 
 
-
-    $parensOrTerm = parens($expr)->or(term());
+    // https://en.wikipedia.org/wiki/Operator-precedence_parser
+    $primary = parens($expr)->or(term());
 
     $multiplyOperator = token(char('*'));
     $multiplyFunction = fn($l, $r) : BinaryOp => new BinaryOp("*", $l, $r);
@@ -114,37 +156,52 @@ function expression(): Parser
 
 
 
-    /** @psalm-var Parser<callable>  $multiplyAppl */
-    $multiplyAppl = pure(curry(flip($multiplyFunction)))->apply($multiplyOperator->sequence($parensOrTerm));
-    $divisionAppl = pure(curry(flip($divisionFunction)))->apply($divisionOperator->sequence($parensOrTerm));
+    /** @psalm-pyvar Parser<callable>  $multiplyAppl */
+    $multiplyAppl = pure(curry(flip($multiplyFunction)))->apply($multiplyOperator->followedBy($primary));
+    // @todo pure f <*> x <*> y  === f <$> x <*> y
+    $divisionAppl = pure(curry(flip($divisionFunction)))->apply($divisionOperator->followedBy($primary));
 
-    $multiAndDiv = collect(
-        $parensOrTerm,
-        some($multiplyAppl->or($divisionAppl))
-    )->map(fn(array $o) =>
+    $multiAndDiv = choice(
+        collect(
+            $primary,
+            some(choice($multiplyAppl, $divisionAppl))
+        )->map(fn(array $o) =>
+            array_reduce(
+                $o[1],
+                fn($acc, callable $appl) => $appl($acc),
+                $o[0]
+            )
+        ),
+        $primary,
+    );
+
+
+    $plusOperator = token(char('+'));
+    $plusFunction = fn($l, $r): BinaryOp => new BinaryOp("+", $l, $r);
+
+
+    $plusAppl = pure(curry(flip($plusFunction)))->apply($plusOperator->followedBy($multiAndDiv));
+
+    $multiplus =     choice(
+        collect(
+            $multiAndDiv,
+            some(choice($plusAppl))
+        )->map(fn(array $o) =>
         array_reduce(
             $o[1],
             fn($acc, callable $appl) => $appl($acc),
             $o[0]
         )
+        ),
+        $multiAndDiv,
     );
-
-
-
-
-
-
-    $multiplus = sepBy2(
-        token(char('+')),
-        $multiAndDiv->or($parensOrTerm)
-    )->map(fn(array $o) => foldl1($o, fn($l, $r) : BinaryOp => new BinaryOp("+", $l, $r)));
 
 
     $expr->recurse(
         choice(
             $multiplus,
             $multiAndDiv,
-            $parensOrTerm,
+            $primary,
         )
     );
 
