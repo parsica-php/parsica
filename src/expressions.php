@@ -11,13 +11,17 @@
 
 use Verraes\Parsica\Parser;
 use function Cypress\Curry\curry;
+use function Verraes\Parsica\atLeastOne;
 use function Verraes\Parsica\between;
 use function Verraes\Parsica\char;
 use function Verraes\Parsica\choice;
 use function Verraes\Parsica\collect;
+use function Verraes\Parsica\digitChar;
 use function Verraes\Parsica\float;
+use function Verraes\Parsica\integer;
 use function Verraes\Parsica\keepFirst;
 use function Verraes\Parsica\many;
+use function Verraes\Parsica\map;
 use function Verraes\Parsica\pure;
 use function Verraes\Parsica\recursive;
 use function Verraes\Parsica\skipHSpace;
@@ -90,7 +94,7 @@ function parens(Parser $parser): Parser
  */
 function term(): Parser
 {
-    return token(float());
+    return token(atLeastOne(digitChar()));
 }
 
 /**
@@ -136,25 +140,29 @@ function expression(): Parser
     // https://en.wikipedia.org/wiki/Operator-precedence_parser
     $primary = parens($expr)->or(term());
 
+    $negateOperator = char('-'); // we don't use token because we don't allow spaces between - and the term
+    $negateFunction = fn($v): UnaryOp => new UnaryOp("-", $v);
+    $negateAppl = pure($negateFunction)->apply($negateOperator->followedBy($primary))->label("negate expr");
+    $precedence1 = $negateAppl->or($primary);
+
     $multiplyOperator = token(char('*'));
     $multiplyFunction = fn($l, $r): BinaryOp => new BinaryOp("*", $l, $r);
     $multiplyArity = "binary";
-    $multiplyAssociativty = "left";
+    $multiplyAssociativity = "left";
 
     $divisionOperator = token(char('/'));
     $divisionFunction = fn($l, $r): BinaryOp => new BinaryOp("/", $l, $r);
     $divisionArity = "binary";
-    $divisionAssociativty = "left";
+    $divisionAssociativity = "left";
 
 
     /** @psalm-pyvar Parser<callable>  $multiplyAppl */
-    $multiplyAppl = pure(curry(flip($multiplyFunction)))->apply($multiplyOperator->followedBy($primary));
-    // @todo pure f <*> x <*> y  === f <$> x <*> y
-    $divisionAppl = pure(curry(flip($divisionFunction)))->apply($divisionOperator->followedBy($primary));
+    $multiplyAppl = pure(curry(flip($multiplyFunction)))->apply($multiplyOperator->followedBy($precedence1));
+    $divisionAppl = pure(curry(flip($divisionFunction)))->apply($divisionOperator->followedBy($precedence1));
 
-    $multiAndDiv =
+    $precedence2 =
         collect(
-            $primary,
+            $precedence1,
             many(choice($multiplyAppl, $divisionAppl))
         )->map(fn(array $o) => array_reduce(
             $o[1],
@@ -170,12 +178,12 @@ function expression(): Parser
     $minusFunction = fn($l, $r): BinaryOp => new BinaryOp("-", $l, $r);
 
 
-    $plusAppl = pure(curry(flip($plusFunction)))->apply($plusOperator->followedBy($multiAndDiv));
-    $minusAppl = pure(curry(flip($minusFunction)))->apply($minusOperator->followedBy($multiAndDiv));
+    $plusAppl = pure(curry(flip($plusFunction)))->apply($plusOperator->followedBy($precedence2));
+    $minusAppl = pure(curry(flip($minusFunction)))->apply($minusOperator->followedBy($precedence2));
 
-    $multiplus =
+    $precendence3 =
         collect(
-            $multiAndDiv,
+            $precedence2,
             many(choice($plusAppl, $minusAppl))
         )->map(fn(array $o) => array_reduce(
             $o[1],
@@ -186,7 +194,7 @@ function expression(): Parser
         );
 
 
-    $expr->recurse($multiplus);
+    $expr->recurse($precendence3);
 
 
     return $expr;
@@ -212,19 +220,43 @@ class Term
 
 }
 
+class UnaryOp
+{
+    private string $operator;
+    /** @psalm-var Term|BinaryOp|UnaryOp */
+    private $value;
+
+    /**
+     * @psalm-param Term|BinaryOp|UnaryOp $value
+     */
+    function __construct(string $operator, $value)
+    {
+        $this->operator = $operator;
+        $this->value = $value;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function __toString(): string
+    {
+        return "(" . $this->operator . (string)$this->value . ")";
+    }
+}
+
 class BinaryOp
 {
     private string $operator;
 
-    /** @psalm-var Term|BinaryOp */
+    /** @psalm-var Term|BinaryOp|UnaryOp */
     private $left;
 
-    /** @psalm-var Term|BinaryOp */
+    /** @psalm-var Term|BinaryOp|UnaryOp */
     private $right;
 
     /**
-     * @psalm-param Term|BinaryOp $left
-     * @psalm-param Term|BinaryOp $right
+     * @psalm-param Term|BinaryOp|UnaryOp $left
+     * @psalm-param Term|BinaryOp|UnaryOp $right
      */
     function __construct(string $operator, $left, $right)
     {
