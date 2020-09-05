@@ -25,6 +25,7 @@ use function Verraes\Parsica\map;
 use function Verraes\Parsica\pure;
 use function Verraes\Parsica\recursive;
 use function Verraes\Parsica\skipHSpace;
+use function Verraes\Parsica\string;
 
 
 /*
@@ -140,10 +141,18 @@ function expression(): Parser
     // https://en.wikipedia.org/wiki/Operator-precedence_parser
     $primary = parens($expr)->or(term());
 
+    // UNARY PREFIX
     $negateOperator = char('-'); // we don't use token because we don't allow spaces between - and the term
-    $negateFunction = fn($v): UnaryOp => new UnaryOp("-", $v);
+    $negateFunction = fn($v): PrefixUnaryOp => new PrefixUnaryOp("-", $v);
     $negateAppl = pure($negateFunction)->apply($negateOperator->followedBy($primary))->label("negate expr");
-    $precedence1 = $negateAppl->or($primary);
+    $precedence0 = $negateAppl->or($primary);
+
+    // UNARY POSTFIX
+    $incrOperator = token(string('++'));
+    $incrFunction = fn($v): PostfixUnaryOp => new PostfixUnaryOp("++", $v);
+    $incrAppl = pure($incrFunction)->apply(keepFirst($primary, $incrOperator));
+    $precedence1 = $incrAppl->or($precedence0);
+
 
     $multiplyOperator = token(char('*'));
     $multiplyFunction = fn($l, $r): BinaryOp => new BinaryOp("*", $l, $r);
@@ -170,20 +179,44 @@ function expression(): Parser
             $o[0]
         )
         );
+    $foldr = function (array $input, callable $function, $initial = null) use(&$foldr) {
+        if(empty($input)) return $initial;
+        $head = array_shift($input);
+        return $function(
+            $head,
+            $foldr($input, $function, $initial)
+        );
+    };
 
+    // RIGHT ASSOC BINARY
+    $rOperator = token(char('R'));
+    $rFunction = fn($l, $r): BinaryOp => new BinaryOp("R", $l, $r);
+    $rAppl = pure(curry($rFunction))->apply(keepFirst($precedence2, $rOperator));
+    $precedence3 =
+        collect(
+            many(choice($rAppl)),// 1 R 2 R
+            $precedence2 // (1*2) or 3
+        )->map(fn(array $o) => $foldr(
+            $o[0],
+            fn(callable $appl, $acc) => $appl($acc),
+            $o[1]
+        )
 
+        );
+
+    // LEFT ASSOC BINARY
     $plusOperator = token(char('+'));
     $plusFunction = fn($l, $r): BinaryOp => new BinaryOp("+", $l, $r);
     $minusOperator = token(char('-'));
     $minusFunction = fn($l, $r): BinaryOp => new BinaryOp("-", $l, $r);
 
 
-    $plusAppl = pure(curry(flip($plusFunction)))->apply($plusOperator->followedBy($precedence2));
-    $minusAppl = pure(curry(flip($minusFunction)))->apply($minusOperator->followedBy($precedence2));
+    $plusAppl = pure(curry(flip($plusFunction)))->apply($plusOperator->followedBy($precedence3));
+    $minusAppl = pure(curry(flip($minusFunction)))->apply($minusOperator->followedBy($precedence3));
 
-    $precedence3 =
+    $precedence4 =
         collect(
-            $precedence2,
+            $precedence3,
             many(choice($plusAppl, $minusAppl))
         )->map(fn(array $o) => array_reduce(
             $o[1],
@@ -193,20 +226,18 @@ function expression(): Parser
 
         );
 
-
-
+    // NON ASSOC BINARY
     $weirdOperator = token(char('§'));
     $weirdFunction = fn($l, $r): BinaryOp => new BinaryOp("§", $l, $r);
-//    $weirdAppl = pure(curry(flip($weirdFunction)))->apply($weirdOperator->followedBy($precedence3));
 
-    $precedence4 = choice(
-        collect($precedence3, $weirdOperator, $precedence3)->map(fn(array $o) => $weirdFunction($o[0], $o[2])),
-        $precedence3
+    $precedence5 = choice(
+        collect($precedence4, $weirdOperator, $precedence4)->map(fn(array $o) => $weirdFunction($o[0], $o[2])),
+        $precedence4
     );
 
 
 
-    $expr->recurse($precedence4);
+    $expr->recurse($precedence5);
 
 
     return $expr;
@@ -232,16 +263,13 @@ class Term
 
 }
 
-class UnaryOp
+
+class PrefixUnaryOp
 {
     private string $operator;
-    /** @psalm-var Term|BinaryOp|UnaryOp */
-    private $value;
+    private  $value;
 
-    /**
-     * @psalm-param Term|BinaryOp|UnaryOp $value
-     */
-    function __construct(string $operator, $value)
+    function __construct(string $operator,  $value)
     {
         $this->operator = $operator;
         $this->value = $value;
@@ -255,22 +283,33 @@ class UnaryOp
         return "(" . $this->operator . (string)$this->value . ")";
     }
 }
+class PostfixUnaryOp
+{
+    private string $operator;
+    private  $value;
+
+    function __construct(string $operator,  $value)
+    {
+        $this->operator = $operator;
+        $this->value = $value;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function __toString(): string
+    {
+        return "(" . (string)$this->value . $this->operator . ")";
+    }
+}
 
 class BinaryOp
 {
     private string $operator;
+    private  $left;
+    private  $right;
 
-    /** @psalm-var Term|BinaryOp|UnaryOp */
-    private $left;
-
-    /** @psalm-var Term|BinaryOp|UnaryOp */
-    private $right;
-
-    /**
-     * @psalm-param Term|BinaryOp|UnaryOp $left
-     * @psalm-param Term|BinaryOp|UnaryOp $right
-     */
-    function __construct(string $operator, $left, $right)
+    function __construct(string $operator,  $left,  $right)
     {
         $this->operator = $operator;
         $this->left = $left;
