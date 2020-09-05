@@ -181,7 +181,7 @@ function expression(): Parser
     $plusAppl = pure(curry(flip($plusFunction)))->apply($plusOperator->followedBy($precedence2));
     $minusAppl = pure(curry(flip($minusFunction)))->apply($minusOperator->followedBy($precedence2));
 
-    $precendence3 =
+    $precedence3 =
         collect(
             $precedence2,
             many(choice($plusAppl, $minusAppl))
@@ -194,7 +194,19 @@ function expression(): Parser
         );
 
 
-    $expr->recurse($precendence3);
+
+    $weirdOperator = token(char('§'));
+    $weirdFunction = fn($l, $r): BinaryOp => new BinaryOp("§", $l, $r);
+//    $weirdAppl = pure(curry(flip($weirdFunction)))->apply($weirdOperator->followedBy($precedence3));
+
+    $precedence4 = choice(
+        collect($precedence3, $weirdOperator, $precedence3)->map(fn(array $o) => $weirdFunction($o[0], $o[2])),
+        $precedence3
+    );
+
+
+
+    $expr->recurse($precedence4);
 
 
     return $expr;

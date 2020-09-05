@@ -51,13 +51,15 @@ final class ExpressionsTest extends TestCase
             ["4 + 5 * 2 * 3", "(4 + ((5 * 2) * 3))"],
             ["1 * 2 * 3 / 4 * 5", "((((1 * 2) * 3) / 4) * 5)"],
             ["1 / 2 / 3 * 4", "(((1 / 2) / 3) * 4)"],
+            ["1 - 2 + 3", "((1 - 2) + 3)"],
             ["1 - 2 * 3", "(1 - (2 * 3))"],
             ["1 + 5 - 2 * 3 - 6", "(((1 + 5) - (2 * 3)) - 6)"],
             ["-1", "(-1)"],
             ["-1 + -2", "((-1) + (-2))"],
             ["-(-1)", "(-(-1))"],
             ["(-(-(1)))", "(-(-1))"],
-
+            ["1 § 2", "(1 § 2)"],
+            ["1 + 5 § 2 * 3 - 6", "((1 + 5) § ((2 * 3) - 6))"],
 
             // assuming non-assoc binary
             // "a + b + c" -> fail
@@ -71,6 +73,27 @@ final class ExpressionsTest extends TestCase
 //            ["1 * 2 * 3 / 4 * 5", "(((1 * 2) * 3) / (4 * 5)"],
         ];
 
+        return array_combine(array_column($examples, 0), $examples);
+    }
+
+    /**
+     * @test
+     * @dataProvider unparsableExamples
+     */
+    public function unparsableExpression(string $input)
+    {
+        $parser = keepFirst(expression(), eof());
+        $this->assertParseFails($input, $parser);
+    }
+
+    public function unparsableExamples()
+    {
+        $examples = [
+            ["--1"],
+            ["1 § 2 § 3"],
+            ["1 § 2 * 3 § 4"],
+            ["1 § 2 * 3 § 4 § 5"],
+        ];
         return array_combine(array_column($examples, 0), $examples);
     }
 
