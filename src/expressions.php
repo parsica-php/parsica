@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+
 /**
  * This file is part of the Parsica library.
  *
@@ -16,13 +17,10 @@ use function Verraes\Parsica\choice;
 use function Verraes\Parsica\collect;
 use function Verraes\Parsica\float;
 use function Verraes\Parsica\keepFirst;
-use function Verraes\Parsica\map;
+use function Verraes\Parsica\many;
 use function Verraes\Parsica\pure;
 use function Verraes\Parsica\recursive;
-use function Verraes\Parsica\sepBy2;
 use function Verraes\Parsica\skipHSpace;
-use function Verraes\Parsica\some;
-
 
 
 /*
@@ -58,20 +56,12 @@ cλementd on mastodon · 4:42 PM
  */
 
 
-
-
-
-
-
-
-
-
 /**
  * @template T1
  * @psalm-param Parser<T1> $parser
  * @psalm-return Parser<T1>
  */
-function token(Parser $parser) : Parser
+function token(Parser $parser): Parser
 {
     return keepFirst($parser, skipHSpace());
 }
@@ -111,7 +101,8 @@ function term(): Parser
  * @psalm-param callable(TAcc, T):TAcc $f
  * @psalm-return TAcc
  */
-function foldl1 (array $l, callable $f) {
+function foldl1(array $l, callable $f)
+{
     $head = array_shift($l);
     return array_reduce($l, $f, $head);
 }
@@ -123,7 +114,8 @@ function foldl1 (array $l, callable $f) {
  * @psalm-param callable(Ta, Tb):Tc $f
  * @psalm-return callable(Tb, Ta):Tc
  */
-function flip(callable $f) : callable {
+function flip(callable $f): callable
+{
     /**
      * @psalm-param Ta $x
      * @psalm-param Tb $y
@@ -145,15 +137,14 @@ function expression(): Parser
     $primary = parens($expr)->or(term());
 
     $multiplyOperator = token(char('*'));
-    $multiplyFunction = fn($l, $r) : BinaryOp => new BinaryOp("*", $l, $r);
+    $multiplyFunction = fn($l, $r): BinaryOp => new BinaryOp("*", $l, $r);
     $multiplyArity = "binary";
     $multiplyAssociativty = "left";
 
     $divisionOperator = token(char('/'));
-    $divisionFunction = fn($l, $r) : BinaryOp => new BinaryOp("/", $l, $r);
+    $divisionFunction = fn($l, $r): BinaryOp => new BinaryOp("/", $l, $r);
     $divisionArity = "binary";
     $divisionAssociativty = "left";
-
 
 
     /** @psalm-pyvar Parser<callable>  $multiplyAppl */
@@ -161,19 +152,16 @@ function expression(): Parser
     // @todo pure f <*> x <*> y  === f <$> x <*> y
     $divisionAppl = pure(curry(flip($divisionFunction)))->apply($divisionOperator->followedBy($primary));
 
-    $multiAndDiv = choice(
+    $multiAndDiv =
         collect(
             $primary,
-            some(choice($multiplyAppl, $divisionAppl))
-        )->map(fn(array $o) =>
-            array_reduce(
-                $o[1],
-                fn($acc, callable $appl) => $appl($acc),
-                $o[0]
-            )
-        ),
-        $primary,
-    );
+            many(choice($multiplyAppl, $divisionAppl))
+        )->map(fn(array $o) => array_reduce(
+            $o[1],
+            fn($acc, callable $appl) => $appl($acc),
+            $o[0]
+        )
+        );
 
 
     $plusOperator = token(char('+'));
@@ -185,19 +173,17 @@ function expression(): Parser
     $plusAppl = pure(curry(flip($plusFunction)))->apply($plusOperator->followedBy($multiAndDiv));
     $minusAppl = pure(curry(flip($minusFunction)))->apply($minusOperator->followedBy($multiAndDiv));
 
-    $multiplus =     choice(
+    $multiplus =
         collect(
             $multiAndDiv,
-            some(choice($plusAppl, $minusAppl))
-        )->map(fn(array $o) =>
-        array_reduce(
+            many(choice($plusAppl, $minusAppl))
+        )->map(fn(array $o) => array_reduce(
             $o[1],
             fn($acc, callable $appl) => $appl($acc),
             $o[0]
         )
-        ),
-        $multiAndDiv,
-    );
+
+        );
 
 
     $expr->recurse($multiplus);
@@ -252,7 +238,7 @@ class BinaryOp
      */
     public function __toString(): string
     {
-        return "(" . (string) $this->left . " " . $this->operator . " " . (string)$this->right . ")";
+        return "(" . (string)$this->left . " " . $this->operator . " " . (string)$this->right . ")";
     }
 
 
