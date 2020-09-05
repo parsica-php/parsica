@@ -178,14 +178,17 @@ function expression(): Parser
 
     $plusOperator = token(char('+'));
     $plusFunction = fn($l, $r): BinaryOp => new BinaryOp("+", $l, $r);
+    $minusOperator = token(char('-'));
+    $minusFunction = fn($l, $r): BinaryOp => new BinaryOp("-", $l, $r);
 
 
     $plusAppl = pure(curry(flip($plusFunction)))->apply($plusOperator->followedBy($multiAndDiv));
+    $minusAppl = pure(curry(flip($minusFunction)))->apply($minusOperator->followedBy($multiAndDiv));
 
     $multiplus =     choice(
         collect(
             $multiAndDiv,
-            some(choice($plusAppl))
+            some(choice($plusAppl, $minusAppl))
         )->map(fn(array $o) =>
         array_reduce(
             $o[1],
