@@ -73,6 +73,7 @@ final class Assert
     /**
      * @throws InvalidArgumentException
      * @internal
+     * @param callable|mixed $f
      */
     public static function callable($f, string $message) : void
     {
