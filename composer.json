@@ -19,11 +19,11 @@
     ],
     "require": {
         "php": "^7.4 || ^8.0",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "cypresslab/php-curry": "^0.5.0"
     },
     "require-dev": {
         "ext-json": "*",
-        "cypresslab/php-curry": "^0.5.0",
         "mathiasverraes/uptodocs": "dev-main",
         "phpunit/phpunit": "^9.0",
         "psr/event-dispatcher": "^1.0",
@@ -43,7 +43,8 @@
             "src/sideEffects.php",
             "src/space.php",
             "src/strings.php",
-            "src/expressions.php"
+            "src/Expression/expression.php",
+            "src/Internal/FP.php"
         ]
     },
     "autoload-dev": {
