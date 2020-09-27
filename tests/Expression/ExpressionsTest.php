@@ -85,7 +85,7 @@ final class ExpressionsTest extends TestCase
      */
     public function expression(string $input, string $expected)
     {
-        $parser = keepFirst($this->expression, eof());
+        $parser = $this->expression->thenEof();
         $result = $parser->tryString($input);
         $this->assertEquals($expected, (string)$result->output());
     }
@@ -143,7 +143,7 @@ final class ExpressionsTest extends TestCase
      */
     public function unparsableExpressions(string $input)
     {
-        $parser = keepFirst($this->expression, eof());
+        $parser = $this->expression->thenEof();
         $this->assertParseFails($input, $parser);
     }
 

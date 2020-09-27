@@ -65,7 +65,7 @@ final class CalculatorTest extends TestCase
         ));
 
 
-        $parser = keepFirst($expr, eof());
+        $parser = $expr->thenEof();
         $result = $parser->tryString("(3 - 2) + -1 - 3 * (1 + 1) / 6");
         $this->assertEquals(-1, (string)$result->output());
     }

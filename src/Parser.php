@@ -440,4 +440,21 @@ final class Parser
             fn($_) => $output
         );
     }
+
+    /**
+     * Make sure that the input ends after the parser has successfully completed. The output is the output of the
+     * original parser.
+     *
+     * Also useful in unit tests to make sure a parser doesn't consume more than you intended.
+     *
+     * Alias for $parser->thenIgnore(eof()).
+     *
+     * @api
+     * @psalm-return Parser<T>
+     */
+    public function thenEof(): Parser
+    {
+        return keepFirst($this, eof());
+        // aka $this->thenIgnore(eof());
+    }
 }
