@@ -246,6 +246,9 @@ final class Parser
     /**
      * Construct a class with thee parser's output as the constructor argument
      *
+     * @todo Get rid of this and just ue map
+     * @deprecated Use Parser#map() instead
+     *
      * @template T2
      *
      * @psalm-param class-string<T2> $className
