@@ -22,6 +22,8 @@ use Verraes\Parsica\Internal\Fail;
  * At the moment, there is no Parser interface, and no Parser abstract class to extend from. This is intentional, but
  * will be changed if we find use cases where those would be the best solutions.
  *
+ * The type is Parser<T>, where T is the type of the output that the parser will produce after completing successfully.
+ *
  * @template T
  * @api
  */
