@@ -33,22 +33,11 @@ final class FunctorTest extends TestCase
     }
 
     /** @test */
-    public function construct()
-    {
-        $parser = sequence(char('a'), char('b'))
-            ->construct(__NAMESPACE__ . '\\MyType1');
-
-        $expected = new MyType1("b");
-
-        $this->assertParses("abc", $parser, $expected);
-    }
-
-    /** @test */
     public function simple_eur()
     {
         $parser = sequence(
             char('€'),
-            float()->map('floatval')->construct(SimpleEur::class)
+            float()->map(fn($v)=>new SimpleEur((float) $v))
         );
         $this->assertParses("€1.25", $parser, new SimpleEur(1.25));
 

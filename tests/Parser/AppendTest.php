@@ -39,8 +39,8 @@ final class AppendTest extends TestCase
     /** @test */
     public function append_non_semigroup()
     {
-        $a = char('a')->construct(NotASemigroup::class);
-        $b = char('b')->construct(NotASemigroup::class);
+        $a = char('a')->map(fn($v)=> new NotASemigroup($v));
+        $b = char('b')->map(fn($v)=> new NotASemigroup($v));
         $this->expectException(Exception::class);
         $a->append($b)->run(new StringStream('abc'));
     }

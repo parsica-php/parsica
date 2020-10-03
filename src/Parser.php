@@ -244,24 +244,6 @@ final class Parser
     }
 
     /**
-     * Construct a class with thee parser's output as the constructor argument
-     *
-     * @todo Get rid of this and just ue map
-     * @deprecated Use Parser#map() instead
-     *
-     * @template T2
-     *
-     * @psalm-param class-string<T2> $className
-     *
-     * @psalm-return Parser<T2>
-     * @api
-     */
-    public function construct(string $className): Parser
-    {
-        return map($this, /** @psalm-param mixed $val */ fn($val) => new $className($val));
-    }
-
-    /**
      * Combine the parser with another parser of the same type, which will cause the results to be appended.
      *
      * @psalm-param Parser<T|null> $other
