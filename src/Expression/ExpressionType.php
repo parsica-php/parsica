@@ -12,6 +12,9 @@ namespace Verraes\Parsica\Expression;
 
 use Verraes\Parsica\Parser;
 
+/**
+ * @internal
+ */
 interface ExpressionType
 {
     public function buildPrecedenceLevel(Parser $previousPrecedenceLevel): Parser;

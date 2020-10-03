@@ -11,21 +11,9 @@
 namespace Tests\Verraes\Parsica\Examples;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Expression\LeftBinary;
-use Verraes\Parsica\Expression\Operator;
-use Verraes\Parsica\Expression\PostfixUnary;
-use Verraes\Parsica\Expression\PrefixUnary;
 use Verraes\Parsica\Parser;
-use function Verraes\Parsica\atLeastOne;
-use function Verraes\Parsica\between;
-use function Verraes\Parsica\char;
-use function Verraes\Parsica\digitChar;
-use function Verraes\Parsica\eof;
-use function Verraes\Parsica\Expression\expression;
-use function Verraes\Parsica\keepFirst;
-use function Verraes\Parsica\recursive;
-use function Verraes\Parsica\skipHSpace;
-use function Verraes\Parsica\string;
+use function Verraes\Parsica\{atLeastOne, between, char, digitChar, keepFirst, recursive, skipHSpace, string};
+use function Verraes\Parsica\Expression\{expression, leftAssoc, operator, postfix, prefix};
 
 /**
  * Parse expressions and calculate the result
@@ -39,27 +27,25 @@ final class CalculatorTest extends TestCase
         $parens = fn (Parser $parser): Parser =>  $token(between($token(char('(')), $token(char(')')), $parser));
         $term = fn(): Parser => $token(atLeastOne(digitChar()));
 
-
         $expr = recursive();
-        $primaryTermParser = $parens($expr)->or($term());
         $expr->recurse(expression(
-            $primaryTermParser,
+            $parens($expr)->or($term()),
             [
-                new PrefixUnary(
-                    new Operator(char('-'), fn($v) => -$v),
-                    new Operator(char('+'), fn($v) => $v),
+                prefix(
+                    operator(char('-'), fn($v) => -$v),
+                    operator(char('+'), fn($v) => $v),
                 ),
-                new PostfixUnary(
-                    new Operator($token(string('--')), fn($v) => $v - 1),
-                    new Operator($token(string('++')), fn($v) => $v + 1),
+                postfix(
+                    operator($token(string('--')), fn($v) => $v - 1),
+                    operator($token(string('++')), fn($v) => $v + 1),
                 ),
-                new LeftBinary(
-                    new Operator($token(char('*')), fn($l, $r) => $l * $r),
-                    new Operator($token(char('/')), fn($l, $r) => $l / $r),
+                leftAssoc(
+                    operator($token(char('*')), fn($l, $r) => $l * $r),
+                    operator($token(char('/')), fn($l, $r) => $l / $r),
                 ),
-                new LeftBinary(
-                    new Operator($token(char('+')), fn($l, $r) => $l + $r),
-                    new Operator($token(char('-')), fn($l, $r) => $l - $r),
+                leftAssoc(
+                    operator($token(char('+')), fn($l, $r) => $l + $r),
+                    operator($token(char('-')), fn($l, $r) => $l - $r),
                 ),
             ]
         ));

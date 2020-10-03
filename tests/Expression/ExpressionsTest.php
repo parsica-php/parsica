@@ -11,7 +11,7 @@
 namespace Tests\Verraes\Parsica\Expression;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Expression\{LeftBinary, NonAssocBinary, Operator, PostfixUnary, PrefixUnary, RightBinary};
+use Verraes\Parsica\Expression\{LeftAssoc, NonAssoc, Operator, Postfix, Prefix, RightAssoc};
 use Verraes\Parsica\Parser;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\atLeastOne;
@@ -20,6 +20,12 @@ use function Verraes\Parsica\char;
 use function Verraes\Parsica\digitChar;
 use function Verraes\Parsica\eof;
 use function Verraes\Parsica\Expression\expression;
+use function Verraes\Parsica\Expression\leftAssoc;
+use function Verraes\Parsica\Expression\nonAssoc;
+use function Verraes\Parsica\Expression\operator;
+use function Verraes\Parsica\Expression\postfix;
+use function Verraes\Parsica\Expression\prefix;
+use function Verraes\Parsica\Expression\rightAssoc;
 use function Verraes\Parsica\keepFirst;
 use function Verraes\Parsica\recursive;
 use function Verraes\Parsica\skipHSpace;
@@ -45,31 +51,31 @@ final class ExpressionsTest extends TestCase
         $expr->recurse(expression(
             $primaryTermParser,
             [
-                new PrefixUnary(
-                    new Operator(char('-'), fn($v) => "(-$v)"),
-                    new Operator(char('+'), fn($v) => "(+$v)"),
+                prefix(
+                    operator(char('-'), fn($v) => "(-$v)"),
+                    operator(char('+'), fn($v) => "(+$v)"),
                 ),
-                new PostfixUnary(
-                    new Operator($token(string('--')), fn($v) => "($v--)"),
-                    new Operator($token(string('++')), fn($v) => "($v++)"),
+                postfix(
+                    operator($token(string('--')), fn($v) => "($v--)"),
+                    operator($token(string('++')), fn($v) => "($v++)"),
                 ),
-                new LeftBinary(
-                    new Operator($token(char('*')), fn($l, $r) => "($l * $r)"),
-                    new Operator($token(char('/')), fn($l, $r) => "($l / $r)"),
+                leftAssoc(
+                    operator($token(char('*')), fn($l, $r) => "($l * $r)"),
+                    operator($token(char('/')), fn($l, $r) => "($l / $r)"),
 
                 ),
-                new RightBinary(
+                rightAssoc(
                     // imaginary right associative operator
-                    new Operator($token(char('R')), fn($l, $r) => "($l R $r)"),
-                    new Operator($token(string('R2')), fn($l, $r) => "($l R2 $r)"),
+                    operator($token(char('R')), fn($l, $r) => "($l R $r)"),
+                    operator($token(string('R2')), fn($l, $r) => "($l R2 $r)"),
                 ),
-                new LeftBinary(
-                    new Operator($token(char('-')), fn($l, $r) => "($l - $r)"),
-                    new Operator($token(char('+')), fn($l, $r) => "($l + $r)"),
+                leftAssoc(
+                    operator($token(char('-')), fn($l, $r) => "($l - $r)"),
+                    operator($token(char('+')), fn($l, $r) => "($l + $r)"),
                 ),
-                new NonAssocBinary(
+                nonAssoc(
                     // imaginary non-associative operator
-                    new Operator($token(char('§')), fn($l, $r) => "($l § $r)"),
+                    operator($token(char('§')), fn($l, $r) => "($l § $r)"),
                 )
             ]
         ));

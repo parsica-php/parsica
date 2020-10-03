@@ -14,12 +14,17 @@ use Verraes\Parsica\Parser;
 use function Verraes\Parsica\choice;
 use function Verraes\Parsica\collect;
 
-final class NonAssocBinary implements ExpressionType
+/**
+ * @internal
+ */
+final class NonAssoc implements ExpressionType
 {
     private Operator $operator;
 
     function __construct(Operator $operator)
     {
+        // @todo throw if $operator->arity() != 2
+
         $this->operator = $operator;
     }
 
@@ -30,7 +35,7 @@ final class NonAssocBinary implements ExpressionType
                 $previousPrecedenceLevel,
                 $this->operator->parser(),
                 $previousPrecedenceLevel
-            )->map(fn(array $o) => $this->operator->constructor()($o[0], $o[2])),
+            )->map(fn(array $o) => $this->operator->transform()($o[0], $o[2])),
             $previousPrecedenceLevel
         );
     }

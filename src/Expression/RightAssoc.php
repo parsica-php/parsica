@@ -14,18 +14,24 @@ use Verraes\Parsica\Parser;
 use function Cypress\Curry\curry;
 use function Verraes\Parsica\choice;
 use function Verraes\Parsica\collect;
-use function Verraes\Parsica\Internal\FP\flip;
+use function Verraes\Parsica\keepFirst;
 use function Verraes\Parsica\many;
 use function Verraes\Parsica\pure;
 
-final class LeftBinary implements ExpressionType
+/**
+ * @internal
+ */
+final class RightAssoc implements ExpressionType
 {
-    /** @psalm-var Operator[] */
+    /** @var Operator[] */
     private array $operators;
 
-    function __construct(Operator ...$operators)
+    /**
+     * @psalm-param Operator[] $operators
+     */
+    function __construct(array $operators)
     {
-        // @todo use array as argument -^
+        // @todo throw if $operator->arity() != 2
 
         // @todo replace with atLeastOneArg, adjust message
         if (empty($operators)) throw new \InvalidArgumentException("PrefixUnary expects at least one Operator");
@@ -34,24 +40,32 @@ final class LeftBinary implements ExpressionType
 
     public function buildPrecedenceLevel(Parser $previousPrecedenceLevel): Parser
     {
+        /** @todo refactor for performance */
+        $foldr = function (array $input, callable $function, $initial = null) use (&$foldr) {
+            if (empty($input)) return $initial;
+            $head = array_shift($input);
+            return $function(
+                $head,
+                $foldr($input, $function, $initial)
+            );
+        };
+
+
         $operatorParsers = [];
         foreach ($this->operators as $operator) {
             $operatorParsers[] =
-                pure(curry(flip($operator->constructor())))
-                    ->apply($operator->parser()->followedBy($previousPrecedenceLevel))
+                pure(curry($operator->transform()))
+                    ->apply(keepFirst($previousPrecedenceLevel, $operator->parser()))
                     ->label($operator->label());
         }
 
-        return
-            collect(
-                $previousPrecedenceLevel,
-                many(choice(...$operatorParsers))
-            )->map(fn(array $o) => array_reduce(
-                $o[1],
-                fn($acc, callable $appl) => $appl($acc),
-                $o[0]
-            ));
-
+        return collect(
+            many(choice(...$operatorParsers)),
+            $previousPrecedenceLevel
+        )->map(fn(array $o) => $foldr(
+            $o[0],
+            fn(callable $appl, $acc) => $appl($acc),
+            $o[1]
+        ));
     }
-
 }

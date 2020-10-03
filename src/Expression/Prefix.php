@@ -12,17 +12,22 @@ namespace Verraes\Parsica\Expression;
 
 use Verraes\Parsica\Parser;
 use function Verraes\Parsica\choice;
-use function Verraes\Parsica\keepFirst;
 use function Verraes\Parsica\pure;
 
-final class PostfixUnary implements ExpressionType
+/**
+ * @internal
+ */
+final class Prefix implements ExpressionType
 {
-    /** @psalm-var Operator[] */
+    /** @var Operator[] */
     private array $operators;
 
-    function __construct(Operator ...$operators)
+    /**
+     * @psalm-param Operator[] $operators
+     */
+    function __construct(array $operators)
     {
-        // @todo use array as argument -^
+        // @todo throw if $operator->arity() != 1
 
         // @todo replace with atLeastOneArg, adjust message
         if (empty($operators)) throw new \InvalidArgumentException("PrefixUnary expects at least one Operator");
@@ -35,8 +40,8 @@ final class PostfixUnary implements ExpressionType
         foreach ($this->operators as $operator) {
 
             $operatorParsers[] =
-                pure($operator->constructor())
-                    ->apply(keepFirst($previousPrecedenceLevel, $operator->parser()))
+                pure($operator->transform())
+                    ->apply($operator->parser()->followedBy($previousPrecedenceLevel))
                     ->label($operator->label());
         }
 

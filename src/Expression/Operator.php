@@ -13,36 +13,60 @@ namespace Verraes\Parsica\Expression;
 use Verraes\Parsica\Parser;
 
 /**
- * @template T1
- * @template T2
+ * @internal
+ * @template TOutput
+ * @template TTerm
+ * @template TTermL
+ * @template TTermR
  */
 final class Operator
 {
+    /**
+     * @psalm-var Parser<TOutput>
+     */
     private Parser $parser;
 
-    /** @var callable(T1):T2 $constructor */
-    private $constructor;
+    /** @var callable(TTerm):TOutput|callable(TTermL, TTermR):TOutput $constructor */
+    private $transform;
 
     private string $label;
 
-    function __construct(Parser $parser, callable $constructor, string $label = "")
+    /**
+     * @psalm-param Parser<T> $symbol
+     * @psalm-param callable(TTerm):TOutput|callable(TTermL, TTermR):TOutput $transform
+     * @psalm-param string $label
+     */
+    function __construct(Parser $parser, callable $transform, string $label = "")
     {
         $this->parser = $parser;
-        $this->constructor = $constructor;
+        $this->transform = $transform;
         $this->label = $label ?: $parser->getLabel() . " prefix operator";
     }
 
+
+    /**
+     * Return the arity of the inner transform() function
+     */
+    public function arity(): Int
+    {
+        throw new \Exception("@todo not implemented");
+    }
+
+
+    /**
+     * @psalm-return Parser<T>
+     */
     function parser(): Parser
     {
         return $this->parser;
     }
 
     /**
-     * @psalm-return callable(T1):T2
+     * @psalm-return callable(TTerm):TOutput|callable(TTermL, TTermR):TOutput
      */
-    function constructor(): callable
+    function transform(): callable
     {
-        return $this->constructor;
+        return $this->transform;
     }
 
     function label(): string
