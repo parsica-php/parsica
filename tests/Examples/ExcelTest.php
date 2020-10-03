@@ -13,14 +13,7 @@ namespace Tests\Verraes\Parsica\Examples;
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Parser;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\alphaChar;
-use function Verraes\Parsica\between;
-use function Verraes\Parsica\char;
-use function Verraes\Parsica\collect;
-use function Verraes\Parsica\digitChar;
-use function Verraes\Parsica\skipHSpace1;
-use function Verraes\Parsica\space;
-use function Verraes\Parsica\string;
+use function Verraes\Parsica\{alphaChar, between, char, collect, digitChar, skipHSpace1, space, string};
 
 final class ExcelTest extends TestCase
 {
