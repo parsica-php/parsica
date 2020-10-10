@@ -250,7 +250,7 @@ final class Parser
      * Combine the parser with another parser of the same type, which will cause the results to be appended.
      *
      * @psalm-param Parser<T|null> $other
-     * @psalm-return Parser<T>
+     * @psalm-return Parser<T|null>
      * @api
      */
     public function append(Parser $other): Parser
