@@ -250,7 +250,9 @@ function takeRest(): Parser
  */
 function nothing(): Parser
 {
-    return Parser::make("<nothing>", fn(Stream $input) => new Succeed(null, $input));
+    $parser = Parser::make("<nothing>", fn(Stream $input) => new Succeed(null, $input));
+    Assert::parserNull($parser);
+    return $parser;
 }
 
 /**
