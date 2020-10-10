@@ -172,15 +172,16 @@ function keepSecond(Parser $first, Parser $second): Parser
 /**
  * Either parse the first thing or the second thing
  *
- * @psalm-param Parser<T> $first
- * @psalm-param Parser<T> $second
+ * @psalm-param Parser<T1> $first
+ * @psalm-param Parser<T2> $second
  *
- * @psalm-return Parser<T>
+ * @psalm-return Parser<T1|T2>
  * @api
  *
  * @see Parser::or()
  *
- * @template T
+ * @template T1
+ * @template T2
  *
  */
 function either(Parser $first, Parser $second): Parser
