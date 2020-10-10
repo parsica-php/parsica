@@ -89,6 +89,9 @@ final class Parser
      * Recurse on a parser. Used in combination with {@see recursive()}. After calling this method, this parser behaves
      * like a regular parser.
      *
+     * @psalm-param Parser<T> $parser
+     * @psalm-return Parser<T>
+     *
      * @api
      */
     public function recurse(Parser $parser): Parser
