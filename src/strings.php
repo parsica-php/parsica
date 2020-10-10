@@ -63,7 +63,7 @@ function stringI(string $str): Parser
     /** @psalm-var Parser<string> $parser */
     $parser = array_reduce(
         $chars,
-        fn(Parser $l, Parser $r): Parser => $l->append($r),
+        fn(Parser $l, Parser $r): Parser => append($l, $r),
         succeed()
     )->label("'$str'");
     return $parser;
