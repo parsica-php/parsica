@@ -92,16 +92,4 @@ final class Assert
             throw new InvalidArgumentException("$source expects at least one Parser");
         }
     }
-
-
-    /**
-     * Help Psalm understand that the type is Parser<null>
-     *
-     * @internal
-     * @psalm-assert Parser<null> $parser
-     */
-    public static function parserNull(Parser $parser): void
-    {
-        // empty on purpose
-    }
 }
