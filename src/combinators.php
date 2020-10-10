@@ -10,6 +10,7 @@
 
 namespace Verraes\Parsica;
 
+use InvalidArgumentException;
 use Verraes\Parsica\Internal\Assert;
 use Verraes\Parsica\Internal\Fail;
 use Verraes\Parsica\Internal\Succeed;
@@ -244,17 +245,18 @@ function assemble(Parser ...$parsers): Parser
 /**
  * Parse into an array that consists of the results of all parsers.
  *
- * @psalm-param list<Parser<T>> $parsers
- *
- * @psalm-return Parser<T>
+ * @psalm-param list<Parser<mixed>> $parsers
+ * @psalm-return Parser<mixed>
  * @api
- * @template T
- *
  */
 function collect(Parser ...$parsers): Parser
 {
-    /** @psalm-suppress MissingClosureParamType */
-    $toArray = fn($v): array => [$v];
+    $toArray =
+        /**
+         * @psalm-param mixed $v
+         * @psalm-return list<mixed>
+         */
+        fn($v): array => [$v];
     $arrayParsers = array_map(
         fn(Parser $parser): Parser => map($parser, $toArray),
         $parsers
@@ -265,9 +267,9 @@ function collect(Parser ...$parsers): Parser
 /**
  * Tries each parser one by one, returning the result of the first one that succeeds.
  *
- * @psalm-param Parser<T>[] $parsers
+ * @psalm-param list<Parser<mixed>> $parsers
  *
- * @psalm-return Parser<T>
+ * @psalm-return Parser<mixed>
  *
  * @template T
  * @api
@@ -275,7 +277,7 @@ function collect(Parser ...$parsers): Parser
 function any(Parser ...$parsers): Parser
 {
     if (empty($parsers)) {
-        throw new \InvalidArgumentException("any() expects at least one parser");
+        throw new InvalidArgumentException("any() expects at least one parser");
     }
 
     $labels = array_map(fn(Parser $p): string => $p->getLabel(), $parsers);
@@ -293,9 +295,9 @@ function any(Parser ...$parsers): Parser
  *
  * Alias for {@see any()}
  *
- * @psalm-param Parser<T>[] $parsers
+ * @psalm-param list<Parser<mixed>> $parsers
  *
- * @psalm-return Parser<T>
+ * @psalm-return Parser<mixed>
  *
  * @template T
  * @api
@@ -415,8 +417,15 @@ function repeatList(int $n, Parser $parser): Parser
  */
 function some(Parser $parser): Parser
 {
-    return collect($parser, many($parser))
-        ->map(fn(array $o):array => array_merge([$o[0]], $o[1]));
+    return map(
+            collect($parser, many($parser)),
+            /**
+             * @template T
+             * @psalm-param array{0: T, 1: list<T>} $o
+             * @psalm-return list<T>
+             */
+            fn(array $o):array => array_merge([$o[0]], $o[1])
+    );
 }
 
 /**
@@ -433,10 +442,18 @@ function many(Parser $parser): Parser
 {
     $rec = recursive();
     $rec->recurse(
-         choice(
-             collect($parser, $rec)->map(fn(array $o):array => array_merge([$o[0]], $o[1])),
-             pure([]),
-         )
+        any(
+            map(
+                collect($parser, $rec),
+                /**
+                 * @template T
+                 * @psalm-param array{0: T, 1: list<T>} $o
+                 * @psalm-return list<T>
+                 */
+                fn(array $o): array => array_merge([$o[0]], $o[1])
+            ),
+            pure([]),
+        )
     );
     return $rec;
 }

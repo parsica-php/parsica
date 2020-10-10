@@ -25,12 +25,14 @@ function integer(): Parser
     $oneNine = oneOfS("123456789");
     $minus = char('-');
     $digits = atLeastOne($zeroNine);
-    return choice(
+    /** @var Parser<string> $parser */
+    $parser = choice(
         $minus->append($oneNine)->append($digits),
         $minus->append($zeroNine),
         $oneNine->append($digits),
         $zeroNine
     );
+    return $parser;
 }
 
 /**

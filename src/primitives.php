@@ -180,8 +180,6 @@ function oneOf(array $chars): Parser
  *
  * @psalm-return Parser<string>
  * @api
- * @template T
- *
  */
 function oneOfS(string $chars): Parser
 {
