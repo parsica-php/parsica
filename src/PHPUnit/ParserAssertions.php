@@ -75,10 +75,10 @@ trait ParserAssertions
                 "Expected type didn't match actual type");
             $this->assertEquals($expected, $actual, $message);
         } elseif (is_array($expected)) {
-            $this->assertSame(count($expected), count($actual), "The length of the  actual array differs from the length of the expected array.");
             foreach ($expected as $k => $v) {
                 $this->assertStrictlyEquals($expected[$k], $actual[$k], "Item $k from the actual array differs from item $k in the expected array");
             }
+            $this->assertSame(count($expected), count($actual), "The length of the  actual array differs from the length of the expected array.");
         } else {
             throw new Exception("@todo Not implemented");
         }
