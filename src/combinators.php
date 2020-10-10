@@ -219,7 +219,6 @@ function append(Parser $left, Parser $right): Parser
     return Parser::make($right->getLabel(), function (Stream $input) use ($left, $right): ParseResult {
         $r1 = $left->run($input);
         $r2 = $r1->continueWith($right);
-        // @todo replace these with append(...) everywhere
         return $r1->append($r2);
     });
 }
@@ -405,34 +404,41 @@ function repeatList(int $n, Parser $parser): Parser
 }
 
 /**
- * Parse something zero or more times, and output an array of the successful outputs.
- *
- * @api
- */
-function many(Parser $parser): Parser
-{
-    return either(some($parser), pure([]));
-}
-
-/**
  * Parse something one or more times, and output an array of the successful outputs.
  *
- * @psalm-suppress MixedArgumentTypeCoercion
+ * @template T
+ *
+ * @psalm-param Parser<T> $parser
+ * @psalm-return Parser<list<T>>
  *
  * @api
  */
 function some(Parser $parser): Parser
 {
+    return collect($parser, many($parser))
+        ->map(fn(array $o):array => array_merge([$o[0]], $o[1]));
+}
+
+/**
+ * Parse something zero or more times, and output an array of the successful outputs.
+ *
+ * @template T
+ *
+ * @psalm-param Parser<T> $parser
+ * @psalm-return Parser<list<T>>
+ *
+ * @api
+ */
+function many(Parser $parser): Parser
+{
     $rec = recursive();
-    $pArray = map($parser, /** @psalm-param mixed $x */ fn($x): array => [$x]);
-    return $pArray->append(
-        $rec->recurse(
-            either(
-                append($pArray, $rec),
-                pure([])
-            )
-        )
+    $rec->recurse(
+         choice(
+             collect($parser, $rec)->map(fn(array $o):array => array_merge([$o[0]], $o[1])),
+             pure([]),
+         )
     );
+    return $rec;
 }
 
 /**
