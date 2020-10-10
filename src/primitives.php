@@ -244,6 +244,8 @@ function takeRest(): Parser
  *
  * This serves as the zero parser in `append()` operations.
  *
+ * @psalm-return Parser<null>
+ *
  * @api
  */
 function nothing(): Parser
