@@ -51,14 +51,16 @@ final class JSON
      * To understand the terminology and the structure, have a peak at {@see https://www.json.org/json-en.html}
      *
      * @api
-     * @psalm-suppress all
+     * @psalm-return Parser<mixed>
      */
     public static function json(): Parser
     {
         return JSON::ws()->sequence(JSON::element());
     }
 
-    /** @psalm-suppress all */
+    /**
+     * @psalm-return Parser<mixed>
+     */
     public static function element(): Parser
     {
         // Memoize $element so we can keep reusing it for recursion.
@@ -80,27 +82,30 @@ final class JSON
         return $element;
     }
 
-    /** @psalm-suppress all */
+    /**
+     * @psalm-return Parser<object>
+     */
     public static function object(): Parser
     {
-        return between(
-            JSON::token(char('{')),
-            JSON::token(char('}')),
-            sepBy(
-                JSON::token(char(',')),
-                JSON::member()
-            )
-        )->map(function ($members) {
-            $object = [];
-            foreach ($members as $kv) {
-                $object[$kv[0]] = $kv[1];
-            }
-            return (object)$object;
-        }
-        );
+        return map(
+            between(
+                JSON::token(char('{')),
+                JSON::token(char('}')),
+                sepBy(
+                    JSON::token(char(',')),
+                    JSON::member()
+                )
+            ),
+            /**
+             * @psalm-param list<array{string:mixed}> $members
+             * @psalm-return object
+             */
+            fn(array $members) => (object)array_merge($members));
     }
 
-    /** @psalm-suppress all */
+    /**
+     * @psalm-return Parser<list>
+     */
     public static function array(): Parser
     {
         return between(
@@ -112,19 +117,25 @@ final class JSON
         );
     }
 
-    /** @psalm-suppress all */
+    /**
+     * @psalm-return Parser<bool>
+     */
     public static function true(): Parser
     {
         return JSON::token(string('true'))->map(fn($_) => true)->label('true');
     }
 
-    /** @psalm-suppress all */
+    /**
+     * @psalm-return Parser<bool>
+     */
     public static function false(): Parser
     {
         return JSON::token(string('false'))->map(fn($_) => false)->label('false');
     }
 
-    /** @psalm-suppress all */
+    /**
+     * @psalm-return Parser<null>
+     */
     public static function null(): Parser
     {
         return JSON::token(string('null'))->map(fn($_) => null)->label('null');
@@ -132,7 +143,8 @@ final class JSON
 
     /**
      * Whitespace
-     * @psalm-suppress all
+     *
+     * @psalm-return Parser<null>
      */
     public static function ws(): Parser
     {
@@ -142,20 +154,17 @@ final class JSON
 
     /**
      * Apply $parser and consume all the following whitespace.
-     * @psalm-suppress all
      */
     public static function token(Parser $parser): Parser
     {
         return keepFirst($parser, JSON::ws());
     }
 
-    /** @psalm-suppress all */
     public static function number(): Parser
     {
         return JSON::token(float())->map('floatval')->label("number");
     }
 
-    /** @psalm-suppress all */
     public static function stringLiteral(): Parser
     {
         return JSON::token(
@@ -180,15 +189,20 @@ final class JSON
         )->label("string literal");
     }
 
-    /** @psalm-suppress all */
+    /**
+     * @return Parser<array{string:mixed}>
+     */
     public static function member(): Parser
     {
-        return collect(
-            JSON::stringLiteral(),
-            JSON::token(char(':'))->sequence(
+        return map(
+            collect(
+                JSON::stringLiteral(),
+                JSON::token(char(':')),
                 JSON::token(JSON::element())
-            )
-        );
+            ),
+            /**
+             * @psalm-param array{0:string, 1:string, 2:mixed}
+             */
+            fn(array $o): array => [$o[0] => $o[2]]);
     }
-
 }

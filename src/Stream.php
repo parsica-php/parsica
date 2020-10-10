@@ -15,6 +15,8 @@ use Verraes\Parsica\Internal\TakeResult;
 
 /**
  * Represents an input stream. This allows us to have different types of input, each with their own optimizations.
+ *
+ * @psalm-immutable
  */
 interface Stream
 {
@@ -47,7 +49,6 @@ interface Stream
      * @TODO This method isn't strictly necessary but let's see.
      *
      * @psalm-param callable(string):bool $predicate
-     *
      */
     public function takeWhile(callable $predicate) : TakeResult;
 

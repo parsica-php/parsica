@@ -12,11 +12,17 @@ namespace Verraes\Parsica\Internal;
 
 /**
  * File, line, and column position of the parser.
+ *
+ * @psalm-immutable
+ * @psalm-external-mutation-free
  */
 final class Position
 {
+    /** @psalm-readonly  */
     private string $filename;
+    /** @psalm-readonly  */
     private int $line;
+    /** @psalm-readonly  */
     private int $column;
 
     function __construct(string $filename, int $line, int $column)

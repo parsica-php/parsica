@@ -14,6 +14,9 @@ use Verraes\Parsica\Internal\EndOfStream;
 use Verraes\Parsica\Internal\Position;
 use Verraes\Parsica\Internal\TakeResult;
 
+/**
+ * @psalm-immutable
+ */
 final class StringStream implements Stream
 {
     private string $string;

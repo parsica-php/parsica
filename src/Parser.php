@@ -414,6 +414,7 @@ final class Parser
      *
      * @template T2
      * @psalm-param T2 $output
+     * @psalm-return Parser<T2>
      *
      * @deprecated @TODO needs test
      *

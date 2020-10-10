@@ -435,12 +435,12 @@ function some(Parser $parser): Parser
  *
  * @psalm-param Parser<T> $parser
  * @psalm-return Parser<list<T>>
- *
  * @api
  */
 function many(Parser $parser): Parser
 {
     $rec = recursive();
+    /** @psalm-suppress MixedArgumentTypeCoercion */
     $rec->recurse(
         any(
             map(

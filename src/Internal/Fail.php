@@ -41,6 +41,9 @@ final class Fail extends Exception implements ParserFailure, ParseResult
         parent::__construct("\n".$this->errorMessage());
     }
 
+    /**
+     * @api
+     */
     public function errorMessage(): string
     {
         try {
