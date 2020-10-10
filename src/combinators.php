@@ -218,6 +218,7 @@ function append(Parser $left, Parser $right): Parser
     return Parser::make($right->getLabel(), function (Stream $input) use ($left, $right): ParseResult {
         $r1 = $left->run($input);
         $r2 = $r1->continueWith($right);
+        // @todo replace these with append(...) everywhere
         return $r1->append($r2);
     });
 }
