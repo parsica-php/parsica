@@ -73,10 +73,9 @@ final class Assert
 
     /**
      * @psalm-param mixed $f
-     * @psalm-assert callable $f
      * @internal
      */
-    public static function callable($f, string $message) : void
+    public static function isCallable($f, string $message) : void
     {
         if (!is_callable($f)) {
             throw new InvalidArgumentException($message);

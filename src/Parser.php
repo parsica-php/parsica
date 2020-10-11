@@ -55,7 +55,7 @@ final class Parser
      *
      * @see recursive()
      *
-     * @psalm-return Parser<T>
+     * @psalm-return Parser<mixed>
      * @api
      */
     public static function recursive(): Parser

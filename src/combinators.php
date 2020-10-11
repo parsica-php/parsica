@@ -114,7 +114,7 @@ function apply(Parser $parser1, Parser $parser2): Parser
             return $r1;
         }
         $f = $r1->output();
-        Assert::callable($f, "apply() can only be used when the output of the first parser is a callable with 1 argument. Use currying for functions with more than 1 argument.");
+        Assert::isCallable($f, "apply() can only be used when the output of the first parser is a callable with 1 argument. Use currying for functions with more than 1 argument.");
         // @todo assert that the arity of $f == 1
         return $r1->continueWith($parser2)->map($f);
     });
@@ -268,10 +268,7 @@ function collect(Parser ...$parsers): Parser
  * Tries each parser one by one, returning the result of the first one that succeeds.
  *
  * @psalm-param list<Parser<mixed>> $parsers
- *
  * @psalm-return Parser<mixed>
- *
- * @template T
  * @api
  */
 function any(Parser ...$parsers): Parser
@@ -296,10 +293,7 @@ function any(Parser ...$parsers): Parser
  * Alias for {@see any()}
  *
  * @psalm-param list<Parser<mixed>> $parsers
- *
  * @psalm-return Parser<mixed>
- *
- * @template T
  * @api
  */
 function choice(Parser ...$parsers): Parser
@@ -440,7 +434,6 @@ function some(Parser $parser): Parser
 function many(Parser $parser): Parser
 {
     $rec = recursive();
-    /** @psalm-suppress MixedArgumentTypeCoercion */
     $rec->recurse(
         any(
             map(
