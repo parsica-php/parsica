@@ -89,12 +89,11 @@ final class Parser
      * Recurse on a parser. Used in combination with {@see recursive()}. After calling this method, this parser behaves
      * like a regular parser.
      *
-     * @psalm-param Parser<T> $parser
-     * @psalm-return Parser<T>
+     * @psalm-param Parser<mixed> $parser
      *
      * @api
      */
-    public function recurse(Parser $parser): Parser
+    public function recurse(Parser $parser): void
     {
         switch ($this->recursionStatus) {
             case 'non-recursive':
@@ -114,8 +113,6 @@ final class Parser
             default:
                 throw new Exception("Unexpected recursionStatus value");
         }
-
-        return $this;
     }
 
     /**
