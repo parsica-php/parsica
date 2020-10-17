@@ -39,8 +39,13 @@ function expression(Parser $term, array $expressionTable): Parser
  *
  * @api
  *
+ * @template T
+ * @template TTerm
+ * @template TTerm1
+ * @template TTerm2
+ * @template TOutput
  * @psalm-param Parser<T> $symbol
- * @psalm-param callable(TTerm):TOutput|callable(TTerm1, TTerm2):TOuput $transform
+ * @psalm-param callable(TTerm):TOutput|callable(TTerm1, TTerm2):TOutput $transform
  * @psalm-param string $label
  *
  * @return Operator<TOutput>
