@@ -23,12 +23,7 @@ use Verraes\Parsica\StringStream;
 trait ParserAssertions
 {
     /**
-     * @psalm-param mixed $expectedParsed
-     *
-     * @param string $input
-     * @param Parser $parser
-     * @param        $expectedOutput
-     * @param string $message
+     * @psalm-param mixed $expectedOutput
      *
      * @api
      */
