@@ -17,6 +17,7 @@ use function Verraes\Parsica\pure;
 
 /**
  * @internal
+ * @template TExpressionAST
  */
 final class Prefix implements ExpressionType
 {

@@ -15,8 +15,8 @@ use Verraes\Parsica\Parser;
 /**
  * @internal
  * @template TSymbol
- * @template TOutput
  * @template TTerm
+ * @template TExpressionAST
  */
 final class UnaryOperator
 {
@@ -25,14 +25,14 @@ final class UnaryOperator
      */
     private Parser $symbol;
 
-    /** @var callable(TTerm):TOutput $transform */
+    /** @var callable(TTerm):TExpressionAST $transform */
     private $transform;
 
     private string $label;
 
     /**
      * @psalm-param Parser<TSymbol> $symbol
-     * @psalm-param callable(TTerm):TOutput $transform
+     * @psalm-param callable(TTerm):TExpressionAST $transform
      * @psalm-param string          $label
      */
     function __construct(Parser $symbol, callable $transform, string $label = "")
@@ -51,7 +51,7 @@ final class UnaryOperator
     }
 
     /**
-     * @psalm-return callable(TTerm):TOutput
+     * @psalm-return callable(TTerm):TExpressionAST
      */
     function transform(): callable
     {

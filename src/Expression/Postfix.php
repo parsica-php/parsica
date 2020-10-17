@@ -18,7 +18,7 @@ use function Verraes\Parsica\pure;
 
 /**
  * @internal
- * @template TOutput
+ * @template TExpressionAST
  */
 final class Postfix implements ExpressionType
 {
@@ -35,11 +35,6 @@ final class Postfix implements ExpressionType
         $this->operators = $operators;
     }
 
-    /**
-     * @template T
-     * @psalm-param Parser<T> $previousPrecedenceLevel
-     * @psalm-return Parser<TOutput>
-     */
     public function buildPrecedenceLevel(Parser $previousPrecedenceLevel): Parser
     {
         /**

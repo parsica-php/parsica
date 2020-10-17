@@ -17,20 +17,23 @@ use Verraes\Parsica\Parser;
  *
  * @api
  *
- * @template T
+ * @template TTerm
+ * @template TExpressionAST
  *
- * @psalm-param Parser<T> $term
+ * @psalm-param Parser<TTerm> $term
  * @psalm-param ExpressionType[] $expressionTable
  *
- * @psalm-return Parser<T>
+ * @psalm-return Parser<TExpressionAST>
  */
 function expression(Parser $term, array $expressionTable): Parser
 {
-    return array_reduce(
+    /** @psalm-var Parser<TExpressionAST> $parser */
+    $parser = array_reduce(
         $expressionTable,
         fn(Parser $previous, ExpressionType $next) => $next->buildPrecedenceLevel($previous),
         $term
     );
+    return $parser;
 }
 
 /*
@@ -42,12 +45,12 @@ function expression(Parser $term, array $expressionTable): Parser
  * @template TSymbol
  * @template TTermL
  * @template TTermR
- * @template TOutput
+ * @template TExpressionAST
  * @psalm-param Parser<TSymbol> $symbol
- * @psalm-param callable(TTermL, TTermR):TOutput $transform
+ * @psalm-param callable(TTermL, TTermR):TExpressionAST $transform
  * @psalm-param string $label
  *
- * @return BinaryOperator<TSymbol, TTermL, TTermR, TOutput>
+ * @return BinaryOperator<TSymbol, TTermL, TTermR, TExpressionAST>
  */
 function binaryOperator(Parser $symbol, callable $transform, string $label = ""): BinaryOperator
 {
@@ -62,12 +65,12 @@ function binaryOperator(Parser $symbol, callable $transform, string $label = "")
  *
  * @template TSymbol
  * @template TTerm
- * @template TOutput
+ * @template TExpressionAST
  * @psalm-param Parser<TSymbol> $symbol
- * @psalm-param callable(TTerm):TOutput $transform
+ * @psalm-param callable(TTerm):TExpressionAST $transform
  * @psalm-param string $label
  *
- * @return BinaryOperator<TSymbol, TTerm, TOutput>
+ * @return BinaryOperator<TSymbol, TTerm, TExpressionAST>
  */
 function unaryOperator(Parser $symbol, callable $transform, string $label = ""): UnaryOperator
 {
@@ -76,6 +79,8 @@ function unaryOperator(Parser $symbol, callable $transform, string $label = ""):
 
 /*
  * @api
+ * @psalm-param BinaryOperator<TSymbol, TTermL, TTermR, TExpressionAST>[]
+ * @psalm-return LeftAssoc
  */
 function leftAssoc(BinaryOperator ...$operators): LeftAssoc
 {
@@ -84,6 +89,9 @@ function leftAssoc(BinaryOperator ...$operators): LeftAssoc
 
 /*
  * @api
+ *
+ * @psalm-param BinaryOperator<TSymbol, TTermL, TTermR, TExpressionAST>[]
+ * @psalm-return RightAssoc
  */
 function rightAssoc(BinaryOperator ...$operators): RightAssoc
 {
@@ -92,6 +100,9 @@ function rightAssoc(BinaryOperator ...$operators): RightAssoc
 
 /*
  * @api
+ *
+ * @psalm-param BinaryOperator<TSymbol, TTermL, TTermR, TExpressionAST>[]
+ * @psalm-return NonAssoc
  */
 function nonAssoc(BinaryOperator $operator): NonAssoc
 {
@@ -100,6 +111,10 @@ function nonAssoc(BinaryOperator $operator): NonAssoc
 
 /*
  * @api
+ *
+ *
+ * @psalm-param BinaryOperator<TSymbol, TTerm, TExpressionAST>[]
+ * @psalm-return Prefix
  */
 function prefix(UnaryOperator ...$operators): Prefix
 {
@@ -108,6 +123,9 @@ function prefix(UnaryOperator ...$operators): Prefix
 
 /*
  * @api
+ *
+ * @psalm-param BinaryOperator<TSymbol, TTermL, TTermR, TExpressionAST>[]
+ * @psalm-return PostFix
  */
 function postfix(UnaryOperator ...$operators): Postfix
 {

@@ -21,6 +21,7 @@ use function Verraes\Parsica\pure;
 
 /**
  * @internal
+ * @template TExpressionAST
  */
 final class RightAssoc implements ExpressionType
 {

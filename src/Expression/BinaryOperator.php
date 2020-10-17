@@ -17,7 +17,7 @@ use Verraes\Parsica\Parser;
  * @template TSymbol
  * @template TTermL
  * @template TTermR
- * @template TOutput
+ * @template TExpressionAST
  */
 final class BinaryOperator
 {
@@ -26,14 +26,14 @@ final class BinaryOperator
      */
     private Parser $symbol;
 
-    /** @var callable(TTermL, TTermR):TOutput $transform */
+    /** @var callable(TTermL, TTermR):TExpressionAST $transform */
     private $transform;
 
     private string $label;
 
     /**
      * @psalm-param Parser<TSymbol> $symbol
-     * @psalm-param callable(TTermL, TTermR):TOutput $transform
+     * @psalm-param callable(TTermL, TTermR):TExpressionAST $transform
      * @psalm-param string $label
      */
     function __construct(Parser $symbol, callable $transform, string $label = "")
@@ -52,7 +52,7 @@ final class BinaryOperator
     }
 
     /**
-     * @psalm-return callable(TTermL, TTermR):TOutput
+     * @psalm-return callable(TTermL, TTermR):TExpressionAST
      */
     function transform(): callable
     {

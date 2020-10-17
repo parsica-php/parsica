@@ -14,8 +14,13 @@ use Verraes\Parsica\Parser;
 
 /**
  * @internal
+ * @template TExpressionAST
  */
 interface ExpressionType
 {
+    /**
+     * @psalm-param Parser<TExpressionAST> $previousPrecedenceLevel
+     * @psalm-return  Parser<TExpressionAST>
+     */
     public function buildPrecedenceLevel(Parser $previousPrecedenceLevel): Parser;
 }

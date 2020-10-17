@@ -16,6 +16,7 @@ use function Verraes\Parsica\collect;
 
 /**
  * @internal
+ * @template TExpressionAST
  */
 final class NonAssoc implements ExpressionType
 {

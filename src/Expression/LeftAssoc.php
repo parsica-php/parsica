@@ -17,14 +17,18 @@ use function Verraes\Parsica\choice;
 use function Verraes\Parsica\collect;
 use function Verraes\Parsica\Internal\FP\flip;
 use function Verraes\Parsica\many;
+use function Verraes\Parsica\map;
 use function Verraes\Parsica\pure;
 
 /**
  * @internal
+ * @template TTermL
+ * @template TTermR
+ * @template TExpressionAST
  */
 final class LeftAssoc implements ExpressionType
 {
-    /** @var BinaryOperator[] */
+    /** @psalm-var BinaryOperator[] */
     private array $operators;
 
     /**
@@ -40,10 +44,11 @@ final class LeftAssoc implements ExpressionType
 
     public function buildPrecedenceLevel(Parser $previousPrecedenceLevel): Parser
     {
-        // @todo can we check the arity of $operator->transform() and throw
-        //
-
+        /**
+         * @psalm-var list<Parser<callable(TTermL):TExpressionAST>> $operatorParsers
+         */
         $operatorParsers = [];
+        // @todo use folds?
         foreach ($this->operators as $operator) {
             $operatorParsers[] =
                 pure(curry(flip($operator->transform())))
@@ -51,13 +56,44 @@ final class LeftAssoc implements ExpressionType
                     ->label($operator->label());
         }
 
+        return
+            map(
+                collect(
+                    $previousPrecedenceLevel,
+                    many(choice(...$operatorParsers))
+                ),
+                /**
+                 * @psalm-param array{0:Parser<TExpressionAST>, 1: list<callable(Parser<TTermL>):Parser<TExpressionAST>>} $o
+                 * @psalm-return Parser<TExpressionAST>
+                 */
+                fn(array $o): Parser => array_reduce(
+                    $o[1],
+                    /**
+                     * @psalm-param Parser<TTermL> $acc
+                     * @psalm-param callable(Parser<TTermL>):Parser<TExpressionAST> $appl
+                     * @psalm-return Parser<TExpressionAST>
+                     */
+                    fn($acc, callable $appl) => $appl($acc),
+                    $o[0]
+                )
+            );
+
+
         return collect(
             $previousPrecedenceLevel,
             many(choice(...$operatorParsers))
-        )->map(fn(array $o) => array_reduce(
-            $o[1],
-            fn($acc, callable $appl) => $appl($acc),
-            $o[0]
-        ));
+        )->map(
+        /** @psalm-return Parser<TExpressionAST> */
+            fn(array $o): Parser => array_reduce(
+                $o[1],
+                /**
+                 * @psalm-param TTermL $acc
+                 * @psalm-param Parser<callable(TTermL):TExpressionAST> $appl
+                 * @psalm-return Parser<TExpressionAST>
+                 */
+                fn($acc, callable $appl) => $appl($acc),
+                $o[0]
+            )
+        );
     }
 }
