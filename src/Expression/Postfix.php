@@ -10,6 +10,7 @@
 
 namespace Verraes\Parsica\Expression;
 
+use InvalidArgumentException;
 use Verraes\Parsica\Parser;
 use function Verraes\Parsica\choice;
 use function Verraes\Parsica\keepFirst;
@@ -21,29 +22,35 @@ use function Verraes\Parsica\pure;
  */
 final class Postfix implements ExpressionType
 {
-    /** @psalm-var Operator[] */
+    /** @psalm-var UnaryOperator[] */
     private array $operators;
 
     /**
-     * @psalm-param Operator[] $operators
+     * @psalm-param UnaryOperator[] $operators
      */
     function __construct(array $operators)
     {
-        // @todo throw if $operator->arity() != 1
-
         // @todo replace with atLeastOneArg, adjust message
-        if (empty($operators)) throw new \InvalidArgumentException("PrefixUnary expects at least one Operator");
+        if (empty($operators)) throw new InvalidArgumentException("Postfix expects at least one Operator");
         $this->operators = $operators;
     }
 
+    /**
+     * @template T
+     * @psalm-param Parser<T> $previousPrecedenceLevel
+     * @psalm-return Parser<TOutput>
+     */
     public function buildPrecedenceLevel(Parser $previousPrecedenceLevel): Parser
     {
-        /** @var [Operator<TOutput>] $operatorParsers */
+        /**
+         * @todo template TOutput
+         * @todo psalm-var Operator<TOutput>[] $operatorParsers
+         */
         $operatorParsers = [];
         foreach ($this->operators as $operator) {
             $operatorParsers[] =
                 pure($operator->transform())
-                    ->apply(keepFirst($previousPrecedenceLevel, $operator->parser()))
+                    ->apply(keepFirst($previousPrecedenceLevel, $operator->symbol()))
                     ->label($operator->label());
         }
 

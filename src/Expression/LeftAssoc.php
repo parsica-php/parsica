@@ -24,18 +24,16 @@ use function Verraes\Parsica\pure;
  */
 final class LeftAssoc implements ExpressionType
 {
-    /** @var Operator[] */
+    /** @var BinaryOperator[] */
     private array $operators;
 
     /**
-     * @psalm-param Operator[] $operators
+     * @psalm-param BinaryOperator[] $operators
      */
     function __construct(array $operators)
     {
         // @todo replace with atLeastOneArg, adjust message
-        if (empty($operators)) throw new InvalidArgumentException("PrefixUnary expects at least one Operator");
-
-        // @todo throw if $operator->arity() != 2
+        if (empty($operators)) throw new InvalidArgumentException("LeftAssoc expects at least one Operator");
 
         $this->operators = $operators;
     }
@@ -49,7 +47,7 @@ final class LeftAssoc implements ExpressionType
         foreach ($this->operators as $operator) {
             $operatorParsers[] =
                 pure(curry(flip($operator->transform())))
-                    ->apply($operator->parser()->followedBy($previousPrecedenceLevel))
+                    ->apply($operator->symbol()->followedBy($previousPrecedenceLevel))
                     ->label($operator->label());
         }
 

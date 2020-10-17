@@ -10,6 +10,7 @@
 
 namespace Verraes\Parsica\Expression;
 
+use InvalidArgumentException;
 use Verraes\Parsica\Parser;
 use function Cypress\Curry\curry;
 use function Verraes\Parsica\choice;
@@ -23,18 +24,16 @@ use function Verraes\Parsica\pure;
  */
 final class RightAssoc implements ExpressionType
 {
-    /** @var Operator[] */
+    /** @var BinaryOperator[] */
     private array $operators;
 
     /**
-     * @psalm-param Operator[] $operators
+     * @psalm-param BinaryOperator[] $operators
      */
     function __construct(array $operators)
     {
-        // @todo throw if $operator->arity() != 2
-
         // @todo replace with atLeastOneArg, adjust message
-        if (empty($operators)) throw new \InvalidArgumentException("PrefixUnary expects at least one Operator");
+        if (empty($operators)) throw new InvalidArgumentException("RightAssoc expects at least one Operator");
         $this->operators = $operators;
     }
 
@@ -55,7 +54,7 @@ final class RightAssoc implements ExpressionType
         foreach ($this->operators as $operator) {
             $operatorParsers[] =
                 pure(curry($operator->transform()))
-                    ->apply(keepFirst($previousPrecedenceLevel, $operator->parser()))
+                    ->apply(keepFirst($previousPrecedenceLevel, $operator->symbol()))
                     ->label($operator->label());
         }
 

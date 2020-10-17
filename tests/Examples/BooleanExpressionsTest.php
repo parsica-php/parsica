@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Parser;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\{between, char, choice, keepFirst, recursive, skipHSpace, string};
-use function Verraes\Parsica\Expression\{expression, leftAssoc, operator, prefix};
+use function Verraes\Parsica\Expression\{binaryOperator, expression, leftAssoc, operator, prefix, unaryOperator};
 
 final class BooleanExpressionsTest extends TestCase
 {
@@ -23,15 +23,15 @@ final class BooleanExpressionsTest extends TestCase
     /** @test */
     public function booleanExpressions()
     {
-        $token = fn(Parser $parser) => keepFirst($parser, skipHSpace());
+        $token = fn(Parser $parser) : Parser => keepFirst($parser, skipHSpace());
         $parens = fn (Parser $parser): Parser =>  $token(between($token(char('(')), $token(char(')')), $parser));
         $term = fn(): Parser => $token(choice(
             string("TRUE")->map(fn($v) => new True_),
             string("FALSE")->map(fn($v) => new False_),
         ));
-        $NOT = operator($token(string("NOT")), fn($v) => new Not_($v));
-        $AND = operator($token(string("AND")), fn($l, $r) => new And_($l, $r));
-        $OR = operator($token(string("OR")), fn($l, $r) => new Or_($l, $r));
+        $NOT = unaryOperator($token(string("NOT")), fn($v) => new Not_($v));
+        $AND = binaryOperator($token(string("AND")), fn($l, $r) => new And_($l, $r));
+        $OR = binaryOperator($token(string("OR")), fn($l, $r) => new Or_($l, $r));
 
         $expr = recursive();
         $expr->recurse(expression(

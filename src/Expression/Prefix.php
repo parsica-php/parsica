@@ -10,6 +10,7 @@
 
 namespace Verraes\Parsica\Expression;
 
+use InvalidArgumentException;
 use Verraes\Parsica\Parser;
 use function Verraes\Parsica\choice;
 use function Verraes\Parsica\pure;
@@ -19,18 +20,16 @@ use function Verraes\Parsica\pure;
  */
 final class Prefix implements ExpressionType
 {
-    /** @var Operator[] */
+    /** @psalm-var UnaryOperator[] */
     private array $operators;
 
     /**
-     * @psalm-param Operator[] $operators
+     * @psalm-param UnaryOperator[] $operators
      */
     function __construct(array $operators)
     {
-        // @todo throw if $operator->arity() != 1
-
         // @todo replace with atLeastOneArg, adjust message
-        if (empty($operators)) throw new \InvalidArgumentException("PrefixUnary expects at least one Operator");
+        if (empty($operators)) throw new InvalidArgumentException("Prefix expects at least one Operator");
         $this->operators = $operators;
     }
 
@@ -41,7 +40,7 @@ final class Prefix implements ExpressionType
 
             $operatorParsers[] =
                 pure($operator->transform())
-                    ->apply($operator->parser()->followedBy($previousPrecedenceLevel))
+                    ->apply($operator->symbol()->followedBy($previousPrecedenceLevel))
                     ->label($operator->label());
         }
 

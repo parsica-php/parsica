@@ -34,31 +34,50 @@ function expression(Parser $term, array $expressionTable): Parser
 }
 
 /*
- * An operator in an expression. The operands of the expression will be passed into $transform to produce the output of
- * the expression parser.
+ * An binary operator in an expression. The operands of the expression will be passed into $transform to produce the
+ * output of the expression parser.
  *
  * @api
  *
- * @template T
- * @template TTerm
- * @template TTerm1
- * @template TTerm2
+ * @template TSymbol
+ * @template TTermL
+ * @template TTermR
  * @template TOutput
- * @psalm-param Parser<T> $symbol
- * @psalm-param callable(TTerm):TOutput|callable(TTerm1, TTerm2):TOutput $transform
+ * @psalm-param Parser<TSymbol> $symbol
+ * @psalm-param callable(TTermL, TTermR):TOutput $transform
  * @psalm-param string $label
  *
- * @return Operator<TOutput>
+ * @return BinaryOperator<TSymbol, TTermL, TTermR, TOutput>
  */
-function operator(Parser $symbol, callable $transform, string $label = ""): Operator
+function binaryOperator(Parser $symbol, callable $transform, string $label = ""): BinaryOperator
 {
-    return new Operator($symbol, $transform, $label);
+    return new BinaryOperator($symbol, $transform, $label);
+}
+
+/*
+ * An unary operator in an expression. The operands of the expression will be passed into $transform to produce the
+ * output of the expression parser.
+ *
+ * @api
+ *
+ * @template TSymbol
+ * @template TTerm
+ * @template TOutput
+ * @psalm-param Parser<TSymbol> $symbol
+ * @psalm-param callable(TTerm):TOutput $transform
+ * @psalm-param string $label
+ *
+ * @return BinaryOperator<TSymbol, TTerm, TOutput>
+ */
+function unaryOperator(Parser $symbol, callable $transform, string $label = ""): UnaryOperator
+{
+    return new UnaryOperator($symbol, $transform, $label);
 }
 
 /*
  * @api
  */
-function leftAssoc(Operator ...$operators): LeftAssoc
+function leftAssoc(BinaryOperator ...$operators): LeftAssoc
 {
     return new LeftAssoc($operators);
 }
@@ -66,7 +85,7 @@ function leftAssoc(Operator ...$operators): LeftAssoc
 /*
  * @api
  */
-function rightAssoc(Operator ...$operators): RightAssoc
+function rightAssoc(BinaryOperator ...$operators): RightAssoc
 {
     return new RightAssoc($operators);
 }
@@ -74,7 +93,7 @@ function rightAssoc(Operator ...$operators): RightAssoc
 /*
  * @api
  */
-function nonAssoc(Operator $operator): NonAssoc
+function nonAssoc(BinaryOperator $operator): NonAssoc
 {
     return new NonAssoc($operator);
 }
@@ -82,7 +101,7 @@ function nonAssoc(Operator $operator): NonAssoc
 /*
  * @api
  */
-function prefix(Operator ...$operators): Prefix
+function prefix(UnaryOperator ...$operators): Prefix
 {
     return new Prefix($operators);
 }
@@ -90,7 +109,7 @@ function prefix(Operator ...$operators): Prefix
 /*
  * @api
  */
-function postfix(Operator ...$operators): Postfix
+function postfix(UnaryOperator ...$operators): Postfix
 {
     return new Postfix($operators);
 }

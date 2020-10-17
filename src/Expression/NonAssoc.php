@@ -19,9 +19,9 @@ use function Verraes\Parsica\collect;
  */
 final class NonAssoc implements ExpressionType
 {
-    private Operator $operator;
+    private BinaryOperator $operator;
 
-    function __construct(Operator $operator)
+    function __construct(BinaryOperator $operator)
     {
         // @todo throw if $operator->arity() != 2
 
@@ -33,7 +33,7 @@ final class NonAssoc implements ExpressionType
         return choice(
             collect(
                 $previousPrecedenceLevel,
-                $this->operator->parser(),
+                $this->operator->symbol(),
                 $previousPrecedenceLevel
             )->map(fn(array $o) => $this->operator->transform()($o[0], $o[2])),
             $previousPrecedenceLevel

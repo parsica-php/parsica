@@ -13,7 +13,13 @@ namespace Tests\Verraes\Parsica\Examples;
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Parser;
 use function Verraes\Parsica\{atLeastOne, between, char, digitChar, keepFirst, recursive, skipHSpace, string};
-use function Verraes\Parsica\Expression\{expression, leftAssoc, operator, postfix, prefix};
+use function Verraes\Parsica\Expression\{binaryOperator,
+    expression,
+    leftAssoc,
+    operator,
+    postfix,
+    prefix,
+    unaryOperator};
 
 /**
  * Parse expressions and calculate the result
@@ -32,20 +38,20 @@ final class CalculatorTest extends TestCase
             $parens($expr)->or($term()),
             [
                 prefix(
-                    operator(char('-'), fn($v) => -$v),
-                    operator(char('+'), fn($v) => $v),
+                    unaryOperator(char('-'), fn($v) => -$v),
+                    unaryOperator(char('+'), fn($v) => $v),
                 ),
                 postfix(
-                    operator($token(string('--')), fn($v) => $v - 1),
-                    operator($token(string('++')), fn($v) => $v + 1),
+                    unaryOperator($token(string('--')), fn($v) => $v - 1),
+                    unaryOperator($token(string('++')), fn($v) => $v + 1),
                 ),
                 leftAssoc(
-                    operator($token(char('*')), fn($l, $r) => $l * $r),
-                    operator($token(char('/')), fn($l, $r) => $l / $r),
+                    binaryOperator($token(char('*')), fn($l, $r) => $l * $r),
+                    binaryOperator($token(char('/')), fn($l, $r) => $l / $r),
                 ),
                 leftAssoc(
-                    operator($token(char('+')), fn($l, $r) => $l + $r),
-                    operator($token(char('-')), fn($l, $r) => $l - $r),
+                    binaryOperator($token(char('+')), fn($l, $r) => $l + $r),
+                    binaryOperator($token(char('-')), fn($l, $r) => $l - $r),
                 ),
             ]
         ));
