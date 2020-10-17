@@ -476,10 +476,10 @@ function between(Parser $open, Parser $close, Parser $middle): Parser
  * The sepBy parser always succeed, even if it doesn't find anything. Use {@see sepBy1()} if you want it to find at
  * least one value.
  *
- * @template TS
+ * @template TSeparator
  * @template T
  *
- * @psalm-param Parser<TS> $separator
+ * @psalm-param Parser<TSeparator> $separator
  * @psalm-param Parser<T>  $parser
  *
  * @psalm-return Parser<list<T>>
