@@ -105,7 +105,7 @@ final class JSON
              * @psalm-param  list<array{string:mixed}> $members
              * @psalm-return object
              */
-            fn(array $members):object => (object)array_merge($members));
+            fn(array $members):object => (object)array_merge(...$members));
     }
 
     /**
