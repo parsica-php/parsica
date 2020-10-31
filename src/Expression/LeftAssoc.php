@@ -17,26 +17,25 @@ use function Verraes\Parsica\choice;
 use function Verraes\Parsica\collect;
 use function Verraes\Parsica\Internal\FP\flip;
 use function Verraes\Parsica\many;
-use function Verraes\Parsica\map;
 use function Verraes\Parsica\pure;
 
 /**
  * @internal
- * @template TTermL
- * @template TTermR
  * @template TExpressionAST
  */
 final class LeftAssoc implements ExpressionType
 {
-    /** @psalm-var BinaryOperator[] */
+    /** @psalm-var non-empty-list<BinaryOperator> */
     private array $operators;
 
     /**
-     * @psalm-param BinaryOperator[] $operators
+     * @psalm-param non-empty-list<BinaryOperator> $operators
      */
     function __construct(array $operators)
     {
         // @todo replace with atLeastOneArg, adjust message
+
+        /** @psalm-suppress TypeDoesNotContainType */
         if (empty($operators)) throw new InvalidArgumentException("LeftAssoc expects at least one Operator");
 
         $this->operators = $operators;
@@ -45,7 +44,7 @@ final class LeftAssoc implements ExpressionType
     public function buildPrecedenceLevel(Parser $previousPrecedenceLevel): Parser
     {
         /**
-         * @psalm-var list<Parser<callable(TTermL):TExpressionAST>> $operatorParsers
+         * @psalm-var list<Parser<callable(Parser<TExpressionAST>):Parser<TExpressionAST>>> $operatorParsers
          */
         $operatorParsers = [];
         // @todo use folds?

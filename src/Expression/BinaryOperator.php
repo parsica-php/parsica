@@ -16,6 +16,7 @@ use Verraes\Parsica\Parser;
  * @internal
  * @template TSymbol
  * @template TTermL
+ * @TODO THESE ARE ALL TExpressionAST
  * @template TTermR
  * @template TExpressionAST
  */
