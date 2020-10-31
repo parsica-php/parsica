@@ -35,6 +35,10 @@ final class NonAssoc implements ExpressionType
         $this->operator = $operator;
     }
 
+    /**
+     * @psalm-param Parser<TExpressionAST> $previousPrecedenceLevel
+     * @psalm-return Parser<TExpressionAST>
+     */
     public function buildPrecedenceLevel(Parser $previousPrecedenceLevel): Parser
     {
         return choice(
@@ -46,6 +50,7 @@ final class NonAssoc implements ExpressionType
                 ),
 
                 /**
+                 * @psalm-param array{0: TExpressionAST, 1: TSymbol, 2: TExpressionAST} $o
                  * @psalm-return TExpressionAST
                  */
                 fn(array $o) => $this->operator->transform()($o[0], $o[2])),
