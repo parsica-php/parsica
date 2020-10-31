@@ -39,6 +39,10 @@ final class NonAssoc implements ExpressionType
                     $this->operator->symbol(),
                     $previousPrecedenceLevel
                 ),
+
+                /**
+                 * @psalm-return TExpressionAST
+                 */
                 fn(array $o) => $this->operator->transform()($o[0], $o[2])),
             $previousPrecedenceLevel
         );
