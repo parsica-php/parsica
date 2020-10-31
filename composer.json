@@ -15,6 +15,11 @@
             "name": "Mathias Verraes",
             "email": "mathias@verraes.net",
             "homepage": "https://verraes.net"
+        },
+        {
+            "name": "Toon Daelman",
+            "email": "spinnewebber_toon@hotmail.com",
+            "homepage": "https://github.com/turanct"
         }
     ],
     "require": {
