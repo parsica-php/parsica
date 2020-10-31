@@ -13,6 +13,7 @@ namespace Verraes\Parsica\Expression;
 use Verraes\Parsica\Parser;
 use function Verraes\Parsica\choice;
 use function Verraes\Parsica\collect;
+use function Verraes\Parsica\map;
 
 /**
  * @internal
@@ -32,11 +33,13 @@ final class NonAssoc implements ExpressionType
     public function buildPrecedenceLevel(Parser $previousPrecedenceLevel): Parser
     {
         return choice(
-            collect(
-                $previousPrecedenceLevel,
-                $this->operator->symbol(),
-                $previousPrecedenceLevel
-            )->map(fn(array $o) => $this->operator->transform()($o[0], $o[2])),
+            map(
+                collect(
+                    $previousPrecedenceLevel,
+                    $this->operator->symbol(),
+                    $previousPrecedenceLevel
+                ),
+                fn(array $o) => $this->operator->transform()($o[0], $o[2])),
             $previousPrecedenceLevel
         );
     }
