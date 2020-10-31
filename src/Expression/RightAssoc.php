@@ -59,13 +59,17 @@ final class RightAssoc implements ExpressionType
                     ->label($operator->label());
         }
 
-        return collect(
-            many(choice(...$operatorParsers)),
-            $previousPrecedenceLevel
-        )->map(fn(array $o) => $foldr(
-            $o[0],
-            fn(callable $appl, $acc) => $appl($acc),
-            $o[1]
-        ));
+        return map(
+            collect(
+                many(choice(...$operatorParsers)),
+                $previousPrecedenceLevel
+            ),
+            fn(array $o) => $foldr(
+                $o[0],
+                fn(callable $appl, $acc) => $appl($acc),
+                $o[1]
+            )
+        );
+
     }
 }
