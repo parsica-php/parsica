@@ -6,3 +6,4 @@
 Gherkin
 infection.log
 per-mutator.md
+composer.lock
