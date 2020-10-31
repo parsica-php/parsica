@@ -43,6 +43,10 @@ final class LeftAssoc implements ExpressionType
         $this->operators = $operators;
     }
 
+    /**
+     * @psalm-param Parser<TExpressionAST> $previousPrecedenceLevel
+     * @psalm-return Parser<TExpressionAST>
+     */
     public function buildPrecedenceLevel(Parser $previousPrecedenceLevel): Parser
     {
         /**
@@ -64,12 +68,17 @@ final class LeftAssoc implements ExpressionType
             ),
 
             /**
+             * @psalm-param array{0: TExpressionAST, 1: list<callable(TExpressionAST):TExpressionAST>} $o
              * @psalm-return TExpressionAST
              */
             fn(array $o) => array_reduce(
                 $o[1],
 
-                /** @psalm-return TExpressionAST */
+                /**
+                 * @psalm-param TExpressionAST $acc
+                 * @psalm-param callable(TExpressionAST):TExpressionAST $appl
+                 * @psalm-return TExpressionAST
+                 */
                 fn($acc, callable $appl)  => $appl($acc),
                 $o[0]
             )
