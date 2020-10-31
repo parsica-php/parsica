@@ -56,44 +56,13 @@ final class LeftAssoc implements ExpressionType
                     ->label($operator->label());
         }
 
-        return
-            map(
-                collect(
-                    $previousPrecedenceLevel,
-                    many(choice(...$operatorParsers))
-                ),
-                /**
-                 * @psalm-param array{0:Parser<TExpressionAST>, 1: list<callable(Parser<TTermL>):Parser<TExpressionAST>>} $o
-                 * @psalm-return Parser<TExpressionAST>
-                 */
-                fn(array $o): Parser => array_reduce(
-                    $o[1],
-                    /**
-                     * @psalm-param Parser<TTermL> $acc
-                     * @psalm-param callable(Parser<TTermL>):Parser<TExpressionAST> $appl
-                     * @psalm-return Parser<TExpressionAST>
-                     */
-                    fn($acc, callable $appl) => $appl($acc),
-                    $o[0]
-                )
-            );
-
-
         return collect(
             $previousPrecedenceLevel,
             many(choice(...$operatorParsers))
-        )->map(
-        /** @psalm-return Parser<TExpressionAST> */
-            fn(array $o): Parser => array_reduce(
-                $o[1],
-                /**
-                 * @psalm-param TTermL $acc
-                 * @psalm-param Parser<callable(TTermL):TExpressionAST> $appl
-                 * @psalm-return Parser<TExpressionAST>
-                 */
-                fn($acc, callable $appl) => $appl($acc),
-                $o[0]
-            )
-        );
+        )->map(fn(array $o) => array_reduce(
+            $o[1],
+            fn($acc, callable $appl) => $appl($acc),
+            $o[0]
+        ));
     }
 }
