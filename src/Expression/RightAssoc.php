@@ -10,7 +10,7 @@
 
 namespace Verraes\Parsica\Expression;
 
-use InvalidArgumentException;
+use Verraes\Parsica\Internal\Assert;
 use Verraes\Parsica\Parser;
 use function Cypress\Curry\curry;
 use function Verraes\Parsica\choice;
@@ -35,8 +35,8 @@ final class RightAssoc implements ExpressionType
      */
     function __construct(array $operators)
     {
-        // @todo replace with atLeastOneArg, adjust message
-        if (empty($operators)) throw new InvalidArgumentException("RightAssoc expects at least one Operator");
+        /** @psalm-suppress RedundantCondition */
+        Assert::nonEmptyList($operators, "RightAssoc expects at least one Operator");
         $this->operators = $operators;
     }
 
