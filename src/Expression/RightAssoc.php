@@ -17,19 +17,21 @@ use function Verraes\Parsica\choice;
 use function Verraes\Parsica\collect;
 use function Verraes\Parsica\keepFirst;
 use function Verraes\Parsica\many;
+use function Verraes\Parsica\map;
 use function Verraes\Parsica\pure;
 
 /**
  * @internal
+ * @template TSymbol
  * @template TExpressionAST
  */
 final class RightAssoc implements ExpressionType
 {
-    /** @var BinaryOperator[] */
+    /** @var non-empty-list<BinaryOperator<TSymbol, TExpressionAST>> */
     private array $operators;
 
     /**
-     * @psalm-param BinaryOperator[] $operators
+     * @psalm-param non-empty-list<BinaryOperator<TSymbol, TExpressionAST>> $operators
      */
     function __construct(array $operators)
     {

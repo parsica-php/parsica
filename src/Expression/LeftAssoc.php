@@ -22,15 +22,16 @@ use function Verraes\Parsica\pure;
 
 /**
  * @internal
+ * @template TSymbol
  * @template TExpressionAST
  */
 final class LeftAssoc implements ExpressionType
 {
-    /** @psalm-var non-empty-list<BinaryOperator> */
+    /** @psalm-var non-empty-list<BinaryOperator<TSymbol, TExpressionAST>> */
     private array $operators;
 
     /**
-     * @psalm-param non-empty-list<BinaryOperator> $operators
+     * @psalm-param non-empty-list<BinaryOperator<TSymbol, TExpressionAST>> $operators
      */
     function __construct(array $operators)
     {
@@ -67,7 +68,9 @@ final class LeftAssoc implements ExpressionType
              */
             fn(array $o) => array_reduce(
                 $o[1],
-                fn($acc, callable $appl) => $appl($acc),
+
+                /** @psalm-return TExpressionAST */
+                fn($acc, callable $appl)  => $appl($acc),
                 $o[0]
             )
         );

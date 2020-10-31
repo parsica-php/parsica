@@ -43,14 +43,12 @@ function expression(Parser $term, array $expressionTable): Parser
  * @api
  *
  * @template TSymbol
- * @template TTermL
- * @template TTermR
  * @template TExpressionAST
  * @psalm-param Parser<TSymbol> $symbol
- * @psalm-param callable(TTermL, TTermR):TExpressionAST $transform
+ * @psalm-param callable(TExpressionAST, TExpressionAST):TExpressionAST $transform
  * @psalm-param string $label
  *
- * @return BinaryOperator<TSymbol, TTermL, TTermR, TExpressionAST>
+ * @return BinaryOperator<TSymbol, TExpressionAST>
  */
 function binaryOperator(Parser $symbol, callable $transform, string $label = ""): BinaryOperator
 {
@@ -70,7 +68,7 @@ function binaryOperator(Parser $symbol, callable $transform, string $label = "")
  * @psalm-param callable(TTerm):TExpressionAST $transform
  * @psalm-param string $label
  *
- * @return BinaryOperator<TSymbol, TTerm, TExpressionAST>
+ * @return UnaryOperator<TSymbol, TTerm, TExpressionAST>
  */
 function unaryOperator(Parser $symbol, callable $transform, string $label = ""): UnaryOperator
 {
@@ -79,7 +77,7 @@ function unaryOperator(Parser $symbol, callable $transform, string $label = ""):
 
 /*
  * @api
- * @psalm-param BinaryOperator<TSymbol, TTermL, TTermR, TExpressionAST>[]
+ * @psalm-param non-empty-list<BinaryOperator<TSymbol, TExpressionAST>>
  * @psalm-return LeftAssoc
  */
 function leftAssoc(BinaryOperator ...$operators): LeftAssoc
@@ -90,7 +88,7 @@ function leftAssoc(BinaryOperator ...$operators): LeftAssoc
 /*
  * @api
  *
- * @psalm-param BinaryOperator<TSymbol, TTermL, TTermR, TExpressionAST>[]
+ * @psalm-param non-empty-list<BinaryOperator<TSymbol,TExpressionAST>>
  * @psalm-return RightAssoc
  */
 function rightAssoc(BinaryOperator ...$operators): RightAssoc
@@ -101,7 +99,7 @@ function rightAssoc(BinaryOperator ...$operators): RightAssoc
 /*
  * @api
  *
- * @psalm-param BinaryOperator<TSymbol, TTermL, TTermR, TExpressionAST>[]
+ * @psalm-param BinaryOperator<TSymbol, TExpressionAST>
  * @psalm-return NonAssoc
  */
 function nonAssoc(BinaryOperator $operator): NonAssoc

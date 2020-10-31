@@ -17,16 +17,21 @@ use function Verraes\Parsica\map;
 
 /**
  * @internal
+ * @template TSymbol
  * @template TExpressionAST
  */
 final class NonAssoc implements ExpressionType
 {
+    /**
+     * @psalm-var BinaryOperator<TSymbol, TExpressionAST>
+     */
     private BinaryOperator $operator;
 
+    /**
+     * @psalm-param BinaryOperator<TSymbol, TExpressionAST> $operator
+     */
     function __construct(BinaryOperator $operator)
     {
-        // @todo throw if $operator->arity() != 2
-
         $this->operator = $operator;
     }
 
