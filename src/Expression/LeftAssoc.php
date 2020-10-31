@@ -17,6 +17,7 @@ use function Verraes\Parsica\choice;
 use function Verraes\Parsica\collect;
 use function Verraes\Parsica\Internal\FP\flip;
 use function Verraes\Parsica\many;
+use function Verraes\Parsica\map;
 use function Verraes\Parsica\pure;
 
 /**
@@ -55,13 +56,21 @@ final class LeftAssoc implements ExpressionType
                     ->label($operator->label());
         }
 
-        return collect(
-            $previousPrecedenceLevel,
-            many(choice(...$operatorParsers))
-        )->map(fn(array $o) => array_reduce(
-            $o[1],
-            fn($acc, callable $appl) => $appl($acc),
-            $o[0]
-        ));
+        return map(
+            collect(
+                $previousPrecedenceLevel,
+                many(choice(...$operatorParsers))
+            ),
+
+            /**
+             * @psalm-return TExpressionAST
+             */
+            fn(array $o) => array_reduce(
+                $o[1],
+                fn($acc, callable $appl) => $appl($acc),
+                $o[0]
+            )
+        );
+
     }
 }
