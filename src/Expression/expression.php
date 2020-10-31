@@ -62,13 +62,12 @@ function binaryOperator(Parser $symbol, callable $transform, string $label = "")
  * @api
  *
  * @template TSymbol
- * @template TTerm
  * @template TExpressionAST
  * @psalm-param Parser<TSymbol> $symbol
- * @psalm-param callable(TTerm):TExpressionAST $transform
+ * @psalm-param callable(TExpressionAST):TExpressionAST $transform
  * @psalm-param string $label
  *
- * @return UnaryOperator<TSymbol, TTerm, TExpressionAST>
+ * @return UnaryOperator<TSymbol, TExpressionAST>
  */
 function unaryOperator(Parser $symbol, callable $transform, string $label = ""): UnaryOperator
 {
@@ -78,7 +77,7 @@ function unaryOperator(Parser $symbol, callable $transform, string $label = ""):
 /*
  * @api
  * @psalm-param non-empty-list<BinaryOperator<TSymbol, TExpressionAST>>
- * @psalm-return LeftAssoc
+ * @psalm-return LeftAssoc<TSymbol, TExpressionAST>
  */
 function leftAssoc(BinaryOperator ...$operators): LeftAssoc
 {
@@ -89,7 +88,7 @@ function leftAssoc(BinaryOperator ...$operators): LeftAssoc
  * @api
  *
  * @psalm-param non-empty-list<BinaryOperator<TSymbol,TExpressionAST>>
- * @psalm-return RightAssoc
+ * @psalm-return RightAssoc<TSymbol, TExpressionAST>
  */
 function rightAssoc(BinaryOperator ...$operators): RightAssoc
 {
@@ -100,7 +99,7 @@ function rightAssoc(BinaryOperator ...$operators): RightAssoc
  * @api
  *
  * @psalm-param BinaryOperator<TSymbol, TExpressionAST>
- * @psalm-return NonAssoc
+ * @psalm-return NonAssoc<TSymbol, TExpressionAST>
  */
 function nonAssoc(BinaryOperator $operator): NonAssoc
 {
@@ -111,8 +110,8 @@ function nonAssoc(BinaryOperator $operator): NonAssoc
  * @api
  *
  *
- * @psalm-param BinaryOperator<TSymbol, TTerm, TExpressionAST>[]
- * @psalm-return Prefix
+ * @psalm-param non-empty-list<BinaryOperator<TSymbol, TExpressionAST>>
+ * @psalm-return Prefix<TExpressionAST>
  */
 function prefix(UnaryOperator ...$operators): Prefix
 {
@@ -122,8 +121,8 @@ function prefix(UnaryOperator ...$operators): Prefix
 /*
  * @api
  *
- * @psalm-param BinaryOperator<TSymbol, TTermL, TTermR, TExpressionAST>[]
- * @psalm-return PostFix
+ * @psalm-param non-empty-list<BinaryOperator<TSymbol, TExpressionAST>>
+ * @psalm-return PostFix<TExpressionAST>
  */
 function postfix(UnaryOperator ...$operators): Postfix
 {

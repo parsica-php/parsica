@@ -10,7 +10,7 @@
 
 namespace Verraes\Parsica\Expression;
 
-use InvalidArgumentException;
+use Verraes\Parsica\Internal\Assert;
 use Verraes\Parsica\Parser;
 use function Verraes\Parsica\choice;
 use function Verraes\Parsica\keepFirst;
@@ -18,29 +18,26 @@ use function Verraes\Parsica\pure;
 
 /**
  * @internal
+ * @template TSymbol
  * @template TExpressionAST
  */
 final class Postfix implements ExpressionType
 {
-    /** @psalm-var UnaryOperator[] */
+    /** @psalm-var non-empty-list<UnaryOperator<TSymbol, TExpressionAST>> */
     private array $operators;
 
     /**
-     * @psalm-param UnaryOperator[] $operators
+     * @psalm-param non-empty-list<UnaryOperator<TSymbol, TExpressionAST>> $operators
      */
     function __construct(array $operators)
     {
-        // @todo replace with atLeastOneArg, adjust message
-        if (empty($operators)) throw new InvalidArgumentException("Postfix expects at least one Operator");
+        /** @psalm-suppress RedundantCondition */
+        Assert::nonEmptyList($operators, "Postfix expects at least one Operator");
         $this->operators = $operators;
     }
 
     public function buildPrecedenceLevel(Parser $previousPrecedenceLevel): Parser
     {
-        /**
-         * @todo template TOutput
-         * @todo psalm-var Operator<TOutput>[] $operatorParsers
-         */
         $operatorParsers = [];
         foreach ($this->operators as $operator) {
             $operatorParsers[] =
