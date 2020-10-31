@@ -28,6 +28,15 @@ final class Assert
     }
 
     /**
+     * @psalm-assert list $l
+     * @psalm-assert !empty $l
+     */
+    public static function nonEmptyList(array $l, string $message): void
+    {
+        if (empty($l)) throw new InvalidArgumentException($message);
+    }
+
+    /**
      * @throws InvalidArgumentException
      * @internal
      */
