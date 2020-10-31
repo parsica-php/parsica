@@ -40,6 +40,10 @@ final class RightAssoc implements ExpressionType
         $this->operators = $operators;
     }
 
+    /**
+     * @psalm-param Parser<TExpressionAST> $previousPrecedenceLevel
+     * @psalm-return Parser<TExpressionAST>
+     */
     public function buildPrecedenceLevel(Parser $previousPrecedenceLevel): Parser
     {
         /** @todo refactor for performance */
@@ -52,7 +56,9 @@ final class RightAssoc implements ExpressionType
             );
         };
 
-
+        /**
+         * @psalm-var list<Parser<callable(Parser<TExpressionAST>):Parser<TExpressionAST>>> $operatorParsers
+         */
         $operatorParsers = [];
         foreach ($this->operators as $operator) {
             $operatorParsers[] =
@@ -66,8 +72,19 @@ final class RightAssoc implements ExpressionType
                 many(choice(...$operatorParsers)),
                 $previousPrecedenceLevel
             ),
+
+            /**
+             * @psalm-param array{0: list<callable(TExpressionAST, 1: TExpressionAST):TExpressionAST>} $o
+             * @psalm-return TExpressionAST
+             */
             fn(array $o) => $foldr(
                 $o[0],
+
+                /**
+                 * @psalm-param callable(TExpressionAST):TExpressionAST $appl
+                 * @psalm-param TExpressionAST $acc
+                 * @psalm-return TExpressionAST
+                 */
                 fn(callable $appl, $acc) => $appl($acc),
                 $o[1]
             )
