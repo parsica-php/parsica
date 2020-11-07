@@ -22,7 +22,7 @@ use function Verraes\Parsica\Internal\FP\foldl;
  * @template TExpressionAST
  *
  * @psalm-param Parser<TTerm> $term
- * @psalm-param ExpressionType[] $expressionTable
+ * @psalm-param list<ExpressionType> $expressionTable
  *
  * @psalm-return Parser<TExpressionAST>
  */
@@ -49,7 +49,7 @@ function expression(Parser $term, array $expressionTable): Parser
  * @psalm-param callable(TExpressionAST, TExpressionAST):TExpressionAST $transform
  * @psalm-param string $label
  *
- * @return BinaryOperator<TSymbol, TExpressionAST>
+ * @psalm-return BinaryOperator<TSymbol, TExpressionAST>
  */
 function binaryOperator(Parser $symbol, callable $transform, string $label = ""): BinaryOperator
 {
