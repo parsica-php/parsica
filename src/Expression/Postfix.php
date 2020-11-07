@@ -10,7 +10,6 @@
 
 namespace Verraes\Parsica\Expression;
 
-use Verraes\Parsica\Internal\Assert;
 use Verraes\Parsica\Parser;
 use function Verraes\Parsica\choice;
 use function Verraes\Parsica\keepFirst;

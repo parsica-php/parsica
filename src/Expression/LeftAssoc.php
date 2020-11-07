@@ -10,8 +10,6 @@
 
 namespace Verraes\Parsica\Expression;
 
-use InvalidArgumentException;
-use Verraes\Parsica\Internal\Assert;
 use Verraes\Parsica\Parser;
 use function Cypress\Curry\curry;
 use function Verraes\Parsica\choice;
