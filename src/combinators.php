@@ -240,7 +240,7 @@ function assemble(Parser ...$parsers): Parser
     Assert::atLeastOneArg($parsers, "assemble()");
     $first = array_shift($parsers);
     /** @psalm-suppress InvalidArgument */
-    return foldl($parsers, fn(Parser $p1, Parser $p2): Parser => append($p1, $p2), $first);
+    return array_reduce($parsers, fn(Parser $p1, Parser $p2): Parser => append($p1, $p2), $first);
 }
 
 /**
