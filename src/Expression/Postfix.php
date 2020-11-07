@@ -31,8 +31,6 @@ final class Postfix implements ExpressionType
      */
     function __construct(array $operators)
     {
-        /** @psalm-suppress RedundantCondition */
-        Assert::nonEmptyList($operators, "Postfix expects at least one Operator");
         $this->operators = $operators;
     }
 

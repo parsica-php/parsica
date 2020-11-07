@@ -33,12 +33,11 @@ final class LeftAssoc implements ExpressionType
     private array $operators;
 
     /**
+     * @internal
      * @psalm-param non-empty-list<BinaryOperator<TSymbol, TExpressionAST>> $operators
      */
     function __construct(array $operators)
     {
-        /** @psalm-suppress RedundantCondition */
-        Assert::nonEmptyList($operators, "LeftAssoc expects at least one Operator");
         $this->operators = $operators;
     }
 

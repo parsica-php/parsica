@@ -10,6 +10,7 @@
 
 namespace Verraes\Parsica\Expression;
 
+use Verraes\Parsica\Internal\Assert;
 use Verraes\Parsica\Parser;
 use function Verraes\Parsica\Internal\FP\foldl;
 
@@ -82,6 +83,7 @@ function unaryOperator(Parser $symbol, callable $transform, string $label = ""):
  */
 function leftAssoc(BinaryOperator ...$operators): LeftAssoc
 {
+    Assert::nonEmptyList($operators, "LeftAssoc expects at least one Operator");
     return new LeftAssoc($operators);
 }
 
@@ -93,6 +95,7 @@ function leftAssoc(BinaryOperator ...$operators): LeftAssoc
  */
 function rightAssoc(BinaryOperator ...$operators): RightAssoc
 {
+    Assert::nonEmptyList($operators, "RightAssoc expects at least one Operator");
     return new RightAssoc($operators);
 }
 
@@ -110,12 +113,12 @@ function nonAssoc(BinaryOperator $operator): NonAssoc
 /*
  * @api
  *
- *
  * @psalm-param non-empty-list<BinaryOperator<TSymbol, TExpressionAST>>
  * @psalm-return Prefix<TExpressionAST>
  */
 function prefix(UnaryOperator ...$operators): Prefix
 {
+    Assert::nonEmptyList($operators, "Prefix expects at least one Operator");
     return new Prefix($operators);
 }
 
@@ -127,5 +130,6 @@ function prefix(UnaryOperator ...$operators): Prefix
  */
 function postfix(UnaryOperator ...$operators): Postfix
 {
+    Assert::nonEmptyList($operators, "Postfix expects at least one Operator");
     return new Postfix($operators);
 }

@@ -31,8 +31,6 @@ final class Prefix implements ExpressionType
      */
     function __construct(array $operators)
     {
-        /** @psalm-suppress RedundantCondition */
-        Assert::nonEmptyList($operators, "Prefix expects at least one Operator");
         $this->operators = $operators;
     }
 

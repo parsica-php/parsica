@@ -32,12 +32,11 @@ final class RightAssoc implements ExpressionType
     private array $operators;
 
     /**
+     * @internal
      * @psalm-param non-empty-list<BinaryOperator<TSymbol, TExpressionAST>> $operators
      */
     function __construct(array $operators)
     {
-        /** @psalm-suppress RedundantCondition */
-        Assert::nonEmptyList($operators, "RightAssoc expects at least one Operator");
         $this->operators = $operators;
     }
 
