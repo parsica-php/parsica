@@ -32,20 +32,38 @@ function flip(callable $f): callable
 
 
 /**
+ * @template TA
+ * @template TB
+ *
+ * @psalm-param list<TA> $input
+ * @psalm-param callable(TB, TA):TB $function
+ * @psalm-param TB $initial
+ * @psalm-return TB
+ * @psalm-suppress MixedInferredReturnType
+ * @psalm-suppress MixedReturnStatement
+ *
  * @internal
  */
-function foldl(array $input, callable $function, $initial = null) {
+function foldl(array $input, callable $function, $initial) {
     return array_reduce($input, $function, $initial);
 }
 
 /**
+ * @template TA
+ * @template TB
+ *
+ * @psalm-param list<TA> $input
+ * @psalm-param callable(TA, TB):TB $function
+ * @psalm-param TB $initial
+ * @psalm-return TB
+ *
  * @internal
  */
-function foldr(array $input, callable $function, $initial = null) {
+function foldr(array $input, callable $function, $initial) {
     if (empty($input)) return $initial;
     $head = array_shift($input);
     return $function(
         $head,
         foldr($input, $function, $initial)
     );
-};
+}
