@@ -37,11 +37,8 @@ final class LeftAssoc implements ExpressionType
      */
     function __construct(array $operators)
     {
-        // @todo replace with atLeastOneArg, adjust message
-
-        /** @psalm-suppress TypeDoesNotContainType */
-        if (empty($operators)) throw new InvalidArgumentException("LeftAssoc expects at least one Operator");
-
+        /** @psalm-suppress RedundantCondition */
+        Assert::nonEmptyList($operators, "LeftAssoc expects at least one Operator");
         $this->operators = $operators;
     }
 
