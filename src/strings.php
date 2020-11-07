@@ -14,6 +14,7 @@ use Verraes\Parsica\Internal\Assert;
 use Verraes\Parsica\Internal\EndOfStream;
 use Verraes\Parsica\Internal\Fail;
 use Verraes\Parsica\Internal\Succeed;
+use function Verraes\Parsica\Internal\FP\foldl;
 
 /**
  * Parse a non-empty string.
