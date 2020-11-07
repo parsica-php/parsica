@@ -17,14 +17,14 @@ use Verraes\Parsica\Internal\Position;
  */
 interface ParseResult
 {
-    /*
+    /**
      * True if the parser was successful.
      *
      * @api
      */
     public function isSuccess(): bool;
 
-    /*
+    /**
      * True if the parser has failed.
      *
      * @api
@@ -46,7 +46,7 @@ interface ParseResult
      */
     public function remainder(): Stream;
 
-    /*
+    /**
      * A message that indicates what the failed parser expected to find at its position in the input. It contains the
      * label that was attached to the parser.
      *

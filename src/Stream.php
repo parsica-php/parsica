@@ -20,14 +20,14 @@ use Verraes\Parsica\Internal\TakeResult;
  */
 interface Stream
 {
-    /*
+    /**
      * Extract a single token from the stream. Throw if the stream is empty.
      *
      * @throw EndOfStream
      */
     public function take1(): TakeResult;
 
-    /*
+    /**
      * Try to extract a chunk of length $n, or if the stream is too short, the rest of the stream.
      *
      * Valid implementation should follow the rules:
