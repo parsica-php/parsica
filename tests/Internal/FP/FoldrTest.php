@@ -26,17 +26,34 @@ final class FoldrTest extends TestCase
     public function associativity_is_correct()
     {
         $minus = fn($x, $y) => $x - $y;
-        $input = [1, 2, 3];
+        $input = [1, 2, 3, 4, 5];
         $init = 0;
 
-        // foldl: ((0 - 1) - 2) - 3 = -6
-        // foldr: (1 - (2 - (3 - 0))) = 2
+        // foldl: ((((0 - 1) - 2) - 3) - 4) - 5) = -15
+        // foldr: (1 - (2 - (3 - (4 - (5 - 0))))) = 3
 
         $actual = array_reduce($input, $minus, $init);
-        $this->assertSame(-6, $actual);
+        $this->assertSame(-15, $actual);
 
         $actual = foldr($input, $minus, $init);
-        $this->assertSame(2, $actual);
+        $this->assertSame(3, $actual);
+    }
+
+    /** @test */
+    public function x()
+    {
+        $concat = fn($x, $y) => "$x$y";
+        $input = [1, 2, 3, 4, 5];
+        $init = "0";
+
+        // foldl: 012345
+        // foldr: 123450
+
+        $actual = array_reduce($input, $concat, $init);
+        $this->assertSame("012345", $actual);
+
+        $actual = foldr($input, $concat, $init);
+        $this->assertSame("123450", $actual);
     }
 
 }

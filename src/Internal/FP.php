@@ -60,10 +60,9 @@ function foldl(array $input, callable $function, $initial) {
  * @internal
  */
 function foldr(array $input, callable $function, $initial) {
-    if (empty($input)) return $initial;
-    $head = array_shift($input);
-    return $function(
-        $head,
-        foldr($input, $function, $initial)
-    );
+    while($head = array_pop($input))
+    {
+        $initial = $function($head, $initial);
+    }
+    return $initial;
 }
