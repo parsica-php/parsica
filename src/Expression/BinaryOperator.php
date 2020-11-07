@@ -24,7 +24,9 @@ final class BinaryOperator
      */
     private Parser $symbol;
 
-    /** @psalm-var callable(TExpressionAST, TExpressionAST):TExpressionAST $transform */
+    /**
+     * @psalm-var callable(TExpressionAST, TExpressionAST):TExpressionAST
+     */
     private $transform;
 
     private string $label;

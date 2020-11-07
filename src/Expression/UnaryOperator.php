@@ -24,7 +24,9 @@ final class UnaryOperator
      */
     private Parser $symbol;
 
-    /** @psalm-var callable(TExpressionAST):TExpressionAST $transform */
+    /**
+     * @psalm-var callable(TExpressionAST):TExpressionAST
+     */
     private $transform;
 
     private string $label;
