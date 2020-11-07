@@ -14,6 +14,7 @@ use InvalidArgumentException;
 use Verraes\Parsica\Internal\Assert;
 use Verraes\Parsica\Internal\Fail;
 use Verraes\Parsica\Internal\Succeed;
+use function Verraes\Parsica\Internal\FP\foldl;
 
 /**
  * Identity parser, returns the Parser as is.
@@ -239,7 +240,7 @@ function assemble(Parser ...$parsers): Parser
     Assert::atLeastOneArg($parsers, "assemble()");
     $first = array_shift($parsers);
     /** @psalm-suppress InvalidArgument */
-    return array_reduce($parsers, fn(Parser $p1, Parser $p2): Parser => append($p1, $p2), $first);
+    return foldl($parsers, fn(Parser $p1, Parser $p2): Parser => append($p1, $p2), $first);
 }
 
 /**
@@ -280,7 +281,7 @@ function any(Parser ...$parsers): Parser
     $labels = array_map(fn(Parser $p): string => $p->getLabel(), $parsers);
     $label = implode(' or ', $labels);
 
-    return array_reduce(
+    return foldl(
         $parsers,
         fn(Parser $first, Parser $second): Parser => either($first, $second),
         fail("")
@@ -368,7 +369,7 @@ function zeroOrMore(Parser $parser): Parser
  */
 function repeat(int $n, Parser $parser): Parser
 {
-    return array_reduce(
+    return foldl(
         array_fill(0, $n - 1, $parser),
         fn(Parser $l, Parser $r): Parser => append($l, $r),
         $parser
@@ -392,7 +393,7 @@ function repeatList(int $n, Parser $parser): Parser
     $parser = map($parser, /** @psalm-param mixed $output */ fn($output): array => [$output]);
 
     $parsers = array_fill(0, $n - 1, $parser);
-    return array_reduce(
+    return foldl(
         $parsers,
         fn(Parser $l, Parser $r): Parser => append($l, $r),
         $parser

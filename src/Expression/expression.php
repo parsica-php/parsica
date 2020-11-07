@@ -11,6 +11,7 @@
 namespace Verraes\Parsica\Expression;
 
 use Verraes\Parsica\Parser;
+use function Verraes\Parsica\Internal\FP\foldl;
 
 /**
  * Build an expression parser from a term parser and an expression table.
@@ -28,7 +29,7 @@ use Verraes\Parsica\Parser;
 function expression(Parser $term, array $expressionTable): Parser
 {
     /** @psalm-var Parser<TExpressionAST> $parser */
-    $parser = array_reduce(
+    $parser = foldl(
         $expressionTable,
         fn(Parser $previous, ExpressionType $next) => $next->buildPrecedenceLevel($previous),
         $term

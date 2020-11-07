@@ -15,6 +15,7 @@ use Verraes\Parsica\Parser;
 use function Cypress\Curry\curry;
 use function Verraes\Parsica\choice;
 use function Verraes\Parsica\collect;
+use function Verraes\Parsica\Internal\FP\foldr;
 use function Verraes\Parsica\keepFirst;
 use function Verraes\Parsica\many;
 use function Verraes\Parsica\map;
@@ -46,16 +47,6 @@ final class RightAssoc implements ExpressionType
      */
     public function buildPrecedenceLevel(Parser $previousPrecedenceLevel): Parser
     {
-        /** @todo refactor for performance */
-        $foldr = function (array $input, callable $function, $initial = null) use (&$foldr) {
-            if (empty($input)) return $initial;
-            $head = array_shift($input);
-            return $function(
-                $head,
-                $foldr($input, $function, $initial)
-            );
-        };
-
         /**
          * @psalm-var list<Parser<callable(Parser<TExpressionAST>):Parser<TExpressionAST>>> $operatorParsers
          */
@@ -77,7 +68,7 @@ final class RightAssoc implements ExpressionType
              * @psalm-param array{0: list<callable(TExpressionAST, 1: TExpressionAST):TExpressionAST>} $o
              * @psalm-return TExpressionAST
              */
-            fn(array $o) => $foldr(
+            fn(array $o) => foldr(
                 $o[0],
 
                 /**

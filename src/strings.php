@@ -61,7 +61,7 @@ function stringI(string $str): Parser
     $split = mb_str_split($str);
     $chars = array_map(fn(string $c): Parser => charI($c), $split);
     /** @psalm-var Parser<string> $parser */
-    $parser = array_reduce(
+    $parser = foldl(
         $chars,
         fn(Parser $l, Parser $r): Parser => append($l, $r),
         succeed()

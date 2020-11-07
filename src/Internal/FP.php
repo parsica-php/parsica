@@ -29,3 +29,23 @@ function flip(callable $f): callable
      */
     return fn($x, $y) => $f($y, $x);
 }
+
+
+/**
+ * @internal
+ */
+function foldl(array $input, callable $function, $initial = null) {
+    return array_reduce($input, $function, $initial);
+}
+
+/**
+ * @internal
+ */
+function foldr(array $input, callable $function, $initial = null) {
+    if (empty($input)) return $initial;
+    $head = array_shift($input);
+    return $function(
+        $head,
+        foldr($input, $function, $initial)
+    );
+};

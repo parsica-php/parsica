@@ -11,11 +11,13 @@
 namespace Verraes\Parsica\Expression;
 
 use InvalidArgumentException;
+use Verraes\Parsica\Internal\Assert;
 use Verraes\Parsica\Parser;
 use function Cypress\Curry\curry;
 use function Verraes\Parsica\choice;
 use function Verraes\Parsica\collect;
 use function Verraes\Parsica\Internal\FP\flip;
+use function Verraes\Parsica\Internal\FP\foldl;
 use function Verraes\Parsica\many;
 use function Verraes\Parsica\map;
 use function Verraes\Parsica\pure;
@@ -71,7 +73,7 @@ final class LeftAssoc implements ExpressionType
              * @psalm-param array{0: TExpressionAST, 1: list<callable(TExpressionAST):TExpressionAST>} $o
              * @psalm-return TExpressionAST
              */
-            fn(array $o) => array_reduce(
+            fn(array $o) => foldl(
                 $o[1],
 
                 /**
