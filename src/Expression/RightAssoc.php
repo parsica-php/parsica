@@ -65,7 +65,7 @@ final class RightAssoc implements ExpressionType
             ),
 
             /**
-             * @psalm-param array{0: list<callable(TExpressionAST, 1: TExpressionAST):TExpressionAST>} $o
+             * @psalm-param array{0: list<callable(TExpressionAST):TExpressionAST>, 1: TExpressionAST} $o
              * @psalm-return TExpressionAST
              */
             fn(array $o) => foldr(
