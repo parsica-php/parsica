@@ -11,7 +11,8 @@
 namespace Verraes\Parsica\JSON;
 
 use Verraes\Parsica\Parser;
-use function Verraes\Parsica\{anySingleBut,
+use function Verraes\Parsica\{any,
+    anySingleBut,
     between,
     char,
     choice,
@@ -20,6 +21,7 @@ use function Verraes\Parsica\{anySingleBut,
     hexDigitChar,
     isCharCode,
     keepFirst,
+    map,
     recursive,
     repeat,
     satisfy,
@@ -51,22 +53,27 @@ final class JSON
      * To understand the terminology and the structure, have a peak at {@see https://www.json.org/json-en.html}
      *
      * @api
-     * @psalm-suppress all
+     * @psalm-return Parser<mixed>
      */
     public static function json(): Parser
     {
         return JSON::ws()->sequence(JSON::element());
     }
 
-    /** @psalm-suppress all */
+    /**
+     * @template T
+     * @psalm-return Parser<mixed>
+     * @psalm-suppress DocblockTypeContradiction
+     */
     public static function element(): Parser
     {
         // Memoize $element so we can keep reusing it for recursion.
+        /** @psalm-var Parser<mixed> $element */
         static $element;
         if (!isset($element)) {
             $element = recursive();
             $element->recurse(
-                choice(
+                any(
                     JSON::object(),
                     JSON::array(),
                     JSON::stringLiteral(),
@@ -80,27 +87,30 @@ final class JSON
         return $element;
     }
 
-    /** @psalm-suppress all */
+    /**
+     * @psalm-return Parser<object>
+     */
     public static function object(): Parser
     {
-        return between(
-            JSON::token(char('{')),
-            JSON::token(char('}')),
-            sepBy(
-                JSON::token(char(',')),
-                JSON::member()
-            )
-        )->map(function ($members) {
-            $object = [];
-            foreach ($members as $kv) {
-                $object[$kv[0]] = $kv[1];
-            }
-            return (object)$object;
-        }
-        );
+        return map(
+            between(
+                JSON::token(char('{')),
+                JSON::token(char('}')),
+                sepBy(
+                    JSON::token(char(',')),
+                    JSON::member()
+                )
+            ),
+            /**
+             * @psalm-param  list<array{string:mixed}> $members
+             * @psalm-return object
+             */
+            fn(array $members):object => (object)array_merge(...$members));
     }
 
-    /** @psalm-suppress all */
+    /**
+     * @psalm-return Parser<list<mixed>>
+     */
     public static function array(): Parser
     {
         return between(
@@ -112,19 +122,25 @@ final class JSON
         );
     }
 
-    /** @psalm-suppress all */
+    /**
+     * @psalm-return Parser<bool>
+     */
     public static function true(): Parser
     {
         return JSON::token(string('true'))->map(fn($_) => true)->label('true');
     }
 
-    /** @psalm-suppress all */
+    /**
+     * @psalm-return Parser<bool>
+     */
     public static function false(): Parser
     {
         return JSON::token(string('false'))->map(fn($_) => false)->label('false');
     }
 
-    /** @psalm-suppress all */
+    /**
+     * @psalm-return Parser<null>
+     */
     public static function null(): Parser
     {
         return JSON::token(string('null'))->map(fn($_) => null)->label('null');
@@ -132,7 +148,8 @@ final class JSON
 
     /**
      * Whitespace
-     * @psalm-suppress all
+     *
+     * @psalm-return Parser<null>
      */
     public static function ws(): Parser
     {
@@ -142,20 +159,24 @@ final class JSON
 
     /**
      * Apply $parser and consume all the following whitespace.
-     * @psalm-suppress all
+     *
+     * @template T
+     * @psalm-param Parser<T> $parser
+     * @psalm-return Parser<T>
      */
     public static function token(Parser $parser): Parser
     {
         return keepFirst($parser, JSON::ws());
     }
 
-    /** @psalm-suppress all */
     public static function number(): Parser
     {
         return JSON::token(float())->map('floatval')->label("number");
     }
 
-    /** @psalm-suppress all */
+    /**
+     * @psalm-return Parser<string>
+     */
     public static function stringLiteral(): Parser
     {
         return JSON::token(
@@ -176,19 +197,27 @@ final class JSON
                         anySingleBut('"') // @TODO is a backslash  that is not one of the escapes above legal?
                     )
                 )
-            )->map(fn($o) => (string)$o) // because the empty json string returns null
+            )->map(fn($o): string => (string)$o) // because the empty json string returns null
         )->label("string literal");
     }
 
-    /** @psalm-suppress all */
+    /**
+     * @return Parser<array{string:mixed}>
+     */
     public static function member(): Parser
     {
-        return collect(
-            JSON::stringLiteral(),
-            JSON::token(char(':'))->sequence(
+        return map(
+            collect(
+                JSON::stringLiteral(),
+                JSON::token(char(':')),
                 JSON::token(JSON::element())
-            )
-        );
+            ),
+            /**
+             * @psalm-param array{0:string, 1:string, 2:mixed} $o
+             * @psalm-return array{string:mixed}
+             * @psalm-suppress MoreSpecificReturnType
+             * @psalm-suppress LessSpecificReturnStatement
+             */
+            fn(array $o): array => [$o[0] => $o[2]]);
     }
-
 }

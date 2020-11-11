@@ -8,6 +8,8 @@ Parsica is early stage, so expect things to break all the time.
 
 This is a rough wishlist of features to do before 1.0:
 
+### Done
+
 - [x] API Documentation
 - [x] All essential parsers
 - [x] Basic error messages
@@ -17,21 +19,18 @@ This is a rough wishlist of features to do before 1.0:
 - [x] Essential combinators
 - [x] JSON parser
 - [x] Parser position in error messages
-
-### WIP 
-
-- [ ] WIP - Tutorial
-- [ ] Streaming input
+- [x] Expression parser helpers
+- [x] Tutorial
 
 ### TODO 
 
+- [ ] Streaming input
 - [ ] Change the behaviour of or, add try and lookAhead
 - [ ] Better parser assertions
 - [ ] Better exceptions
 - [ ] Character categories
 - [ ] Comparison tests for canonical and performant implementations
 - [ ] Debug trees
-- [ ] Expression parser helpers
 - [ ] Inliner
 - [ ] Lexer
 - [ ] Monoidal parser types

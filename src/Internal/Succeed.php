@@ -79,8 +79,6 @@ final class Succeed implements ParseResult
      *
      * @psalm-param ParseResult<T> $other
      * @psalm-return ParseResult<T>
-     * @psalm-suppress MixedOperand
-     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function append(ParseResult $other): ParseResult
     {

@@ -11,6 +11,7 @@
 namespace Verraes\Parsica\Internal;
 
 use InvalidArgumentException;
+use Verraes\Parsica\Parser;
 
 /**
  * @internal
@@ -24,6 +25,14 @@ final class Assert
     public static function nonEmpty(string $str): void
     {
         Assert::minLength($str, 1, "The string must not be empty.");
+    }
+
+    /**
+     * @psalm-assert non-empty-list $l
+     */
+    public static function nonEmptyList(array $l, string $message): void
+    {
+        if (empty($l)) throw new InvalidArgumentException($message);
     }
 
     /**
@@ -71,11 +80,11 @@ final class Assert
     }
 
     /**
-     * @throws InvalidArgumentException
+     * @psalm-param mixed $f
      * @internal
      * @param callable|mixed $f
      */
-    public static function callable($f, string $message) : void
+    public static function isCallable($f, string $message) : void
     {
         if (!is_callable($f)) {
             throw new InvalidArgumentException($message);

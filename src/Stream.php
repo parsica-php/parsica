@@ -15,17 +15,19 @@ use Verraes\Parsica\Internal\TakeResult;
 
 /**
  * Represents an input stream. This allows us to have different types of input, each with their own optimizations.
+ *
+ * @psalm-immutable
  */
 interface Stream
 {
-    /*
+    /**
      * Extract a single token from the stream. Throw if the stream is empty.
      *
      * @throw EndOfStream
      */
     public function take1(): TakeResult;
 
-    /*
+    /**
      * Try to extract a chunk of length $n, or if the stream is too short, the rest of the stream.
      *
      * Valid implementation should follow the rules:
@@ -47,7 +49,6 @@ interface Stream
      * @TODO This method isn't strictly necessary but let's see.
      *
      * @psalm-param callable(string):bool $predicate
-     *
      */
     public function takeWhile(callable $predicate) : TakeResult;
 

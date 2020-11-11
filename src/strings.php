@@ -14,6 +14,7 @@ use Verraes\Parsica\Internal\Assert;
 use Verraes\Parsica\Internal\EndOfStream;
 use Verraes\Parsica\Internal\Fail;
 use Verraes\Parsica\Internal\Succeed;
+use function Verraes\Parsica\Internal\FP\foldl;
 
 /**
  * Parse a non-empty string.
@@ -61,9 +62,9 @@ function stringI(string $str): Parser
     $split = mb_str_split($str);
     $chars = array_map(fn(string $c): Parser => charI($c), $split);
     /** @psalm-var Parser<string> $parser */
-    $parser = array_reduce(
+    $parser = foldl(
         $chars,
-        fn(Parser $l, Parser $r): Parser => $l->append($r),
+        fn(Parser $l, Parser $r): Parser => append($l, $r),
         succeed()
     )->label("'$str'");
     return $parser;

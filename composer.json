@@ -15,19 +15,24 @@
             "name": "Mathias Verraes",
             "email": "mathias@verraes.net",
             "homepage": "https://verraes.net"
+        },
+        {
+            "name": "Toon Daelman",
+            "email": "spinnewebber_toon@hotmail.com",
+            "homepage": "https://github.com/turanct"
         }
     ],
     "require": {
         "php": "^7.4 || ^8.0",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "cypresslab/php-curry": "^0.5.0"
     },
     "require-dev": {
         "ext-json": "*",
-        "cypresslab/php-curry": "^0.5.0",
         "mathiasverraes/uptodocs": "dev-main",
         "phpunit/phpunit": "^9.0",
         "psr/event-dispatcher": "^1.0",
-        "vimeo/psalm": "^3.11"
+        "vimeo/psalm": "^4.1"
     },
     "autoload": {
         "psr-4": {
@@ -42,7 +47,9 @@
             "src/recursion.php",
             "src/sideEffects.php",
             "src/space.php",
-            "src/strings.php"
+            "src/strings.php",
+            "src/Expression/expression.php",
+            "src/Internal/FP.php"
         ]
     },
     "autoload-dev": {

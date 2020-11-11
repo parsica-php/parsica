@@ -180,8 +180,6 @@ function oneOf(array $chars): Parser
  *
  * @psalm-return Parser<string>
  * @api
- * @template T
- *
  */
 function oneOfS(string $chars): Parser
 {
@@ -244,11 +242,16 @@ function takeRest(): Parser
  *
  * This serves as the zero parser in `append()` operations.
  *
+ * @psalm-return Parser<null>
+ *
  * @api
  */
 function nothing(): Parser
 {
-    return Parser::make("<nothing>", fn(Stream $input) => new Succeed(null, $input));
+    /** @psalm-var callable(Stream):ParseResult<null> $result */
+    $result = fn(Stream $input) : ParseResult => new Succeed(null, $input);
+    $parser = Parser::make("<nothing>", $result);
+    return $parser;
 }
 
 /**

@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\v0_4_0\ParseResult;
+namespace Tests\Verraes\Parsica\ParseResult;
 
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Internal\Position;

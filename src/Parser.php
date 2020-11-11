@@ -22,6 +22,8 @@ use Verraes\Parsica\Internal\Fail;
  * At the moment, there is no Parser interface, and no Parser abstract class to extend from. This is intentional, but
  * will be changed if we find use cases where those would be the best solutions.
  *
+ * The type is Parser<T>, where T is the type of the output that the parser will produce after completing successfully.
+ *
  * @template T
  * @api
  */
@@ -53,7 +55,7 @@ final class Parser
      *
      * @see recursive()
      *
-     * @psalm-return Parser<T>
+     * @psalm-return Parser<mixed>
      * @api
      */
     public static function recursive(): Parser
@@ -87,9 +89,11 @@ final class Parser
      * Recurse on a parser. Used in combination with {@see recursive()}. After calling this method, this parser behaves
      * like a regular parser.
      *
+     * @psalm-param Parser<mixed> $parser
+     *
      * @api
      */
-    public function recurse(Parser $parser): Parser
+    public function recurse(Parser $parser): void
     {
         switch ($this->recursionStatus) {
             case 'non-recursive':
@@ -109,8 +113,6 @@ final class Parser
             default:
                 throw new Exception("Unexpected recursionStatus value");
         }
-
-        return $this;
     }
 
     /**
@@ -242,25 +244,10 @@ final class Parser
     }
 
     /**
-     * Construct a class with thee parser's output as the constructor argument
-     *
-     * @template T2
-     *
-     * @psalm-param class-string<T2> $className
-     *
-     * @psalm-return Parser<T2>
-     * @api
-     */
-    public function construct(string $className): Parser
-    {
-        return map($this, /** @psalm-param mixed $val */ fn($val) => new $className($val));
-    }
-
-    /**
      * Combine the parser with another parser of the same type, which will cause the results to be appended.
      *
      * @psalm-param Parser<T|null> $other
-     * @psalm-return Parser<T>
+     * @psalm-return Parser<T|null>
      * @api
      */
     public function append(Parser $other): Parser
@@ -424,6 +411,7 @@ final class Parser
      *
      * @template T2
      * @psalm-param T2 $output
+     * @psalm-return Parser<T2>
      *
      * @deprecated @TODO needs test
      *
@@ -437,5 +425,22 @@ final class Parser
              */
             fn($_) => $output
         );
+    }
+
+    /**
+     * Make sure that the input ends after the parser has successfully completed. The output is the output of the
+     * original parser.
+     *
+     * Also useful in unit tests to make sure a parser doesn't consume more than you intended.
+     *
+     * Alias for $parser->thenIgnore(eof()).
+     *
+     * @api
+     * @psalm-return Parser<T>
+     */
+    public function thenEof(): Parser
+    {
+        return keepFirst($this, eof());
+        // aka $this->thenIgnore(eof());
     }
 }

@@ -10,9 +10,11 @@
 
 namespace Verraes\Parsica;
 
+use InvalidArgumentException;
 use Verraes\Parsica\Internal\Assert;
 use Verraes\Parsica\Internal\Fail;
 use Verraes\Parsica\Internal\Succeed;
+use function Verraes\Parsica\Internal\FP\foldl;
 
 /**
  * Identity parser, returns the Parser as is.
@@ -113,7 +115,7 @@ function apply(Parser $parser1, Parser $parser2): Parser
             return $r1;
         }
         $f = $r1->output();
-        Assert::callable($f, "apply() can only be used when the output of the first parser is a callable with 1 argument. Use currying for functions with more than 1 argument.");
+        Assert::isCallable($f, "apply() can only be used when the output of the first parser is a callable with 1 argument. Use currying for functions with more than 1 argument.");
         // @todo assert that the arity of $f == 1
         return $r1->continueWith($parser2)->map($f);
     });
@@ -172,15 +174,16 @@ function keepSecond(Parser $first, Parser $second): Parser
 /**
  * Either parse the first thing or the second thing
  *
- * @psalm-param Parser<T> $first
- * @psalm-param Parser<T> $second
+ * @psalm-param Parser<T1> $first
+ * @psalm-param Parser<T2> $second
  *
- * @psalm-return Parser<T>
+ * @psalm-return Parser<T1|T2>
  * @api
  *
  * @see Parser::or()
  *
- * @template T
+ * @template T1
+ * @template T2
  *
  */
 function either(Parser $first, Parser $second): Parser
@@ -243,17 +246,18 @@ function assemble(Parser ...$parsers): Parser
 /**
  * Parse into an array that consists of the results of all parsers.
  *
- * @psalm-param list<Parser<T>> $parsers
- *
- * @psalm-return Parser<T>
+ * @psalm-param list<Parser<mixed>> $parsers
+ * @psalm-return Parser<mixed>
  * @api
- * @template T
- *
  */
 function collect(Parser ...$parsers): Parser
 {
-    /** @psalm-suppress MissingClosureParamType */
-    $toArray = fn($v): array => [$v];
+    $toArray =
+        /**
+         * @psalm-param mixed $v
+         * @psalm-return list<mixed>
+         */
+        fn($v): array => [$v];
     $arrayParsers = array_map(
         fn(Parser $parser): Parser => map($parser, $toArray),
         $parsers
@@ -264,23 +268,20 @@ function collect(Parser ...$parsers): Parser
 /**
  * Tries each parser one by one, returning the result of the first one that succeeds.
  *
- * @psalm-param Parser<T>[] $parsers
- *
- * @psalm-return Parser<T>
- *
- * @template T
+ * @psalm-param non-empty-list<Parser<mixed>> $parsers
+ * @psalm-return Parser<mixed>
  * @api
  */
 function any(Parser ...$parsers): Parser
 {
     if (empty($parsers)) {
-        throw new \InvalidArgumentException("any() expects at least one parser");
+        throw new InvalidArgumentException("any() expects at least one parser");
     }
 
     $labels = array_map(fn(Parser $p): string => $p->getLabel(), $parsers);
     $label = implode(' or ', $labels);
 
-    return array_reduce(
+    return foldl(
         $parsers,
         fn(Parser $first, Parser $second): Parser => either($first, $second),
         fail("")
@@ -292,11 +293,8 @@ function any(Parser ...$parsers): Parser
  *
  * Alias for {@see any()}
  *
- * @psalm-param Parser<T>[] $parsers
- *
- * @psalm-return Parser<T>
- *
- * @template T
+ * @psalm-param non-empty-list<Parser<mixed>> $parsers
+ * @psalm-return Parser<mixed>
  * @api
  */
 function choice(Parser ...$parsers): Parser
@@ -371,7 +369,7 @@ function zeroOrMore(Parser $parser): Parser
  */
 function repeat(int $n, Parser $parser): Parser
 {
-    return array_reduce(
+    return foldl(
         array_fill(0, $n - 1, $parser),
         fn(Parser $l, Parser $r): Parser => append($l, $r),
         $parser
@@ -395,7 +393,7 @@ function repeatList(int $n, Parser $parser): Parser
     $parser = map($parser, /** @psalm-param mixed $output */ fn($output): array => [$output]);
 
     $parsers = array_fill(0, $n - 1, $parser);
-    return array_reduce(
+    return foldl(
         $parsers,
         fn(Parser $l, Parser $r): Parser => append($l, $r),
         $parser
@@ -403,34 +401,55 @@ function repeatList(int $n, Parser $parser): Parser
 }
 
 /**
- * Parse something zero or more times, and output an array of the successful outputs.
- *
- * @api
- */
-function many(Parser $parser): Parser
-{
-    return either(some($parser), pure([]));
-}
-
-/**
  * Parse something one or more times, and output an array of the successful outputs.
  *
- * @psalm-suppress MixedArgumentTypeCoercion
+ * @template T
+ *
+ * @psalm-param Parser<T> $parser
+ * @psalm-return Parser<list<T>>
  *
  * @api
  */
 function some(Parser $parser): Parser
 {
+    return map(
+            collect($parser, many($parser)),
+            /**
+             * @template T
+             * @psalm-param array{0: T, 1: list<T>} $o
+             * @psalm-return list<T>
+             */
+            fn(array $o):array => array_merge([$o[0]], $o[1])
+    );
+}
+
+/**
+ * Parse something zero or more times, and output an array of the successful outputs.
+ *
+ * @template T
+ *
+ * @psalm-param Parser<T> $parser
+ * @psalm-return Parser<list<T>>
+ * @api
+ */
+function many(Parser $parser): Parser
+{
     $rec = recursive();
-    $pArray = map($parser, /** @psalm-param mixed $x */ fn($x): array => [$x]);
-    return $pArray->append(
-        $rec->recurse(
-            either(
-                append($pArray, $rec),
-                pure([])
-            )
+    $rec->recurse(
+        any(
+            map(
+                collect($parser, $rec),
+                /**
+                 * @template T
+                 * @psalm-param array{0: T, 1: list<T>} $o
+                 * @psalm-return list<T>
+                 */
+                fn(array $o): array => array_merge([$o[0]], $o[1])
+            ),
+            pure([]),
         )
     );
+    return $rec;
 }
 
 /**
@@ -458,10 +477,10 @@ function between(Parser $open, Parser $close, Parser $middle): Parser
  * The sepBy parser always succeed, even if it doesn't find anything. Use {@see sepBy1()} if you want it to find at
  * least one value.
  *
- * @template TS
+ * @template TSeparator
  * @template T
  *
- * @psalm-param Parser<TS> $separator
+ * @psalm-param Parser<TSeparator> $separator
  * @psalm-param Parser<T>  $parser
  *
  * @psalm-return Parser<list<T>>
@@ -499,8 +518,6 @@ function sepBy1(Parser $separator, Parser $parser): Parser
 
 /**
  * Parses 2 or more occurrences of $parser, separated by $separator. Returns a list of values.
- *
- * @deprecated Untested
  *
  * @template TS
  * @template T
