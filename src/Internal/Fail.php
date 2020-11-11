@@ -38,6 +38,7 @@ final class Fail extends Exception implements ParserFailure, ParseResult
     {
         $this->expected = $expected;
         $this->got = $got;
+        /** @psalm-suppress ImpureMethodCall */
         parent::__construct("\n".$this->errorMessage());
     }
 
