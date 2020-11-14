@@ -190,6 +190,8 @@ function either(Parser $first, Parser $second): Parser
 {
     $label = $first->getLabel() . " or " . $second->getLabel();
     return Parser::make($label, function (Stream $input) use ($second, $first, $label): ParseResult {
+        // @todo Megaparsec doesn't do automatic rollback, for performance reasons, and requires the user to add try
+        //       combinators. We could mimic that behaviour as it is probably more performant
         $r1 = $first->run($input);
         if ($r1->isSuccess()) {
             return $r1;
