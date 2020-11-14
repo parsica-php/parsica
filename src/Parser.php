@@ -276,7 +276,7 @@ final class Parser
      *
      * @psalm-return ParseResult<T>
      *
-     * @throws ParserFailure
+     * @throws ParserHasFailed
      * @api
      */
     public function tryString(string $input): ParseResult
@@ -291,15 +291,14 @@ final class Parser
      *
      * @psalm-return ParseResult<T>
      *
-     * @throws ParserFailure
+     * @throws ParserHasFailed
      * @api
      */
     public function try(Stream $input): ParseResult
     {
         $result = $this->run($input);
         if ($result->isFail()) {
-            /** @psalm-suppress InvalidThrow */
-            throw $result;
+            $result->throw();
         }
         return $result;
     }

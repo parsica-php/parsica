@@ -144,7 +144,7 @@ try {
     $result = $parser->tryString("1.23");
     assert($result->output() == 1.23);
  
-    // throws a ParseFailure exception with message "Expected: float, got abc"
+    // throws a ParserHasFailed exception with message "Expected: float, got abc"
     $result = $parser->tryString("abc");
-} catch (ParserFailure $e) {}
+} catch (ParserHasFailed $e) {}
 ```

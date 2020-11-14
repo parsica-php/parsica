@@ -14,6 +14,7 @@ use BadMethodCallException;
 use Exception;
 use Verraes\Parsica\Parser;
 use Verraes\Parsica\ParseResult;
+use Verraes\Parsica\ParserHasFailed;
 use Verraes\Parsica\Stream;
 
 /**
@@ -181,5 +182,13 @@ final class Succeed implements ParseResult
     public function position(): Position
     {
         return $this->remainder->position();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function throw() : void
+    {
+        throw new BadMethodCallException("You can't throw a successful ParseResult.");
     }
 }

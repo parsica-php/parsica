@@ -10,6 +10,7 @@
 
 namespace Verraes\Parsica;
 
+use BadMethodCallException;
 use Verraes\Parsica\Internal\Position;
 
 /**
@@ -108,4 +109,14 @@ interface ParseResult
      * Get the last position of where the parser ended up when producing this result.
      */
     public function position(): Position;
+
+    /**
+     * Throw a ParserFailure exception if the Parser failed, or complain if you're trying to throw a successful
+     * ParseResult.
+     *
+     * @api
+     * @throws ParserHasFailed
+     * @throws BadMethodCallException
+     */
+    public function throw() : void;
 }

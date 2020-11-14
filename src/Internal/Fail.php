@@ -11,10 +11,9 @@
 namespace Verraes\Parsica\Internal;
 
 use BadMethodCallException;
-use Exception;
 use Verraes\Parsica\Parser;
 use Verraes\Parsica\ParseResult;
-use Verraes\Parsica\ParserFailure;
+use Verraes\Parsica\ParserHasFailed;
 use Verraes\Parsica\Stream;
 use function Verraes\Parsica\isEqual;
 use function Verraes\Parsica\notPred;
@@ -22,11 +21,10 @@ use function Verraes\Parsica\notPred;
 /**
  * The return value of a failed parser.
  *
- * @TODO make our own Throwable implementation that uses the parsed files as the exceptions file etc?
  * @template T
  * @internal
  */
-final class Fail extends Exception implements ParserFailure, ParseResult
+final class Fail implements ParseResult
 {
     private string $expected;
     private Stream $got;
@@ -38,8 +36,6 @@ final class Fail extends Exception implements ParserFailure, ParseResult
     {
         $this->expected = $expected;
         $this->got = $got;
-        /** @psalm-suppress ImpureMethodCall */
-        parent::__construct("\n".$this->errorMessage());
     }
 
     /**
@@ -152,4 +148,14 @@ final class Fail extends Exception implements ParserFailure, ParseResult
     {
         return $this->got->position();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function throw() : void
+    {
+        throw new ParserHasFailed($this);
+    }
+
+
 }
