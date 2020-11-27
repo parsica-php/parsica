@@ -16,7 +16,7 @@ $parser = many(either(
     char('b')->emit($print)
 ));
 // Running the parser calls print() whenever a 'b' is encountered:
-$parser->try('aababba'); // Prints "bbb"
+$parser->tryString('aababba'); // Prints "bbb"
 ```
 
 Using closures and mutable objects, you can embed mutability into a parsing process.
@@ -39,7 +39,7 @@ $parser = many(either(
     // Increment counter when we hit 'b'
     char('b')->emit($incr)
 ));
-$parser->try('aababba');
+$parser->tryString('aababba');
 assert($counter->count() == 3);
 ```
 
