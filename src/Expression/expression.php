@@ -39,7 +39,7 @@ function expression(Parser $term, array $expressionTable): Parser
 }
 
 /**
- * An binary operator in an expression. The operands of the expression will be passed into $transform to produce the
+ * A binary operator in an expression. The operands of the expression will be passed into $transform to produce the
  * output of the expression parser.
  *
  * @api
@@ -58,7 +58,7 @@ function binaryOperator(Parser $symbol, callable $transform, string $label = "")
 }
 
 /**
- * An unary operator in an expression. The operands of the expression will be passed into $transform to produce the
+ * A unary operator in an expression. The operands of the expression will be passed into $transform to produce the
  * output of the expression parser.
  *
  * @api
