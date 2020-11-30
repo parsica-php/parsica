@@ -103,4 +103,5 @@ final class MyJSON
 }
 ```
 
+If you have multiple ways of handling space in one parser, you can of course define multiple space consumers and give them relevant names.
 
