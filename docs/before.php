@@ -10,6 +10,7 @@ declare(strict_types=1);
 // This code is executed by UpToDocs before each code block
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use Verraes\Parsica\Parser;
 use Verraes\Parsica\ParserHasFailed;
 use Verraes\Parsica\StringStream;
 use function Verraes\Parsica\{
@@ -23,6 +24,7 @@ use function Verraes\Parsica\{
     collect,
     digitChar ,
     either,
+    eof,
     float,
     isDigit,
     isEqual,
@@ -40,6 +42,7 @@ use function Verraes\Parsica\{
     sepBy1,
     sequence,
     skipHSpace,
+    skipSpace1,
     some,
     string,
     stringI,
