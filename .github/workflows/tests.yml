@@ -12,7 +12,7 @@ jobs:
 
     - name: Validate composer.json and composer.lock
       run: composer validate
-      
+
     - name: Cache Composer packages
       id: composer-cache
       uses: actions/cache@v2
@@ -30,7 +30,7 @@ jobs:
       run: vendor/bin/phpunit
 
     - name: UpToDocs Documentation tester
-      run: docs/testdocs
+      run: docs/testdocs github
 
     - name: Psalm Static type checker
       run: vendor/bin/psalm --output-format=github --threads=4

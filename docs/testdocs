@@ -1,29 +1,27 @@
 #!/usr/bin/env bash
-
 # Execute the docs to make sure all code examples are in sync with the Parsica code.
-
-
-#!/usr/bin/env bash
-
-# Execute the docs to make sure all code examples are in sync with the Parsica code.
+#
 
 set -e
-vendor/bin/uptodocs run README.md                                     --before=docs/before.php --output-format=github
-vendor/bin/uptodocs run docs/contribute/design_goals.md               --before=docs/before.php --output-format=github
-vendor/bin/uptodocs run docs/resources/01_development_status.md       --before=docs/before.php --output-format=github
-vendor/bin/uptodocs run docs/resources/02_performance.md              --before=docs/before.php --output-format=github
-vendor/bin/uptodocs run docs/resources/03_naming_conventions.md       --before=docs/before.php --output-format=github
-vendor/bin/uptodocs run docs/tutorial/01_introduction.md              --before=docs/before.php --output-format=github
-vendor/bin/uptodocs run docs/tutorial/02_building_blocks.md           --before=docs/before.php --output-format=github
-vendor/bin/uptodocs run docs/tutorial/03_combinators.md               --before=docs/before.php --output-format=github
-vendor/bin/uptodocs run docs/tutorial/04_running_parsers.md           --before=docs/before.php --output-format=github
-vendor/bin/uptodocs run docs/tutorial/05_mapping_to_objects.md        --before=docs/before.php --output-format=github
-vendor/bin/uptodocs run docs/tutorial/06_order_matters.md             --before=docs/before.php --output-format=github
-vendor/bin/uptodocs run docs/tutorial/07_recursion.md                 --before=docs/before.php --output-format=github
-vendor/bin/uptodocs run docs/tutorial/08_look_ahead.md                --before=docs/before.php --output-format=github
-vendor/bin/uptodocs run docs/tutorial/09_errors_and_labels.md         --before=docs/before.php --output-format=github
-vendor/bin/uptodocs run docs/tutorial/10_side_effects.md              --before=docs/before.php --output-format=github
-vendor/bin/uptodocs run docs/tutorial/11_dealing_with_space.md        --before=docs/before.php --output-format=github
-vendor/bin/uptodocs run docs/tutorial/20_expressions.md               --before=docs/expressions.php --output-format=github
-vendor/bin/uptodocs run docs/tutorial/90_functional_paradigms.md      --before=docs/before.php --output-format=github
+
+OUTPUTFORMAT=${1:-console}
+
+vendor/bin/uptodocs run README.md                                     --before=docs/before.php --output-format=$OUTPUTFORMAT
+vendor/bin/uptodocs run docs/contribute/design_goals.md               --before=docs/before.php --output-format=$OUTPUTFORMAT
+vendor/bin/uptodocs run docs/resources/01_development_status.md       --before=docs/before.php --output-format=$OUTPUTFORMAT
+vendor/bin/uptodocs run docs/resources/02_performance.md              --before=docs/before.php --output-format=$OUTPUTFORMAT
+vendor/bin/uptodocs run docs/resources/03_naming_conventions.md       --before=docs/before.php --output-format=$OUTPUTFORMAT
+vendor/bin/uptodocs run docs/tutorial/01_introduction.md              --before=docs/before.php --output-format=$OUTPUTFORMAT
+vendor/bin/uptodocs run docs/tutorial/02_building_blocks.md           --before=docs/before.php --output-format=$OUTPUTFORMAT
+vendor/bin/uptodocs run docs/tutorial/03_combinators.md               --before=docs/before.php --output-format=$OUTPUTFORMAT
+vendor/bin/uptodocs run docs/tutorial/04_running_parsers.md           --before=docs/before.php --output-format=$OUTPUTFORMAT
+vendor/bin/uptodocs run docs/tutorial/05_mapping_to_objects.md        --before=docs/before.php --output-format=$OUTPUTFORMAT
+vendor/bin/uptodocs run docs/tutorial/06_order_matters.md             --before=docs/before.php --output-format=$OUTPUTFORMAT
+vendor/bin/uptodocs run docs/tutorial/07_recursion.md                 --before=docs/before.php --output-format=$OUTPUTFORMAT
+vendor/bin/uptodocs run docs/tutorial/08_look_ahead.md                --before=docs/before.php --output-format=$OUTPUTFORMAT
+vendor/bin/uptodocs run docs/tutorial/09_errors_and_labels.md         --before=docs/before.php --output-format=$OUTPUTFORMAT
+vendor/bin/uptodocs run docs/tutorial/10_side_effects.md              --before=docs/before.php --output-format=$OUTPUTFORMAT
+vendor/bin/uptodocs run docs/tutorial/11_dealing_with_space.md        --before=docs/before.php --output-format=$OUTPUTFORMAT
+vendor/bin/uptodocs run docs/tutorial/20_expressions.md               --before=docs/expressions.php --output-format=$OUTPUTFORMAT
+vendor/bin/uptodocs run docs/tutorial/90_functional_paradigms.md      --before=docs/before.php --output-format=$OUTPUTFORMAT
 
