@@ -8,3 +8,7 @@ infection.log
 per-mutator.md
 composer.lock
 /bin/clear-psalm-cache.sh
+/_storage/
+/.phpdoc/
+/.phive/
+/tools/
