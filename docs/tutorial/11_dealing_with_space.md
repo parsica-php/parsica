@@ -39,7 +39,7 @@ $parser = collect(
     )->map(fn($o) => $o[0] + $o[4]);
 
 $result = $parser->tryString("1  +\n  2\t");
-assert(3 == $result->output());
+assertSame(3, $result->output());
 ```
 
 This is noisy. And if you want to change the rules about whitespace or build more complex parsers, you have to deal with this problem all the time, making it unmaintainable (or at least annoying).
@@ -64,7 +64,7 @@ $parser = collect(
     )->map(fn($o) => $o[0] + $o[2]);
 
 $result = $parser->tryString("1  +\n  2\t");
-assert(3 == $result->output());
+assertSame(3, $result->output());
 ```
 
 Now, all the logic for skipping space is nicely contained in `$token`. If we wanted to disallow multiline expressions, we only need to replace `skipSpace1()` with `skipHSpace1()` in one place.

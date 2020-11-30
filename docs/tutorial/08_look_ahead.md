@@ -11,10 +11,10 @@ Say you want to match the `print` keyword in a programming language. You can exp
 $print = string("print");
 
 $result = $print->tryString("print('Hello World');");
-assert($result->output() == "print");
+assertEquals("print", $result->output());
 
 $result = $print->tryString("printXYZ('Hello World');");
-assert($result->output() == "print"); // oops!
+assertEquals("print", $result->output()); // oops!
 ```
 
 As you can see, "printXYZ" also results in "print", but it wasn't our intention, because "printXYZ" is not a valid keyword.
@@ -25,7 +25,7 @@ We can solve it by using the `notFollowedBy` combinator.
 <?php
 $print = keepFirst(string("print"), notFollowedBy(alphaNumChar()));
 $result = $print->run(new StringStream("printXYZ('Hello World');"));
-assert($result->isFail());
+assertTrue($result->isFail());
 ```
 
 There's a fluent interface as well:
@@ -34,7 +34,7 @@ There's a fluent interface as well:
 <?php
 $print = string("print")->notFollowedBy(alphaNumChar());
 $result = $print->run(new StringStream("printXYZ('Hello World');"));
-assert($result->isFail());
+assertTrue($result->isFail());
 ```
 
 
@@ -51,8 +51,8 @@ $parser = choice(
 );
 
 $result = $parser->tryString("print('Hello World');");
-assert($result->output() == "print");
+assertEquals("print", $result->output());
 
 $result = $parser->tryString("printf('Hello %s', 'world');");
-assert($result->output() == "printf");
+assertEquals("printf", $result->output());
 ```

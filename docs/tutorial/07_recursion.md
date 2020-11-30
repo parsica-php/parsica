@@ -42,7 +42,7 @@ $pair->recurse(
 );
 
 $result = $pair->tryString("[1,[2,[3,4]]]");
-assert($result->output() == [1, [2, [3, 4]]]);
+assertSame(['1', ['2', ['3', '4']]], $result->output());
 ```
 
 It's possible to nest multiple recursive parsers. Simply initialise them all first using  `recursive()` and then define them in terms of each other:
@@ -70,7 +70,7 @@ $squarePair->recurse(
 
 $mixed = "{1,[2,{3,4}]}";
 $result = $anyPair->tryString($mixed);
-assert($result->output() == [1, [2, [3, 4]]]);
+assertSame(['1', ['2', ['3', '4']]], $result->output());
 ```
 
 Note that when you initialize a parser with `recursive()`, it is in fact mutable, and the `recurse()` method mutates it. All parsers are immutable, and this is the only exception. After calling `recurse()`, the parser is immutable again and behaves just like any other parser.
@@ -93,7 +93,7 @@ The end result looks like this:
 $rec = recursive();
 $rec->recurse(char('a')->append(optional($rec)));
 $result = $rec->tryString("aaab");
-assert($result->output() == "aaa");
+assertEquals("aaa", $result->output());
 ```
 
 In fact the code above is how the `atLeastOne()` combinator works, so you can simplify that code by writing this:
@@ -102,7 +102,7 @@ In fact the code above is how the `atLeastOne()` combinator works, so you can si
 <?php
 $parser = atLeastOne(char('a'));
 $result = $parser->tryString("aaab");
-assert($result->output() == "aaa");
+assertEquals("aaa", $result->output());
 ```
 
 

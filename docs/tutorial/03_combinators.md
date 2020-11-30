@@ -33,7 +33,7 @@ It's important to understand that this drops whatever output `$parser1` produced
 <?php
 $parser = sequence(string('My name is '), atLeastOne(alphaChar()));
 $result = $parser->tryString("My name is Parsica");
-assert("Parsica" == $result->output());
+assertEquals("Parsica", $result->output());
 ``` 
 
 ## Alternatives

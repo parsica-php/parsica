@@ -8,10 +8,12 @@ Most of the parsers that come with Parsica, return strings as outputs.
 
 ```php
 <?php
-$parser = digitChar()->append(alphaChar());
-$result = $parser->tryString('1A');
-assert(gettype($result->output() == 'string'));
-assert($parser instanceof Verraes\Parsica\Parser);
+$parser = digitChar();
+assertInstanceOf('Verraes\Parsica\Parser', $parser);
+
+$result = $parser->tryString('1');
+assertIsString('Verraes\Parsica\StringStream', $result->output());
+assertEquals('1', $result->output());
 ```
 
 In PHP 7.x, the type of `$parser` is `Parser`, but you can think of it having the type `Parser<string>`. PHP doesn't support generics, so it doesn't enforce that. However, working with Parsica is easier if you always think of parsers having an inner type. 
@@ -24,7 +26,7 @@ Here's an example of a parser of type `Parser<array<string>>`:
 <?php
 $parser = sepBy(char(','), atLeastOne(digitChar()));
 $result = $parser->tryString('123,9,55');
-assert($result->output() == ["123", "9", "55"]);
+assertEquals(["123", "9", "55"], $result->output());
 ```
 
 ## The map combinator
@@ -38,7 +40,7 @@ We can use it for manipulating the output. Here's a simple example:
 $parser = atLeastOne(alphaChar())
     ->map(fn(string $val) => strtolower($val));
 $result = $parser->tryString('PaRsIcA');
-assert($result->output() == "parsica");
+assertEquals("parsica", $result->output());
 ```
 
 If the parser fails, the callable is not applied to the output (because there is no output). So you don't need to worry about error handling.
@@ -52,7 +54,7 @@ We can now use this to cast the parser's output to scalars:
 $parser = atLeastOne(digitChar())
     ->map(fn(string $val) => intval($val));
 $result = $parser->tryString("123"); // input is still a string
-assert($result->output() == 123); // output is an int
+assertSame(123, $result->output()); // output is an int
 ```
 
 It also works inside nested parsers. We can use this on the `sepBy` example from above:
@@ -65,7 +67,7 @@ $parser = sepBy(
         ->map(fn($val) => intval($val))
 );
 $result = $parser->tryString('123,9,55');
-assert($result->output() == [123, 9, 55]); // array of ints
+assertSame([123, 9, 55], $result->output()); // array of ints
 ```
 
 The type of this last parser is now `Parser<array<int>>` instead of the original `Parser<array<string>>`. 
@@ -115,7 +117,7 @@ $money = collect($currency, skipHSpace()->followedBy($amount));
 $money = $money->map(fn(array $a) => new Money($a[1], $a[0]));
 
 $result = $money->tryString('EUR 12.34');
-assert($result->output() == new Money(12.34, new Currency('EUR')));
+assertEquals(new Money(12.34, new Currency('EUR')), $result->output());
 
 // We can now composer our Parser<Money> in larger parsers
 // $pricelist has type Parser<array<Money>>

@@ -11,8 +11,8 @@ The simplest building block is a parser that only considers the first character 
 $parser = satisfy(isEqual('a'));
 $input = "abc";
 $result = $parser->tryString($input);
-assert($result->output() == "a");
-assert($result->remainder() == "bc");
+assertEquals("a", $result->output());
+assertEquals("bc", $result->remainder());
 ``` 
 
 `isEqual('a')` is a predicate. If you call it with another argument, you get a boolean: `isEqual('a')('b') == false`.
@@ -41,20 +41,18 @@ $parser = char('a');
 <?php
 $parser = charI('a');
 $result = $parser->tryString("ABC");
-assert($result->output() == "A");
+assertEquals("A", $result->output());
 $result = $parser->tryString("abc");
-assert($result->output() == "a");
+assertEquals("a", $result->output());
 ```
 
-Parsica provides various parsers for groups of characters, like `alphaNumChar`, `uppercChar`, `punctuationChar`, `newline`, and `digitChar`. You can find them all listed in the API Reference. 
-
+Parsica provides various parsers for groups of characters, like `alphaNumChar`, `upperChar`, `punctuationChar`, `newline`, and `digitChar`. You can find them all listed in the API Reference.
 
 ```php
 <?php
-$parser = digitChar('a');
+$parser = digitChar();
 $result = $parser->tryString('123');
-assert($result->output() == "1");
-assert(is_string($result->output()));
+assertEquals('1', $result->output());
 ```
 
 Note that even though we parsed a `digitChar`, the output is a string, not an int. That's because at this point, we're parsing characters. We'll talk about outputting other types than string later.
@@ -68,9 +66,9 @@ For longer sequences of characters, you can use `string` and `stringI`. Keep in 
 <?php
 $parser = stringI("parsica");
 $result = $parser->tryString("PARSICA");
-assert($result->output() == "PARSICA"); 
+assertEquals("PARSICA", $result->output()); 
 $result = $parser->tryString("pArSiCa");
-assert($result->output() == "pArSiCa"); 
+assertEquals("pArSiCa", $result->output()); 
 ```
  
 If you want the output to be consistent, you can use `map` to convert it.
@@ -81,7 +79,7 @@ If you want the output to be consistent, you can use `map` to convert it.
 $parser = stringI("parsica")
     ->map(fn($output) => strtolower($output));
 $result = $parser->tryString("pArSiCa");
-assert($result->output() == "parsica"); 
+assertEquals("parsica", $result->output()); 
 ```
  
 

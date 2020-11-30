@@ -67,8 +67,8 @@ The information in the error message is also available from `ParseResult`. You c
 ```php
 <?php
 $result = string('Hello')->run(new StringStream("Hello, World"));
-assert(1 == $result->position()->line());
-assert(6 == $result->position()->column());
+assertSame(1, $result->position()->line());
+assertSame(6, $result->position()->column());
 ```
 
 Have a look at the `ParseResult` API to see what else it can do. 

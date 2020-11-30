@@ -18,7 +18,7 @@ Predicates are either prefixed with `is` or suffixed with `pred`.
 ```php
 <?php
 $predicate = orPred(isEqual('5'), isEqual('6'));
-assert($predicate('6'));
+assertTrue($predicate('6'));
 ```
 
 ## Character Parsers
@@ -33,6 +33,6 @@ Some parsers have case-insensitive versions. These are sufficed with 'I'.
 <?php
 $parser = stringI('hello world'); 
 $result = $parser->tryString("hElLO WoRlD"); 
-assert($result->output() === "hElLO WoRlD");
+assertEquals("hElLO WoRlD", $result->output());
 ```
 

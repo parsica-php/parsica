@@ -36,8 +36,8 @@ $parser = digitChar();
 $input = "1. Write Docs";
 $result = $parser->tryString($input);
 $output = $result->output();
-assert($output === "1");
-assert(is_string($output));
+assertSame("1", $output);
+assertIsString($output);
 ```
 
 ## Parser Combinators
@@ -49,7 +49,7 @@ Parser Combinators are functions (or methods) that combine parsers into new pars
 $parser = char('a')->append(char('b'));
 $result = $parser->tryString("abc");
 $output = $result->output();
-assert($output === "ab");
+assertEquals("ab", $output);
 ```
 
 ```php
@@ -61,7 +61,7 @@ $parser =
     );
 $result = $parser->tryString("Hello,world!");
 $output = $result->output();
-assert($output == ["Hello", "world"]);   
+assertEquals(["Hello", "world"], $output);   
 ```
 
 To make this work, we need a small change in our original definition of a parser.
@@ -77,8 +77,8 @@ We can inspect the remainder:
 $parser = sequence(char('a'), char('b'));
 $result = $parser->tryString("abc");
 
-assert($result->output() === "b");
-assert($result->remainder() === "c");
+assertEquals("b", $result->output());
+assertEquals("c", $result->remainder());
  ```
 
 So when we run our parser using `$parser->tryString($input)`, the `sequence()` combinator first tries to run `char('a')` on the input `"abc"`. If it succeeds, it takes the remainder `"bc"` and successfully runs `char('b')` on it and returns the result. That result consists of the output from the last parser `"b"`, and the remainder `"c"`.
@@ -109,8 +109,8 @@ final class MyParser
 $parser = new MyParser();
 $result = $parser->try("abc");
 
-assert($result['output'] == 'b');
-assert($result['remainder'] == 'c');
+assertEquals('b', $result['output']);
+assertEquals('c', $result['remainder']);
 ```
 
 If you've been working in PHP long enough and have never used parser combinators, the code above may look more familiar for now. But imagine scaling that to parse anything from simple formats like credit card numbers, recursive structures like JSON or XML, or even entire programming languages like PHP. And that doesn't even include the code you'd need for performance, testing and debugging tooling, code reuse, and reporting on bad input. If you'd rather write `sequence(char('a'), char('b'))`, stick around.
@@ -123,15 +123,14 @@ If you've been working in PHP long enough and have never used parser combinators
 ```php
 <?php
 $v = floatval("1.23");
-assert($v === 1.23); 
-assert(is_float($v)); 
+assertSame(1.23, $v); 
 ```
 
 The above looks fine at first sight, but `floatval()` really isn't a very good parser.
 
 ```php
 <?php
-assert(floatval("abc") == 0);
+assertSame(0.0, floatval("abc"));
 ```
 
 `floatval()` claims that the float of `"abc"` is `0`, which really should be an error. So you can only use `floatval` when you already know that the string doesn't contain anything non-float. Parsica can help you do that:
@@ -142,7 +141,7 @@ $parser = float()->map(fn($v) => floatval($v));
 try {
     // works: 
     $result = $parser->tryString("1.23");
-    assert($result->output() == 1.23);
+    assertSame(1.23, $result->output());
  
     // throws a ParserHasFailed exception with message "Expected: float, got abc"
     $result = $parser->tryString("abc");

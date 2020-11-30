@@ -40,7 +40,7 @@ $parser = many(either(
     char('b')->emit($incr)
 ));
 $parser->tryString('aababba');
-assert($counter->count() == 3);
+assertSame(3, $counter->count());
 ```
 
 
