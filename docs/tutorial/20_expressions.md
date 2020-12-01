@@ -10,7 +10,9 @@ An expression, roughly, is anything that can evaluated to a value, such as
 - boolean expressions `x and (y or z)`,
 - code inside a template language `{{ user.loggedIn ? 'Hello '  ~ user.name : 'Log in' }}`,
 - spreadsheet formulas `=SUM(A1:A10) * B1`, 
-- and anything else you can think of. 
+- rules in a rule engine
+- logic inside a configuration language,  
+- and anything else you can think of! 
 
 The tricky thing about parsing expressions is that you often have to deal with things like recursion, associativity, and operator precedence. These can make it pretty tricky to build a parser. Parsica provides the `expression()` function, which offers a simple way to create a parser for your custom expression language. 
 
