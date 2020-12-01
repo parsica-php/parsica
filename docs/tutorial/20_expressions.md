@@ -122,6 +122,12 @@ assertSame(-4, $result->output());
 
 You can play around with the precedence and the associativity to see how it impacts the result. As an exercise, make a parser that solves `1 - 2 - 3 = (1 - (2 - 3) = (1 - (-1)) = 2`.
 
+## Non-associative operators 
+
+Non-associative means that an expression like `1 + 2 + 3` cannot be resolved, because there is no way to decide whether it's associates left `(1 + 2) + 3` or right `1 + (2 + 3)`. The parser will simply fail. Of course, for addition, non-associativity wouldn't make sense, but for other languages or operators it might.  
+
+## Unary operators
+
 You can add unary operators, such as the negation prefix operator `-`, and the increment and decrement postfix operators `++` and `--`.
 
 ```php
