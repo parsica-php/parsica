@@ -1,11 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Verraes\Parsica;
 
+use InvalidArgumentException;
+use Verraes\Parsica\Internal\EndOfStream;
 use Verraes\Parsica\Internal\Position;
 use Verraes\Parsica\Internal\TakeResult;
 
-class TextFileStream implements Stream
+final class TextFileStream implements Stream
 {
 
     private string $filePath;
@@ -19,11 +21,21 @@ class TextFileStream implements Stream
 
     public function __construct(string $filePath, ?Position $position = null)
     {
+        if (!is_file($filePath)) {
+            throw new InvalidArgumentException("The file path for the text-file is not a valid file.");
+        }
         $this->filePath = $filePath;
         $this->fileHandle = fopen($this->filePath, 'rb');
         $this->position = $position ?? Position::initial($this->filePath);
-        if (!is_null($position)) {
+        if (true !== is_null($position)) {
             fseek($this->fileHandle, $this->position->bytePosition());
+        }
+    }
+
+    public function __destruct()
+    {
+        if (is_resource($this->fileHandle)) {
+            fclose($this->fileHandle);
         }
     }
 
@@ -37,6 +49,18 @@ class TextFileStream implements Stream
         }
     }
 
+    private function safeRead(?int $n = null): string
+    {
+        if (is_null($n)) {
+            $tokenChunk = fgetc($this->fileHandle);
+        } else {
+            $tokenChunk = fread($this->fileHandle, $n);
+        }
+        rewind($this->fileHandle);
+        fseek($this->fileHandle, $this->position->bytePosition());
+        return !$tokenChunk ? '' : $tokenChunk;
+    }
+
     /**
      * @inheritDoc
      */
@@ -44,7 +68,7 @@ class TextFileStream implements Stream
     {
         $this->guardEndOfStream();
 
-        $token = fgetc($this->fileHandle);
+        $token = $this->safeRead();
         $position = $this->position->advance($token);
 
         return new TakeResult(
@@ -64,7 +88,7 @@ class TextFileStream implements Stream
 
         $this->guardEndOfStream();
 
-        $chunk = fread($this->fileHandle, $n);
+        $chunk = $this->safeRead($n);
         $position = $this->position->advance($chunk);
 
         return new TakeResult(
@@ -82,12 +106,6 @@ class TextFileStream implements Stream
             return new TakeResult("", $this);
         }
 
-        /**
-         * Variable to track if loop breaks due to EOF.
-         * @var bool $eof
-         */
-        $eof = false;
-
         $chunk = ""; // Init the result buffer
         $nextToken = fgetc($this->fileHandle);
         while ($predicate($nextToken)) {
@@ -95,16 +113,11 @@ class TextFileStream implements Stream
             if (!feof($this->fileHandle)) {
                 $nextToken = fgetc($this->fileHandle);
             } else {
-                $eof = true;
                 break;
             }
         }
-        // If the loop breaks because EOF then skip this.
-        if (!$eof) {
-            // However if the loop breaks because the predicate, then step one byte back.
-            fseek($this->fileHandle, -1, SEEK_CUR);
-        }
         $position = $this->position->advance($chunk);
+        $this->safeRead();
 
         return new TakeResult(
             $chunk,
@@ -121,6 +134,7 @@ class TextFileStream implements Stream
             return "<EMPTYFILE>";
         }
 
+        fseek($this->fileHandle, $this->position->bytePosition());
         $stringData = fread($this->fileHandle, $size);
         fseek($this->fileHandle, $this->position->bytePosition());
         return $stringData;
