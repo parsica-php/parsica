@@ -16,7 +16,7 @@ use Parsica\Parsica\Internal\TakeResult;
 /**
  * Represents an input stream. This allows us to have different types of input, each with their own optimizations.
  *
- * @psalm-immutable
+ * @psalm-external-mutation-free
  */
 interface Stream
 {

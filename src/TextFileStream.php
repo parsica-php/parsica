@@ -7,10 +7,17 @@ use Verraes\Parsica\Internal\EndOfStream;
 use Verraes\Parsica\Internal\Position;
 use Verraes\Parsica\Internal\TakeResult;
 
+/**
+ * @psalm-external-mutation-free
+ */
 final class TextFileStream implements Stream
 {
 
     private string $filePath;
+    /**
+     * @psalm-allow-private-mutation
+     * @var resource
+     */
     private $fileHandle;
     private Position $position;
 
