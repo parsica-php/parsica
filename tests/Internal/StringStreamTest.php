@@ -23,7 +23,7 @@ final class StringStreamTest extends TestCase
         $s = new StringStream("abc");
         $t = $s->take1();
         $this->assertEquals("a", $t->chunk());
-        $expectedPosition = new Position("<input>", 1, 2);
+        $expectedPosition = new Position(3, "<input>", 1, 2, 1);
         $expectedStream = new StringStream("bc", $expectedPosition);
         $this->assertEquals($expectedStream, $t->stream());
     }
@@ -34,7 +34,7 @@ final class StringStreamTest extends TestCase
         $s = new StringStream("abcde");
         $t = $s->takeN(3);
         $this->assertEquals("abc", $t->chunk());
-        $expectedPosition = new Position("<input>", 1, 4);
+        $expectedPosition = new Position(5, "<input>", 1, 4, 3);
         $expectedStream = new StringStream("de", $expectedPosition);
         $this->assertEquals($expectedStream, $t->stream());
     }
@@ -45,7 +45,7 @@ final class StringStreamTest extends TestCase
         $s = new StringStream("abc\nde");
         $t = $s->takeWhile(fn($c) => $c !== "\n");
         $this->assertEquals("abc", $t->chunk());
-        $expectedPosition = new Position("<input>", 1, 4);
+        $expectedPosition = new Position(6, "<input>", 1, 4, 3);
         $expectedStream = new StringStream("\nde", $expectedPosition);
         $this->assertEquals($expectedStream, $t->stream());
     }

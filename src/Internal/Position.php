@@ -19,26 +19,32 @@ namespace Parsica\Parsica\Internal;
 final class Position
 {
     /** @psalm-readonly  */
+    private int $totalBytes;
+    /** @psalm-readonly  */
     private string $filename;
     /** @psalm-readonly  */
     private int $line;
     /** @psalm-readonly  */
     private int $column;
+    /** @psalm-readonly  */
+    private int $bytePosition;
 
-    function __construct(string $filename, int $line, int $column)
+    function __construct(int $totalBytes, string $filename, int $line, int $column, int $bytePosition)
     {
+        $this->totalBytes = $totalBytes;
         $this->filename = $filename;
         $this->line = $line;
         $this->column = $column;
+        $this->bytePosition = $bytePosition;
     }
 
     /**
      * Initial position (line 1, column 1). The optional filename is the source of the input, and is really just a label
      * to make more useful error messages.
      */
-    public static function initial(string $filename = "<input>"): Position
+    public static function initial(int $totalBytes = 0, string $filename = "<input>"): Position
     {
-        return new Position($filename, 1, 1);
+        return new Position($totalBytes, $filename, 1, 1, 0);
     }
 
     /**
@@ -53,6 +59,7 @@ final class Position
     {
         $column = $this->column;
         $line = $this->line;
+        $bytePosition = $this->bytePosition;
         /** @psalm-var string $char */
         foreach (mb_str_split($parsed, 1) as $char) {
             switch ($char) {
@@ -67,9 +74,10 @@ final class Position
                 default:
                     $column++;
             }
+            $bytePosition += strlen($char);
         }
 
-        return new Position($this->filename, $line, $column);
+        return new Position($this->totalBytes, $this->filename, $line, $column, $bytePosition);
     }
 
     public function filename(): string
@@ -85,5 +93,20 @@ final class Position
     public function column(): int
     {
         return $this->column;
+    }
+
+    public function totalBytes(): int
+    {
+        return $this->totalBytes;
+    }
+
+    public function bytePosition(): int
+    {
+        return $this->bytePosition;
+    }
+
+    public function unreadBytes(): int
+    {
+        return $this->totalBytes - $this->bytePosition;
     }
 }
