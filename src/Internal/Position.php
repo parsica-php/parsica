@@ -19,8 +19,6 @@ namespace Parsica\Parsica\Internal;
 final class Position
 {
     /** @psalm-readonly  */
-    private int $totalBytes;
-    /** @psalm-readonly  */
     private string $filename;
     /** @psalm-readonly  */
     private int $line;
@@ -29,9 +27,8 @@ final class Position
     /** @psalm-readonly  */
     private int $bytePosition;
 
-    function __construct(int $totalBytes, string $filename, int $line, int $column, int $bytePosition)
+    function __construct(string $filename, int $line, int $column, int $bytePosition)
     {
-        $this->totalBytes = $totalBytes;
         $this->filename = $filename;
         $this->line = $line;
         $this->column = $column;
@@ -42,9 +39,9 @@ final class Position
      * Initial position (line 1, column 1). The optional filename is the source of the input, and is really just a label
      * to make more useful error messages.
      */
-    public static function initial(int $totalBytes = 0, string $filename = "<input>"): Position
+    public static function initial(string $filename = "<input>"): Position
     {
-        return new Position($totalBytes, $filename, 1, 1, 0);
+        return new Position($filename, 1, 1, 0);
     }
 
     /**
@@ -77,7 +74,7 @@ final class Position
             $bytePosition += strlen($char);
         }
 
-        return new Position($this->totalBytes, $this->filename, $line, $column, $bytePosition);
+        return new Position($this->filename, $line, $column, $bytePosition);
     }
 
     public function filename(): string
@@ -95,18 +92,8 @@ final class Position
         return $this->column;
     }
 
-    public function totalBytes(): int
-    {
-        return $this->totalBytes;
-    }
-
     public function bytePosition(): int
     {
         return $this->bytePosition;
-    }
-
-    public function unreadBytes(): int
-    {
-        return $this->totalBytes - $this->bytePosition;
     }
 }

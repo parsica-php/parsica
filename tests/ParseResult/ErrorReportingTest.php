@@ -49,7 +49,7 @@ final class ErrorReportingTest extends TestCase
     public function failing_with_an_advanced_position()
     {
         $parser = char('a');
-        $input = new StringStream("bcd", new Position(3,"/path/to/file", 5, 10, 0));
+        $input = new StringStream("bcd", new Position("/path/to/file", 5, 10, 0));
         $result = $parser->run($input);
         $expected =
             <<<ERROR
@@ -68,7 +68,7 @@ final class ErrorReportingTest extends TestCase
     public function works_for_parsers_with_more_than_one_character()
     {
         $parser = string("abc");
-        $input = new StringStream("xyz", Position::initial(3,"/path/to/file"));
+        $input = new StringStream("xyz", Position::initial("/path/to/file"));
         $result = $parser->run($input);
         $expected =
             <<<ERROR
@@ -162,7 +162,7 @@ final class ErrorReportingTest extends TestCase
     public function multiline_input()
     {
         $parser = many(newline())->sequence(char('a'));
-        $input = new StringStream("\n\n\nbcd\nxyz", Position::initial(10,"/path/to/file"));
+        $input = new StringStream("\n\n\nbcd\nxyz", Position::initial("/path/to/file"));
         $result = $parser->run($input);
         $expected =
             <<<ERROR

@@ -28,7 +28,7 @@ final class StringStream implements Stream
     public function __construct(string $string, ?Position $position = null)
     {
         $this->string = $string;
-        $this->position = $position ?? Position::initial(strlen($string));
+        $this->position = $position ?? Position::initial();
     }
 
     /**
