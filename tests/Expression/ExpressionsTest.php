@@ -177,7 +177,7 @@ final class ExpressionsTest extends TestCase
     {
         $token = fn(Parser $parser) => keepFirst($parser, skipHSpace());
         $term = digitChar();
-        $parens = fn (Parser $parser): Parser => $token(between($token(char('(')), $token(char(')')), $expr));
+        $parens = fn (Parser $parser): Parser => $token(between($token(char('(')), $token(char(')')), $parser));
 
 
         $expr = recursive();
@@ -190,7 +190,7 @@ final class ExpressionsTest extends TestCase
         )->map(fn($o) => "(+ {$o[1]} {$o[2]})");
 
 
-        $expr->recurse($term->or($plus));
+        $expr->recurse($term->or($plus)->or($parens($expr)));
 
         $this->assertParses($input, $expr, $output);
     }
