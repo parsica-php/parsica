@@ -28,8 +28,6 @@ use function Verraes\Parsica\{atLeastOne, between, char, choice, digitChar, keep
 use function PHPUnit\Framework\{assertSame, assertEquals};
 
 assert_options(ASSERT_ACTIVE, 1);
-assert_options(ASSERT_QUIET_EVAL, 1);
-
 
 
 $token = fn(Parser $parser) => keepFirst($parser, skipHSpace());
