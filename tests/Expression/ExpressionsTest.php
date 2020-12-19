@@ -17,6 +17,7 @@ use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\atLeastOne;
 use function Verraes\Parsica\between;
 use function Verraes\Parsica\char;
+use function Verraes\Parsica\collect;
 use function Verraes\Parsica\digitChar;
 use function Verraes\Parsica\eof;
 use function Verraes\Parsica\Expression\binaryOperator;
@@ -167,6 +168,5 @@ final class ExpressionsTest extends TestCase
         ];
         return array_combine(array_column($examples, 0), $examples);
     }
-
 }
 
