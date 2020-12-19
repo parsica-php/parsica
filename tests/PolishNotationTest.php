@@ -10,6 +10,7 @@ use function Verraes\Parsica\between;
 use function Verraes\Parsica\char;
 use function Verraes\Parsica\collect;
 use function Verraes\Parsica\digitChar;
+use function Verraes\Parsica\eof;
 use function Verraes\Parsica\keepFirst;
 use function Verraes\Parsica\recursive;
 use function Verraes\Parsica\skipHSpace;
@@ -43,7 +44,7 @@ final class PolishNotationTest extends TestCase
 
         $expr->recurse($term->or($plus)->or($parens($expr)));
 
-        $this->expr = $expr;
+        $this->expr = $expr->thenEof();
     }
 
     /**
@@ -84,11 +85,20 @@ final class PolishNotationTest extends TestCase
     public function badExamples()
     {
         $examples = [
+            [''],
             ['()'],
+            ['1 2'],
+            ['(1 2'],
+            ['1 2)'],
+            ['(1 2)'],
+            ['(+ 2)'],
+            ['+ 1 2)'],
+            ['(1 + 2)'],
+            ['1 + 2)'],
+            ['(1 2 +)'],
         ];
 
         return array_combine(array_column($examples, 0), $examples);
     }
-
 }
 
