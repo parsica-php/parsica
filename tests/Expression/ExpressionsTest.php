@@ -168,44 +168,5 @@ final class ExpressionsTest extends TestCase
         ];
         return array_combine(array_column($examples, 0), $examples);
     }
-
-    /**
-     * @test
-     * @dataProvider polishExamples
-     */
-    public function polishNotation(string $input, $output)
-    {
-        $token = fn(Parser $parser) => keepFirst($parser, skipHSpace());
-        $term = digitChar();
-        $parens = fn (Parser $parser): Parser => $token(between($token(char('(')), $token(char(')')), $parser));
-
-
-        $expr = recursive();
-
-
-        $plus = collect(
-            $token(char('+')),
-            $token($expr),
-            $token($expr)
-        )->map(fn($o) => "(+ {$o[1]} {$o[2]})");
-
-
-        $expr->recurse($term->or($plus)->or($parens($expr)));
-
-        $this->assertParses($input, $expr, $output);
-    }
-
-    public function polishExamples()
-    {
-        $examples = [
-            ['1', '1'],
-            ['+ 1 2', '(+ 1 2)'],
-            ['+ 1 + 2 3', '(+ 1 (+ 2 3))'],
-            ['+ + 1 2 + 3 4', '(+ (+ 1 2) (+ 3 4))'],
-            ['+ 1 (+ 2 3)', '(+ 1 (+ 2 3))'],
-        ];
-
-        return array_combine(array_column($examples, 0), $examples);
-    }
 }
 
