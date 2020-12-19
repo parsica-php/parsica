@@ -41,8 +41,13 @@ final class PolishNotationTest extends TestCase
             $token($expr)
         )->map(fn($o) => "(+ {$o[1]} {$o[2]})");
 
+        $times = collect(
+            $token(char('*')),
+            $token($expr),
+            $token($expr)
+        )->map(fn($o) => "(* {$o[1]} {$o[2]})");
 
-        $expr->recurse($term->or($plus)->or($parens($expr)));
+        $expr->recurse($term->or($plus)->or($times)->or($parens($expr)));
 
         $this->expr = $expr->thenEof();
     }
@@ -68,6 +73,11 @@ final class PolishNotationTest extends TestCase
             ['(1)', '1'],
             ['((1))', '1'],
             ['(((1)))', '1'],
+            ['* 1 2', '(* 1 2)'],
+            ['+ 1 * 2 3', '(+ 1 (* 2 3))'],
+            ['* 1 + 2 3', '(* 1 (+ 2 3))'],
+            ['* 1 * 2 3', '(* 1 (* 2 3))'],
+            ['((+ 1 * 2 (+ 3 4)))', '(+ 1 (* 2 (+ 3 4)))'],
         ];
 
         return array_combine(array_column($examples, 0), $examples);
