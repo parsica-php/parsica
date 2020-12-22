@@ -3,6 +3,7 @@
 namespace Verraes\Parsica;
 
 use InvalidArgumentException;
+use MallardDuck\ImmutableReadFile\ImmutableFile;
 use Verraes\Parsica\Internal\EndOfStream;
 use Verraes\Parsica\Internal\Position;
 use Verraes\Parsica\Internal\TakeResult;
@@ -16,9 +17,8 @@ final class TextFileStream implements Stream
     private string $filePath;
     /**
      * @psalm-allow-private-mutation
-     * @var resource
      */
-    private $fileHandle;
+    private ImmutableFile $fileHandle;
     private Position $position;
 
     public static function createFromPosition(Position $position): self
@@ -28,22 +28,15 @@ final class TextFileStream implements Stream
 
     public function __construct(string $filePath, ?Position $position = null)
     {
+        /**
+         * @psalm-suppress ImpureFunctionCall
+         */
         if (!is_file($filePath)) {
             throw new InvalidArgumentException("The file path for the text-file is not a valid file.");
         }
         $this->filePath = $filePath;
-        $this->fileHandle = fopen($this->filePath, 'rb');
         $this->position = $position ?? Position::initial($this->filePath);
-        if (true !== is_null($position)) {
-            fseek($this->fileHandle, $this->position->bytePosition());
-        }
-    }
-
-    public function __destruct()
-    {
-        if (is_resource($this->fileHandle)) {
-            fclose($this->fileHandle);
-        }
+        $this->fileHandle = ImmutableFile::fromFilePathWithPosition($this->filePath, $this->position->bytePosition());
     }
 
     /**
@@ -56,18 +49,6 @@ final class TextFileStream implements Stream
         }
     }
 
-    private function safeRead(?int $n = null): string
-    {
-        if (is_null($n)) {
-            $tokenChunk = fgetc($this->fileHandle);
-        } else {
-            $tokenChunk = fread($this->fileHandle, $n);
-        }
-        rewind($this->fileHandle);
-        fseek($this->fileHandle, $this->position->bytePosition());
-        return !$tokenChunk ? '' : $tokenChunk;
-    }
-
     /**
      * @inheritDoc
      */
@@ -75,7 +56,10 @@ final class TextFileStream implements Stream
     {
         $this->guardEndOfStream();
 
-        $token = $this->safeRead();
+        /**
+         * @psalm-suppress ImpureMethodCall
+         */
+        $token = $this->fileHandle->fgetc();
         $position = $this->position->advance($token);
 
         return new TakeResult(
@@ -95,7 +79,10 @@ final class TextFileStream implements Stream
 
         $this->guardEndOfStream();
 
-        $chunk = $this->safeRead($n);
+        /**
+         * @psalm-suppress ImpureMethodCall
+         */
+        $chunk = $this->fileHandle->fread($n);
         $position = $this->position->advance($chunk);
 
         return new TakeResult(
@@ -113,22 +100,31 @@ final class TextFileStream implements Stream
             return new TakeResult("", $this);
         }
 
+        $remaining = $this->fileHandle;
+        /**
+         * @psalm-suppress ImpureMethodCall
+         */
+        $nextToken = $this->fileHandle->fgetc();
         $chunk = ""; // Init the result buffer
-        $nextToken = fgetc($this->fileHandle);
         while ($predicate($nextToken)) {
             $chunk .= $nextToken;
-            if (!feof($this->fileHandle)) {
-                $nextToken = fgetc($this->fileHandle);
+            /**
+             * @psalm-suppress ImpureMethodCall
+             */
+            $remaining = $remaining->advanceBytePosition();
+            if (!$remaining->feof()) {
+                /**
+                 * @psalm-suppress ImpureMethodCall
+                 */
+                $nextToken = $remaining->fgetc();
             } else {
                 break;
             }
         }
-        $position = $this->position->advance($chunk);
-        $this->safeRead();
 
         return new TakeResult(
             $chunk,
-            self::createFromPosition($position)
+            self::createFromPosition($this->position->advance($chunk))
         );
     }
 
@@ -137,14 +133,14 @@ final class TextFileStream implements Stream
      */
     public function __toString(): string
     {
-        if (0 === ($size = filesize($this->filePath))) {
+        /**
+         * @psalm-suppress ImpureMethodCall
+         */
+        if (0 === $this->fileHandle->getFileSize()) {
             return "<EMPTYFILE>";
         }
 
-        fseek($this->fileHandle, $this->position->bytePosition());
-        $stringData = fread($this->fileHandle, $size);
-        fseek($this->fileHandle, $this->position->bytePosition());
-        return $stringData;
+        return (string) $this->fileHandle;
     }
 
     /**
@@ -152,7 +148,7 @@ final class TextFileStream implements Stream
      */
     public function isEOF(): bool
     {
-        return feof($this->fileHandle);
+        return $this->fileHandle->feof();
     }
 
     /**

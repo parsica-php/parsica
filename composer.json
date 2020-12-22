@@ -25,7 +25,8 @@
     "require": {
         "php": "^7.4 || ^8.0",
         "ext-mbstring": "*",
-        "cypresslab/php-curry": "^0.5.0"
+        "cypresslab/php-curry": "^0.5.0",
+        "mallardduck/immutable-read-file": "^0.5.2"
     },
     "require-dev": {
         "ext-json": "*",
