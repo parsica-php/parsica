@@ -14,20 +14,18 @@ use Verraes\Parsica\Internal\EndOfStream;
 use Verraes\Parsica\Internal\Position;
 use Verraes\Parsica\Internal\TakeResult;
 
-/**
- * @psalm-immutable
- */
 final class StringStream implements Stream
 {
-    private string $string;
+    private array $stringAsArray;
     private Position $position;
+    private array $transactionCounters = [];
 
     /**
      * @api
      */
     public function __construct(string $string, ?Position $position = null)
     {
-        $this->string = $string;
+        $this->stringAsArray = mb_str_split($string);
         $this->position = $position ?? Position::initial();
     }
 
@@ -37,25 +35,17 @@ final class StringStream implements Stream
      */
     public function take1(): TakeResult
     {
+        $token = current($this->stringAsArray);
         $this->guardEndOfStream();
+        next($this->stringAsArray);
+        $this->advance();
 
-        $token = mb_substr($this->string, 0, 1);
-        $position = $this->position->advance($token);
+        $this->position = $this->position->advance($token);
 
         return new TakeResult(
             $token,
-            new StringStream(mb_substr($this->string, 1), $position)
+            $this
         );
-    }
-
-    /**
-     * @throws EndOfStream
-     */
-    private function guardEndOfStream(): void
-    {
-        if ($this->isEOF()) {
-            throw new EndOfStream("End of stream was reached in " . $this->position->pretty());
-        }
     }
 
     /**
@@ -63,7 +53,9 @@ final class StringStream implements Stream
      */
     public function isEOF(): bool
     {
-        return mb_strlen($this->string) === 0;
+        $isEOF = current($this->stringAsArray) === false;
+
+        return $isEOF;
     }
 
     /**
@@ -75,15 +67,21 @@ final class StringStream implements Stream
             return new TakeResult("", $this);
         }
 
-        $this->guardEndOfStream();
+        $chunk = '';
+        for ($i = 1; $i <= $n; $i++) {
+            $token = current($this->stringAsArray);
+            $this->guardEndOfStream();
+            next($this->stringAsArray);
+            $this->advance();
 
-        $chunk = mb_substr($this->string, 0, $n);
+            $chunk .= $token;
+        }
+
+        $this->position = $this->position->advance($chunk);
+
         return new TakeResult(
             $chunk,
-            new StringStream(
-                mb_substr($this->string, $n),
-                $this->position->advance($chunk)
-            )
+            $this
         );
     }
 
@@ -92,32 +90,41 @@ final class StringStream implements Stream
      */
     public function takeWhile(callable $predicate): TakeResult
     {
-        if($this->isEOF()) {
+        if ($this->isEOF()) {
             return new TakeResult("", $this);
         }
 
-        $remaining = $this->string;
-        $nextToken = mb_substr($remaining, 0, 1);
-        $chunk = "";
-        while ($predicate($nextToken)) {
-            $chunk .= $nextToken;
-            $remaining = mb_substr($remaining, 1);
-            if (mb_strlen($remaining) > 0) {
-                $nextToken = mb_substr($remaining, 0, 1);
+        $chunk = '';
+
+        while ($token = current($this->stringAsArray)) {
+            $this->guardEndOfStream();
+            next($this->stringAsArray);
+            $this->advance();
+
+            if ($predicate($token)) {
+                $chunk .= $token;
             } else {
+                prev($this->stringAsArray);
                 break;
             }
         }
 
+        $this->position = $this->position->advance($chunk);
+
         return new TakeResult(
             $chunk,
-            new StringStream($remaining, $this->position->advance($chunk))
+            $this
         );
     }
 
     public function __toString(): string
     {
-        return $this->string;
+        $currentIndex = key($this->stringAsArray);
+        if ($currentIndex === null) {
+            return '';
+        }
+
+        return implode('', array_slice($this->stringAsArray, $currentIndex));
     }
 
     /**
@@ -126,5 +133,48 @@ final class StringStream implements Stream
     public function position(): Position
     {
         return $this->position;
+    }
+
+    private function guardEndOfStream(): void
+    {
+        if (current($this->stringAsArray) === false) {
+            throw new EndOfStream("End of stream was reached in " . $this->position->pretty());
+        }
+    }
+
+    public function beginTransaction(): void
+    {
+        $this->transactionCounters[] = 0;
+    }
+
+    private function advance(): void
+    {
+        if (empty($this->transactionCounters)) {
+            return;
+        }
+
+        $lastCounterKey = array_key_last($this->transactionCounters);
+
+        $this->transactionCounters[$lastCounterKey]++;
+    }
+
+    public function commit(): void
+    {
+        array_pop($this->transactionCounters);
+    }
+
+    public function rollback(): void
+    {
+        $count = end($this->transactionCounters);
+
+        if ($count === false) {
+            return;
+        }
+
+        for ($i = 0; $i < $count; $i++) {
+            prev($this->stringAsArray);
+        }
+
+        array_pop($this->transactionCounters);
     }
 }

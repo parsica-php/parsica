@@ -182,13 +182,13 @@ final class combinatorsTest extends TestCase
     public function either_with_mixed_type()
     {
         $parser = either(
-            atLeastOne(digitChar())->map(fn(string $o)=> intval($o))->thenEof(),
+            atLeastOne(digitChar())->map(fn(string $o)=> (int) $o)->thenEof(),
             atLeastOne(alphaNumChar())->thenEof(),
         );
 
         $actual = $parser->tryString("123")->output();
         $this->assertIsInt($actual);
-        $this->assertEquals("123", $actual);
+        $this->assertSame(123, $actual);
 
         $actual = $parser->tryString("123a")->output();
         $this->assertIsString($actual);

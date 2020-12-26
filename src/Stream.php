@@ -68,4 +68,10 @@ interface Stream
      * @internal
      */
     public function position() : Position;
+
+    public function rollback(): void;
+
+    public function beginTransaction(): void;
+
+    public function commit(): void;
 }

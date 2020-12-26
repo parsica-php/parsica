@@ -81,10 +81,13 @@ function bind(Parser $parser, callable $f): Parser
 {
     /** @psalm-var Parser<T2> $finalParser */
     $finalParser = Parser::make($parser->getLabel(), function (Stream $input) use ($parser, $f) : ParseResult {
+        $input->beginTransaction();
         $result = $parser->run($input)->map($f);
         if ($result->isFail()) {
+            $input->rollback();
             return $result;
         }
+        $input->commit();
         $p2 = $result->output();
         return $result->continueWith($p2);
     });
@@ -110,10 +113,13 @@ function apply(Parser $parser1, Parser $parser2): Parser
 {
     /** @psalm-var Parser<T2> $parser */
     $parser = Parser::make($parser1->getLabel(), function (Stream $input) use ($parser2, $parser1) : ParseResult {
+        $input->beginTransaction();
         $r1 = $parser1->run($input);
         if ($r1->isFail()) {
+            $input->rollback();
             return $r1;
         }
+        $input->commit();
         $f = $r1->output();
         Assert::isCallable($f, "apply() can only be used when the output of the first parser is a callable with 1 argument. Use currying for functions with more than 1 argument.");
         // @todo assert that the arity of $f == 1
@@ -192,12 +198,15 @@ function either(Parser $first, Parser $second): Parser
     return Parser::make($label, function (Stream $input) use ($second, $first, $label): ParseResult {
         // @todo Megaparsec doesn't do automatic rollback, for performance reasons, and requires the user to add try
         //       combinators. We could mimic that behaviour as it is probably more performant
+        $input->beginTransaction();
         $r1 = $first->run($input);
         if ($r1->isSuccess()) {
+            $input->commit();
             return $r1;
         }
-        $r2 = $second->run($input);
+        $input->rollback();
 
+        $r2 = $second->run($input);
         if ($r2->isSuccess()) {
             return $r2;
         }
@@ -318,10 +327,14 @@ function atLeastOne(Parser $parser): Parser
     return Parser::make(
         "at least one " . $parser->getLabel(),
         function (Stream $input) use ($parser) : ParseResult {
+            $input->beginTransaction();
             $result = $parser->run($input);
             if ($result->isFail()) {
+                $input->rollback();
                 return $result;
             }
+            $input->commit();
+
             $final = new Succeed(null, $result->remainder());
             while ($result->isSuccess()) {
                 $final = $final->append($result);
