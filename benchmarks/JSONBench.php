@@ -21,6 +21,25 @@ class JSONBench
 {
     "name": "mathiasverraes/parsica",
     "type": "library",
+    "alotoftext": [
+        "Lorem Ipsum dolor sit amet",
+        "Lorem Ipsum dolor sit amet",
+        "Lorem Ipsum dolor sit amet",
+        "Lorem Ipsum dolor sit amet",
+        "Lorem Ipsum dolor sit amet",
+        "Lorem Ipsum dolor sit amet",
+        "Lorem Ipsum dolor sit amet",
+        "Lorem Ipsum dolor sit amet",
+        "Lorem Ipsum dolor sit amet",
+        "Lorem Ipsum dolor sit amet",
+        "Lorem Ipsum dolor sit amet",
+        "Lorem Ipsum dolor sit amet",
+        "Lorem Ipsum dolor sit amet",
+        "Lorem Ipsum dolor sit amet",
+        "Lorem Ipsum dolor sit amet",
+        "Lorem Ipsum dolor sit amet",
+        "Lorem Ipsum dolor sit amet"
+    ],
     "description": "The easiest way to build robust parsers in PHP.",
     "keywords": [
         "parser",

@@ -185,15 +185,19 @@ final class JSON
                 char('"'),
                 zeroOrMore(
                     choice(
-                        string("\\\"")->map(fn($_) => '"'),
-                        string("\\\\")->map(fn($_) => '\\'),
-                        string("\\/")->map(fn($_) => '/'),
-                        string("\\b")->map(fn($_) => mb_chr(8)),
-                        string("\\f")->map(fn($_) => mb_chr(12)),
-                        string("\\n")->map(fn($_) => "\n"),
-                        string("\\r")->map(fn($_) => "\r"),
-                        string("\\t")->map(fn($_) => "\t"),
-                        string("\\u")->sequence(repeat(4, hexDigitChar()))->map(fn($o) => mb_chr(hexdec($o))),
+                        char("\\")->followedBy(
+                            choice(
+                                char("\"")->map(fn($_) => '"'),
+                                char("\\")->map(fn($_) => '\\'),
+                                char("/")->map(fn($_) => '/'),
+                                char("b")->map(fn($_) => mb_chr(8)),
+                                char("f")->map(fn($_) => mb_chr(12)),
+                                char("n")->map(fn($_) => "\n"),
+                                char("r")->map(fn($_) => "\r"),
+                                char("t")->map(fn($_) => "\t"),
+                                char("u")->sequence(repeat(4, hexDigitChar()))->map(fn($o) => mb_chr(hexdec($o))),
+                            )
+                        ),
                         anySingleBut('"') // @TODO is a backslash  that is not one of the escapes above legal?
                     )
                 )
