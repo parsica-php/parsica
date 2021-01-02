@@ -27,6 +27,7 @@ use function Verraes\Parsica\{any,
     satisfy,
     sepBy,
     string,
+    takeWhile,
     zeroOrMore};
 
 /**
@@ -153,7 +154,7 @@ final class JSON
      */
     public static function ws(): Parser
     {
-        return zeroOrMore(satisfy(isCharCode([0x20, 0x0A, 0x0D, 0x09])))->voidLeft(null)
+        return takeWhile(isCharCode([0x20, 0x0A, 0x0D, 0x09]))->voidLeft(null)
             ->label('whitespace');
     }
 
