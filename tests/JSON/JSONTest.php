@@ -27,6 +27,7 @@ final class JSONTest extends TestCase
             [' [ { " a b  " : " c  d " } ] '],
             [' [ { " a b  " : " c  d " } , { "ef" : "gh" } ] '],
             ['"some weird chars \\n in \\t strings \\u9999 should do it"'],
+            ['"this \\\\ is just a backslash"'],
             [<<<JSON
                 [
                     -1.23,

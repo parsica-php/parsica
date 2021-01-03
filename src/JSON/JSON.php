@@ -186,6 +186,7 @@ final class JSON
                 char('"'),
                 zeroOrMore(
                     choice(
+                        satisfy(fn(string $char): bool => !in_array($char, ['"', '\\'])),
                         char("\\")->followedBy(
                             choice(
                                 char("\"")->map(fn($_) => '"'),
@@ -198,8 +199,7 @@ final class JSON
                                 char("t")->map(fn($_) => "\t"),
                                 char("u")->sequence(repeat(4, hexDigitChar()))->map(fn($o) => mb_chr(hexdec($o))),
                             )
-                        ),
-                        anySingleBut('"') // @TODO is a backslash  that is not one of the escapes above legal?
+                        )
                     )
                 )
             )->map(fn($o): string => (string)$o) // because the empty json string returns null
