@@ -40,6 +40,7 @@ class JSONBench
         "Lorem Ipsum dolor sit amet",
         "Lorem Ipsum dolor sit amet"
     ],
+    "alotmoretext": "Fuga iusto dolores ipsam. Qui excepturi veniam iste autem ducimus porro et voluptas. Veniam veniam ducimus cumque facere repudiandae corrupti sint quas. Cupiditate asperiores iure omnis dolores nihil asperiores qui quo. Assumenda quia iure deserunt deserunt. Perspiciatis velit quia et.\n\nExplicabo non dolores aut facere. Perferendis in est voluptate. Et laboriosam et autem voluptatum rem nam et aut. Voluptatem praesentium et earum fugit accusamus tempore consectetur natus. Beatae sunt nisi rerum blanditiis consequatur rerum ut.\n\nIure ipsa sit assumenda. Vitae nisi qui vero. Eveniet cum aliquam molestiae molestias. Nisi aut ea alias quo ea voluptatem. Minus ea mollitia quis.",
     "description": "The easiest way to build robust parsers in PHP.",
     "keywords": [
         "parser",
