@@ -12,6 +12,7 @@ namespace Tests\Verraes\Parsica\Parser;
 
 use \InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use Verraes\Parsica\ParserHasFailed;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Cypress\Curry\curry;
 use function Verraes\Parsica\{alphaChar,
@@ -90,9 +91,12 @@ final class ApplicativeTest extends TestCase
     public function keepFirst()
     {
         $parser = keepFirst(char('a'), char('b'));
-        $this->assertParses("abc", $parser, "a");
-        $this->assertRemainder("abc", $parser, "c");
-        $this->assertParseFails("ac", $parser);
+        $result = $parser->tryString("abcd");
+        $this->assertSame("a", $result->output());
+        $this->assertEquals("c", $result->remainder()->peak1());
+
+        $this->expectException(ParserHasFailed::class);
+        $parser->tryString("ac");
     }
 
     /** @test */

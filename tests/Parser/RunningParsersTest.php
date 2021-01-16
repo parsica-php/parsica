@@ -23,18 +23,18 @@ final class RunningParsersTest extends TestCase
     public function try_throws()
     {
         $parser = char('a');
-        $result = $parser->try(new StringStream("a"));
+        $result = $parser->try(StringStream::fromString("a"));
         $this->assertSame("a", $result->output());
 
         $this->expectException(ParserHasFailed::class);
-        $result = $parser->try(new StringStream("b"));
+        $result = $parser->try(StringStream::fromString("b"));
     }
 
     /** @test */
     public function continueFrom()
     {
         $parser = string('hello')->sequence(skipSpace());
-        $result = $parser->try(new StringStream("hello world!"));
+        $result = $parser->try(StringStream::fromString("hello world!"));
         $parser2 = string("world");
         $result2 = $parser2->continueFrom($result);
         $this->assertEquals("world", $result2->output());

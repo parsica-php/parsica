@@ -22,7 +22,8 @@ use function Verraes\Parsica\{anything,
     skipWhile1,
     succeed,
     takeWhile,
-    takeWhile1};
+    takeWhile1
+};
 use function Verraes\Parsica\{isEqual, notPred};
 
 
@@ -55,16 +56,6 @@ final class primitivesTest extends TestCase
     {
         $this->assertRemainder("xyz", nothing(), "xyz");
         $this->assertRemainder(":-)", nothing(), ":-)");
-    }
-
-    /** @test */
-    public function everything()
-    {
-        $this->assertParses("xyz", everything(), "xyz");
-        $this->assertRemainder("xyz", everything(), "");
-        $this->assertParses(":-)", everything(), ":-)");
-        $this->assertRemainder(":-)", everything(), "");
-        $this->assertParses("", everything(), "");
     }
 
     /** @test */
@@ -113,8 +104,8 @@ final class primitivesTest extends TestCase
     {
         $parser = takeWhile1(isEqual('a'));
         $this->assertFailOnEOF($parser);
+        $this->assertParseFails("", $parser, "takeWhile1(predicate)");
         $this->assertParseFails("xyz", $parser, "takeWhile1(predicate)");
-        $this->assertParseFails("takeWhile1(predicate)", $parser);
         $this->assertParses("axyz", $parser, "a");
         $this->assertParses("aaaxyz", $parser, "aaa");
         $this->assertParses("aaa", $parser, "aaa");

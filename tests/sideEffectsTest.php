@@ -26,11 +26,11 @@ final class sideEffectsTest extends TestCase
         $parser = emit(char('a'), $addToCache);
 
         $input = "a";
-        $parser->run(new StringStream($input));
+        $parser->run(StringStream::fromString($input));
         $this->assertEquals("a", $cache->get('a'));
 
         $input = "b";
-        $parser->run(new StringStream($input));
+        $parser->run(StringStream::fromString($input));
         $this->assertNull($cache->get('b'));
     }
 }

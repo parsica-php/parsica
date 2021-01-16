@@ -13,6 +13,7 @@ namespace Tests\Verraes\Parsica;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
+use Verraes\Parsica\StringStream;
 use function Verraes\Parsica\{alphaChar,
     alphaNumChar,
     any,
@@ -76,7 +77,7 @@ final class combinatorsTest extends TestCase
         $this->assertParses("abcd-efgh", $parser, "abcdefgh");
         $this->assertParseFails("abcdefgh", $parser);
 
-        // smae with optional dash
+        // same with optional dash
         $parser = string('abcd')
             ->thenIgnore(optional(char('-')))
             ->append(string('efgh'));
@@ -191,8 +192,8 @@ final class combinatorsTest extends TestCase
         $this->assertSame(123, $actual);
 
         $actual = $parser->tryString("123a")->output();
-        $this->assertIsString($actual);
         $this->assertEquals("123a", $actual);
+        $this->assertIsString($actual);
 
     }
 
@@ -459,4 +460,5 @@ final class combinatorsTest extends TestCase
         $parser = repeatList(3, repeat(3, alphaChar()));
         $this->assertParses("EURUSDGBP", $parser, ["EUR", "USD", "GBP"]);
     }
+
 }

@@ -34,7 +34,7 @@ final class ObjectTest extends TestCase
         $input = '{"foo":"bar","bar":"foo"}';
         $parser = JSON::object();
 
-        $result = $parser->run(new StringStream($input));
+        $result = $parser->run(StringStream::fromString($input));
 
         $this->assertParses($input, $parser, (object)["foo" => "bar", "bar" => "foo"]);
     }

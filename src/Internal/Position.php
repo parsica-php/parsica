@@ -15,6 +15,7 @@ namespace Verraes\Parsica\Internal;
  *
  * @psalm-immutable
  * @psalm-external-mutation-free
+ * @deprecated
  */
 final class Position
 {

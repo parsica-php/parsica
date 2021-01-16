@@ -103,7 +103,7 @@ interface ParseResult
      */
     public function continueWith(Parser $parser): ParseResult;
 
-    public function errorMessage() : string;
+    public function errorMessage(): string;
 
     /**
      * Get the last position of where the parser ended up when producing this result.

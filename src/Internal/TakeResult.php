@@ -16,6 +16,7 @@ use Verraes\Parsica\Stream;
  * The result of Stream::take*() functions
  *
  * @internal
+ * @deprecated
  */
 final class TakeResult
 {

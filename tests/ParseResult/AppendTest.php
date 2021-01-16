@@ -23,31 +23,31 @@ final class AppendTest extends TestCase
     /** @test */
     public function append_strings()
     {
-        $remainder = new StringStream("");
-        $succeed1 = new Succeed("Parsed1", new StringStream("Remain1"));
-        $succeed2 = new Succeed("Parsed2", new StringStream("Remain2"));
-        $fail1 = new Fail("Expected1", new StringStream("Got1"));
-        $fail2 = new Fail("Expected2", new StringStream("Got2"));
+        $succeed1 = new Succeed("Parsed1", StringStream::fromString("Remain1"));
+        $succeed2 = new Succeed("Parsed2", StringStream::fromString("Remain2"));
+        $fail1 = new Fail("Expected1", StringStream::fromString("Got1"));
+        $fail2 = new Fail("Expected2", StringStream::fromString("Got2"));
 
-        $this->assertStrictlyEquals(new Succeed("Parsed1Parsed2", new StringStream("Remain2")), $succeed1->append($succeed2));
-        $this->assertStrictlyEquals(new Fail("Expected1", new StringStream("Got1")), $succeed1->append($fail1));
-        $this->assertStrictlyEquals(new Fail("Expected1", new StringStream("Got1")), $fail1->append($succeed2));
-        $this->assertStrictlyEquals(new Fail("Expected1", new StringStream("Got1")), $fail1->append($fail2));
+        $this->assertEquals(new Succeed("Parsed1Parsed2", StringStream::fromString("Remain2")), $succeed1->append($succeed2));
+        $this->assertEquals(new Fail("Expected1", StringStream::fromString("Got1")), $succeed1->append($fail1));
+        $this->assertEquals(new Fail("Expected1", StringStream::fromString("Got1")), $fail1->append($succeed2));
+        $this->assertEquals(new Fail("Expected1", StringStream::fromString("Got1")), $fail1->append($fail2));
     }
+
     /** @test */
     public function append_with_null()
     {
-        $null1 = new Succeed(null, new StringStream("Remain Null 1"));
-        $null2 = new Succeed(null, new StringStream("Remain Null 2"));
-        $string = new Succeed("String", new StringStream("Remain String"));
+        $null1 = new Succeed(null, StringStream::fromString("Remain Null 1"));
+        $null2 = new Succeed(null, StringStream::fromString("Remain Null 2"));
+        $string = new Succeed("String", StringStream::fromString("Remain String"));
 
         $first = $string->append($null1);
-        $this->assertStrictlyEquals(new Succeed("String", new StringStream("Remain Null 1")), $first);
+        $this->assertEquals(new Succeed("String", StringStream::fromString("Remain Null 1")), $first);
 
         $second = $null1->append($string);
-        $this->assertStrictlyEquals(new Succeed("String", new StringStream("Remain String")), $second);
+        $this->assertEquals(new Succeed("String", StringStream::fromString("Remain String")), $second);
 
         $both = $null1->append($null2);
-        $this->assertStrictlyEquals(new Succeed(null, new StringStream("Remain Null 2")), $both);
+        $this->assertEquals(new Succeed(null, StringStream::fromString("Remain Null 2")), $both);
     }
 }

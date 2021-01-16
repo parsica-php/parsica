@@ -23,17 +23,17 @@ final class FunctorTest extends TestCase
     /** @test */
     public function map_over_ParseSuccess()
     {
-        $succeed = new Succeed("parsed", new StringStream("remainder"));
-        $expected = new Succeed("PARSED", new StringStream("remainder"));
+        $succeed = new Succeed("parsed", StringStream::fromString("remainder"));
+        $expected = new Succeed("PARSED", StringStream::fromString("remainder"));
         $this->assertEquals($expected, $succeed->map('strtoupper'));
     }
 
     /** @test */
     public function map_over_ParseFailure()
     {
-        $remainder = new StringStream("");
-        $fail = new Fail("expected", new StringStream("got"));
-        $expected = new Fail("expected", new StringStream("got"));
+        $remainder = StringStream::fromString("");
+        $fail = new Fail("expected", StringStream::fromString("got"));
+        $expected = new Fail("expected", StringStream::fromString("got"));
         $this->assertEquals($expected, $fail->map('strtoupper'));
     }
 

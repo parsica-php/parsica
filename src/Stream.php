@@ -10,8 +10,7 @@
 
 namespace Verraes\Parsica;
 
-use Verraes\Parsica\Internal\Position;
-use Verraes\Parsica\Internal\TakeResult;
+use Verraes\Parsica\Internal\NovelImmutablePosition;
 
 /**
  * Represents an input stream. This allows us to have different types of input, each with their own optimizations.
@@ -25,7 +24,7 @@ interface Stream
      *
      * @throw EndOfStream
      */
-    public function take1(): TakeResult;
+    public function take1(): string;
 
     /**
      * Try to extract a chunk of length $n, or if the stream is too short, the rest of the stream.
@@ -39,7 +38,7 @@ interface Stream
      *
      * @throw EndOfStream
      */
-    public function takeN(int $n): TakeResult;
+    public function takeN(int $n): string;
 
 
     /**
@@ -50,10 +49,11 @@ interface Stream
      *
      * @psalm-param callable(string):bool $predicate
      */
-    public function takeWhile(callable $predicate) : TakeResult;
+    public function takeWhile(callable $predicate) : string;
 
     /**
      * @deprecated We will need to get rid of this again at some point, we can't assume all streams will be strings
+     * @todo remove
      */
     public function __toString(): string;
 
@@ -67,11 +67,34 @@ interface Stream
      *
      * @internal
      */
-    public function position() : Position;
+    public function position() : NovelImmutablePosition;
 
     public function rollback(): void;
 
     public function beginTransaction(): void;
 
     public function commit(): void;
+
+    public function filename(): string;
+
+    /**
+     * Read the previous character in the stream
+     */
+    public function peakBack() : string;
+
+    /**
+     * Read the next n tokens without advancing the stream pointer
+     */
+    public function peakWhile(callable $predicate): string;
+
+    /**
+     * Read the next n tokens without advancing the stream pointer
+     */
+    public function peakN(int $n): string;
+
+    /**
+     * Read the next token without advancing the stream pointer, or return the empty string
+     */
+    public function peak1(): string;
+
 }

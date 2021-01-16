@@ -28,14 +28,14 @@ use Verraes\Parsica\Internal\Succeed;
 function satisfy(callable $predicate): Parser
 {
     $label = "satisfy(predicate)";
-    return Parser::make($label, function (Stream $input) use ($label, $predicate) : ParseResult {
+    return Parser::make($label, function (Stream $input) use ($label, $predicate): ParseResult {
         try {
-            $t = $input->take1();
+            $token = $input->take1();
         } catch (EndOfStream $e) {
             return new Fail($label, $input);
         }
-        return $predicate($t->chunk())
-            ? new Succeed($t->chunk(), $t->stream())
+        return $predicate($token)
+            ? new Succeed($token, $input)
             : new Fail($label, $input);
     });
 }
@@ -79,8 +79,8 @@ function takeWhile(callable $predicate): Parser
     return Parser::make(
         "takeWhile(predicate)",
         function (Stream $input) use ($predicate): ParseResult {
-            $t = $input->takeWhile($predicate);
-            return new Succeed($t->chunk(), $t->stream());
+            $token = $input->takeWhile($predicate);
+            return new Succeed($token, $input);
         }
     );
 }
@@ -100,20 +100,12 @@ function takeWhile1(callable $predicate): Parser
     $label = "takeWhile1(predicate)";
     return Parser::make($label, function (Stream $input) use ($label, $predicate): ParseResult {
 
-        try {
-            $t = $input->take1();
-        } catch (EndOfStream $e) {
+        if ($input->isEOF() || !$predicate($input->peak1())) {
             return new Fail($label, $input);
         }
-
-        if (!$predicate($t->chunk())) {
-            return new Fail($label, $input);
-        }
-
-        $t = $input->takeWhile($predicate);
-        return new Succeed($t->chunk(), $t->stream());
-    }
-    );
+        $chunk = $input->takeWhile($predicate);
+        return new Succeed($chunk, $input);
+    });
 }
 
 /**
@@ -249,19 +241,9 @@ function takeRest(): Parser
 function nothing(): Parser
 {
     /** @psalm-var callable(Stream):ParseResult<null> $result */
-    $result = fn(Stream $input) : ParseResult => new Succeed(null, $input);
+    $result = fn(Stream $input): ParseResult => new Succeed(null, $input);
     $parser = Parser::make("<nothing>", $result);
     return $parser;
-}
-
-/**
- * Parse everything; that is, consume the rest of the input until the end.
- *
- * @api
- */
-function everything(): Parser
-{
-    return Parser::make("<everything>", fn(Stream $input) => new Succeed((string)$input, new StringStream("")));
 }
 
 /**
@@ -276,6 +258,8 @@ function succeed(): Parser
 
 /**
  * Always fail, no matter what the input was.
+ *
+ * (This is mzero in Megaparsec)
  *
  * @return Parser
  * @api

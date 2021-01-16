@@ -11,7 +11,8 @@
 namespace Tests\Verraes\Parsica\Internal;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Internal\Position;
+use Verraes\Parsica\Internal\ActualPosition;
+use Verraes\Parsica\Internal\NovelImmutablePosition;
 use Verraes\Parsica\StringStream;
 use function Verraes\Parsica\char;
 
@@ -20,25 +21,33 @@ final class PositionTest extends TestCase
     /** @test */
     public function update()
     {
-        $position = Position::initial();
+        $position = NovelImmutablePosition::initial();
+        $this->assertEquals(0, $position->pointer());
         $this->assertEquals(1, $position->line());
         $this->assertEquals(1, $position->column());
         $position = $position->advance("a");
+        $this->assertEquals(1, $position->pointer());
         $this->assertEquals(1, $position->line());
         $this->assertEquals(2, $position->column());
         $position = $position->advance("\n");
+        $this->assertEquals(2, $position->pointer());
         $this->assertEquals(2, $position->line());
         $this->assertEquals(1, $position->column());
-        $position = $position->advance("\n\n\nabc");
-        $this->assertEquals(5, $position->line());
-        $this->assertEquals(4, $position->column());
+        $position = $position->advance("\n");
+        $this->assertEquals(3, $position->pointer());
+        $this->assertEquals(3, $position->line());
+        $this->assertEquals(1, $position->column());
+        $position = $position->advance("a");
+        $this->assertEquals(4, $position->pointer());
+        $this->assertEquals(3, $position->line());
+        $this->assertEquals(2, $position->column());
     }
 
     /** @test */
     public function position_in_sequence()
     {
         $parser = char('a')->followedBy(char('b'));
-        $input = new StringStream("abc", Position::initial());
+        $input = StringStream::fromString("abc");
         $result = $parser->run($input);
 
         $expectedColumn = 3;
@@ -49,17 +58,15 @@ final class PositionTest extends TestCase
     /** @test */
     public function position_with_tabs()
     {
-        $expected = 10;
-        // All of these move the column position to 10
-        $position = Position::initial()->advance("123456789");
-        $this->assertEquals($expected, $position->column());
-        $position = Position::initial()->advance("\t56789");
-        $this->assertEquals($expected, $position->column());
-        $position = Position::initial()->advance("\t\t9");
-        $this->assertEquals($expected, $position->column());
-        $position = Position::initial()->advance("1\t56789");
-        $this->assertEquals($expected, $position->column());
-        $position = Position::initial()->advance("123\t56789");
-        $this->assertEquals($expected, $position->column());
+        $position = NovelImmutablePosition::initial();
+        $position = $position->advance("\t");
+        $this->assertEquals(5, $position->column());
+        $position = $position->advance("\t");
+        $this->assertEquals(9, $position->column());
+        $position = $position->advance("a");
+        $this->assertEquals(10, $position->column());
+        $position = $position->advance("\t");
+        $this->assertEquals(13, $position->column());
+
     }
 }

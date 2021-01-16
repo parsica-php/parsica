@@ -39,29 +39,28 @@ final class Fail implements ParseResult
     }
 
     /**
+     * @return string
      * @api
      */
     public function errorMessage(): string
     {
-        try {
-            $firstChar = $this->got->take1()->chunk();
-            $unexpected = Ascii::printable($firstChar);
-            $body = $this->got()->takeWhile(notPred(isEqual("\n")))->chunk();
-        } catch (EndOfStream $e) {
-            $unexpected = $body = "<EOF>";
-        }
-        $lineNumber = $this->got->position()->line();
+        $firstChar = $this->got->peakBack();
+        $text = $firstChar . $this->got->peakWhile(notPred(isEqual("\n")));
+        $unexpected = Ascii::printable($firstChar);
+        $position = $this->got->position()->retreat($firstChar);
+
+        $lineNumber = $position->line();
         $spaceLength = str_repeat(" ", strlen((string)$lineNumber));
         $expecting = $this->expected;
-        $position = $this->got->position()->pretty();
-        $columnNumber = $this->got->position()->column();
+        $pretty = $position->pretty($this->got->filename());
+        $columnNumber = $position->column();
         $leftDots = $columnNumber == 1 ? "" : "...";
         $leftSpace = $columnNumber == 1 ? "" : "   ";
-        $bodyLine = "$lineNumber | $leftDots$body";
-        $bodyLine = strlen($bodyLine) > 80 ? (substr($bodyLine, 0, 77) . "...") : $bodyLine;
+        $bodyLine = "$lineNumber | $leftDots$text";
+        $bodyLine = strlen($bodyLine) > 80 ? (substr($bodyLine, 0, 79) . "…") : $bodyLine;
 
         return
-            "$position\n"
+            "$pretty\n"
             . "$spaceLength |\n"
             . "$bodyLine\n"
             . "$spaceLength | $leftSpace^— column $columnNumber\n"
@@ -152,7 +151,7 @@ final class Fail implements ParseResult
     /**
      * @inheritDoc
      */
-    public function throw() : void
+    public function throw(): void
     {
         throw new ParserHasFailed($this);
     }

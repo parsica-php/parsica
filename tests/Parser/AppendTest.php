@@ -42,7 +42,7 @@ final class AppendTest extends TestCase
         $a = char('a')->map(fn($v)=> new NotASemigroup($v));
         $b = char('b')->map(fn($v)=> new NotASemigroup($v));
         $this->expectException(Exception::class);
-        $a->append($b)->run(new StringStream('abc'));
+        $a->append($b)->run(StringStream::fromString('abc'));
     }
 }
 

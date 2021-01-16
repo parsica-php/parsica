@@ -268,7 +268,7 @@ final class Parser
     }
 
     /**
-     * Try to parse a string. Alias of `try(new StringStream($string))`.
+     * Try to parse a string. Alias of `try(StringStream::fromString($string))`.
      *
      * @TODO Try should fail when it doesn't consume the whole input.
      *
@@ -281,7 +281,7 @@ final class Parser
      */
     public function tryString(string $input): ParseResult
     {
-        return $this->try(new StringStream($input));
+        return $this->try(StringStream::fromString($input));
     }
 
     /**

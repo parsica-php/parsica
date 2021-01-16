@@ -1,4 +1,7 @@
 <?php declare(strict_types=1);
+
+use Verraes\Parsica\Parser;
+
 /**
  * This file is part of the Parsica library.
  *
@@ -80,7 +83,7 @@ function optional(Parser $parser): Parser
 function bind(Parser $parser, callable $f): Parser
 {
     /** @psalm-var Parser<T2> $finalParser */
-    $finalParser = Parser::make($parser->getLabel(), function (Stream $input) use ($parser, $f) : ParseResult {
+    $finalParser = Parser::make($parser->getLabel(), function (Stream $input) use ($parser, $f): ParseResult {
         $input->beginTransaction();
         $result = $parser->run($input)->map($f);
         if ($result->isFail()) {
@@ -89,7 +92,7 @@ function bind(Parser $parser, callable $f): Parser
         }
         $input->commit();
         $p2 = $result->output();
-        return $result->continueWith($p2);
+        return $p2->run($input);
     });
     return $finalParser;
 }
@@ -112,7 +115,7 @@ function bind(Parser $parser, callable $f): Parser
 function apply(Parser $parser1, Parser $parser2): Parser
 {
     /** @psalm-var Parser<T2> $parser */
-    $parser = Parser::make($parser1->getLabel(), function (Stream $input) use ($parser2, $parser1) : ParseResult {
+    $parser = Parser::make($parser1->getLabel(), function (Stream $input) use ($parser2, $parser1): ParseResult {
         $input->beginTransaction();
         $r1 = $parser1->run($input);
         if ($r1->isFail()) {
@@ -195,7 +198,7 @@ function keepSecond(Parser $first, Parser $second): Parser
 function either(Parser $first, Parser $second): Parser
 {
     $label = $first->getLabel() . " or " . $second->getLabel();
-    return Parser::make($label, function (Stream $input) use ($second, $first, $label): ParseResult {
+    return Parser::make($label, function (Stream $input) use ($first, $second, $label): ParseResult {
         // @todo Megaparsec doesn't do automatic rollback, for performance reasons, and requires the user to add try
         //       combinators. We could mimic that behaviour as it is probably more performant
         $input->beginTransaction();
@@ -206,10 +209,13 @@ function either(Parser $first, Parser $second): Parser
         }
         $input->rollback();
 
+        $input->beginTransaction();
         $r2 = $second->run($input);
         if ($r2->isSuccess()) {
+            $input->commit();
             return $r2;
         }
+        $input->rollback();
 
         return new Fail($label, $r2->got());
     });
@@ -326,21 +332,31 @@ function atLeastOne(Parser $parser): Parser
 {
     return Parser::make(
         "at least one " . $parser->getLabel(),
-        function (Stream $input) use ($parser) : ParseResult {
-            $input->beginTransaction();
+        function (Stream $input) use ($parser): ParseResult {
+
+           // $input->beginTransaction();
             $result = $parser->run($input);
             if ($result->isFail()) {
-                $input->rollback();
+               // $input->rollback();
                 return $result;
             }
-            $input->commit();
+           // $input->commit();
 
-            $final = new Succeed(null, $result->remainder());
-            while ($result->isSuccess()) {
-                $final = $final->append($result);
-                $result = $parser->continueFrom($result);
-            }
+            $final = $result;
+            do {
+                $input->beginTransaction();
+                $result = $parser->run($input);
+                if ($result->isFail()) {
+                    $input->rollback();
+                    break;
+                } else {
+                    $final = $final->append($result);
+                    $input->commit();
+                }
+            } while (true);
+
             return $final;
+
         }
     );
 }
@@ -360,14 +376,41 @@ function zeroOrMore(Parser $parser): Parser
 {
     return Parser::make(
         "zero or more " . $parser->getLabel(),
-        function (Stream $input) use ($parser) : ParseResult {
+        function (Stream $input) use ($parser): ParseResult {
             $result = new Succeed(null, $input);
             $final = $result;
             while ($result->isSuccess()) {
                 $final = $final->append($result);
-                $result = $parser->continueFrom($result);
+                $result = try_($parser)->run($input);
             }
             return $final;
+        }
+    );
+}
+
+/**
+ * Try the parser, if it fails, rollback the stream
+ *
+ * @template T
+ *
+ * @psalm-param Parser<T> $parser
+ *
+ * @psalm-return Parser<T>
+ * @api
+ */
+function try_(Parser $parser) : Parser
+{
+    return Parser::make(
+        "try " . $parser->getLabel(),
+        function (Stream $input) use ($parser): ParseResult {
+            $input->beginTransaction();
+            $result = $parser->run($input);
+            if($result->isSuccess()) {
+                $input->commit();
+            } else {
+                $input->rollback();
+            }
+            return $result;
         }
     );
 }
@@ -428,13 +471,13 @@ function repeatList(int $n, Parser $parser): Parser
 function some(Parser $parser): Parser
 {
     return map(
-            collect($parser, many($parser)),
-            /**
-             * @template T
-             * @psalm-param array{0: T, 1: list<T>} $o
-             * @psalm-return list<T>
-             */
-            fn(array $o):array => array_merge([$o[0]], $o[1])
+        collect($parser, many($parser)),
+        /**
+         * @template T
+         * @psalm-param array{0: T, 1: list<T>} $o
+         * @psalm-return list<T>
+         */
+        fn(array $o): array => array_merge([$o[0]], $o[1])
     );
 }
 
@@ -496,7 +539,7 @@ function between(Parser $open, Parser $close, Parser $middle): Parser
  * @template T
  *
  * @psalm-param Parser<TSeparator> $separator
- * @psalm-param Parser<T>  $parser
+ * @psalm-param Parser<T>          $parser
  *
  * @psalm-return Parser<list<T>>
  *
@@ -613,8 +656,13 @@ function lookAhead(Parser $parser): Parser
 {
     return Parser::make(
         $parser->getLabel(),
-        fn(Stream $input): ParseResult => $parser->run($input)->isSuccess()
-            ? new Succeed("", $input)
-            : new Fail("lookAhead", $input)
+        function (Stream $input) use ($parser): ParseResult {
+            $input->beginTransaction();
+            $result = $parser->run($input)->isSuccess()
+                ? new Succeed("", $input)
+                : new Fail("lookAhead", $input);
+            $input->rollback();
+            return $result;
+        }
     );
 }

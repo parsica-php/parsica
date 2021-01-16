@@ -10,171 +10,214 @@
 
 namespace Verraes\Parsica;
 
+use Exception;
+use InvalidArgumentException;
 use Verraes\Parsica\Internal\EndOfStream;
-use Verraes\Parsica\Internal\Position;
-use Verraes\Parsica\Internal\TakeResult;
+use Verraes\Parsica\Internal\NovelImmutablePosition;
 
 final class StringStream implements Stream
 {
     private array $stringAsArray;
-    private Position $position;
-    private array $transactionCounters = [];
+    private string $filename = "<input>";
+    private array $positions = [];
+    private int $length;
+
+    private function __construct()
+    {
+    }
 
     /**
      * @api
      */
-    public function __construct(string $string, ?Position $position = null)
+    public static function fromString(string $string, string $filename = "<input>"): StringStream
     {
-        $this->stringAsArray = mb_str_split($string);
-        $this->position = $position ?? Position::initial();
+        $stream = new StringStream();
+        $stream->filename = $filename;
+        $stream->stringAsArray = mb_str_split($string);
+        $stream->length = count($stream->stringAsArray);
+        $stream->positions[] = NovelImmutablePosition::initial();
+        return $stream;
+    }
+
+    public function filename(): string
+    {
+        return $this->filename;
+    }
+
+
+
+    /**
+     * The position of the parser in the stream.
+     *
+     * @internal
+     */
+    public function position(): NovelImmutablePosition
+    {
+        return end($this->positions);
     }
 
     /**
-     * @inheritDoc
-     * @internal
+     * Pretty print as "filename:line:column"
      */
-    public function take1(): TakeResult
+    public function pretty(): string
     {
-        $token = current($this->stringAsArray);
-        $this->guardEndOfStream();
-        next($this->stringAsArray);
-        $this->advance();
-
-        $this->position = $this->position->advance($token);
-
-        return new TakeResult(
-            $token,
-            $this
-        );
+        return $this->position()->pretty($this->filename);
     }
+
 
     /**
      * @inheritDoc
      */
     public function isEOF(): bool
     {
-        $isEOF = current($this->stringAsArray) === false;
-
-        return $isEOF;
+        return $this->position()->pointer() >= $this->length;
     }
 
     /**
-     * @inheritDoc
+     * @deprecated use peakAll()
+     * @deprecated We should probably get rid of this entirely
+     * @todo We should probably get rid of this entirely
      */
-    public function takeN(int $n): TakeResult
-    {
-        if ($n <= 0) {
-            return new TakeResult("", $this);
-        }
-
-        $chunk = '';
-        for ($i = 1; $i <= $n; $i++) {
-            $token = current($this->stringAsArray);
-            $this->guardEndOfStream();
-            next($this->stringAsArray);
-            $this->advance();
-
-            $chunk .= $token;
-        }
-
-        $this->position = $this->position->advance($chunk);
-
-        return new TakeResult(
-            $chunk,
-            $this
-        );
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function takeWhile(callable $predicate): TakeResult
-    {
-        if ($this->isEOF()) {
-            return new TakeResult("", $this);
-        }
-
-        $chunk = '';
-
-        while ($token = current($this->stringAsArray)) {
-            $this->guardEndOfStream();
-            next($this->stringAsArray);
-            $this->advance();
-
-            if ($predicate($token)) {
-                $chunk .= $token;
-            } else {
-                prev($this->stringAsArray);
-                break;
-            }
-        }
-
-        $this->position = $this->position->advance($chunk);
-
-        return new TakeResult(
-            $chunk,
-            $this
-        );
-    }
-
     public function __toString(): string
     {
-        $currentIndex = key($this->stringAsArray);
-        if ($currentIndex === null) {
-            return '';
-        }
-
-        return implode('', array_slice($this->stringAsArray, $currentIndex));
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function position(): Position
-    {
-        return $this->position;
-    }
-
-    private function guardEndOfStream(): void
-    {
-        if (current($this->stringAsArray) === false) {
-            throw new EndOfStream("End of stream was reached in " . $this->position->pretty());
-        }
+        return $this->peakAll();
     }
 
     public function beginTransaction(): void
     {
-        $this->transactionCounters[] = 0;
-    }
-
-    private function advance(): void
-    {
-        if (empty($this->transactionCounters)) {
-            return;
-        }
-
-        $lastCounterKey = array_key_last($this->transactionCounters);
-
-        $this->transactionCounters[$lastCounterKey]++;
+        $this->positions[] = $this->position();
     }
 
     public function commit(): void
     {
-        array_pop($this->transactionCounters);
+        if (count($this->positions) === 1) {
+            throw new Exception("Can't commit, there are no active transactions.");
+        }
+        $last = array_pop($this->positions);
+        $this->positions[array_key_last($this->positions)] = $last;
     }
 
     public function rollback(): void
     {
-        $count = end($this->transactionCounters);
+        if (count($this->positions) === 1) {
+            throw new Exception("Can't rollback, there are no active transactions.");
+        }
+        array_pop($this->positions);
+    }
 
-        if ($count === false) {
-            return;
+    /**
+     * @inheritDoc
+     * @internal
+     */
+    public function take1(): string
+    {
+        // @TODO If we move to PHP8:
+        // $token = $this->stringAsArray[$this->position()->pointer()] ?? throw new EndOfStream("End of stream was reached in " . $this->pretty());
+        $token = $this->stringAsArray[$this->position()->pointer()] ?? null;
+        if(is_null($token)) {
+            throw new EndOfStream("End of stream was reached in " . $this->pretty());
+        }
+        //
+
+        $this->positions[array_key_last($this->positions)] = $this->position()->advance($token);
+
+        return $token;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function takeN(int $n): string
+    {
+        if ($n < 0) {
+            throw new InvalidArgumentException("The argument to takeN() must be >= 0, got $n.");
+        } elseif ($n === 0) {
+            return '';
         }
 
-        for ($i = 0; $i < $count; $i++) {
-            prev($this->stringAsArray);
+        $chunk = '';
+        for ($i = 0; $i < $n; $i++) {
+            $token = $this->take1();
+            $chunk .= $token;
+        }
+        return $chunk;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function takeWhile(callable $predicate): string
+    {
+        if (!array_key_exists($this->position()->pointer(), $this->stringAsArray)) {
+            return '';
+        }
+        $chunk = '';
+
+        while ($predicate($this->peak1())) {
+            $token = $this->take1();
+            $chunk .= $token;
+            if (!array_key_exists($this->position()->pointer(), $this->stringAsArray)) {
+                return $chunk;
+            }
         }
 
-        array_pop($this->transactionCounters);
+        return $chunk;
+    }
+
+    /**
+     * Read the next token without advancing the stream pointer, or return the empty string
+     *
+     */
+    public function peak1(): string
+    {
+        return array_key_exists($this->position()->pointer(), $this->stringAsArray)
+            ? $this->stringAsArray[$this->position()->pointer()]
+            : '';
+    }
+
+    /**
+     * Read the next n tokens without advancing the stream pointer
+     *
+     */
+    public function peakN(int $n): string
+    {
+        return join('', array_slice($this->stringAsArray, $this->position()->pointer(), $n));
+    }
+
+    /**
+     * Read the next n tokens without advancing the stream pointer
+     *
+     */
+    public function peakWhile(callable $predicate): string
+    {
+        $chunk = '';
+
+        $pointer = $this->position()->pointer();
+        while (array_key_exists($pointer, $this->stringAsArray) && $predicate($this->stringAsArray[$pointer])) {
+            $chunk .= $this->stringAsArray[$pointer];
+            if (!array_key_exists($this->position()->pointer(), $this->stringAsArray)) {
+                return $chunk;
+            }
+            $pointer++;
+        }
+
+        return $chunk;
+    }
+
+    /**
+     * @deprecated
+     */
+    public function peakAll() : string
+    {
+        return implode('', array_slice($this->stringAsArray, $this->position()->pointer() ));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function peakBack(): string
+    {
+        return '';
     }
 }

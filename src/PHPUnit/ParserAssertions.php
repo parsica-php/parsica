@@ -29,10 +29,10 @@ trait ParserAssertions
      */
     protected function assertParses(string $input, Parser $parser, $expectedOutput, string $message = ""): void
     {
-        $input = new StringStream($input);
-        $actualResult = $parser->run($input);
+        $stream = StringStream::fromString($input);
+        $actualResult = $parser->run($stream);
         if ($actualResult->isSuccess()) {
-            $this->assertStrictlyEquals(
+            $this->assertEquals(
                 $expectedOutput,
                 $actualResult->output(),
                 $message . "\n" . "The parser succeeded but the output doesn't match your expected output."
@@ -43,39 +43,6 @@ trait ParserAssertions
                 ."The parser failed with the following error message:\n"
                 .$actualResult->errorMessage()."\n"
             );
-        }
-    }
-
-    /**
-     * Behaves like assertSame for primitives, behaves like assertEquals for objects of the same type, and fails
-     * for everything else.
-     *
-     * @psalm-param mixed  $expected
-     * @psalm-param mixed  $actual
-     * @psalm-param string $message
-     *
-     * @throws Exception
-     * @api
-     *
-     * @psalm-suppress MixedArgument
-     * @psalm-suppress MixedAssignment
-     * @psalm-suppress MixedArrayAccess
-     */
-    protected function assertStrictlyEquals($expected, $actual, string $message = ''): void
-    {
-        if (is_null($expected) || is_scalar($expected)) {
-            $this->assertSame($expected, $actual, $message);
-        } elseif (is_object($expected)) {
-            $this->assertEquals(get_class($expected), get_class($actual),
-                "Expected type didn't match actual type");
-            $this->assertEquals($expected, $actual, $message);
-        } elseif (is_array($expected)) {
-            foreach ($expected as $k => $v) {
-                $this->assertStrictlyEquals($expected[$k], $actual[$k], "Item $k from the actual array differs from item $k in the expected array");
-            }
-            $this->assertSame(count($expected), count($actual), "The length of the  actual array differs from the length of the expected array.");
-        } else {
-            throw new Exception("@todo Not implemented");
         }
     }
 
@@ -95,12 +62,12 @@ trait ParserAssertions
      */
     protected function assertRemainder(string $input, Parser $parser, string $expectedRemaining, string $message = ""): void
     {
-        $input = new StringStream($input);
-        $actualResult = $parser->run($input);
+        $stream = StringStream::fromString($input);
+        $actualResult = $parser->run($stream);
         if ($actualResult->isSuccess()) {
             $this->assertEquals(
                 $expectedRemaining,
-                $actualResult->remainder(),
+                $actualResult->remainder()->peakN(80),
                 $message . "\n" . "The parser succeeded but the expected remaining input doesn't match."
             );
         } else {
@@ -122,7 +89,7 @@ trait ParserAssertions
      */
     protected function assertParseFails(string $input, Parser $parser, ?string $expectedFailure = null, string $message = ""): void
     {
-        $input = new StringStream($input);
+        $input = StringStream::fromString($input);
         $actualResult = $parser->run($input);
         $this->assertTrue(
             $actualResult->isFail(),
@@ -145,7 +112,7 @@ trait ParserAssertions
      */
     protected function assertFailOnEOF(Parser $parser, string $message = ""): void
     {
-        $actualResult = $parser->run(new StringStream(""));
+        $actualResult = $parser->run(StringStream::fromString(""));
         $this->assertTrue(
             $actualResult->isFail(),
             $message . "\n" . "Expected the parser to fail on EOL."
@@ -157,7 +124,7 @@ trait ParserAssertions
      */
     protected function assertSucceedOnEOF(Parser $parser, string $message = ""): void
     {
-        $actualResult = $parser->run(new StringStream(""));
+        $actualResult = $parser->run(StringStream::fromString(""));
         $this->assertTrue(
             $actualResult->isSuccess(),
             $message . "\n" . "Expected the parser to succeed on EOL."

@@ -102,7 +102,7 @@ final class recursionTest extends TestCase
         $p2 = recursive();
         $p1->recurse($p2);
         $this->expectException(Exception::class);
-        $p1->run(new StringStream("test"));
+        $p1->run(StringStream::fromString("test"));
     }
 
     /** @test */

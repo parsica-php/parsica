@@ -16,7 +16,6 @@ use function Verraes\Parsica\{atLeastOne, between, char, digitChar, keepFirst, r
 use function Verraes\Parsica\Expression\{binaryOperator,
     expression,
     leftAssoc,
-    operator,
     postfix,
     prefix,
     unaryOperator};

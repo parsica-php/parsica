@@ -36,8 +36,8 @@ function string(string $str): Parser
         } catch (EndOfStream $e) {
             return new Fail($label, $input);
         }
-        return $t->chunk() === $str
-            ? new Succeed($str, $t->stream())
+        return $t === $str
+            ? new Succeed($str, $input)
             : new Fail($label, $input);
     }
     );

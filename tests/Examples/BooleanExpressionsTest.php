@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Parser;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
 use function Verraes\Parsica\{between, char, choice, keepFirst, recursive, skipHSpace, string};
-use function Verraes\Parsica\Expression\{binaryOperator, expression, leftAssoc, operator, prefix, unaryOperator};
+use function Verraes\Parsica\Expression\{binaryOperator, expression, leftAssoc, prefix, unaryOperator};
 
 final class BooleanExpressionsTest extends TestCase
 {

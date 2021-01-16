@@ -12,6 +12,7 @@ namespace Tests\Verraes\Parsica\JSON;
 
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\JSON\JSON;
+use Verraes\Parsica\StringStream;
 
 final class JSONTest extends TestCase
 {
@@ -59,4 +60,5 @@ final class JSONTest extends TestCase
         $parsica = JSON::json()->tryString($input)->output();
         $this->assertEquals($native, $parsica);
     }
+
 }

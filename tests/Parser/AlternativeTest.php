@@ -42,8 +42,8 @@ final class AlternativeTest extends TestCase
     {
         $jan =
             either(
-                string("Jan")->thenIgnore(eof()),
-                string("January")->thenIgnore(eof()),
+                string("Jan")->thenEof(),
+                string("January")->thenEof(),
             );
         $this->assertParses("Jan", $jan, "Jan");
         $this->assertParses("January", $jan, "January");
@@ -51,8 +51,8 @@ final class AlternativeTest extends TestCase
         // Reverse order
         $jan =
             either(
-                string("January")->thenIgnore(eof()),
-                string("Jan")->thenIgnore(eof()),
+                string("January")->thenEof(),
+                string("Jan")->thenEof(),
             );
         $this->assertParses("Jan", $jan, "Jan");
         $this->assertParses("January", $jan, "January");

@@ -20,7 +20,7 @@ final class ParseResultTest extends TestCase
     /** @test */
     public function ParseSuccess_continueWith()
     {
-        $input = new StringStream("abc");
+        $input = StringStream::fromString("abc");
         $success = char('a')->run($input);
         $result = $success->continueWith(char('b'));
         $this->assertTrue($result->isSuccess());
@@ -30,7 +30,7 @@ final class ParseResultTest extends TestCase
     /** @test */
     public function ParseFailure_continueWith()
     {
-        $input = new StringStream("abc");
+        $input = StringStream::fromString("abc");
         $fail = char('x')->run($input);
         $result = $fail->continueWith(char('a'));
         $this->assertTrue($result->isFail());

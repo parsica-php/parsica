@@ -32,7 +32,8 @@
         "mathiasverraes/uptodocs": "dev-main",
         "phpunit/phpunit": "^9.0",
         "psr/event-dispatcher": "^1.0",
-        "vimeo/psalm": "^4.1"
+        "vimeo/psalm": "^4.1",
+        "phpbench/phpbench": "^0.17.1"
     },
     "autoload": {
         "psr-4": {
