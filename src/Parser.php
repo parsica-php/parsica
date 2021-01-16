@@ -270,8 +270,6 @@ final class Parser
     /**
      * Try to parse a string. Alias of `try(new StringStream($string))`.
      *
-     * @TODO Try should fail when it doesn't consume the whole input.
-     *
      * @psalm-param string $input
      *
      * @psalm-return ParseResult<T>
@@ -280,6 +278,21 @@ final class Parser
      * @api
      */
     public function tryString(string $input): ParseResult
+    {
+        return $this->try(new StringStream($input));
+    }
+
+    /**
+     * Try to parse a string. Alias of `try(new MBStringStream($string))`.
+     *
+     * @psalm-param string $input
+     *
+     * @psalm-return ParseResult<T>
+     *
+     * @throws ParserHasFailed
+     * @api
+     */
+    public function tryMBString(string $input): ParseResult
     {
         return $this->try(new MBStringStream($input));
     }
