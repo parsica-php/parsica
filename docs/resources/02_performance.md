@@ -33,6 +33,26 @@ Below we'll list some approaches to improve performance.
 
 The actual difference in performance depends on many factors, so measure your parsers' performance to know if it is actually faster.
 
+### Reusing parsers is faster than rebuilding them
+
+Storing parsers in a variable or property is often faster than rebuilding them. Compare the these two equivalent parsers:
+
+```php
+<?php
+$slow = between(
+    choice(char('"'), char("'")),
+    choice(char('"'), char("'")),
+    atLeastOne(alphaNumChar())
+);
+
+$quote = choice(char('"'), char("'"));
+$fast = between(
+    $quote,
+    $quote,
+    atLeastOne(alphaNumChar())
+);
+```
+
 ### Use predicates over higher level combinators
 
 Often, a combinator may be replaced with lower level combinators to get the same result faster. For example, the following parsers are equivalent, but the second one is a lot faster:
