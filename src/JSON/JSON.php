@@ -27,6 +27,7 @@ use function Verraes\Parsica\{any,
     satisfy,
     sepBy,
     string,
+    takeWhile,
     zeroOrMore};
 
 /**
@@ -153,7 +154,7 @@ final class JSON
      */
     public static function ws(): Parser
     {
-        return zeroOrMore(satisfy(isCharCode([0x20, 0x0A, 0x0D, 0x09])))->voidLeft(null)
+        return takeWhile(isCharCode([0x20, 0x0A, 0x0D, 0x09]))->voidLeft(null)
             ->label('whitespace');
     }
 
@@ -185,16 +186,20 @@ final class JSON
                 char('"'),
                 zeroOrMore(
                     choice(
-                        string("\\\"")->map(fn($_) => '"'),
-                        string("\\\\")->map(fn($_) => '\\'),
-                        string("\\/")->map(fn($_) => '/'),
-                        string("\\b")->map(fn($_) => mb_chr(8)),
-                        string("\\f")->map(fn($_) => mb_chr(12)),
-                        string("\\n")->map(fn($_) => "\n"),
-                        string("\\r")->map(fn($_) => "\r"),
-                        string("\\t")->map(fn($_) => "\t"),
-                        string("\\u")->sequence(repeat(4, hexDigitChar()))->map(fn($o) => mb_chr(hexdec($o))),
-                        anySingleBut('"') // @TODO is a backslash  that is not one of the escapes above legal?
+                        satisfy(fn(string $char): bool => !in_array($char, ['"', '\\'])),
+                        char("\\")->followedBy(
+                            choice(
+                                char("\"")->map(fn($_) => '"'),
+                                char("\\")->map(fn($_) => '\\'),
+                                char("/")->map(fn($_) => '/'),
+                                char("b")->map(fn($_) => mb_chr(8)),
+                                char("f")->map(fn($_) => mb_chr(12)),
+                                char("n")->map(fn($_) => "\n"),
+                                char("r")->map(fn($_) => "\r"),
+                                char("t")->map(fn($_) => "\t"),
+                                char("u")->sequence(repeat(4, hexDigitChar()))->map(fn($o) => mb_chr(hexdec($o))),
+                            )
+                        )
                     )
                 )
             )->map(fn($o): string => (string)$o) // because the empty json string returns null

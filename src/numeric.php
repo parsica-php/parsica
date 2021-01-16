@@ -24,7 +24,7 @@ function integer(): Parser
     $zeroNine = digitChar();
     $oneNine = oneOfS("123456789");
     $minus = char('-');
-    $digits = atLeastOne($zeroNine);
+    $digits = takeWhile1(isDigit())->label('at least one 0-9');
     /** @var Parser<string> $parser */
     $parser = choice(
         $minus->append($oneNine)->append($digits),
@@ -48,8 +48,7 @@ function integer(): Parser
  */
 function float(): Parser
 {
-    $zeroNine = digitChar();
-    $digits = atLeastOne($zeroNine);
+    $digits = takeWhile1(isDigit())->label('at least one 0-9');
     $fraction = char('.')->append($digits);
     $sign = char('+')->or(char('-'))->or(pure('+'));
     $exponent = assemble(
