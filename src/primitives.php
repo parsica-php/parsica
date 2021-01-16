@@ -261,7 +261,7 @@ function nothing(): Parser
  */
 function everything(): Parser
 {
-    return Parser::make("<everything>", fn(Stream $input) => new Succeed((string)$input, new StringStream("")));
+    return Parser::make("<everything>", fn(Stream $input) => new Succeed((string)$input, new MBStringStream("")));
 }
 
 /**

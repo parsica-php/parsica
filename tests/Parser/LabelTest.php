@@ -11,7 +11,7 @@
 namespace Tests\Verraes\Parsica\Parser;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\StringStream;
+use Verraes\Parsica\MBStringStream;
 use function Verraes\Parsica\any;
 use function Verraes\Parsica\char;
 use function Verraes\Parsica\fail;
@@ -24,7 +24,7 @@ final class LabelTest extends TestCase
     {
         $parser = char('a')->or(char('b'));
         $input = "c";
-        $result = $parser->run(new StringStream($input));
+        $result = $parser->run(new MBStringStream($input));
         $this->assertEquals("'a' or 'b'", $result->expected());
     }
 
@@ -33,7 +33,7 @@ final class LabelTest extends TestCase
     {
         $parser = string('hello')->or(string('world'));
         $input = "foo";
-        $result = $parser->run(new StringStream($input));
+        $result = $parser->run(new MBStringStream($input));
         $this->assertEquals("'hello' or 'world'", $result->expected());
     }
 
@@ -42,7 +42,7 @@ final class LabelTest extends TestCase
     {
         $parser = any(char('a'), char('b'), string("hello"));
         $input = "foo";
-        $result = $parser->run(new StringStream($input));
+        $result = $parser->run(new MBStringStream($input));
         $this->assertEquals("'a' or 'b' or 'hello'", $result->expected());
     }
 
@@ -50,7 +50,7 @@ final class LabelTest extends TestCase
     public function failure_label()
     {
         $parser = fail("reason");
-        $result = $parser->run(new StringStream("foo"));
+        $result = $parser->run(new MBStringStream("foo"));
         $this->assertEquals("reason", $result->expected());
     }
 }

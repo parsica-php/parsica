@@ -12,7 +12,7 @@ $parser = digitChar();
 assertInstanceOf('Verraes\Parsica\Parser', $parser);
 
 $result = $parser->tryString('1');
-assertIsString('Verraes\Parsica\StringStream', $result->output());
+assertIsString('Verraes\Parsica\MBStringStream', $result->output());
 assertEquals('1', $result->output());
 ```
 

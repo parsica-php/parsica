@@ -11,7 +11,7 @@
 namespace Tests\Verraes\Parsica\ParseResult;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\StringStream;
+use Verraes\Parsica\MBStringStream;
 use function Verraes\Parsica\char;
 
 final class ParseResultTest extends TestCase
@@ -20,7 +20,7 @@ final class ParseResultTest extends TestCase
     /** @test */
     public function ParseSuccess_continueWith()
     {
-        $input = new StringStream("abc");
+        $input = new MBStringStream("abc");
         $success = char('a')->run($input);
         $result = $success->continueWith(char('b'));
         $this->assertTrue($result->isSuccess());
@@ -30,7 +30,7 @@ final class ParseResultTest extends TestCase
     /** @test */
     public function ParseFailure_continueWith()
     {
-        $input = new StringStream("abc");
+        $input = new MBStringStream("abc");
         $fail = char('x')->run($input);
         $result = $fail->continueWith(char('a'));
         $this->assertTrue($result->isFail());

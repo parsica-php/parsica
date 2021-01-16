@@ -11,7 +11,7 @@
 namespace Tests\Verraes\Parsica;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\StringStream;
+use Verraes\Parsica\MBStringStream;
 use function Verraes\Parsica\char;
 use function Verraes\Parsica\emit;
 
@@ -26,11 +26,11 @@ final class sideEffectsTest extends TestCase
         $parser = emit(char('a'), $addToCache);
 
         $input = "a";
-        $parser->run(new StringStream($input));
+        $parser->run(new MBStringStream($input));
         $this->assertEquals("a", $cache->get('a'));
 
         $input = "b";
-        $parser->run(new StringStream($input));
+        $parser->run(new MBStringStream($input));
         $this->assertNull($cache->get('b'));
     }
 }

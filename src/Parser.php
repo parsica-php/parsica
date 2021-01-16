@@ -281,7 +281,7 @@ final class Parser
      */
     public function tryString(string $input): ParseResult
     {
-        return $this->try(new StringStream($input));
+        return $this->try(new MBStringStream($input));
     }
 
     /**

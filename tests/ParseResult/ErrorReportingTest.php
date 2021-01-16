@@ -13,7 +13,7 @@ namespace Tests\Verraes\Parsica\ParseResult;
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Internal\Position;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
-use Verraes\Parsica\StringStream;
+use Verraes\Parsica\MBStringStream;
 use function Verraes\Parsica\char;
 use function Verraes\Parsica\many;
 use function Verraes\Parsica\newline;
@@ -30,7 +30,7 @@ final class ErrorReportingTest extends TestCase
     public function failing_on_the_first_token()
     {
         $parser = char('a');
-        $input = new StringStream("bcd");
+        $input = new MBStringStream("bcd");
         $result = $parser->run($input);
         $expected =
             <<<ERROR
@@ -49,7 +49,7 @@ final class ErrorReportingTest extends TestCase
     public function failing_with_an_advanced_position()
     {
         $parser = char('a');
-        $input = new StringStream("bcd", new Position("/path/to/file", 5, 10));
+        $input = new MBStringStream("bcd", new Position("/path/to/file", 5, 10));
         $result = $parser->run($input);
         $expected =
             <<<ERROR
@@ -68,7 +68,7 @@ final class ErrorReportingTest extends TestCase
     public function works_for_parsers_with_more_than_one_character()
     {
         $parser = string("abc");
-        $input = new StringStream("xyz", Position::initial("/path/to/file"));
+        $input = new MBStringStream("xyz", Position::initial("/path/to/file"));
         $result = $parser->run($input);
         $expected =
             <<<ERROR
@@ -87,7 +87,7 @@ final class ErrorReportingTest extends TestCase
     public function advance_the_column_with_followedBy()
     {
         $parser = char('a')->sequence(char('b'));
-        $input = new StringStream("axy");
+        $input = new MBStringStream("axy");
         $result = $parser->run($input);
         $expected =
             <<<ERROR
@@ -106,7 +106,7 @@ final class ErrorReportingTest extends TestCase
     public function works_with_custom_labels()
     {
         $parser = char('a')->sequence(char('b'))->label("a followed by b");
-        $input = new StringStream("axy");
+        $input = new MBStringStream("axy");
         $result = $parser->run($input);
         $expected =
             <<<ERROR
@@ -125,7 +125,7 @@ final class ErrorReportingTest extends TestCase
     public function tabs_move_column_position()
     {
         $parser = skipSpace()->sequence(char('a'));
-        $input = new StringStream("\t\tbcdefgh");
+        $input = new MBStringStream("\t\tbcdefgh");
         $result = $parser->run($input);
         $expected =
             <<<ERROR
@@ -144,7 +144,7 @@ final class ErrorReportingTest extends TestCase
     public function line_numbers_space_out()
     {
         $parser = skipSpace()->sequence(char('a'));
-        $input = new StringStream(str_repeat("\n", 99) . "b");
+        $input = new MBStringStream(str_repeat("\n", 99) . "b");
         $result = $parser->run($input);
         $expected =
             <<<ERROR
@@ -162,7 +162,7 @@ final class ErrorReportingTest extends TestCase
     public function multiline_input()
     {
         $parser = many(newline())->sequence(char('a'));
-        $input = new StringStream("\n\n\nbcd\nxyz", Position::initial("/path/to/file"));
+        $input = new MBStringStream("\n\n\nbcd\nxyz", Position::initial("/path/to/file"));
         $result = $parser->run($input);
         $expected =
             <<<ERROR
@@ -182,7 +182,7 @@ final class ErrorReportingTest extends TestCase
     public function indicate_position()
     {
         $parser = repeat(5, char('a'))->sequence(char('b'));
-        $input = new StringStream("aaaaaXYZ");
+        $input = new MBStringStream("aaaaaXYZ");
         $result = $parser->run($input);
         $expected =
             <<<ERROR
@@ -201,7 +201,7 @@ final class ErrorReportingTest extends TestCase
     public function repeatN()
     {
         $parser = repeat(5, char('a'))->sequence(char('b'));
-        $input = new StringStream("aaaaXYZ");
+        $input = new MBStringStream("aaaaXYZ");
         $result = $parser->run($input);
         $expected =
             <<<ERROR
@@ -220,7 +220,7 @@ final class ErrorReportingTest extends TestCase
     public function indicate_shorter_position()
     {
         $parser = string("aa")->sequence(char('b'));
-        $input = new StringStream("aaXYZ");
+        $input = new MBStringStream("aaXYZ");
         $result = $parser->run($input);
         $expected =
             <<<ERROR
@@ -240,7 +240,7 @@ final class ErrorReportingTest extends TestCase
     public function truncate_long_lines()
     {
         $parser = skipSpace()->sequence(string("Hello"))->sequence(char(','))->sequence(whitespace())->sequence(string("World"));
-        $input = new StringStream("\n\n\n\n\n\n\n\n\nHello World! This is a really long line of more than 80 characters, if you count the spaces.");
+        $input = new MBStringStream("\n\n\n\n\n\n\n\n\nHello World! This is a really long line of more than 80 characters, if you count the spaces.");
         $result = $parser->run($input);
         $expected =
             <<<ERROR
@@ -259,7 +259,7 @@ final class ErrorReportingTest extends TestCase
     public function dont_truncate_short_enough_lines()
     {
         $parser = char('a');
-        $input = new StringStream("1234567890123456789012345678901234567890123456789012345678901234567890123456");
+        $input = new MBStringStream("1234567890123456789012345678901234567890123456789012345678901234567890123456");
         $result = $parser->run($input);
         $expected =
             <<<ERROR

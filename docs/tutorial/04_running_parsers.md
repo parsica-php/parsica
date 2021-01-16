@@ -4,13 +4,15 @@ title: Running Parsers
 
 There are different ways of running your parser on an input. 
 
-## try() and tryString() 
+## try()
 
 Most of the time, you'll want to use `try`. It will run the parser on an input `Stream`, return a `Succeed` (which implements `ParseResult`) on success, and throw a `ParserHasFailed` exception if the input can't successfully be parsed. 
 
-The `Stream` type generalises over a different ways of providing input. The simplest implementation is `StringStream`. This is really a wrapper around a PHP multibyte string. 
+The `Stream` type generalises over a different ways of providing input. The simplest implementation is `StringStream`. This is really a wrapper around a PHP string. For many cases, you might need `MBStringStream` instead, which uses PHP multibyte strings, and is needed for UTF-8 inputs.
 
-(In v0.6.0, `StringStream` is also the _only_ implementation of `Stream`, but this will change.)
+(At the time of writing this, these are the _only_ implementations of `Stream` that ship with Parsica, but this will likely change.)
+
+`$parser->tryString($string)` and `$parser->tryMBString($string)` are shortcuts for `$parser->try(new StringStream($string))` and `$parser->try(new MBStringStream($string))` respectively.
 
 `ParseResult` has an `output()` method, which has the type `T` for a `Parser<T>` (see [Mapping to Objects](mapping_to_objects)). It also has a `remainder()` method, which gives you the part of the input that wasn't consumed by the parser.
  
@@ -21,7 +23,6 @@ The `Stream` type generalises over a different ways of providing input. The simp
 $parser = string('hello');
 
 $result = $parser->try(new StringStream("hello world"));
-// Or, use tryString(string), which is an alias of try(StringStream):
 $result = $parser->tryString("hello world");
 
 echo $result->output(); // "hello"

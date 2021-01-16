@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Internal\Fail;
 use Verraes\Parsica\Internal\Succeed;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
-use Verraes\Parsica\StringStream;
+use Verraes\Parsica\MBStringStream;
 
 final class AppendTest extends TestCase
 {
@@ -23,31 +23,31 @@ final class AppendTest extends TestCase
     /** @test */
     public function append_strings()
     {
-        $remainder = new StringStream("");
-        $succeed1 = new Succeed("Parsed1", new StringStream("Remain1"));
-        $succeed2 = new Succeed("Parsed2", new StringStream("Remain2"));
-        $fail1 = new Fail("Expected1", new StringStream("Got1"));
-        $fail2 = new Fail("Expected2", new StringStream("Got2"));
+        $remainder = new MBStringStream("");
+        $succeed1 = new Succeed("Parsed1", new MBStringStream("Remain1"));
+        $succeed2 = new Succeed("Parsed2", new MBStringStream("Remain2"));
+        $fail1 = new Fail("Expected1", new MBStringStream("Got1"));
+        $fail2 = new Fail("Expected2", new MBStringStream("Got2"));
 
-        $this->assertStrictlyEquals(new Succeed("Parsed1Parsed2", new StringStream("Remain2")), $succeed1->append($succeed2));
-        $this->assertStrictlyEquals(new Fail("Expected1", new StringStream("Got1")), $succeed1->append($fail1));
-        $this->assertStrictlyEquals(new Fail("Expected1", new StringStream("Got1")), $fail1->append($succeed2));
-        $this->assertStrictlyEquals(new Fail("Expected1", new StringStream("Got1")), $fail1->append($fail2));
+        $this->assertStrictlyEquals(new Succeed("Parsed1Parsed2", new MBStringStream("Remain2")), $succeed1->append($succeed2));
+        $this->assertStrictlyEquals(new Fail("Expected1", new MBStringStream("Got1")), $succeed1->append($fail1));
+        $this->assertStrictlyEquals(new Fail("Expected1", new MBStringStream("Got1")), $fail1->append($succeed2));
+        $this->assertStrictlyEquals(new Fail("Expected1", new MBStringStream("Got1")), $fail1->append($fail2));
     }
     /** @test */
     public function append_with_null()
     {
-        $null1 = new Succeed(null, new StringStream("Remain Null 1"));
-        $null2 = new Succeed(null, new StringStream("Remain Null 2"));
-        $string = new Succeed("String", new StringStream("Remain String"));
+        $null1 = new Succeed(null, new MBStringStream("Remain Null 1"));
+        $null2 = new Succeed(null, new MBStringStream("Remain Null 2"));
+        $string = new Succeed("String", new MBStringStream("Remain String"));
 
         $first = $string->append($null1);
-        $this->assertStrictlyEquals(new Succeed("String", new StringStream("Remain Null 1")), $first);
+        $this->assertStrictlyEquals(new Succeed("String", new MBStringStream("Remain Null 1")), $first);
 
         $second = $null1->append($string);
-        $this->assertStrictlyEquals(new Succeed("String", new StringStream("Remain String")), $second);
+        $this->assertStrictlyEquals(new Succeed("String", new MBStringStream("Remain String")), $second);
 
         $both = $null1->append($null2);
-        $this->assertStrictlyEquals(new Succeed(null, new StringStream("Remain Null 2")), $both);
+        $this->assertStrictlyEquals(new Succeed(null, new MBStringStream("Remain Null 2")), $both);
     }
 }

@@ -17,6 +17,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use Verraes\Parsica\Parser;
 use Verraes\Parsica\ParserHasFailed;
+use Verraes\Parsica\MBStringStream;
 use Verraes\Parsica\StringStream;
 use function Verraes\Parsica\{alphaChar,
     alphaNumChar,
