@@ -600,8 +600,11 @@ function lookAhead(Parser $parser): Parser
 {
     return Parser::make(
         $parser->getLabel(),
-        fn(Stream $input): ParseResult => $parser->run($input)->isSuccess()
-            ? new Succeed("", $input)
-            : new Fail("lookAhead", $input)
+        function (Stream $input) use ($parser): ParseResult {
+            $parseResult = $parser->run($input);
+            return $parseResult->isSuccess()
+                ? new Succeed($parseResult->output(), $input)
+                : new Fail("lookAhead", $input);
+        }
     );
 }

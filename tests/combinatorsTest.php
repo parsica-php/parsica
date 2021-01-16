@@ -347,7 +347,7 @@ final class combinatorsTest extends TestCase
         $parser = lookAhead(stringI("hello"));
 
         // On success, lookAhead succeeds without consuming input
-        $this->assertParses("Hello, world!", $parser, "");
+        $this->assertParses("Hello, world!", $parser, "Hello");
         $this->assertRemainder("Hello, world!", $parser, "Hello, world!");
 
         // On fail, lookAhead fails without consuming input
