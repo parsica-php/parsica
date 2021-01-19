@@ -16,8 +16,21 @@ $result = $parser->tryString("{Hello}");
 echo $result->output(); // Hello
 ```
 
-
 ![Twitter Follow](https://img.shields.io/twitter/follow/parsica_php?style=social)
-![Test status](https://img.shields.io/github/workflow/status/mathiasverraes/parsica/Test?label=tests)
+
+
+## Development
+
+After running `composer install`, run these to validate if everything is in working order:
+
+```
+composer run phpunit
+composer run psalm
+composer run uptodocs
+
+# or all of them:
+
+composer run test
+```
 
 
