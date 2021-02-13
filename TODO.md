@@ -11,6 +11,7 @@
 2021-02-13
 
 - move Parsica
+- move packagist
 - move tutorial
 - move documentation site
 - setup turanct sponsorship
