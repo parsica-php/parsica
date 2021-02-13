@@ -16,5 +16,7 @@
 - move documentation site
 - convince sponsors
 - explain docs
-
+- move to diff firebase
+- domain name
+- update docusaurus
 
