@@ -12,7 +12,7 @@ namespace Verraes\Parsica\PHPUnit;
 
 use Exception;
 use Verraes\Parsica\Parser;
-use Verraes\Parsica\StringStream;
+use Verraes\Parsica\MBStringStream;
 
 /**
  * Convenience assertion methods. When writing tests for your own parsers, extend from this instead of PHPUnit's TestCase.
@@ -29,7 +29,7 @@ trait ParserAssertions
      */
     protected function assertParses(string $input, Parser $parser, $expectedOutput, string $message = ""): void
     {
-        $input = new StringStream($input);
+        $input = new MBStringStream($input);
         $actualResult = $parser->run($input);
         if ($actualResult->isSuccess()) {
             $this->assertStrictlyEquals(
@@ -95,7 +95,7 @@ trait ParserAssertions
      */
     protected function assertRemainder(string $input, Parser $parser, string $expectedRemaining, string $message = ""): void
     {
-        $input = new StringStream($input);
+        $input = new MBStringStream($input);
         $actualResult = $parser->run($input);
         if ($actualResult->isSuccess()) {
             $this->assertEquals(
@@ -122,7 +122,7 @@ trait ParserAssertions
      */
     protected function assertParseFails(string $input, Parser $parser, ?string $expectedFailure = null, string $message = ""): void
     {
-        $input = new StringStream($input);
+        $input = new MBStringStream($input);
         $actualResult = $parser->run($input);
         $this->assertTrue(
             $actualResult->isFail(),
@@ -145,7 +145,7 @@ trait ParserAssertions
      */
     protected function assertFailOnEOF(Parser $parser, string $message = ""): void
     {
-        $actualResult = $parser->run(new StringStream(""));
+        $actualResult = $parser->run(new MBStringStream(""));
         $this->assertTrue(
             $actualResult->isFail(),
             $message . "\n" . "Expected the parser to fail on EOL."
@@ -157,7 +157,7 @@ trait ParserAssertions
      */
     protected function assertSucceedOnEOF(Parser $parser, string $message = ""): void
     {
-        $actualResult = $parser->run(new StringStream(""));
+        $actualResult = $parser->run(new MBStringStream(""));
         $this->assertTrue(
             $actualResult->isSuccess(),
             $message . "\n" . "Expected the parser to succeed on EOL."

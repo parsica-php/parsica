@@ -13,7 +13,7 @@ namespace Tests\Verraes\Parsica\JSON;
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\JSON\JSON;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
-use Verraes\Parsica\StringStream;
+use Verraes\Parsica\MBStringStream;
 
 final class ObjectTest extends TestCase
 {
@@ -34,7 +34,7 @@ final class ObjectTest extends TestCase
         $input = '{"foo":"bar","bar":"foo"}';
         $parser = JSON::object();
 
-        $result = $parser->run(new StringStream($input));
+        $result = $parser->run(new MBStringStream($input));
 
         $this->assertParses($input, $parser, (object)["foo" => "bar", "bar" => "foo"]);
     }

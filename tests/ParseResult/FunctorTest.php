@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Internal\Fail;
 use Verraes\Parsica\Internal\Succeed;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
-use Verraes\Parsica\StringStream;
+use Verraes\Parsica\MBStringStream;
 
 final class FunctorTest extends TestCase
 {
@@ -23,17 +23,17 @@ final class FunctorTest extends TestCase
     /** @test */
     public function map_over_ParseSuccess()
     {
-        $succeed = new Succeed("parsed", new StringStream("remainder"));
-        $expected = new Succeed("PARSED", new StringStream("remainder"));
+        $succeed = new Succeed("parsed", new MBStringStream("remainder"));
+        $expected = new Succeed("PARSED", new MBStringStream("remainder"));
         $this->assertEquals($expected, $succeed->map('strtoupper'));
     }
 
     /** @test */
     public function map_over_ParseFailure()
     {
-        $remainder = new StringStream("");
-        $fail = new Fail("expected", new StringStream("got"));
-        $expected = new Fail("expected", new StringStream("got"));
+        $remainder = new MBStringStream("");
+        $fail = new Fail("expected", new MBStringStream("got"));
+        $expected = new Fail("expected", new MBStringStream("got"));
         $this->assertEquals($expected, $fail->map('strtoupper'));
     }
 

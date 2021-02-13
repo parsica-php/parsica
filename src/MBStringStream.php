@@ -15,11 +15,11 @@ use Verraes\Parsica\Internal\Position;
 use Verraes\Parsica\Internal\TakeResult;
 
 /**
- * A stream for regular strings. Use MBStringStream instead if you need unicode support.
+ * A stream for unicode strings
  *
  * @psalm-immutable
  */
-final class StringStream implements Stream
+final class MBStringStream implements Stream
 {
     private string $string;
     private Position $position;
@@ -41,12 +41,12 @@ final class StringStream implements Stream
     {
         $this->guardEndOfStream();
 
-        $token = substr($this->string, 0, 1);
+        $token = mb_substr($this->string, 0, 1);
         $position = $this->position->advance($token);
 
         return new TakeResult(
             $token,
-            new StringStream(mb_substr($this->string, 1), $position)
+            new MBStringStream(mb_substr($this->string, 1), $position)
         );
     }
 
@@ -65,7 +65,7 @@ final class StringStream implements Stream
      */
     public function isEOF(): bool
     {
-        return strlen($this->string) === 0;
+        return mb_strlen($this->string) === 0;
     }
 
     /**
@@ -79,11 +79,11 @@ final class StringStream implements Stream
 
         $this->guardEndOfStream();
 
-        $chunk = substr($this->string, 0, $n);
+        $chunk = mb_substr($this->string, 0, $n);
         return new TakeResult(
             $chunk,
-            new StringStream(
-                substr($this->string, $n),
+            new MBStringStream(
+                mb_substr($this->string, $n),
                 $this->position->advance($chunk)
             )
         );
@@ -99,13 +99,13 @@ final class StringStream implements Stream
         }
 
         $remaining = $this->string;
-        $nextToken = substr($remaining, 0, 1);
+        $nextToken = mb_substr($remaining, 0, 1);
         $chunk = "";
         while ($predicate($nextToken)) {
             $chunk .= $nextToken;
-            $remaining = substr($remaining, 1);
-            if (strlen($remaining) > 0) {
-                $nextToken = substr($remaining, 0, 1);
+            $remaining = mb_substr($remaining, 1);
+            if (mb_strlen($remaining) > 0) {
+                $nextToken = mb_substr($remaining, 0, 1);
             } else {
                 break;
             }
@@ -113,7 +113,7 @@ final class StringStream implements Stream
 
         return new TakeResult(
             $chunk,
-            new StringStream($remaining, $this->position->advance($chunk))
+            new MBStringStream($remaining, $this->position->advance($chunk))
         );
     }
 

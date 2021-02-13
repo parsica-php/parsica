@@ -13,7 +13,7 @@ namespace Tests\Verraes\Parsica\Parser;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\PHPUnit\ParserAssertions;
-use Verraes\Parsica\StringStream;
+use Verraes\Parsica\MBStringStream;
 use function Verraes\Parsica\char;
 
 final class AppendTest extends TestCase
@@ -42,7 +42,7 @@ final class AppendTest extends TestCase
         $a = char('a')->map(fn($v)=> new NotASemigroup($v));
         $b = char('b')->map(fn($v)=> new NotASemigroup($v));
         $this->expectException(Exception::class);
-        $a->append($b)->run(new StringStream('abc'));
+        $a->append($b)->run(new MBStringStream('abc'));
     }
 }
 

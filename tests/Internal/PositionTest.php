@@ -12,7 +12,7 @@ namespace Tests\Verraes\Parsica\Internal;
 
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Internal\Position;
-use Verraes\Parsica\StringStream;
+use Verraes\Parsica\MBStringStream;
 use function Verraes\Parsica\char;
 
 final class PositionTest extends TestCase
@@ -38,7 +38,7 @@ final class PositionTest extends TestCase
     public function position_in_sequence()
     {
         $parser = char('a')->followedBy(char('b'));
-        $input = new StringStream("abc", Position::initial());
+        $input = new MBStringStream("abc", Position::initial());
         $result = $parser->run($input);
 
         $expectedColumn = 3;

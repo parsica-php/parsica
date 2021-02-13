@@ -12,7 +12,7 @@ namespace Tests\Verraes\Parsica\Internal;
 
 use PHPUnit\Framework\TestCase;
 use Verraes\Parsica\Internal\Position;
-use Verraes\Parsica\StringStream;
+use Verraes\Parsica\MBStringStream;
 
 final class StringStreamTest extends TestCase
 {
@@ -20,33 +20,33 @@ final class StringStreamTest extends TestCase
     /** @test */
     public function take1()
     {
-        $s = new StringStream("abc");
+        $s = new MBStringStream("abc");
         $t = $s->take1();
         $this->assertEquals("a", $t->chunk());
         $expectedPosition = new Position("<input>", 1, 2);
-        $expectedStream = new StringStream("bc", $expectedPosition);
+        $expectedStream = new MBStringStream("bc", $expectedPosition);
         $this->assertEquals($expectedStream, $t->stream());
     }
 
     /** @test */
     public function takeN()
     {
-        $s = new StringStream("abcde");
+        $s = new MBStringStream("abcde");
         $t = $s->takeN(3);
         $this->assertEquals("abc", $t->chunk());
         $expectedPosition = new Position("<input>", 1, 4);
-        $expectedStream = new StringStream("de", $expectedPosition);
+        $expectedStream = new MBStringStream("de", $expectedPosition);
         $this->assertEquals($expectedStream, $t->stream());
     }
 
     /** @test */
     public function takeWhile()
     {
-        $s = new StringStream("abc\nde");
+        $s = new MBStringStream("abc\nde");
         $t = $s->takeWhile(fn($c) => $c !== "\n");
         $this->assertEquals("abc", $t->chunk());
         $expectedPosition = new Position("<input>", 1, 4);
-        $expectedStream = new StringStream("\nde", $expectedPosition);
+        $expectedStream = new MBStringStream("\nde", $expectedPosition);
         $this->assertEquals($expectedStream, $t->stream());
     }
 }
