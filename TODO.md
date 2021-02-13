@@ -10,13 +10,18 @@
 
 2021-02-13
 
-- Create github org for Parsica
 - move Parsica
 - move tutorial
 - move documentation site
-- convince sponsors
-- explain docs
+- setup turanct sponsorship
+- convince mathias' sponsors to move
 - move to diff firebase
 - domain name
 - update docusaurus
+- make announcements
+
+done
+- twitter account 
+- explain docs
+- Create github org for Parsica
 
