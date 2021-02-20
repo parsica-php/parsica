@@ -3,10 +3,10 @@
 The easiest way to build robust parsers in PHP.
 
 ```bash
-composer require mathiasverraes/parsica
+composer require parsica-php/parsica
 ```
 
-Documentation & API: [parsica.verraes.net](https://parsica.verraes.net/)
+Documentation & API: [parsica-php.github.io](https://parsica-php.github.io/)
 
 
 ```php
