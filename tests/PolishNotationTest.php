@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Verraes\Parsica;
+namespace Tests\Parsica\Parsica;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Parser;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\between;
-use function Verraes\Parsica\char;
-use function Verraes\Parsica\collect;
-use function Verraes\Parsica\digitChar;
-use function Verraes\Parsica\eof;
-use function Verraes\Parsica\keepFirst;
-use function Verraes\Parsica\recursive;
-use function Verraes\Parsica\skipHSpace;
+use Parsica\Parsica\Parser;
+use Parsica\Parsica\PHPUnit\ParserAssertions;
+use function Parsica\Parsica\between;
+use function Parsica\Parsica\char;
+use function Parsica\Parsica\collect;
+use function Parsica\Parsica\digitChar;
+use function Parsica\Parsica\eof;
+use function Parsica\Parsica\keepFirst;
+use function Parsica\Parsica\recursive;
+use function Parsica\Parsica\skipHSpace;
 
 final class PolishNotationTest extends TestCase
 {

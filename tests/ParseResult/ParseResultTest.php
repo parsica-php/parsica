@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\ParseResult;
+namespace Tests\Parsica\Parsica\ParseResult;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\StringStream;
-use function Verraes\Parsica\char;
+use Parsica\Parsica\StringStream;
+use function Parsica\Parsica\char;
 
 final class ParseResultTest extends TestCase
 {

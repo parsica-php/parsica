@@ -8,9 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica;
+namespace Parsica\Parsica;
 
-use Verraes\Parsica\Internal\Assert;
+use Parsica\Parsica\Internal\Assert;
 
 /**
  * Parse a single character.

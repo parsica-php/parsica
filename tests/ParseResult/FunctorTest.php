@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\ParseResult;
+namespace Tests\Parsica\Parsica\ParseResult;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Internal\Fail;
-use Verraes\Parsica\Internal\Succeed;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
-use Verraes\Parsica\StringStream;
+use Parsica\Parsica\Internal\Fail;
+use Parsica\Parsica\Internal\Succeed;
+use Parsica\Parsica\PHPUnit\ParserAssertions;
+use Parsica\Parsica\StringStream;
 
 final class FunctorTest extends TestCase
 {

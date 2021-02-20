@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica;
+namespace Tests\Parsica\Parsica;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\StringStream;
-use function Verraes\Parsica\char;
-use function Verraes\Parsica\emit;
+use Parsica\Parsica\StringStream;
+use function Parsica\Parsica\char;
+use function Parsica\Parsica\emit;
 
 final class sideEffectsTest extends TestCase
 {

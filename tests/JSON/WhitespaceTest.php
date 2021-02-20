@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\JSON;
+namespace Tests\Parsica\Parsica\JSON;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\JSON\JSON;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\JSON\ws;
+use Parsica\Parsica\JSON\JSON;
+use Parsica\Parsica\PHPUnit\ParserAssertions;
+use function Parsica\Parsica\JSON\ws;
 
 final class WhitespaceTest extends TestCase
 {

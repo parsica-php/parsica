@@ -16,15 +16,15 @@ namespace Docs;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 
-use Verraes\Parsica\Parser;
-use function Verraes\Parsica\Expression\{binaryOperator,
+use Parsica\Parsica\Parser;
+use function Parsica\Parsica\Expression\{binaryOperator,
     expression,
     leftAssoc,
     postfix,
     prefix,
     rightAssoc,
     unaryOperator};
-use function Verraes\Parsica\{atLeastOne, between, char, choice, digitChar, keepFirst, recursive, skipHSpace, string, alphaChar};
+use function Parsica\Parsica\{atLeastOne, between, char, choice, digitChar, keepFirst, recursive, skipHSpace, string, alphaChar};
 use function PHPUnit\Framework\{assertSame, assertEquals};
 
 assert_options(ASSERT_ACTIVE, 1);

@@ -8,15 +8,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica\Internal;
+namespace Parsica\Parsica\Internal;
 
 use BadMethodCallException;
-use Verraes\Parsica\Parser;
-use Verraes\Parsica\ParseResult;
-use Verraes\Parsica\ParserHasFailed;
-use Verraes\Parsica\Stream;
-use function Verraes\Parsica\isEqual;
-use function Verraes\Parsica\notPred;
+use Parsica\Parsica\Parser;
+use Parsica\Parsica\ParseResult;
+use Parsica\Parsica\ParserHasFailed;
+use Parsica\Parsica\Stream;
+use function Parsica\Parsica\isEqual;
+use function Parsica\Parsica\notPred;
 
 /**
  * The return value of a failed parser.

@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica\Internal;
+namespace Parsica\Parsica\Internal;
 
 
 final class EndOfStream extends \Exception

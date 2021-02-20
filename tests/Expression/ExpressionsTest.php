@@ -8,31 +8,31 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Expression;
+namespace Tests\Parsica\Parsica\Expression;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Expression\{LeftAssoc, NonAssoc, Operator, Postfix, Prefix, RightAssoc};
-use Verraes\Parsica\Parser;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\atLeastOne;
-use function Verraes\Parsica\between;
-use function Verraes\Parsica\char;
-use function Verraes\Parsica\collect;
-use function Verraes\Parsica\digitChar;
-use function Verraes\Parsica\eof;
-use function Verraes\Parsica\Expression\binaryOperator;
-use function Verraes\Parsica\Expression\expression;
-use function Verraes\Parsica\Expression\leftAssoc;
-use function Verraes\Parsica\Expression\nonAssoc;
-use function Verraes\Parsica\Expression\operator;
-use function Verraes\Parsica\Expression\postfix;
-use function Verraes\Parsica\Expression\prefix;
-use function Verraes\Parsica\Expression\rightAssoc;
-use function Verraes\Parsica\Expression\unaryOperator;
-use function Verraes\Parsica\keepFirst;
-use function Verraes\Parsica\recursive;
-use function Verraes\Parsica\skipHSpace;
-use function Verraes\Parsica\string;
+use Parsica\Parsica\Expression\{LeftAssoc, NonAssoc, Operator, Postfix, Prefix, RightAssoc};
+use Parsica\Parsica\Parser;
+use Parsica\Parsica\PHPUnit\ParserAssertions;
+use function Parsica\Parsica\atLeastOne;
+use function Parsica\Parsica\between;
+use function Parsica\Parsica\char;
+use function Parsica\Parsica\collect;
+use function Parsica\Parsica\digitChar;
+use function Parsica\Parsica\eof;
+use function Parsica\Parsica\Expression\binaryOperator;
+use function Parsica\Parsica\Expression\expression;
+use function Parsica\Parsica\Expression\leftAssoc;
+use function Parsica\Parsica\Expression\nonAssoc;
+use function Parsica\Parsica\Expression\operator;
+use function Parsica\Parsica\Expression\postfix;
+use function Parsica\Parsica\Expression\prefix;
+use function Parsica\Parsica\Expression\rightAssoc;
+use function Parsica\Parsica\Expression\unaryOperator;
+use function Parsica\Parsica\keepFirst;
+use function Parsica\Parsica\recursive;
+use function Parsica\Parsica\skipHSpace;
+use function Parsica\Parsica\string;
 
 
 final class ExpressionsTest extends TestCase

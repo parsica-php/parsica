@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica;
+namespace Parsica\Parsica;
 
 /**
  * Parse an integer and return it as a string. Use ->map('intval')

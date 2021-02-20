@@ -49,11 +49,11 @@ In a .php file, make sure the Composer autoloader is included:
 
 Import parsers and combinators:
 
-`use function Verraes\Parsica\char;`
+`use function Parsica\Parsica\char;`
 
 You can combine multiple imports in one statement: 
 
-`use function Verraes\Parsica\{between, char, atLeastOne, alphaChar};`
+`use function Parsica\Parsica\{between, char, atLeastOne, alphaChar};`
 
 Finally, add some code:
 

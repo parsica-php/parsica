@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica;
+namespace Parsica\Parsica;
 
 /**
  * Create a recursive parser. Used in combination with Parser#recurse().

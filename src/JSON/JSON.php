@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica\JSON;
+namespace Parsica\Parsica\JSON;
 
-use Verraes\Parsica\Parser;
-use function Verraes\Parsica\{any,
+use Parsica\Parsica\Parser;
+use function Parsica\Parsica\{any,
     anySingleBut,
     between,
     char,

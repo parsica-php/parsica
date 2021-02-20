@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Parser;
+namespace Tests\Parsica\Parsica\Parser;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\char;
-use function Verraes\Parsica\string;
+use Parsica\Parsica\PHPUnit\ParserAssertions;
+use function Parsica\Parsica\char;
+use function Parsica\Parsica\string;
 
 final class ParserTest extends TestCase
 {

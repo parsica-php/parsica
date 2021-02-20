@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Examples;
+namespace Tests\Parsica\Parsica\Examples;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Parser;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\{alphaChar, between, char, collect, digitChar, skipHSpace1, space, string};
+use Parsica\Parsica\Parser;
+use Parsica\Parsica\PHPUnit\ParserAssertions;
+use function Parsica\Parsica\{alphaChar, between, char, collect, digitChar, skipHSpace1, space, string};
 
 final class ExcelTest extends TestCase
 {

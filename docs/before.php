@@ -15,10 +15,10 @@ namespace Docs;
 // This code is executed by UpToDocs before each code block
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Verraes\Parsica\Parser;
-use Verraes\Parsica\ParserHasFailed;
-use Verraes\Parsica\StringStream;
-use function Verraes\Parsica\{alphaChar,
+use Parsica\Parsica\Parser;
+use Parsica\Parsica\ParserHasFailed;
+use Parsica\Parsica\StringStream;
+use function Parsica\Parsica\{alphaChar,
     alphaNumChar,
     atLeastOne,
     between,

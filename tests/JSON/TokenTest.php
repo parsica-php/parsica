@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\JSON;
+namespace Tests\Parsica\Parsica\JSON;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\JSON\JSON;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\char;
-use function Verraes\Parsica\JSON\token;
+use Parsica\Parsica\JSON\JSON;
+use Parsica\Parsica\PHPUnit\ParserAssertions;
+use function Parsica\Parsica\char;
+use function Parsica\Parsica\JSON\token;
 
 final class TokenTest extends TestCase
 {

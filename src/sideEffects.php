@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica;
+namespace Parsica\Parsica;
 
 /**
  * If the parser is successful, call the $receiver function with the output of the parser. The resulting parser

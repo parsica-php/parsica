@@ -8,9 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica\Internal;
+namespace Parsica\Parsica\Internal;
 
-use Verraes\Parsica\Stream;
+use Parsica\Parsica\Stream;
 
 /**
  * The result of Stream::take*() functions

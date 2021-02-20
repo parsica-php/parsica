@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica\PHPUnit;
+namespace Parsica\Parsica\PHPUnit;
 
 use Exception;
-use Verraes\Parsica\Parser;
-use Verraes\Parsica\StringStream;
+use Parsica\Parsica\Parser;
+use Parsica\Parsica\StringStream;
 
 /**
  * Convenience assertion methods. When writing tests for your own parsers, extend from this instead of PHPUnit's TestCase.

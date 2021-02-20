@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica\Internal\FP;
+namespace Parsica\Parsica\Internal\FP;
 
 /**
  * Swaps the arguments of the callable, returning a callable.

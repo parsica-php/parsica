@@ -8,14 +8,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Parser;
+namespace Tests\Parsica\Parsica\Parser;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\StringStream;
-use function Verraes\Parsica\any;
-use function Verraes\Parsica\char;
-use function Verraes\Parsica\fail;
-use function Verraes\Parsica\string;
+use Parsica\Parsica\StringStream;
+use function Parsica\Parsica\any;
+use function Parsica\Parsica\char;
+use function Parsica\Parsica\fail;
+use function Parsica\Parsica\string;
 
 final class LabelTest extends TestCase
 {

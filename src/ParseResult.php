@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica;
+namespace Parsica\Parsica;
 
 use BadMethodCallException;
-use Verraes\Parsica\Internal\Position;
+use Parsica\Parsica\Internal\Position;
 
 /**
  * @template T

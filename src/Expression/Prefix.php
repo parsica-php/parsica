@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica\Expression;
+namespace Parsica\Parsica\Expression;
 
-use Verraes\Parsica\Parser;
-use function Verraes\Parsica\choice;
-use function Verraes\Parsica\pure;
+use Parsica\Parsica\Parser;
+use function Parsica\Parsica\choice;
+use function Parsica\Parsica\pure;
 
 /**
  * @internal

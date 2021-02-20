@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Examples;
+namespace Tests\Parsica\Parsica\Examples;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Parser;
-use function Verraes\Parsica\{atLeastOne, between, char, digitChar, keepFirst, recursive, skipHSpace, string};
-use function Verraes\Parsica\Expression\{binaryOperator,
+use Parsica\Parsica\Parser;
+use function Parsica\Parsica\{atLeastOne, between, char, digitChar, keepFirst, recursive, skipHSpace, string};
+use function Parsica\Parsica\Expression\{binaryOperator,
     expression,
     leftAssoc,
     operator,

@@ -8,9 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica\Expression;
+namespace Parsica\Parsica\Expression;
 
-use Verraes\Parsica\Parser;
+use Parsica\Parsica\Parser;
 
 /**
  * @internal

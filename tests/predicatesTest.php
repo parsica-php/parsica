@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica;
+namespace Tests\Parsica\Parsica;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\{andPred, isEqual, notPred, orPred, satisfy};
+use Parsica\Parsica\PHPUnit\ParserAssertions;
+use function Parsica\Parsica\{andPred, isEqual, notPred, orPred, satisfy};
 
 final class predicatesTest extends TestCase
 {

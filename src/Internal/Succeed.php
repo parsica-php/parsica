@@ -8,14 +8,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica\Internal;
+namespace Parsica\Parsica\Internal;
 
 use BadMethodCallException;
 use Exception;
-use Verraes\Parsica\Parser;
-use Verraes\Parsica\ParseResult;
-use Verraes\Parsica\ParserHasFailed;
-use Verraes\Parsica\Stream;
+use Parsica\Parsica\Parser;
+use Parsica\Parsica\ParseResult;
+use Parsica\Parsica\ParserHasFailed;
+use Parsica\Parsica\Stream;
 
 /**
  * @internal

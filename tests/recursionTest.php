@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica;
+namespace Tests\Parsica\Parsica;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
-use Verraes\Parsica\StringStream;
-use function Verraes\Parsica\{between, char, collect, digitChar, recursive};
+use Parsica\Parsica\PHPUnit\ParserAssertions;
+use Parsica\Parsica\StringStream;
+use function Parsica\Parsica\{between, char, collect, digitChar, recursive};
 
 final class recursionTest extends TestCase
 {

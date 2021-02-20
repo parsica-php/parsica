@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica;
+namespace Parsica\Parsica;
 
 use InvalidArgumentException;
-use Verraes\Parsica\Internal\Assert;
-use Verraes\Parsica\Internal\Fail;
-use Verraes\Parsica\Internal\Succeed;
-use function Verraes\Parsica\Internal\FP\foldl;
+use Parsica\Parsica\Internal\Assert;
+use Parsica\Parsica\Internal\Fail;
+use Parsica\Parsica\Internal\Succeed;
+use function Parsica\Parsica\Internal\FP\foldl;
 
 /**
  * Identity parser, returns the Parser as is.

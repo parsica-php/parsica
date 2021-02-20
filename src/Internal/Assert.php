@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica\Internal;
+namespace Parsica\Parsica\Internal;
 
 use InvalidArgumentException;
-use Verraes\Parsica\Parser;
+use Parsica\Parsica\Parser;
 
 /**
  * @internal

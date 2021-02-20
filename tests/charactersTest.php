@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica;
+namespace Tests\Parsica\Parsica;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Parser;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\{alphaChar,
+use Parsica\Parsica\Parser;
+use Parsica\Parsica\PHPUnit\ParserAssertions;
+use function Parsica\Parsica\{alphaChar,
     alphaNumChar,
     binDigitChar,
     blank,

@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica;
+namespace Parsica\Parsica;
 
-use Verraes\Parsica\Internal\EndOfStream;
-use Verraes\Parsica\Internal\Position;
-use Verraes\Parsica\Internal\TakeResult;
+use Parsica\Parsica\Internal\EndOfStream;
+use Parsica\Parsica\Internal\Position;
+use Parsica\Parsica\Internal\TakeResult;
 
 /**
  * @psalm-immutable

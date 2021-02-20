@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Parser;
+namespace Tests\Parsica\Parsica\Parser;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
-use Verraes\Parsica\StringStream;
-use function Verraes\Parsica\char;
+use Parsica\Parsica\PHPUnit\ParserAssertions;
+use Parsica\Parsica\StringStream;
+use function Parsica\Parsica\char;
 
 final class AppendTest extends TestCase
 {

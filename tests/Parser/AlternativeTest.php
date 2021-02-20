@@ -8,21 +8,21 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Parser;
+namespace Tests\Parsica\Parsica\Parser;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\alphaChar;
-use function Verraes\Parsica\char;
-use function Verraes\Parsica\digitChar;
-use function Verraes\Parsica\either;
-use function Verraes\Parsica\eof;
-use function Verraes\Parsica\ignore;
-use function Verraes\Parsica\keepFirst;
-use function Verraes\Parsica\many;
-use function Verraes\Parsica\punctuationChar;
-use function Verraes\Parsica\some;
-use function Verraes\Parsica\string;
+use Parsica\Parsica\PHPUnit\ParserAssertions;
+use function Parsica\Parsica\alphaChar;
+use function Parsica\Parsica\char;
+use function Parsica\Parsica\digitChar;
+use function Parsica\Parsica\either;
+use function Parsica\Parsica\eof;
+use function Parsica\Parsica\ignore;
+use function Parsica\Parsica\keepFirst;
+use function Parsica\Parsica\many;
+use function Parsica\Parsica\punctuationChar;
+use function Parsica\Parsica\some;
+use function Parsica\Parsica\string;
 
 final class AlternativeTest extends TestCase
 {

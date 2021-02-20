@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Internal\FP;
+namespace Tests\Parsica\Parsica\Internal\FP;
 
 use PHPUnit\Framework\TestCase;
-use function Verraes\Parsica\Internal\FP\foldr;
+use function Parsica\Parsica\Internal\FP\foldr;
 
 final class FoldrTest extends TestCase
 {

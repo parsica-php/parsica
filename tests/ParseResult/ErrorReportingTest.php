@@ -8,19 +8,19 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\ParseResult;
+namespace Tests\Parsica\Parsica\ParseResult;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Internal\Position;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
-use Verraes\Parsica\StringStream;
-use function Verraes\Parsica\char;
-use function Verraes\Parsica\many;
-use function Verraes\Parsica\newline;
-use function Verraes\Parsica\repeat;
-use function Verraes\Parsica\skipSpace;
-use function Verraes\Parsica\string;
-use function Verraes\Parsica\whitespace;
+use Parsica\Parsica\Internal\Position;
+use Parsica\Parsica\PHPUnit\ParserAssertions;
+use Parsica\Parsica\StringStream;
+use function Parsica\Parsica\char;
+use function Parsica\Parsica\many;
+use function Parsica\Parsica\newline;
+use function Parsica\Parsica\repeat;
+use function Parsica\Parsica\skipSpace;
+use function Parsica\Parsica\string;
+use function Parsica\Parsica\whitespace;
 
 final class ErrorReportingTest extends TestCase
 {

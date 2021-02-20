@@ -8,14 +8,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Parser;
+namespace Tests\Parsica\Parsica\Parser;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\ParserHasFailed;
-use Verraes\Parsica\StringStream;
-use function Verraes\Parsica\char;
-use function Verraes\Parsica\skipSpace;
-use function Verraes\Parsica\string;
+use Parsica\Parsica\ParserHasFailed;
+use Parsica\Parsica\StringStream;
+use function Parsica\Parsica\char;
+use function Parsica\Parsica\skipSpace;
+use function Parsica\Parsica\string;
 
 final class RunningParsersTest extends TestCase
 {

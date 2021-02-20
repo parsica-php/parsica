@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica;
+namespace Parsica\Parsica;
 
 use Exception;
-use Verraes\Parsica\Internal\Fail;
+use Parsica\Parsica\Internal\Fail;
 
 /**
  * @api

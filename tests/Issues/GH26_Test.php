@@ -8,22 +8,22 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Issues;
+namespace Tests\Parsica\Parsica\Issues;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Parser;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\alphaNumChar;
-use function Verraes\Parsica\any;
-use function Verraes\Parsica\atLeastOne;
-use function Verraes\Parsica\between;
-use function Verraes\Parsica\char;
-use function Verraes\Parsica\either;
-use function Verraes\Parsica\emit;
-use function Verraes\Parsica\eof;
-use function Verraes\Parsica\fail;
-use function Verraes\Parsica\many;
-use function Verraes\Parsica\succeed;
+use Parsica\Parsica\Parser;
+use Parsica\Parsica\PHPUnit\ParserAssertions;
+use function Parsica\Parsica\alphaNumChar;
+use function Parsica\Parsica\any;
+use function Parsica\Parsica\atLeastOne;
+use function Parsica\Parsica\between;
+use function Parsica\Parsica\char;
+use function Parsica\Parsica\either;
+use function Parsica\Parsica\emit;
+use function Parsica\Parsica\eof;
+use function Parsica\Parsica\fail;
+use function Parsica\Parsica\many;
+use function Parsica\Parsica\succeed;
 
 /**
  * https://github.com/mathiasverraes/parsica/issues/6

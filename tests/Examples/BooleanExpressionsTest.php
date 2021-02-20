@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Examples;
+namespace Tests\Parsica\Parsica\Examples;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Parser;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\{between, char, choice, keepFirst, recursive, skipHSpace, string};
-use function Verraes\Parsica\Expression\{binaryOperator, expression, leftAssoc, operator, prefix, unaryOperator};
+use Parsica\Parsica\Parser;
+use Parsica\Parsica\PHPUnit\ParserAssertions;
+use function Parsica\Parsica\{between, char, choice, keepFirst, recursive, skipHSpace, string};
+use function Parsica\Parsica\Expression\{binaryOperator, expression, leftAssoc, operator, prefix, unaryOperator};
 
 final class BooleanExpressionsTest extends TestCase
 {

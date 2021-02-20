@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-use Verraes\Parsica\JSON\JSON as ParsicaJSON;
+use Parsica\Parsica\JSON\JSON as ParsicaJSON;
 use Json as BaseMaxJson;
 
 class JSONBench

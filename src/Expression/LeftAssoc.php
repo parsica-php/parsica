@@ -8,17 +8,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica\Expression;
+namespace Parsica\Parsica\Expression;
 
-use Verraes\Parsica\Parser;
+use Parsica\Parsica\Parser;
 use function Cypress\Curry\curry;
-use function Verraes\Parsica\choice;
-use function Verraes\Parsica\collect;
-use function Verraes\Parsica\Internal\FP\flip;
-use function Verraes\Parsica\Internal\FP\foldl;
-use function Verraes\Parsica\many;
-use function Verraes\Parsica\map;
-use function Verraes\Parsica\pure;
+use function Parsica\Parsica\choice;
+use function Parsica\Parsica\collect;
+use function Parsica\Parsica\Internal\FP\flip;
+use function Parsica\Parsica\Internal\FP\foldl;
+use function Parsica\Parsica\many;
+use function Parsica\Parsica\map;
+use function Parsica\Parsica\pure;
 
 /**
  * @internal

@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Internal;
+namespace Tests\Parsica\Parsica\Internal;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Internal\Position;
-use Verraes\Parsica\StringStream;
-use function Verraes\Parsica\char;
+use Parsica\Parsica\Internal\Position;
+use Parsica\Parsica\StringStream;
+use function Parsica\Parsica\char;
 
 final class PositionTest extends TestCase
 {

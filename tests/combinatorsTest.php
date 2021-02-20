@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica;
+namespace Tests\Parsica\Parsica;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\{alphaChar,
+use Parsica\Parsica\PHPUnit\ParserAssertions;
+use function Parsica\Parsica\{alphaChar,
     alphaNumChar,
     any,
     anySingle,

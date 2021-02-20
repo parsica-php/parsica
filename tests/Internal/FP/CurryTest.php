@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Internal\FP;
+namespace Tests\Parsica\Parsica\Internal\FP;
 
 use PHPUnit\Framework\TestCase;
 use function Cypress\Curry\curry;

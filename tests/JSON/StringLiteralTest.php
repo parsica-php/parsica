@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\JSON;
+namespace Tests\Parsica\Parsica\JSON;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\JSON\JSON;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
+use Parsica\Parsica\JSON\JSON;
+use Parsica\Parsica\PHPUnit\ParserAssertions;
 
 final class StringLiteralTest extends TestCase
 {

@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica;
+namespace Tests\Parsica\Parsica;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\{anything,
+use Parsica\Parsica\PHPUnit\ParserAssertions;
+use function Parsica\Parsica\{anything,
     eof,
     everything,
     fail,
@@ -23,7 +23,7 @@ use function Verraes\Parsica\{anything,
     succeed,
     takeWhile,
     takeWhile1};
-use function Verraes\Parsica\{isEqual, notPred};
+use function Parsica\Parsica\{isEqual, notPred};
 
 
 final class primitivesTest extends TestCase

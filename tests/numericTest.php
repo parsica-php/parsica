@@ -8,14 +8,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica;
+namespace Tests\Parsica\Parsica;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
-use function Verraes\Parsica\float;
-use function Verraes\Parsica\integer;
-use function Verraes\Parsica\keepFirst;
-use function Verraes\Parsica\skipSpace1;
+use Parsica\Parsica\PHPUnit\ParserAssertions;
+use function Parsica\Parsica\float;
+use function Parsica\Parsica\integer;
+use function Parsica\Parsica\keepFirst;
+use function Parsica\Parsica\skipSpace1;
 
 final class numericTest extends TestCase
 {

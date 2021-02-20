@@ -9,10 +9,10 @@ Most of the parsers that come with Parsica, return strings as outputs.
 ```php
 <?php
 $parser = digitChar();
-assertInstanceOf('Verraes\Parsica\Parser', $parser);
+assertInstanceOf('Parsica\Parsica\Parser', $parser);
 
 $result = $parser->tryString('1');
-assertIsString('Verraes\Parsica\StringStream', $result->output());
+assertIsString('Parsica\Parsica\StringStream', $result->output());
 assertEquals('1', $result->output());
 ```
 

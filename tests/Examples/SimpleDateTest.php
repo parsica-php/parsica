@@ -8,16 +8,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Examples;
+namespace Tests\Parsica\Parsica\Examples;
 
-use Verraes\Parsica\PHPUnit\ParserAssertions;
+use Parsica\Parsica\PHPUnit\ParserAssertions;
 use PHPUnit\Framework\TestCase;
-use function Verraes\Parsica\any;
-use function Verraes\Parsica\collect;
-use function Verraes\Parsica\digitChar;
-use function Verraes\Parsica\repeat;
-use function Verraes\Parsica\skipSpace;
-use function Verraes\Parsica\string;
+use function Parsica\Parsica\any;
+use function Parsica\Parsica\collect;
+use function Parsica\Parsica\digitChar;
+use function Parsica\Parsica\repeat;
+use function Parsica\Parsica\skipSpace;
+use function Parsica\Parsica\string;
 
 final class SimpleDateTest extends TestCase
 {

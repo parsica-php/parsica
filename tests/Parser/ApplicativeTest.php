@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Parser;
+namespace Tests\Parsica\Parsica\Parser;
 
 use \InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\PHPUnit\ParserAssertions;
+use Parsica\Parsica\PHPUnit\ParserAssertions;
 use function Cypress\Curry\curry;
-use function Verraes\Parsica\{alphaChar,
+use function Parsica\Parsica\{alphaChar,
     anything,
     atLeastOne,
     char,

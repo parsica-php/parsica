@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Verraes\Parsica\Expression;
+namespace Parsica\Parsica\Expression;
 
-use Verraes\Parsica\Internal\Assert;
-use Verraes\Parsica\Parser;
-use function Verraes\Parsica\Internal\FP\foldl;
+use Parsica\Parsica\Internal\Assert;
+use Parsica\Parsica\Parser;
+use function Parsica\Parsica\Internal\FP\foldl;
 
 /**
  * Build an expression parser from a term parser and an expression table.
