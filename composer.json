@@ -1,5 +1,5 @@
 {
-    "name": "mathiasverraes/parsica",
+    "name": "parsica-php/parsica",
     "type": "library",
     "description": "The easiest way to build robust parsers in PHP.",
     "keywords": [
@@ -8,7 +8,7 @@
         "parser combinator",
         "parsing"
     ],
-    "homepage": "https://parsica.verraes.net/",
+    "homepage": "https://parsica-php.github.io/",
     "license": "MIT",
     "authors": [
         {
