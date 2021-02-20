@@ -13,8 +13,7 @@ The easiest way to build robust parsers in PHP.
 
 ## Donate
 
-Donate via my [GitHub Sponsor Page](https://github.com/sponsors/mathiasverraes)
- or via [Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NS4GQXUDXRKQJ&source=url). 
+Donate via my [GitHub Sponsor Page](https://github.com/sponsors/turanct).
  
 A lot of research & development went into this project. We think it can become the mainstream choice for building reliable parsers in PHP, and serve as a foundation for many advancements. Your support will help us to reach that goal.
 
@@ -36,8 +35,8 @@ Submit questions as Github issues. Help us help you by submitting short bits of 
 
 ## Links
 
-* Official Site: [parsica.verraes.net](https://parsica.verraes.net)
+* Official Site: [parsica-php.github.io](https://parsica-php.github.io)
 * Twitter: [@parsica_php](https://twitter.com/parsica_php)
-* GitHub: [mathiasverraes/parsica](https://github.com/mathiasverraes/parsica)
-* Packagist: [mathiasverraes/parsica](https://packagist.org/packages/mathiasverraes/parsica)
+* GitHub: [parsica-php/parsica](https://github.com/parsica-php/parsica)
+* Packagist: [parsica-php/parsica](https://packagist.org/packages/parsica-php/parsica)
 * License: [MIT](LICENSE)

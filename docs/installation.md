@@ -16,7 +16,7 @@ import TabItem from '@theme/TabItem';
 <TabItem value="cli">
 
 ```bash
-composer require mathiasverraes/parsica
+composer require parsica-php/parsica
 ```
 
 </TabItem>
@@ -24,7 +24,7 @@ composer require mathiasverraes/parsica
 
 ```json
 "require": {
-    "mathiasverraes/parsica": "dev-main"
+    "parsica-php/parsica": "dev-main"
 }
 ```
 
