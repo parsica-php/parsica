@@ -37,8 +37,9 @@ final class StringStream implements Stream
      */
     public function take1(): TakeResult
     {
-        /** @psalm-suppress UnusedMethodCall */
-        $this->guardEndOfStream();
+        if ($this->isEOF()) {
+            throw new EndOfStream("End of stream was reached in " . $this->position->pretty());
+        }
 
         $token = mb_substr($this->string, 0, 1);
         $position = $this->position->advance($token);
@@ -47,16 +48,6 @@ final class StringStream implements Stream
             $token,
             new StringStream(mb_substr($this->string, 1), $position)
         );
-    }
-
-    /**
-     * @throws EndOfStream
-     */
-    private function guardEndOfStream(): void
-    {
-        if ($this->isEOF()) {
-            throw new EndOfStream("End of stream was reached in " . $this->position->pretty());
-        }
     }
 
     /**
@@ -76,8 +67,9 @@ final class StringStream implements Stream
             return new TakeResult("", $this);
         }
 
-        /** @psalm-suppress UnusedMethodCall */
-        $this->guardEndOfStream();
+        if ($this->isEOF()) {
+            throw new EndOfStream("End of stream was reached in " . $this->position->pretty());
+        }
 
         $chunk = mb_substr($this->string, 0, $n);
         return new TakeResult(
