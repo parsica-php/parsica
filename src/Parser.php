@@ -62,7 +62,7 @@ final class Parser
     {
         return new Parser(
         // Make a placeholder parser that will throw when you try to run it.
-            function (Stream $input): ParseResult {
+            static function (Stream $input): ParseResult {
                 throw new Exception(
                     "Can't run a recursive parser that hasn't been setup properly yet. "
                     . "A parser created by recursive(), must then be called with ->recurse(Parser) "
@@ -377,9 +377,11 @@ final class Parser
      */
     public function label(string $label): Parser
     {
-        $newParserFunction = function (Stream $input) use ($label) : ParseResult {
+        $parserFn = $this->parserFunction;
+
+        $newParserFunction = static function (Stream $input) use ($parserFn, $label) : ParseResult {
             /** @psalm-var ParseResult $result */
-            $result = ($this->parserFunction)($input);
+            $result = ($parserFn)($input);
             return ($result->isSuccess())
                 ? $result
                 : new Fail($label, $result->got());

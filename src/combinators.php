@@ -80,7 +80,7 @@ function optional(Parser $parser): Parser
 function bind(Parser $parser, callable $f): Parser
 {
     /** @psalm-var Parser<T2> $finalParser */
-    $finalParser = Parser::make($parser->getLabel(), function (Stream $input) use ($parser, $f) : ParseResult {
+    $finalParser = Parser::make($parser->getLabel(), static function (Stream $input) use ($parser, $f) : ParseResult {
         $result = $parser->run($input)->map($f);
         if ($result->isFail()) {
             return $result;
@@ -109,7 +109,7 @@ function bind(Parser $parser, callable $f): Parser
 function apply(Parser $parser1, Parser $parser2): Parser
 {
     /** @psalm-var Parser<T2> $parser */
-    $parser = Parser::make($parser1->getLabel(), function (Stream $input) use ($parser2, $parser1) : ParseResult {
+    $parser = Parser::make($parser1->getLabel(), static function (Stream $input) use ($parser2, $parser1) : ParseResult {
         $r1 = $parser1->run($input);
         if ($r1->isFail()) {
             return $r1;
@@ -189,7 +189,7 @@ function keepSecond(Parser $first, Parser $second): Parser
 function either(Parser $first, Parser $second): Parser
 {
     $label = $first->getLabel() . " or " . $second->getLabel();
-    return Parser::make($label, function (Stream $input) use ($second, $first, $label): ParseResult {
+    return Parser::make($label, static function (Stream $input) use ($second, $first, $label): ParseResult {
         // @todo Megaparsec doesn't do automatic rollback, for performance reasons, and requires the user to add try
         //       combinators. We could mimic that behaviour as it is probably more performant
         $r1 = $first->run($input);
@@ -220,7 +220,7 @@ function either(Parser $first, Parser $second): Parser
  */
 function append(Parser $left, Parser $right): Parser
 {
-    return Parser::make($right->getLabel(), function (Stream $input) use ($left, $right): ParseResult {
+    return Parser::make($right->getLabel(), static function (Stream $input) use ($left, $right): ParseResult {
         $r1 = $left->run($input);
         $r2 = $r1->continueWith($right);
         return $r1->append($r2);
@@ -317,7 +317,7 @@ function atLeastOne(Parser $parser): Parser
 {
     return Parser::make(
         "at least one " . $parser->getLabel(),
-        function (Stream $input) use ($parser) : ParseResult {
+        static function (Stream $input) use ($parser) : ParseResult {
             $result = $parser->run($input);
             if ($result->isFail()) {
                 return $result;
@@ -347,7 +347,7 @@ function zeroOrMore(Parser $parser): Parser
 {
     return Parser::make(
         "zero or more " . $parser->getLabel(),
-        function (Stream $input) use ($parser) : ParseResult {
+        static function (Stream $input) use ($parser) : ParseResult {
             $result = new Succeed(null, $input);
             $final = $result;
             while ($result->isSuccess()) {
@@ -562,7 +562,7 @@ function notFollowedBy(Parser $parser): Parser
     /** @psalm-var Parser<string> $p */
     $label = "notFollowedBy({$parser->getLabel()})";
 
-    $p = Parser::make($label, function (Stream $input) use ($label, $parser): ParseResult {
+    $p = Parser::make($label, static function (Stream $input) use ($label, $parser): ParseResult {
         $result = $parser->run($input);
         return $result->isSuccess()
             ? new Fail($label, $input)
@@ -600,7 +600,7 @@ function lookAhead(Parser $parser): Parser
 {
     return Parser::make(
         $parser->getLabel(),
-        function (Stream $input) use ($parser): ParseResult {
+        static function (Stream $input) use ($parser): ParseResult {
             $parseResult = $parser->run($input);
             return $parseResult->isSuccess()
                 ? new Succeed($parseResult->output(), $input)
