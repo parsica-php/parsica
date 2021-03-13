@@ -75,12 +75,22 @@ final class StringStream implements Stream
     {
         $this->guardEndOfStream();
 
-        $token = $this->substr($this->string, 0, 1);
+        if ($this->containsMultiBytes) {
+            $token = \mb_substr($this->string, 0, 1);
+        } else {
+            $token = \substr($this->string, 0, 1);
+        }
         $position = $this->position->advance($token);
+
+        if ($this->containsMultiBytes) {
+            $remainder = \mb_substr($this->string, 1);
+        } else {
+            $remainder = \substr($this->string, 1);
+        }
 
         return new TakeResult(
             $token,
-            new StringStream($this->substr($this->string, 1), $position, $this->containsMultiBytes)
+            new StringStream($remainder, $position, $this->containsMultiBytes)
         );
     }
 
