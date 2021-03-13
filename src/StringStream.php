@@ -21,14 +21,50 @@ final class StringStream implements Stream
 {
     private string $string;
     private Position $position;
+    private bool $containsMultiBytes;
 
     /**
      * @api
      */
-    public function __construct(string $string, ?Position $position = null)
+    public function __construct(string $string, ?Position $position = null, bool $containsMultiBytes = null)
     {
         $this->string = $string;
         $this->position = $position ?? Position::initial();
+        if (null === $containsMultiBytes) {
+            $this->containsMultiBytes = mb_strlen($string) != strlen($string);
+        } else {
+            $this->containsMultiBytes = $containsMultiBytes;
+        }
+    }
+
+    /**
+     * Performance optimized substr() implementation
+     *
+     * @param int $start The first position used in str.
+     * @param int $length [optional] The maximum length of the returned string.
+     */
+    private function substr($string, $start, $length = null):string {
+        if ($this->containsMultiBytes) {
+            if ($length) {
+                return mb_substr($string, $start, $length);
+            }
+            return mb_substr($string, $start);
+        }
+
+        if ($length) {
+            return substr($string, $start, $length);
+        }
+        return substr($string, $start);
+    }
+
+    /**
+     * Performance optimized strlen() implementation
+     */
+    private function strlen($string):int {
+        if ($this->containsMultiBytes) {
+            return mb_strlen($string);
+        }
+        return strlen($string);
     }
 
     /**
@@ -39,12 +75,12 @@ final class StringStream implements Stream
     {
         $this->guardEndOfStream();
 
-        $token = mb_substr($this->string, 0, 1);
+        $token = $this->substr($this->string, 0, 1);
         $position = $this->position->advance($token);
 
         return new TakeResult(
             $token,
-            new StringStream(mb_substr($this->string, 1), $position)
+            new StringStream($this->substr($this->string, 1), $position, $this->containsMultiBytes)
         );
     }
 
@@ -63,7 +99,7 @@ final class StringStream implements Stream
      */
     public function isEOF(): bool
     {
-        return mb_strlen($this->string) === 0;
+        return $this->strlen($this->string) === 0;
     }
 
     /**
@@ -77,11 +113,11 @@ final class StringStream implements Stream
 
         $this->guardEndOfStream();
 
-        $chunk = mb_substr($this->string, 0, $n);
+        $chunk = $this->substr($this->string, 0, $n);
         return new TakeResult(
             $chunk,
             new StringStream(
-                mb_substr($this->string, $n),
+                $this->substr($this->string, $n),
                 $this->position->advance($chunk)
             )
         );
@@ -97,13 +133,13 @@ final class StringStream implements Stream
         }
 
         $remaining = $this->string;
-        $nextToken = mb_substr($remaining, 0, 1);
+        $nextToken = $this->substr($remaining, 0, 1);
         $chunk = "";
         while ($predicate($nextToken)) {
             $chunk .= $nextToken;
-            $remaining = mb_substr($remaining, 1);
+            $remaining = $this->substr($remaining, 1);
             if (mb_strlen($remaining) > 0) {
-                $nextToken = mb_substr($remaining, 0, 1);
+                $nextToken = $this->substr($remaining, 0, 1);
             } else {
                 break;
             }
