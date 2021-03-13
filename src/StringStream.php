@@ -63,7 +63,7 @@ final class StringStream implements Stream
      */
     public function isEOF(): bool
     {
-        return mb_strlen($this->string) === 0;
+        return strlen($this->string) === 0;
     }
 
     /**
