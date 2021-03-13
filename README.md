@@ -1,5 +1,7 @@
 # Parsica
- 
+
+[![Tests](https://github.com/parsica-php/parsica/actions/workflows/tests.yml/badge.svg)](https://github.com/parsica-php/parsica/actions/workflows/tests.yml)
+
 The easiest way to build robust parsers in PHP.
 
 ```bash
