@@ -8,12 +8,14 @@
  * file that was distributed with this source code.
  */
 
+require_once __DIR__.'/../vendor/autoload.php';
+
 use Parsica\Parsica\JSON\JSON as ParsicaJSON;
 use Json as BaseMaxJson;
 
 class JSONBench
 {
-    private string $data;
+    private $data;
 
     function __construct()
     {
@@ -54,32 +56,11 @@ JSON;
 
     }
 
-    /**
-     * @Revs(5)
-     * @Iterations(3)
-     */
-    public function bench_json_encode()
-    {
-        json_decode($this->data);
-    }
-
-    /**
-     * @Revs(5)
-     * @Iterations(3)
-     */
     public function bench_Parsica_JSON()
     {
         $result = ParsicaJSON::json()->tryString($this->data);
     }
-
-
-    /**
-     * @Revs(5)
-     * @Iterations(3)
-     */
-    public function bench_basemax_jpophp()
-    {
-        require_once(__DIR__.'/JPOPHP/JsonParser.php');
-        (new JPOPHP\Json())->decode($this->data);
-    }
 }
+
+
+(new JSONBench)->bench_Parsica_JSON();
