@@ -143,13 +143,13 @@ final class StringStream implements Stream
         }
 
         $remaining = $this->string;
-        $nextToken = $this->substr($remaining, 0, 1);
+        $nextToken = mb_substr($remaining, 0, 1);
         $chunk = "";
         while ($predicate($nextToken)) {
             $chunk .= $nextToken;
-            $remaining = $this->substr($remaining, 1);
+            $remaining = mb_substr($remaining, 1);
             if (mb_strlen($remaining) > 0) {
-                $nextToken = $this->substr($remaining, 0, 1);
+                $nextToken = mb_substr($remaining, 0, 1);
             } else {
                 break;
             }
