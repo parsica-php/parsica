@@ -31,7 +31,7 @@ final class StringStream implements Stream
         $this->string = $string;
         $this->position = $position ?? Position::initial();
         if (null === $containsMultiBytes) {
-            $this->containsMultiBytes = mb_strlen($string) != strlen($string);
+            $this->containsMultiBytes = \mb_strlen($string) != \strlen($string);
         } else {
             $this->containsMultiBytes = $containsMultiBytes;
         }
@@ -46,15 +46,15 @@ final class StringStream implements Stream
     private function substr($string, $start, $length = null):string {
         if ($this->containsMultiBytes) {
             if ($length) {
-                return mb_substr($string, $start, $length);
+                return \mb_substr($string, $start, $length);
             }
-            return mb_substr($string, $start);
+            return \mb_substr($string, $start);
         }
 
         if ($length) {
-            return substr($string, $start, $length);
+            return \substr($string, $start, $length);
         }
-        return substr($string, $start);
+        return \substr($string, $start);
     }
 
     /**
@@ -62,9 +62,9 @@ final class StringStream implements Stream
      */
     private function strlen($string):int {
         if ($this->containsMultiBytes) {
-            return mb_strlen($string);
+            return \mb_strlen($string);
         }
-        return strlen($string);
+        return \strlen($string);
     }
 
     /**
