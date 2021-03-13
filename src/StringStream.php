@@ -20,6 +20,7 @@ use Parsica\Parsica\Internal\TakeResult;
 final class StringStream implements Stream
 {
     private string $string;
+    private int $len;
     private Position $position;
 
     /**
@@ -28,6 +29,7 @@ final class StringStream implements Stream
     public function __construct(string $string, ?Position $position = null)
     {
         $this->string = $string;
+        $this->len = mb_strlen($this->string);
         $this->position = $position ?? Position::initial();
     }
 
@@ -63,7 +65,7 @@ final class StringStream implements Stream
      */
     public function isEOF(): bool
     {
-        return mb_strlen($this->string) === 0;
+        return $this->len === 0;
     }
 
     /**
