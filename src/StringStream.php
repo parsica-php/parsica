@@ -109,7 +109,7 @@ final class StringStream implements Stream
      */
     public function isEOF(): bool
     {
-        return $this->strlen($this->string) === 0;
+        return mb_strlen($this->string) === 0;
     }
 
     /**
@@ -123,11 +123,11 @@ final class StringStream implements Stream
 
         $this->guardEndOfStream();
 
-        $chunk = $this->substr($this->string, 0, $n);
+        $chunk = mb_substr($this->string, 0, $n);
         return new TakeResult(
             $chunk,
             new StringStream(
-                $this->substr($this->string, $n),
+                mb_substr($this->string, $n),
                 $this->position->advance($chunk)
             )
         );
