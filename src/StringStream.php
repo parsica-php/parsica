@@ -38,36 +38,6 @@ final class StringStream implements Stream
     }
 
     /**
-     * Performance optimized substr() implementation
-     *
-     * @param int $start The first position used in str.
-     * @param int $length [optional] The maximum length of the returned string.
-     */
-    private function substr($string, $start, $length = null):string {
-        if ($this->containsMultiBytes) {
-            if ($length) {
-                return \mb_substr($string, $start, $length);
-            }
-            return \mb_substr($string, $start);
-        }
-
-        if ($length) {
-            return \substr($string, $start, $length);
-        }
-        return \substr($string, $start);
-    }
-
-    /**
-     * Performance optimized strlen() implementation
-     */
-    private function strlen($string):int {
-        if ($this->containsMultiBytes) {
-            return \mb_strlen($string);
-        }
-        return \strlen($string);
-    }
-
-    /**
      * @inheritDoc
      * @internal
      */
