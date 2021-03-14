@@ -103,11 +103,11 @@ final class Succeed implements ParseResult
 
         // Ignore nulls
         if($type1 === 'NULL' && $type2 === 'NULL') {
-            return new Succeed(null, $other->remainder());
+            return new Succeed(null, $other->remainder);
         } elseif($type1 !== 'NULL' && $type2 === 'NULL') {
-            return new Succeed($this->output(), $other->remainder());
+            return new Succeed($this->output, $other->remainder);
         } elseif($type1 === 'NULL' && $type2 !== 'NULL') {
-            return new Succeed($other->output(), $other->remainder());
+            return new Succeed($other->output, $other->remainder);
         }
 
         // Only append for the same type
@@ -118,12 +118,12 @@ final class Succeed implements ParseResult
         switch ($type1) {
             case 'string':
                 /** @psalm-suppress MixedOperand */
-                return new Succeed($this->output() . $other->output(), $other->remainder());
+                return new Succeed($this->output . $other->output, $other->remainder);
             case 'array':
                 /** @psalm-suppress MixedArgument */
                 return new Succeed(
-                    array_merge($this->output(), $other->output()),
-                    $other->remainder()
+                    array_merge($this->output, $other->output),
+                    $other->remainder
                 );
             default:
                 throw new Exception("@TODO cannot append ParseResult<$type1>");
