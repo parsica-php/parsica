@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-          ref: main
+          ref: b6ef606 # todo change to "main"
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
