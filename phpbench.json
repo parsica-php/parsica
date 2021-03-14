@@ -1,3 +1,4 @@
 {
-    "bootstrap": "vendor/autoload.php"
+    "bootstrap": "vendor/autoload.php",
+    "xml_storage_path": "/tmp"
 }
