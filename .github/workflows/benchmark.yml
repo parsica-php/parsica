@@ -16,7 +16,7 @@ jobs:
     # create baseline
     - uses: actions/checkout@v2
       with:
-          ref: 'e133da2435d2674e807d6d40d5584ab9e5d36088' # todo change to "main"
+          ref: '0635aaeb5e85dfae1b628286f3f738e6e09ba1ed' # todo change to "main"
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
