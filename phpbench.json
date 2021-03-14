@@ -1,4 +1,4 @@
 {
     "bootstrap": "vendor/autoload.php",
-    "xml_storage_path": "/tmp"
+    "xml_storage_path": "/tmp/.phpbench/storage"
 }
