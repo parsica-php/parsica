@@ -98,36 +98,37 @@ final class Succeed implements ParseResult
      */
     private function appendSuccess(Succeed $other): ParseResult
     {
-        $type1 = $this->type();
-        $type2 = $other->type();
+        $type1isNull = is_null($this->output);
+        $type2isNull = is_null($other->output);
 
         // Ignore nulls
-        if($type1 === 'NULL' && $type2 === 'NULL') {
+        if($type1isNull && $type2isNull) {
             return new Succeed(null, $other->remainder);
-        } elseif($type1 !== 'NULL' && $type2 === 'NULL') {
+        } elseif(!$type1isNull && $type2isNull) {
             return new Succeed($this->output, $other->remainder);
-        } elseif($type1 === 'NULL' && $type2 !== 'NULL') {
+        } elseif($type1isNull && !$type2isNull) {
             return new Succeed($other->output, $other->remainder);
         }
 
         // Only append for the same type
+        /*
         if ($type1 !== $type2) {
             throw new Exception("Append only works for ParseResult<T> instances with the same type T, got ParseResult<$type1> and ParseResult<$type2>.");
         }
+        */
 
-        switch ($type1) {
-            case 'string':
-                /** @psalm-suppress MixedOperand */
-                return new Succeed($this->output . $other->output, $other->remainder);
-            case 'array':
-                /** @psalm-suppress MixedArgument */
-                return new Succeed(
-                    array_merge($this->output, $other->output),
-                    $other->remainder
-                );
-            default:
-                throw new Exception("@TODO cannot append ParseResult<$type1>");
+        if (is_string($this->output)) {
+            /** @psalm-suppress MixedOperand */
+            return new Succeed($this->output . $other->output, $other->remainder);
+        } elseif (is_array($this->output)) {
+            /** @psalm-suppress MixedArgument */
+            return new Succeed(
+                array_merge($this->output, $other->output),
+                $other->remainder
+            );
         }
+
+        throw new Exception("@TODO cannot append ParseResult<". gettype($this->output) .">");
     }
 
     /**
@@ -154,21 +155,6 @@ final class Succeed implements ParseResult
     public function continueWith(Parser $parser): ParseResult
     {
         return $parser->run($this->remainder);
-    }
-
-    /**
-     * The type of the ParseResult
-     *
-     * @psalm-return class-string<T>|'NULL'|'string'|'array'
-     *
-     * @psalm-suppress MoreSpecificReturnType
-     * @psalm-suppress LessSpecificReturnStatement
-     * @psalm-suppress MixedArgumentTypeCoercion
-     */
-    private function type(): string
-    {
-        $t = gettype($this->output);
-        return $t == 'object' ? get_class($this->output) : $t;
     }
 
     public function errorMessage(): string
