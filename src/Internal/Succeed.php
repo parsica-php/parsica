@@ -153,7 +153,7 @@ final class Succeed implements ParseResult
      */
     public function continueWith(Parser $parser): ParseResult
     {
-        return $parser->run($this->remainder());
+        return $parser->run($this->remainder);
     }
 
     /**
