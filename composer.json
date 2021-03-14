@@ -63,6 +63,8 @@
         "phpunit": "vendor/bin/phpunit",
         "psalm": "vendor/bin/psalm",
         "uptodocs": "docs/testdocs",
+        "benchmark-baseline": "phpbench run benchmarks --report=aggregate --tag=original --retry-threshold=5",
+        "benchmark-compare-baseline": "phpbench run benchmarks --report=aggregate --ref=original --retry-threshold=5",
         "benchmark": "phpbench run benchmarks --report=aggregate"
     }
 }
