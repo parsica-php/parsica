@@ -2,7 +2,6 @@
 .idea/
 .private/
 .php_cs.cache
-.phpbench/
 .phpunit.result.cache
 Gherkin
 infection.log
