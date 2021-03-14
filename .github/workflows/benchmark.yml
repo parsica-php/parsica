@@ -1,0 +1,24 @@
+name: Tests
+
+on: [pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          ref: main
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --no-suggest
+
+    - name: create a perf baseline
+      run: composer benchmark-baseline
+
+    - uses: actions/checkout@v2
+
+    - name: compare PR against a perf baseline
+      run: composer benchmark-compare-baseline
