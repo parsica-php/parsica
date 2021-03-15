@@ -34,7 +34,7 @@ jobs:
         git checkout ${{ github.event.pull_request.head.sha }}
         echo ::group::patch-setup
         composer install --prefer-dist --no-progress
-        echo ::endgroup:
+        echo ::endgroup::
         comparison=$(composer benchmark-compare-baseline)
 
         # prepare multi line message
