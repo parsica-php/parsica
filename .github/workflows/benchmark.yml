@@ -17,7 +17,8 @@ jobs:
       with:
         fetch-depth: 0
         
-    - run: |
+    - name: create perf comparison
+      run: |
         # create baseline
         git checkout cc0808fd2ecd30a563bbe20e5d4e989d7071aa03
         composer install --prefer-dist --no-progress --no-suggest
@@ -29,4 +30,11 @@ jobs:
         # compare against current commit
         git checkout ${{ github.event.pull_request.head.sha }}
         composer install --prefer-dist --no-progress --no-suggest
-        composer benchmark-compare-baseline
+        comparison=$(composer benchmark-compare-baseline)
+
+        # prepare multi line message
+        comparison="${comparison//'%'/'%25'}"
+        comparison="${comparison//$'\n'/'%0A'}"
+        comparison="${comparison//$'\r'/'%0D'}"
+        
+        echo "::notice $comparison"
