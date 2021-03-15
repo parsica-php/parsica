@@ -19,7 +19,7 @@ jobs:
         
     - run: |
         # create baseline
-        git checkout 0635aaeb5e85dfae1b628286f3f738e6e09ba1ed
+        git checkout cc0808fd2ecd30a563bbe20e5d4e989d7071aa03
         composer install --prefer-dist --no-progress --no-suggest
         composer benchmark-baseline
         
