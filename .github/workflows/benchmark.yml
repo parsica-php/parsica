@@ -18,6 +18,7 @@ jobs:
         fetch-depth: 0
         
     - name: create perf comparison
+      id: perf-compare
       run: |
         # create baseline
         git checkout cc0808fd2ecd30a563bbe20e5d4e989d7071aa03
@@ -37,4 +38,26 @@ jobs:
         comparison="${comparison//$'\n'/'%0A'}"
         comparison="${comparison//$'\r'/'%0D'}"
         
-        echo "::notice $comparison"
+        echo "::set-output name=comparison::$comparison"
+
+    - name: Find Comment
+      uses: peter-evans/find-comment@v1
+      id: fc
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        comment-author: 'github-actions[bot]'
+        body-includes: running benchmarks...
+
+    - name: Create comment
+      if: steps.fc.outputs.comment-id == ''
+      uses: peter-evans/create-or-update-comment@v1
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        body: ${{ steps.perf-compare.outputs.gitmerge }}
+
+    - name: Update comment
+      if: steps.fc.outputs.comment-id != ''
+      uses: peter-evans/create-or-update-comment@v1
+      with:
+        comment-id: ${{ steps.fc.outputs.comment-id }}
+        body: ${{ steps.perf-compare.outputs.gitmerge }}
