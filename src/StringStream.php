@@ -63,7 +63,7 @@ final class StringStream implements Stream
      */
     public function isEOF(): bool
     {
-        return strlen($this->string) === 0;
+        return $this->string === '';
     }
 
     /**
@@ -102,7 +102,7 @@ final class StringStream implements Stream
         while ($predicate($nextToken)) {
             $chunk .= $nextToken;
             $remaining = mb_substr($remaining, 1);
-            if (mb_strlen($remaining) > 0) {
+            if ($remaining !== '') {
                 $nextToken = mb_substr($remaining, 0, 1);
             } else {
                 break;
