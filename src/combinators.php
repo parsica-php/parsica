@@ -432,14 +432,16 @@ function some(Parser $parser): Parser
  *
  * @psalm-param Parser<T> $parser
  * @psalm-return Parser<list<T>>
+ * @psalm-suppress MixedReturnTypeCoercion
+ *
  * @api
  */
 function many(Parser $parser): Parser
 {
     return Parser::make(
         "many {$parser->getLabel()}",
-        function ($remainder) use ($parser) {
-            $result = array();
+        function (Stream $remainder) use ($parser): ParseResult {
+            $result = [];
 
             while (true) {
                 $lastResult = $parser->run($remainder);
