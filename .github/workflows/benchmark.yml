@@ -21,7 +21,7 @@ jobs:
       id: perf-compare
       run: |
         echo ::group::trigger baseline-setup
-        git checkout cc0808fd2ecd30a563bbe20e5d4e989d7071aa03
+        git checkout main
         composer install --prefer-dist --no-progress
         echo ::endgroup::
         composer benchmark-baseline
