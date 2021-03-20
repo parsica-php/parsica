@@ -432,7 +432,6 @@ function some(Parser $parser): Parser
  *
  * @psalm-param Parser<T> $parser
  * @psalm-return Parser<list<T>>
- * @psalm-suppress MixedReturnTypeCoercion
  *
  * @api
  */
@@ -454,7 +453,10 @@ function many(Parser $parser): Parser
                 $result[] = $lastResult->output();
             }
 
-            return new Succeed($result, $remainder);
+            /** @psalm-var ParseResult<list<T>> $succeed */
+            $succeed = new Succeed($result, $remainder);
+
+            return $succeed;
         }
     );
 }
