@@ -74,11 +74,13 @@ final class Parser
     /**
      * Make a new parser.
      *
-     * @psalm-param callable(Stream) : ParseResult<T2> $parserFunction
+     * @internal
+     *
+     * @template T2
+     *
+     * @psalm-param callable(Stream):ParseResult<T2> $parserFunction
      *
      * @psalm-return Parser<T2>
-     * @internal
-     * @template T2
      */
     public static function make(string $label, callable $parserFunction): Parser
     {

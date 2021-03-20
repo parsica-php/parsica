@@ -432,26 +432,33 @@ function some(Parser $parser): Parser
  *
  * @psalm-param Parser<T> $parser
  * @psalm-return Parser<list<T>>
+ *
  * @api
  */
 function many(Parser $parser): Parser
 {
-    $rec = recursive();
-    $rec->recurse(
-        any(
-            map(
-                collect($parser, $rec),
-                /**
-                 * @template T
-                 * @psalm-param array{0: T, 1: list<T>} $o
-                 * @psalm-return list<T>
-                 */
-                fn(array $o): array => array_merge([$o[0]], $o[1])
-            ),
-            pure([]),
-        )
+    return Parser::make(
+        "many {$parser->getLabel()}",
+        function (Stream $remainder) use ($parser): ParseResult {
+            $result = [];
+
+            while (true) {
+                $lastResult = $parser->run($remainder);
+
+                if ($lastResult->isFail()) {
+                    break;
+                }
+
+                $remainder = $lastResult->remainder();
+                $result[] = $lastResult->output();
+            }
+
+            /** @psalm-var ParseResult<list<T>> $succeed */
+            $succeed = new Succeed($result, $remainder);
+
+            return $succeed;
+        }
     );
-    return $rec;
 }
 
 /**
