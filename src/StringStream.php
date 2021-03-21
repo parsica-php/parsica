@@ -37,7 +37,7 @@ final class StringStream implements Stream
      */
     public function take1(): TakeResult
     {
-        if ($this->isEOF()) {
+        if ($this->string === '') {
             throw new EndOfStream("End of stream was reached in " . $this->position->pretty());
         }
 
@@ -67,7 +67,7 @@ final class StringStream implements Stream
             return new TakeResult("", $this);
         }
 
-        if ($this->isEOF()) {
+        if ($this->string === '') {
             throw new EndOfStream("End of stream was reached in " . $this->position->pretty());
         }
 
@@ -86,7 +86,7 @@ final class StringStream implements Stream
      */
     public function takeWhile(callable $predicate): TakeResult
     {
-        if($this->isEOF()) {
+        if($this->string === '') {
             return new TakeResult("", $this);
         }
 
