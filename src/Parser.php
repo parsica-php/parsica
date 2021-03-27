@@ -242,7 +242,7 @@ final class Parser
      */
     public function continueFrom(ParseResult $result): ParseResult
     {
-        return $this->run($result->remainder());
+        return ($this->parserFunction)($result->remainder());
     }
 
     /**
@@ -283,7 +283,11 @@ final class Parser
      */
     public function tryString(string $input): ParseResult
     {
-        return $this->try(new StringStream($input));
+        $result = ($this->parserFunction)(new StringStream($input));
+        if ($result->isFail()) {
+            $result->throw();
+        }
+        return $result;
     }
 
     /**
@@ -298,7 +302,7 @@ final class Parser
      */
     public function try(Stream $input): ParseResult
     {
-        $result = $this->run($input);
+        $result = ($this->parserFunction)($input);
         if ($result->isFail()) {
             $result->throw();
         }
@@ -419,7 +423,7 @@ final class Parser
      */
     public function voidLeft($output): Parser
     {
-        return $this->map(
+        return map($this,
             /**
              * @psalm-param T $_
              * @psalm-return T2
