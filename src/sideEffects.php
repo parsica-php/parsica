@@ -24,7 +24,7 @@ namespace Parsica\Parsica;
  */
 function emit(Parser $parser, callable $receiver): Parser
 {
-    return Parser::make("emit", function (Stream $input) use ($receiver, $parser): ParseResult {
+    return Parser::make("emit", static function (Stream $input) use ($receiver, $parser): ParseResult {
         $result = $parser->run($input);
         if ($result->isSuccess()) {
             $receiver($result->output());

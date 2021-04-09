@@ -28,7 +28,7 @@ use Parsica\Parsica\Internal\Succeed;
 function satisfy(callable $predicate): Parser
 {
     $label = "satisfy(predicate)";
-    return Parser::make($label, function (Stream $input) use ($label, $predicate) : ParseResult {
+    return Parser::make($label, static function (Stream $input) use ($label, $predicate) : ParseResult {
         try {
             $t = $input->take1();
         } catch (EndOfStream $e) {
@@ -78,7 +78,7 @@ function takeWhile(callable $predicate): Parser
 {
     return Parser::make(
         "takeWhile(predicate)",
-        function (Stream $input) use ($predicate): ParseResult {
+        static function (Stream $input) use ($predicate): ParseResult {
             $t = $input->takeWhile($predicate);
             return new Succeed($t->chunk(), $t->stream());
         }
@@ -98,7 +98,7 @@ function takeWhile(callable $predicate): Parser
 function takeWhile1(callable $predicate): Parser
 {
     $label = "takeWhile1(predicate)";
-    return Parser::make($label, function (Stream $input) use ($label, $predicate): ParseResult {
+    return Parser::make($label, static function (Stream $input) use ($label, $predicate): ParseResult {
 
         try {
             $t = $input->take1();

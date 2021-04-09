@@ -30,7 +30,7 @@ function string(string $str): Parser
     $len = mb_strlen($str);
     $label = "'$str'";
     /** @psalm-var Parser<string> $parser */
-    $parser = Parser::make($label, function (Stream $input) use ($label, $len, $str): ParseResult {
+    $parser = Parser::make($label, static function (Stream $input) use ($label, $len, $str): ParseResult {
         try {
             $t = $input->takeN($len);
         } catch (EndOfStream $e) {
