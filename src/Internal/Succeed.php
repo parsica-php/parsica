@@ -102,7 +102,7 @@ final class Succeed implements ParseResult
         $type2isNull = is_null($other->output);
 
         // Ignore nulls
-        if($type1isNull && $type2isNull) {
+        if ($type1isNull && $type2isNull) {
             return new Succeed(null, $other->remainder);
         } elseif(!$type1isNull && $type2isNull) {
             return new Succeed($this->output, $other->remainder);
@@ -110,17 +110,10 @@ final class Succeed implements ParseResult
             return new Succeed($other->output, $other->remainder);
         }
 
-        // Only append for the same type
-        /*
-        if ($type1 !== $type2) {
-            throw new Exception("Append only works for ParseResult<T> instances with the same type T, got ParseResult<$type1> and ParseResult<$type2>.");
-        }
-        */
-
-        if (is_string($this->output)) {
+        if (is_string($this->output) && is_string($other->output)) {
             /** @psalm-suppress MixedOperand */
             return new Succeed($this->output . $other->output, $other->remainder);
-        } elseif (is_array($this->output)) {
+        } elseif (is_array($this->output) && is_array($other->output)) {
             /** @psalm-suppress MixedArgument */
             return new Succeed(
                 array_merge($this->output, $other->output),
@@ -128,7 +121,10 @@ final class Succeed implements ParseResult
             );
         }
 
-        throw new Exception("@TODO cannot append ParseResult<". gettype($this->output) .">");
+        $type1 = gettype($this->output);
+        $type2 = gettype($other->output);
+
+        throw new Exception("Append only works for ParseResult<T> instances with the same type T, got ParseResult<$type1> and ParseResult<$type2>.");
     }
 
     /**
