@@ -93,8 +93,6 @@ final class Succeed implements ParseResult
 
     /**
      * @TODO    This is hardcoded to only deal with certain types. We need an interface with a append() for arbitrary types.
-     *
-     * @psalm-suppress MixedArgumentTypeCoercion
      */
     private function appendSuccess(Succeed $other): ParseResult
     {
@@ -106,15 +104,13 @@ final class Succeed implements ParseResult
             return new Succeed(null, $other->remainder);
         } elseif(!$type1isNull && $type2isNull) {
             return new Succeed($this->output, $other->remainder);
-        } elseif($type1isNull && !$type2isNull) {
+        } elseif($type1isNull) {
             return new Succeed($other->output, $other->remainder);
         }
 
         if (is_string($this->output) && is_string($other->output)) {
-            /** @psalm-suppress MixedOperand */
             return new Succeed($this->output . $other->output, $other->remainder);
         } elseif (is_array($this->output) && is_array($other->output)) {
-            /** @psalm-suppress MixedArgument */
             return new Succeed(
                 array_merge($this->output, $other->output),
                 $other->remainder
