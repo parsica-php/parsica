@@ -86,7 +86,7 @@ final class StringStream implements Stream
      */
     public function takeWhile(callable $predicate): TakeResult
     {
-        if($this->string === '') {
+        if ($this->string === '') {
             return new TakeResult("", $this);
         }
 
