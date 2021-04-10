@@ -62,7 +62,7 @@ final class Parser
     {
         return new Parser(
         // Make a placeholder parser that will throw when you try to run it.
-            static function (Stream $input): ParseResult {
+            static function (Stream $_): ParseResult {
                 throw new Exception(
                     "Can't run a recursive parser that hasn't been setup properly yet. "
                     . "A parser created by recursive(), must then be called with ->recurse(Parser) "

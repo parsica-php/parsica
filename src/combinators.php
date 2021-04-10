@@ -270,6 +270,7 @@ function collect(Parser ...$parsers): Parser
 /**
  * Tries each parser one by one, returning the result of the first one that succeeds.
  *
+ * @no-named-arguments
  * @psalm-param non-empty-list<Parser<mixed>> $parsers
  * @psalm-return Parser<mixed>
  * @api
@@ -295,6 +296,7 @@ function any(Parser ...$parsers): Parser
  *
  * Alias for {@see any()}
  *
+ * @no-named-arguments
  * @psalm-param non-empty-list<Parser<mixed>> $parsers
  * @psalm-return Parser<mixed>
  * @api

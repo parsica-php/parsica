@@ -28,7 +28,8 @@ final class Assert
     }
 
     /**
-     * @psalm-assert non-empty-list $l
+     * @psalm-assert list $l
+     * @psalm-assert !empty $l
      */
     public static function nonEmptyList(array $l, string $message): void
     {

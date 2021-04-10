@@ -37,6 +37,7 @@ final class StringStream implements Stream
      */
     public function take1(): TakeResult
     {
+        /** @psalm-suppress UnusedMethodCall */
         $this->guardEndOfStream();
 
         $token = mb_substr($this->string, 0, 1);
@@ -75,6 +76,7 @@ final class StringStream implements Stream
             return new TakeResult("", $this);
         }
 
+        /** @psalm-suppress UnusedMethodCall */
         $this->guardEndOfStream();
 
         $chunk = mb_substr($this->string, 0, $n);
