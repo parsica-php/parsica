@@ -63,6 +63,6 @@
         "phpunit": "vendor/bin/phpunit",
         "psalm": "vendor/bin/psalm",
         "uptodocs": "docs/testdocs",
-        "benchmark": "vendor/bin/phpbench run benchmarks --report=aggregate"
+        "benchmark": "phpbench run benchmarks --report=aggregate"
     }
 }
