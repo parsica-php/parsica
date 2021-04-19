@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Verraes\Parsica;
+namespace Parsica\Parsica;
 
 use InvalidArgumentException;
 use MallardDuck\ImmutableReadFile\ImmutableFile;
-use Verraes\Parsica\Internal\EndOfStream;
-use Verraes\Parsica\Internal\Position;
-use Verraes\Parsica\Internal\TakeResult;
+use Parsica\Parsica\Internal\EndOfStream;
+use Parsica\Parsica\Internal\Position;
+use Parsica\Parsica\Internal\TakeResult;
 
 /**
  * @psalm-external-mutation-free

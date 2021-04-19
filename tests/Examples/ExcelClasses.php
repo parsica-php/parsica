@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Verraes\Parsica\Examples;
+namespace Tests\Parsica\Parsica\Examples;
 
 class Cell
 {

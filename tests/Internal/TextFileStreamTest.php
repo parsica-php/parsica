@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Verraes\Parsica\Internal;
+namespace Tests\Parsica\Parsica\Internal;
 
 use PHPUnit\Framework\TestCase;
-use Verraes\Parsica\Internal\Position;
-use Verraes\Parsica\TextFileStream;
+use Parsica\Parsica\Internal\Position;
+use Parsica\Parsica\TextFileStream;
 
 final class TextFileStreamTest extends TestCase
 {
