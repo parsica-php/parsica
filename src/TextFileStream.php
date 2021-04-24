@@ -5,7 +5,7 @@ namespace Parsica\Parsica;
 use InvalidArgumentException;
 use MallardDuck\ImmutableReadFile\ImmutableFile;
 use Parsica\Parsica\Internal\EndOfStream;
-use Parsica\Parsica\Internal\Position;
+use Parsica\Parsica\Internal\PositionWithBytes;
 use Parsica\Parsica\Internal\TakeResult;
 
 /**
@@ -19,14 +19,14 @@ final class TextFileStream implements Stream
      * @psalm-allow-private-mutation
      */
     private ImmutableFile $fileHandle;
-    private Position $position;
+    private PositionWithBytes $position;
 
-    public static function createFromPosition(Position $position): self
+    public static function createFromPosition(PositionWithBytes $position): self
     {
         return new self($position->filename(), $position);
     }
 
-    public function __construct(string $filePath, ?Position $position = null)
+    public function __construct(string $filePath, ?PositionWithBytes $position = null)
     {
         /**
          * @psalm-suppress ImpureFunctionCall
@@ -35,7 +35,7 @@ final class TextFileStream implements Stream
             throw new InvalidArgumentException("The file path for the text-file is not a valid file.");
         }
         $this->filePath = $filePath;
-        $this->position = $position ?? Position::initial($this->filePath);
+        $this->position = $position ?? PositionWithBytes::initial($this->filePath);
         $this->fileHandle = ImmutableFile::fromFilePathWithPosition($this->filePath, $this->position->bytePosition());
     }
 
@@ -154,7 +154,7 @@ final class TextFileStream implements Stream
     /**
      * @inheritDoc
      */
-    public function position(): Position
+    public function position(): PositionWithBytes
     {
         return $this->position;
     }

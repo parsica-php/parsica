@@ -10,7 +10,7 @@
 
 namespace Parsica\Parsica;
 
-use Parsica\Parsica\Internal\Position;
+use Parsica\Parsica\Internal\BasePosition;
 use Parsica\Parsica\Internal\TakeResult;
 
 /**
@@ -67,5 +67,5 @@ interface Stream
      *
      * @internal
      */
-    public function position() : Position;
+    public function position() : BasePosition;
 }

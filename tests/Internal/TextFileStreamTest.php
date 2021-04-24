@@ -11,7 +11,7 @@
 namespace Tests\Parsica\Parsica\Internal;
 
 use PHPUnit\Framework\TestCase;
-use Parsica\Parsica\Internal\Position;
+use Parsica\Parsica\Internal\PositionWithBytes;
 use Parsica\Parsica\TextFileStream;
 
 final class TextFileStreamTest extends TestCase
@@ -33,7 +33,7 @@ final class TextFileStreamTest extends TestCase
         $s = new TextFileStream($testStub);
         $t = $s->take1();
         $this->assertEquals("a", $t->chunk());
-        $expectedPosition = new Position($testStub, 1, 2, 1);
+        $expectedPosition = new PositionWithBytes($testStub, 1, 2, 1);
         $expectedStream = new TextFileStream($testStub, $expectedPosition);
         // Because the file socket stream is unique we compare individual aspects...
         $this->assertEquals($expectedStream->position(), $t->stream()->position());
@@ -48,7 +48,7 @@ final class TextFileStreamTest extends TestCase
         $s = new TextFileStream($testStub);
         $t = $s->takeN(3);
         $this->assertEquals("abc", $t->chunk());
-        $expectedPosition = new Position($testStub, 1, 4, 3);
+        $expectedPosition = new PositionWithBytes($testStub, 1, 4, 3);
         $expectedStream = new TextFileStream($testStub, $expectedPosition);
         $this->assertEquals($expectedStream->position(), $t->stream()->position());
         $this->assertEquals($expectedStream->filePath(), $t->stream()->filePath());
@@ -62,7 +62,7 @@ final class TextFileStreamTest extends TestCase
         $s = new TextFileStream($testStub);
         $t = $s->takeWhile(fn($c) => $c !== "\n");
         $this->assertEquals("abc", $t->chunk());
-        $expectedPosition = new Position($testStub, 1, 4, 3);
+        $expectedPosition = new PositionWithBytes($testStub, 1, 4, 3);
         $expectedStream = new TextFileStream($testStub, $expectedPosition);
         $this->assertEquals($expectedStream->position(), $t->stream()->position());
         $this->assertEquals($expectedStream->filePath(), $t->stream()->filePath());
