@@ -56,7 +56,7 @@ JSON;
 
     /**
      * @Revs(5)
-     * @Iterations(3)
+     * @Iterations(10)
      */
     public function bench_json_encode()
     {
