@@ -419,7 +419,6 @@ function some(Parser $parser): Parser
     return map(
             collect($parser, many($parser)),
             /**
-             * @template T
              * @psalm-param array{0: T, 1: list<T>} $o
              * @psalm-return list<T>
              */
