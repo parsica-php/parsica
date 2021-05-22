@@ -55,8 +55,8 @@ JSON;
     }
 
     /**
-     * @Revs(5)
-     * @Iterations(3)
+     * @Revs(10)
+     * @Iterations(10)
      */
     public function bench_json_encode()
     {
@@ -64,8 +64,8 @@ JSON;
     }
 
     /**
-     * @Revs(5)
-     * @Iterations(3)
+     * @Revs(10)
+     * @Iterations(10)
      */
     public function bench_Parsica_JSON()
     {
@@ -74,8 +74,8 @@ JSON;
 
 
     /**
-     * @Revs(5)
-     * @Iterations(3)
+     * @Revs(10)
+     * @Iterations(10)
      */
     public function bench_basemax_jpophp()
     {
