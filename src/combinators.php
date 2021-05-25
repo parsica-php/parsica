@@ -149,7 +149,7 @@ function sequence(Parser $first, Parser $second): Parser
  * @template T2
  * @psalm-param Parser<T1> $first
  * @psalm-param Parser<T2> $second
- * @psalm-return Parser<T2>
+ * @psalm-return Parser<T1>
  * @api
  */
 function keepFirst(Parser $first, Parser $second): Parser
