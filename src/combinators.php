@@ -164,6 +164,11 @@ function keepFirst(Parser $first, Parser $second): Parser
 /**
  * Sequence two parsers, and return the output of the second one.
  *
+ * @template T1
+ * @template T2
+ * @psalm-param Parser<T1> $first
+ * @psalm-param Parser<T2> $second
+ * @psalm-return Parser<T2>
  * @api
  */
 function keepSecond(Parser $first, Parser $second): Parser
