@@ -22,7 +22,7 @@ In fact, very often there are both a function and an instance method for the sam
 
 ## Types
 
-There are no generics in PHP 7.4, but we use thee Psalm static typechecker to simulate some of it. The two type are really `Parser<T>` and `ParseResult<T>`, where `T` is the type of the resulting output in the case of a successful parse. 
+There are no generics in PHP 7.4, but we use the Psalm static typechecker to simulate some of it. The two type are really `Parser<T>` and `ParseResult<T>`, where `T` is the type of the resulting output in the case of a successful parse. 
 
 ## Either
 
