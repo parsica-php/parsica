@@ -392,18 +392,36 @@ function repeat(int $n, Parser $parser): Parser
  *
  * @template T
  *
+ * $psalm-param positive-int $n
  * @psalm-param Parser<T> $parser
  *
- * @psalm-return Parser<T>
+ * @psalm-return Parser<list<T>>
  * @api
  */
 function repeatList(int $n, Parser $parser): Parser
 {
-    $parser = map($parser, /** @psalm-param mixed $output */ fn($output): array => [$output]);
+    /** @palm-var Parser<list<T>> $parser */
+    $parser = map(
+        $parser,
+        /**
+         * @psalm-param T $output
+         * @psalm-return list<T>
+         */
+        fn($output): array => [$output]
+    );
 
     $parsers = array_fill(0, $n - 1, $parser);
+
     return foldl(
         $parsers,
+        /**
+         * @psalm-param Parser<list<T>> $l
+         * @psalm-param Parser<list<T>> $r
+         * @psalm-return Parser<list<T>>
+         *
+         * @psalm-suppress InvalidReturnType
+         * @psalm-suppress InvalidReturnStatement
+         */
         fn(Parser $l, Parser $r): Parser => append($l, $r),
         $parser
     )->label("$n times " . $parser->getLabel());
