@@ -392,7 +392,7 @@ function repeat(int $n, Parser $parser): Parser
  *
  * @template T
  *
- * $psalm-param positive-int $n
+ * @psalm-param positive-int $n
  * @psalm-param Parser<T> $parser
  *
  * @psalm-return Parser<list<T>>
