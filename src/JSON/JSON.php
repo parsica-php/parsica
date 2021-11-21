@@ -13,6 +13,8 @@ namespace Parsica\Parsica\JSON;
 use Parsica\Parsica\Parser;
 use function Parsica\Parsica\{any,
     anySingleBut,
+    assemble,
+    atLeastOne,
     between,
     char,
     choice,
@@ -22,13 +24,13 @@ use function Parsica\Parsica\{any,
     isCharCode,
     keepFirst,
     map,
+    optional,
     recursive,
     repeat,
     satisfy,
     sepBy,
     string,
-    takeWhile,
-    zeroOrMore};
+    takeWhile};
 
 /**
  * JSON parser and utility parsers
@@ -180,24 +182,31 @@ final class JSON
      */
     public static function stringLiteral(): Parser
     {
+        $simpleCase = fn(string $char): bool => !in_array($char, ['"', '\\']);
         return JSON::token(
             between(
                 char('"'),
                 char('"'),
-                zeroOrMore(
-                    choice(
-                        satisfy(fn(string $char): bool => !in_array($char, ['"', '\\'])),
-                        char("\\")->followedBy(
-                            choice(
-                                char("\"")->map(fn($_) => '"'),
-                                char("\\")->map(fn($_) => '\\'),
-                                char("/")->map(fn($_) => '/'),
-                                char("b")->map(fn($_) => mb_chr(8)),
-                                char("f")->map(fn($_) => mb_chr(12)),
-                                char("n")->map(fn($_) => "\n"),
-                                char("r")->map(fn($_) => "\r"),
-                                char("t")->map(fn($_) => "\t"),
-                                char("u")->sequence(repeat(4, hexDigitChar()))->map(fn($o) => mb_chr(hexdec($o))),
+                assemble(
+                    takeWhile($simpleCase),
+                    // unrolled loop following Jeffrey E.F. Friedl
+                    optional(
+                        atLeastOne(
+                            assemble(
+                                char("\\")->followedBy(
+                                    choice(
+                                        char("\"")->map(fn($_) => '"'),
+                                        char("\\")->map(fn($_) => '\\'),
+                                        char("/")->map(fn($_) => '/'),
+                                        char("b")->map(fn($_) => mb_chr(8)),
+                                        char("f")->map(fn($_) => mb_chr(12)),
+                                        char("n")->map(fn($_) => "\n"),
+                                        char("r")->map(fn($_) => "\r"),
+                                        char("t")->map(fn($_) => "\t"),
+                                        char("u")->sequence(repeat(4, hexDigitChar()))->map(fn($o) => mb_chr(hexdec($o))),
+                                    )
+                                ),
+                                takeWhile($simpleCase)
                             )
                         )
                     )
