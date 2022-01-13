@@ -17,7 +17,7 @@ assertEquals("bc", $result->remainder());
 
 `isEqual('a')` is a predicate. If you call it with another argument, you get a boolean: `isEqual('a')('b') == false`.
 
-`satisfy($predicate)` is a function returns a `Parser` object. You can think of it as a parser constructor. This object will do the heavy lifting of taking the first character of `$input`, and testing it with the predicate. 
+`satisfy($predicate)` is a function that returns a `Parser` object. You can think of it as a parser constructor. This object will do the heavy lifting of taking the first character of `$input`, and testing it with the predicate. 
 
 Parsica comes with some useful predicates, including boolean and/or/not combinators: 
 
@@ -85,7 +85,7 @@ assertEquals("parsica", $result->output());
 
 ## Other parsers
 
-Parsica comes with a growing library of other useful parsers, such as numeric types, and spaces. Always make sure to check the API documentation to know what the type of a parser is (aka the tpye of the output that the parser will produce.) For example, parsers like `space`, `tab`, and `newline` all output strings containing the characters they matched. On the other hand, `skipSpace` will output `null`, no matter if it consumed spaces or not. This makes sense because the point is to ignore them, not use them.    
+Parsica comes with a growing library of other useful parsers, such as numeric types, and spaces. Always make sure to check the API documentation to know what the type of a parser is (aka the type of the output that the parser will produce.) For example, parsers like `space`, `tab`, and `newline` all output strings containing the characters they matched. On the other hand, `skipSpace` will output `null`, no matter if it consumed spaces or not. This makes sense because the point is to ignore them, not use them.    
 
 `skipSpace` consumes all kinds of space, whereas `skipHSpace` will stop consuming at newlines and carriage returns. They also come with two friends, `skipSpace1` and `skipHSpace1`, which expect at least on space to present.
 
