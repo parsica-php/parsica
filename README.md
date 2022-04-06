@@ -35,4 +35,6 @@ composer run uptodocs
 composer run test
 ```
 
+## Maintainer
 
+Regrettably, the maintainer of this library (@turanct) has passed away in December 2021 due to cancer. At the moment, there is no maintainer. Contact @mathiasverraes if you're interested in working on this project. 
