@@ -3,6 +3,7 @@
 .private/
 .php_cs.cache
 .phpunit.result.cache
+.phpbench/
 Gherkin
 infection.log
 per-mutator.md
