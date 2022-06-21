@@ -16,7 +16,7 @@ namespace Parsica\Parsica\Internal;
  * @psalm-immutable
  * @psalm-external-mutation-free
  */
-final class Position implements BasePosition
+final class PositionWithBytes implements BasePosition
 {
     /** @psalm-readonly  */
     private string $filename;
@@ -24,21 +24,24 @@ final class Position implements BasePosition
     private int $line;
     /** @psalm-readonly  */
     private int $column;
+    /** @psalm-readonly  */
+    private int $bytePosition;
 
-    function __construct(string $filename, int $line, int $column)
+    function __construct(string $filename, int $line, int $column, int $bytePosition)
     {
         $this->filename = $filename;
         $this->line = $line;
         $this->column = $column;
+        $this->bytePosition = $bytePosition;
     }
 
     /**
      * Initial position (line 1, column 1). The optional filename is the source of the input, and is really just a label
      * to make more useful error messages.
      */
-    public static function initial(string $filename = "<input>"): Position
+    public static function initial(string $filename = "<input>"): PositionWithBytes
     {
-        return new Position($filename, 1, 1);
+        return new PositionWithBytes($filename, 1, 1, 0);
     }
 
     /**
@@ -49,10 +52,11 @@ final class Position implements BasePosition
         return $this->filename . ":" . $this->line . ":" . $this->column;
     }
 
-    public function advance(string $parsed): Position
+    public function advance(string $parsed): PositionWithBytes
     {
         $column = $this->column;
         $line = $this->line;
+        $bytePosition = $this->bytePosition;
         /** @psalm-var string $char */
         foreach (mb_str_split($parsed, 1) as $char) {
             switch ($char) {
@@ -67,9 +71,10 @@ final class Position implements BasePosition
                 default:
                     $column++;
             }
+            $bytePosition += strlen($char);
         }
 
-        return new Position($this->filename, $line, $column);
+        return new PositionWithBytes($this->filename, $line, $column, $bytePosition);
     }
 
     public function filename(): string
@@ -85,5 +90,10 @@ final class Position implements BasePosition
     public function column(): int
     {
         return $this->column;
+    }
+
+    public function bytePosition(): int
+    {
+        return $this->bytePosition;
     }
 }

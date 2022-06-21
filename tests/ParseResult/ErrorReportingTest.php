@@ -49,7 +49,7 @@ final class ErrorReportingTest extends TestCase
     public function failing_with_an_advanced_position()
     {
         $parser = char('a');
-        $input = new StringStream("bcd", new Position("/path/to/file", 5, 10));
+        $input = new StringStream("bcd", new Position("/path/to/file", 5, 10, 0));
         $result = $parser->run($input);
         $expected =
             <<<ERROR

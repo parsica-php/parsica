@@ -12,6 +12,7 @@ namespace Parsica\Parsica\PHPUnit;
 
 use Exception;
 use Parsica\Parsica\Parser;
+use Parsica\Parsica\Stream;
 use Parsica\Parsica\StringStream;
 
 /**
@@ -30,6 +31,29 @@ trait ParserAssertions
     protected function assertParses(string $input, Parser $parser, $expectedOutput, string $message = ""): void
     {
         $input = new StringStream($input);
+        $actualResult = $parser->run($input);
+        if ($actualResult->isSuccess()) {
+            $this->assertStrictlyEquals(
+                $expectedOutput,
+                $actualResult->output(),
+                $message . "\n" . "The parser succeeded but the output doesn't match your expected output."
+            );
+        } else {
+            $this->fail(
+                $message . "\n"
+                ."The parser failed with the following error message:\n"
+                .$actualResult->errorMessage()."\n"
+            );
+        }
+    }
+
+    /**
+     * @psalm-param mixed $expectedOutput
+     *
+     * @api
+     */
+    protected function assertParsesStream(Stream $input, Parser $parser, $expectedOutput, string $message = ""): void
+    {
         $actualResult = $parser->run($input);
         if ($actualResult->isSuccess()) {
             $this->assertStrictlyEquals(
