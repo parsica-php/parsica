@@ -11,10 +11,11 @@
 namespace Parsica\Parsica\Expression;
 
 use Parsica\Parsica\Parser;
-use function Cypress\Curry\curry;
+
 use function Parsica\Parsica\choice;
 use function Parsica\Parsica\collect;
 use function Parsica\Parsica\Internal\FP\foldr;
+use function Parsica\Parsica\Internal\FP\curry;
 use function Parsica\Parsica\keepFirst;
 use function Parsica\Parsica\many;
 use function Parsica\Parsica\map;
