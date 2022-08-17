@@ -11,14 +11,14 @@
 namespace Tests\Parsica\Parsica\Internal\FP;
 
 use PHPUnit\Framework\TestCase;
-use function Cypress\Curry\curry;
+use function Parsica\Parsica\Internal\FP\curry;
 
 final class CurryTest extends TestCase
 {
     /** @test */
     public function curry()
     {
-        $f = fn($a, $b, $c) => $a + $b + $c;
+        $f = static fn($a, $b, $c) => $a + $b + $c;
         $curried = curry($f);
 
         $this->assertIsCallable($curried);
