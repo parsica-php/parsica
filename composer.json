@@ -63,6 +63,7 @@
         "phpunit": "vendor/bin/phpunit",
         "psalm": "vendor/bin/psalm",
         "uptodocs": "docs/testdocs",
-        "benchmark": "phpbench run benchmarks --report=aggregate"
+        "benchmark": "phpbench run benchmarks --report=aggregate",
+        "benchmark-opcache": "phpbench run benchmarks --report=aggregate --php-config=\"{opcache.enable_cli: 1}\""
     }
 }
