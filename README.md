@@ -1,5 +1,6 @@
 # Parsica
 
+
 [![Tests](https://github.com/parsica-php/parsica/actions/workflows/tests.yml/badge.svg)](https://github.com/parsica-php/parsica/actions/workflows/tests.yml)
 
 The easiest way to build robust parsers in PHP.
@@ -20,6 +21,9 @@ echo $result->output(); // Hello
 
 ![Twitter Follow](https://img.shields.io/twitter/follow/parsica_php?style=social)
 
+## Project status
+
+Regrettably, the maintainer of this library (@turanct) has passed away in December 2021 due to cancer. At the moment, there is no maintainer. If you'd like to contribute to this library, or if you wish to use this library for a project and need consulting, contact the original author Mathias Verraes mathias at verraes net.
 
 ## Development
 
@@ -35,6 +39,4 @@ composer run uptodocs
 composer run test
 ```
 
-## Maintainer
 
-Regrettably, the maintainer of this library (@turanct) has passed away in December 2021 due to cancer. At the moment, there is no maintainer. Contact @mathiasverraes if you're interested in working on this project. 
