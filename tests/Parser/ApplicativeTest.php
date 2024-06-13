@@ -13,7 +13,7 @@ namespace Tests\Parsica\Parsica\Parser;
 use \InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Parsica\Parsica\PHPUnit\ParserAssertions;
-use function Cypress\Curry\curry;
+use function Parsica\Parsica\Internal\FP\curry;
 use function Parsica\Parsica\{alphaChar,
     anything,
     atLeastOne,
@@ -258,4 +258,3 @@ final class ApplicativeTest extends TestCase
         $this->assertParses("EURUSDGBP", $parser, ["EUR", "USD", "GBP"]);
     }
 }
-

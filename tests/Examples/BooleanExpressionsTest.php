@@ -23,15 +23,15 @@ final class BooleanExpressionsTest extends TestCase
     /** @test */
     public function booleanExpressions()
     {
-        $token = fn(Parser $parser) : Parser => keepFirst($parser, skipHSpace());
-        $parens = fn (Parser $parser): Parser =>  $token(between($token(char('(')), $token(char(')')), $parser));
-        $term = fn(): Parser => $token(choice(
+        $token = static fn(Parser $parser) : Parser => keepFirst($parser, skipHSpace());
+        $parens = static fn (Parser $parser): Parser =>  $token(between($token(char('(')), $token(char(')')), $parser));
+        $term = static fn(): Parser => $token(choice(
             string("TRUE")->map(fn($v) => new True_),
             string("FALSE")->map(fn($v) => new False_),
         ));
-        $NOT = unaryOperator($token(string("NOT")), fn($v) => new Not_($v));
-        $AND = binaryOperator($token(string("AND")), fn($l, $r) => new And_($l, $r));
-        $OR = binaryOperator($token(string("OR")), fn($l, $r) => new Or_($l, $r));
+        $NOT = unaryOperator($token(string("NOT")), static fn($v) => new Not_($v));
+        $AND = binaryOperator($token(string("AND")), static fn($l, $r) => new And_($l, $r));
+        $OR = binaryOperator($token(string("OR")), static fn($l, $r) => new Or_($l, $r));
 
         $expr = recursive();
         $expr->recurse(expression(

@@ -27,7 +27,7 @@ function flip(callable $f): callable
      * @psalm-param Tb $y
      * @psalm-return Tc
      */
-    return fn($x, $y) => $f($y, $x);
+    return static fn($x, $y) => $f($y, $x);
 }
 
 
@@ -65,4 +65,23 @@ function foldr(array $input, callable $function, $initial) {
         $initial = $function($head, $initial);
     }
     return $initial;
+}
+
+function curry(callable $callable, ...$initialArgs): callable {
+
+    $reflector = new \ReflectionFunction($callable);
+    $expectedArgumentCount = $reflector->getNumberOfRequiredParameters();
+    return curry_internal($callable, $initialArgs, $expectedArgumentCount);
+}
+
+function curry_internal(callable $callable, array $args, int $expectedArgumentCount): callable
+{
+    return static function(...$newArgs) use ($callable, $args, $expectedArgumentCount) {
+        $args = [...$args, ...$newArgs];
+        if (count($args) >= $expectedArgumentCount) {
+            return $callable(...$args);
+        } else {
+            return curry_internal($callable, $args, $expectedArgumentCount);
+        }
+    };
 }
