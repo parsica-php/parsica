@@ -15,7 +15,7 @@ use Parsica\Parsica\Internal\Position;
 use Parsica\Parsica\Internal\TakeResult;
 
 /**
- * @psalm-immutable
+ * @psalm-external-mutation-free
  */
 final class StringStream implements Stream
 {
