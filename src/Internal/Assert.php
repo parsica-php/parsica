@@ -11,7 +11,6 @@
 namespace Parsica\Parsica\Internal;
 
 use InvalidArgumentException;
-use Parsica\Parsica\Parser;
 
 /**
  * @internal

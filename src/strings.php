@@ -45,7 +45,7 @@ function string(string $str): Parser
 }
 
 /**
- * Parse a non-empty string, case-insensitive and case-preserving. On success it returns the string cased as the
+ * Parse a non-empty string, case-insensitive and case-preserving. On success, it returns the string cased as the
  * actually parsed input.
  * eg stringI("foobar")->tryString("foObAr") will succeed with "foObAr"
  *
@@ -60,8 +60,14 @@ function stringI(string $str): Parser
     Assert::nonEmpty($str);
     /** @psalm-var list<string> $split */
     $split = mb_str_split($str);
-    $chars = array_map(fn(string $c): Parser => charI($c), $split);
-    /** @psalm-var Parser<string> $parser */
+    $chars = array_map(
+        fn(string $c): Parser => charI($c),
+        $split
+    );
+    /**
+     * @psalm-var Parser<string> $parser
+     * @psalm-suppress
+     */
     $parser = foldl(
         $chars,
         fn(Parser $l, Parser $r): Parser => append($l, $r),

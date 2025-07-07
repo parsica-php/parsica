@@ -14,7 +14,6 @@ use BadMethodCallException;
 use Exception;
 use Parsica\Parsica\Parser;
 use Parsica\Parsica\ParseResult;
-use Parsica\Parsica\ParserHasFailed;
 use Parsica\Parsica\Stream;
 
 /**
