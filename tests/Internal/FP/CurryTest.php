@@ -11,7 +11,7 @@
 namespace Tests\Parsica\Parsica\Internal\FP;
 
 use PHPUnit\Framework\TestCase;
-use function Cypress\Curry\curry;
+use function Parsica\Parsica\Curry\curry;
 
 final class CurryTest extends TestCase
 {

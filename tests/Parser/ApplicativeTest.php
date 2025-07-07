@@ -13,11 +13,11 @@ namespace Tests\Parsica\Parsica\Parser;
 use \InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Parsica\Parsica\PHPUnit\ParserAssertions;
-use function Cypress\Curry\curry;
 use function Parsica\Parsica\{alphaChar,
     anything,
     atLeastOne,
     char,
+    Curry\curry,
     digitChar,
     keepFirst,
     keepSecond,

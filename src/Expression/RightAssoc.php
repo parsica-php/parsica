@@ -11,7 +11,7 @@
 namespace Parsica\Parsica\Expression;
 
 use Parsica\Parsica\Parser;
-use function Cypress\Curry\curry;
+use function Parsica\Parsica\Curry\curry;
 use function Parsica\Parsica\choice;
 use function Parsica\Parsica\collect;
 use function Parsica\Parsica\Internal\FP\foldr;
