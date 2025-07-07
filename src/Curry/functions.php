@@ -11,14 +11,10 @@ use ReflectionFunction;
 
 function curry(callable $callable) : callable
 {
-    if (_number_of_required_params($callable) === 0) {
-        return _make_function($callable);
-    }
-    if (_number_of_required_params($callable) === 1) {
-        return _curry_array_args($callable, _rest(func_get_args()));
-    }
+    return _number_of_required_params($callable) === 0
+        ? _make_function($callable)
+        : _curry_array_args($callable, _rest(func_get_args()));
 
-    return _curry_array_args($callable, _rest(func_get_args()));
 }
 
 /**
@@ -28,8 +24,9 @@ function curry(callable $callable) : callable
  */
 function curry_right(callable $callable) : callable
 {
-    if (_number_of_required_params($callable) < 2) return _make_function($callable);
-    return _curry_array_args($callable, _rest(func_get_args()), false);
+    return _number_of_required_params($callable) < 2
+        ? _make_function($callable)
+        : _curry_array_args($callable, _rest(func_get_args()), false);
 }
 
 /**
@@ -55,8 +52,8 @@ function _curry_array_args(callable $callable, array $args, bool $left = true) :
 
 /**
  * @param $callable
- * @param $args
- * @param $left
+ * @param array $args
+ * @param mixed $left
  *
  * @return mixed
  * @internal
@@ -67,18 +64,18 @@ function _execute(callable $callable, array $args, $left)
         $args = array_reverse($args);
     }
 
-    $placeholders = _placeholder_positions($args);
-    if (0 < count($placeholders)) {
-        $n = _number_of_required_params($callable);
-        if ($n <= _last($placeholders)) {
-            // This means that we have more placeholders than needed
+    $placeholderPositions = _placeholder_positions($args);
+    if (0 < count($placeholderPositions)) {
+        $reqdParams = _number_of_required_params($callable);
+        if ($reqdParams <= _last($placeholderPositions)) {
+            // This means that we have more placeholderPositions than needed
             // I know that throwing exceptions is not really the
             // functional way, but this case should not happen.
             throw new \Exception("Argument Placeholder found on unexpected position !");
         }
-        foreach ($placeholders as $i) {
-            $args[$i] = $args[$n];
-            array_splice($args, $n, 1);
+        foreach ($placeholderPositions as $i) {
+            $args[$i] = $args[$reqdParams];
+            array_splice($args, $reqdParams, 1);
         }
     }
 
@@ -156,7 +153,7 @@ function _is_placeholder($arg) : bool
  *
  * @param array $args
  *
- * @return array
+ * @return list<int|string>
  * @internal
  */
 function _placeholder_positions(array $args) : array
