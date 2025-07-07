@@ -62,8 +62,8 @@ final class GH26_Test extends TestCase
     public function only_the_first_successful_parser_in_an_either_should_call_emit()
     {
         $x = new class {
-            public $first = false;
-            public $second = false;
+            public bool $first = false;
+            public bool $second = false;
         };
 
         $parser = either(
