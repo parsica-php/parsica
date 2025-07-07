@@ -56,11 +56,11 @@ class Json
     // token type of current state in decode()
     public $token = null;
     // length and last index of the input, it update using decode()
-    public $length = 0;
-    // input string, it update using decode()
-    public $input = "";
+    public int $length = 0;
+    // input string, it updates using decode()
+    public string $input = "";
     // current state and index of pointer at the input string
-    public $index = 0;
+    public int $index = 0;
 
     /**
      * @function typeToken($token)
