@@ -52,7 +52,7 @@ function float(): Parser
     $fraction = char('.')->append($digits);
     $sign = char('+')->or(char('-'))->or(pure('+'));
     $exponent = assemble(
-        charI('e')->map('strtoupper'),
+        charI('e')->map(fn(string $s) : string => strtoupper($s)),
         $sign,
         $digits
     );

@@ -64,10 +64,7 @@ function stringI(string $str): Parser
         fn(string $c): Parser => charI($c),
         $split
     );
-    /**
-     * @psalm-var Parser<string> $parser
-     * @psalm-suppress
-     */
+    /** @psalm-var Parser<string> $parser */
     $parser = foldl(
         $chars,
         fn(Parser $l, Parser $r): Parser => append($l, $r),
