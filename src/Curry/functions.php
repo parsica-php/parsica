@@ -22,17 +22,6 @@ function curry(callable $callable) : callable
 }
 
 /**
- * @param       $callable
- * @param array $args pass the arguments to be curried as an array
- *
- * @return callable
- */
-function curry_args(callable $callable, array $args) : callable
-{
-    return _curry_array_args($callable, $args);
-}
-
-/**
  * @param callable $callable
  *
  * @return callable
@@ -41,17 +30,6 @@ function curry_right(callable $callable) : callable
 {
     if (_number_of_required_params($callable) < 2) return _make_function($callable);
     return _curry_array_args($callable, _rest(func_get_args()), false);
-}
-
-/**
- * @param callable $callable
- * @param array    $args pass the arguments to be curried as an array
- *
- * @return callable
- */
-function curry_right_args(callable $callable, array $args) : callable
-{
-    return _curry_array_args($callable, $args, false);
 }
 
 /**

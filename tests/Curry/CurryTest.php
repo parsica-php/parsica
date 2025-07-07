@@ -17,7 +17,9 @@ use function Parsica\Parsica\Curry\curry_right_args;
 
 final class CurryTest extends TestCase
 {
-    /** @test */
+    /**
+     * @test
+     */
     public function curry_without_params()
     {
         $simpleFunction = curry(function () {
@@ -26,14 +28,18 @@ final class CurryTest extends TestCase
         $this->assertEquals(1, $simpleFunction());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function curry_identity()
     {
         $identity = curry([new TestSubject(), 'identity'], 1);
         $this->assertEquals(1, $identity(1));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function curry_identity_function()
     {
         $func = curry(function ($v) {
@@ -42,23 +48,9 @@ final class CurryTest extends TestCase
         $this->assertEquals('test string', $func());
     }
 
-    /** @test */
-    public function curry_args_identity_function()
-    {
-        $func = curry_args(function ($v) {
-            return $v;
-        }, ['test string']);
-        $this->assertEquals('test string', $func());
-    }
-
-    /** @test */
-    public function curry_args_identity()
-    {
-        $identity = curry_args([new TestSubject(), 'identity'], [1]);
-        $this->assertEquals(1, $identity(1));
-    }
-
-    /** @test */
+    /**
+     * @test
+     */
     public function curry_with_one_later_param()
     {
         $curriedOne = curry([new TestSubject(), 'add2'], 1);
@@ -66,7 +58,9 @@ final class CurryTest extends TestCase
         $this->assertEquals(2, $curriedOne(1));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function curry_with_two_later_param()
     {
         $curriedTwo = curry([new TestSubject(), 'add4'], 1, 1);
@@ -74,15 +68,9 @@ final class CurryTest extends TestCase
         $this->assertEquals(4, $curriedTwo(1, 1));
     }
 
-    /** @test */
-    public function curry_args_with_two_later_param()
-    {
-        $curriedTwo = curry_args([new TestSubject(), 'add4'], [1, 1]);
-        $this->assertInstanceOf('Closure', $curriedTwo);
-        $this->assertEquals(4, $curriedTwo(1, 1));
-    }
-
-    /** @test */
+    /**
+     * @test
+     */
     public function curry_with_successive_calls()
     {
         $curriedTwo = curry([new TestSubject(), 'add4'], 1, 1);
@@ -90,7 +78,9 @@ final class CurryTest extends TestCase
         $this->assertEquals(4, $curriedThree(1));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function curry_right()
     {
         $divideBy10 = curry_right([new TestSubject(), 'divide2'], 10);
@@ -98,36 +88,27 @@ final class CurryTest extends TestCase
         $this->assertEquals(10, $divideBy10(100));
     }
 
-    /** @test */
-    public function curry_right_args()
-    {
-        $divideBy10 = curry_right_args([new TestSubject(), 'divide2'], [10]);
-        $this->assertInstanceOf('Closure', $divideBy10);
-        $this->assertEquals(10, $divideBy10(100));
-    }
-
-    /** @test */
+    /**
+     * @test
+     */
     public function curry_right_immediate()
     {
         $divide3 = curry_right([new TestSubject(), 'divide3'], 5, 2, 20);
         $this->assertEquals(2, $divide3());
     }
 
-    /** @test */
-    public function curry_right_args_immediate()
-    {
-        $divide3 = curry_right_args([new TestSubject(), 'divide3'], [5, 2, 20]);
-        $this->assertEquals(2, $divide3());
-    }
-
-    /** @test */
+    /**
+     * @test
+     */
     public function curry_left_immediate()
     {
         $divide3 = curry([new TestSubject(), 'divide3'], 20, 2, 4);
         $this->assertEquals(2.5, $divide3());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function curry_three_times()
     {
         $divideBy5 = curry([new TestSubject(), 'divide3'], 100);
@@ -135,7 +116,9 @@ final class CurryTest extends TestCase
         $this->assertEquals(2, $divideBy10And5(5));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function curry_right_three_times()
     {
         $divideBy5 = curry_right([new TestSubject(), 'divide3'], 5);
@@ -143,15 +126,9 @@ final class CurryTest extends TestCase
         $this->assertEquals(2, $divideBy10And5(100));
     }
 
-    /** @test */
-    public function curry_right_args_three_times()
-    {
-        $divideBy5 = curry_right_args([new TestSubject(), 'divide3'], [5]);
-        $divideBy10And5 = $divideBy5(10);
-        $this->assertEquals(2, $divideBy10And5(100));
-    }
-
-    /** @test */
+    /**
+     * @test
+     */
     public function curry_using_func_get_args()
     {
 
@@ -212,7 +189,9 @@ final class CurryTest extends TestCase
         $this->assertEquals([1, 2, 'three'], $curriedRightTwo(2, 1));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function curry_with_placeholders()
     {
         $minus = curry(function ($x, $y) {
@@ -247,7 +226,9 @@ final class CurryTest extends TestCase
         $this->assertEquals(10, $sum([1, 2, 3, 4], 0));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function rest()
     {
         $this->assertEquals([1], _rest([1, 1]));
