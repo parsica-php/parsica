@@ -6,6 +6,8 @@
 
 namespace Parsica\Parsica\Curry;
 
+use Closure;
+use Exception;
 use ReflectionClass;
 use ReflectionFunction;
 
@@ -52,13 +54,13 @@ function _curry_array_args(callable $callable, array $args, bool $left = true) :
 
 /**
  * @param $callable
- * @param array $args
+ * @param array<mixed> $args
  * @param mixed $left
  *
  * @return mixed
  * @internal
  */
-function _execute(callable $callable, array $args, $left)
+function _execute(callable $callable, array $args, bool $left = true)
 {
     if (!$left) {
         $args = array_reverse($args);
@@ -71,10 +73,11 @@ function _execute(callable $callable, array $args, $left)
             // This means that we have more placeholderPositions than needed
             // I know that throwing exceptions is not really the
             // functional way, but this case should not happen.
-            throw new \Exception("Argument Placeholder found on unexpected position !");
+            throw new Exception("Argument Placeholder found on unexpected position!");
         }
-        foreach ($placeholderPositions as $i) {
-            $args[$i] = $args[$reqdParams];
+        foreach ($placeholderPositions as $placeholderPosition) {
+            /** @psalm-suppress MixedAssignment  */
+            $args[$placeholderPosition] = $args[$reqdParams];
             array_splice($args, $reqdParams, 1);
         }
     }
@@ -98,10 +101,11 @@ function _rest(array $args) : array
  */
 function _is_fullfilled(callable $callable, array $args) : bool
 {
-    $args = array_filter($args, function ($arg) {
-        return !_is_placeholder($arg);
-    });
-    return count($args) >= _number_of_required_params($callable);
+    $nonPlaceholderArgs = array_filter(
+        $args,
+        fn($arg) => !($arg instanceof Placeholder)
+    );
+    return count($nonPlaceholderArgs) >= _number_of_required_params($callable);
 }
 
 /**
@@ -113,10 +117,11 @@ function _number_of_required_params(callable $callable) : int
         $refl = new ReflectionClass($callable[0]);
         $method = $refl->getMethod($callable[1]);
         return $method->getNumberOfRequiredParameters();
+    } elseif (is_string($callable) || $callable instanceof Closure) {
+        $refl = new ReflectionFunction($callable);
+        return $refl->getNumberOfRequiredParameters();
     }
-
-    $refl = new ReflectionFunction($callable);
-    return $refl->getNumberOfRequiredParameters();
+    throw new Exception("Unexpected other type of callable");
 }
 
 /**
@@ -137,18 +142,6 @@ function _make_function(callable $callable) : callable
 }
 
 /**
- * Checks if an argument is a placeholder.
- *
- * @param mixed $arg
- *
- * @internal
- */
-function _is_placeholder($arg) : bool
-{
-    return $arg instanceof Placeholder;
-}
-
-/**
  * Gets an array of placeholders positions in the given arguments.
  *
  * @param array $args
@@ -158,7 +151,12 @@ function _is_placeholder($arg) : bool
  */
 function _placeholder_positions(array $args) : array
 {
-    return array_keys(array_filter($args, 'Parsica\\Parsica\\Curry\\_is_placeholder'));
+    return array_keys(
+        array_filter(
+            $args,
+            fn($arg) : bool => $arg instanceof Placeholder
+        )
+    );
 }
 
 /**
