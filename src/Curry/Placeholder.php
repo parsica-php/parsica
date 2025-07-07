@@ -13,7 +13,7 @@ namespace Parsica\Parsica\Curry;
  */
 final class Placeholder
 {
-    private static $instance;
+    private static Placeholder $instance;
 
     private function __construct()
     {
@@ -21,8 +21,10 @@ final class Placeholder
 
     public static function get() : Placeholder
     {
-        if (static::$instance === null) static::$instance = new Placeholder;
-        return static::$instance;
+        if (Placeholder::$instance === null) {
+            Placeholder::$instance = new Placeholder;
+        }
+        return Placeholder::$instance;
     }
 
     public function __toString()  : string
