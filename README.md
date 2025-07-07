@@ -23,7 +23,10 @@ echo $result->output(); // Hello
 
 ## Project status
 
-Regrettably, the maintainer of this library (@turanct) has passed away in December 2021 due to cancer. At the moment, there is no maintainer. If you'd like to contribute to this library, or if you wish to use this library for a project and need consulting, contact the original author Mathias Verraes mathias at verraes net.
+The code is well-tested and probably bug-free. It is suitable for complex parsing requirements, and could even be used to build a programming language.
+However, it might not be performant enough if you use it at a high scale. 
+
+Regrettably, the maintainer of this library (@turanct) has passed away in December 2021 due to cancer. The original author @mathiasverraes is now the maintainer again, and is doing occasional minor updates. If you'd like to contribute to this library, or if you wish to use this library for a project and need consulting, contact Mathias via mathias at verraes net. PR and issues submissions may not be monitored.
 
 ## Development
 
