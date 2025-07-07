@@ -6,6 +6,9 @@
 
 namespace Parsica\Parsica\Curry;
 
+use ReflectionClass;
+use ReflectionFunction;
+
 function curry(callable $callable) : callable
 {
     if (_number_of_required_params($callable) === 0) {
@@ -116,10 +119,6 @@ function _rest(array $args) : array
 }
 
 /**
- * @param callable $callable
- * @param          $args
- *
- * @return bool
  * @internal
  */
 function _is_fullfilled(callable $callable, array $args) : bool
@@ -131,19 +130,17 @@ function _is_fullfilled(callable $callable, array $args) : bool
 }
 
 /**
- * @param $callable
- *
- * @return int
  * @internal
  */
 function _number_of_required_params(callable $callable) : int
 {
     if (is_array($callable)) {
-        $refl = new \ReflectionClass($callable[0]);
+        $refl = new ReflectionClass($callable[0]);
         $method = $refl->getMethod($callable[1]);
         return $method->getNumberOfRequiredParameters();
     }
-    $refl = new \ReflectionFunction($callable);
+
+    $refl = new ReflectionFunction($callable);
     return $refl->getNumberOfRequiredParameters();
 }
 
@@ -158,9 +155,9 @@ function _number_of_required_params(callable $callable) : int
  */
 function _make_function(callable $callable) : callable
 {
-    if (is_array($callable)) return function () use ($callable) {
-        return call_user_func_array($callable, func_get_args());
-    };
+    if (is_array($callable)) {
+        return /** @return mixed */ fn() => call_user_func_array($callable, func_get_args());
+    }
     return $callable;
 }
 
@@ -169,7 +166,6 @@ function _make_function(callable $callable) : callable
  *
  * @param mixed $arg
  *
- * @return boolean
  * @internal
  */
 function _is_placeholder($arg) : bool
@@ -212,5 +208,5 @@ function _last(array $array)
  */
 function __() : Placeholder
 {
-    return Placeholder::get();
+    return new Placeholder;
 }
