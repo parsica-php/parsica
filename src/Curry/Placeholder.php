@@ -11,7 +11,7 @@ namespace Parsica\Parsica\Curry;
  * for the placeholder. As defining a constant, even
  * a random one, could collide with other values.
  */
-class Placeholder
+final class Placeholder
 {
     private static $instance;
 
@@ -25,7 +25,7 @@ class Placeholder
         return static::$instance;
     }
 
-    public function __toString()
+    public function __toString()  : string
     {
         return '__';
     }

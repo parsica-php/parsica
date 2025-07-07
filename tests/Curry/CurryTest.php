@@ -15,7 +15,7 @@ use function Parsica\Parsica\Curry\curry_args;
 use function Parsica\Parsica\Curry\curry_right;
 use function Parsica\Parsica\Curry\curry_right_args;
 
-class CurryTest extends TestCase
+final class CurryTest extends TestCase
 {
     public function test_curry_without_params()
     {

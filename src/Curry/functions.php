@@ -6,12 +6,7 @@
 
 namespace Parsica\Parsica\Curry;
 
-/**
- * @param callable $callable
- *
- * @return callable
- */
-function curry($callable)
+function curry(callable $callable) : callable
 {
     if (_number_of_required_params($callable) === 0) {
         return _make_function($callable);
@@ -29,7 +24,7 @@ function curry($callable)
  *
  * @return callable
  */
-function curry_args($callable, array $args)
+function curry_args(callable $callable, array $args) : callable
 {
     return _curry_array_args($callable, $args);
 }
@@ -39,7 +34,7 @@ function curry_args($callable, array $args)
  *
  * @return callable
  */
-function curry_right($callable)
+function curry_right(callable $callable) : callable
 {
     if (_number_of_required_params($callable) < 2) return _make_function($callable);
     return _curry_array_args($callable, _rest(func_get_args()), false);
@@ -51,7 +46,7 @@ function curry_right($callable)
  *
  * @return callable
  */
-function curry_right_args($callable, array $args)
+function curry_right_args(callable $callable, array $args) : callable
 {
     return _curry_array_args($callable, $args, false);
 }
@@ -63,7 +58,7 @@ function curry_right_args($callable, array $args)
  *
  * @return callable
  */
-function _curry_array_args($callable, $args, $left = true)
+function _curry_array_args(callable $callable, array $args, bool $left = true) : callable
 {
     return function () use ($callable, $args, $left) {
         if (_is_fullfilled($callable, $args)) {
@@ -85,7 +80,7 @@ function _curry_array_args($callable, $args, $left = true)
  * @return mixed
  * @internal
  */
-function _execute($callable, $args, $left)
+function _execute(callable $callable, array $args, $left)
 {
     if (!$left) {
         $args = array_reverse($args);
@@ -115,7 +110,7 @@ function _execute($callable, $args, $left)
  * @return array
  * @internal
  */
-function _rest(array $args)
+function _rest(array $args) : array
 {
     return array_slice($args, 1);
 }
@@ -127,7 +122,7 @@ function _rest(array $args)
  * @return bool
  * @internal
  */
-function _is_fullfilled($callable, $args)
+function _is_fullfilled(callable $callable, array $args) : bool
 {
     $args = array_filter($args, function ($arg) {
         return !_is_placeholder($arg);
@@ -141,7 +136,7 @@ function _is_fullfilled($callable, $args)
  * @return int
  * @internal
  */
-function _number_of_required_params($callable)
+function _number_of_required_params(callable $callable) : int
 {
     if (is_array($callable)) {
         $refl = new \ReflectionClass($callable[0]);
@@ -161,7 +156,7 @@ function _number_of_required_params($callable)
  * @return callable
  * @internal
  */
-function _make_function($callable)
+function _make_function(callable $callable) : callable
 {
     if (is_array($callable)) return function () use ($callable) {
         return call_user_func_array($callable, func_get_args());
@@ -177,7 +172,7 @@ function _make_function($callable)
  * @return boolean
  * @internal
  */
-function _is_placeholder($arg)
+function _is_placeholder($arg) : bool
 {
     return $arg instanceof Placeholder;
 }
@@ -213,7 +208,7 @@ function _last(array $array)
  * Gets a special placeholder value used to specify "gaps" within curried
  * functions, allowing partial application of any combination of arguments,
  * regardless of their positions. Should be used only for required arguments.
- * When used, optional arguments must be at the end of the arguments list.
+ * When used, optional arguments must be at the end of the argument list.
  */
 function __() : Placeholder
 {
