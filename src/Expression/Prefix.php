@@ -18,6 +18,7 @@ use function Parsica\Parsica\pure;
  * @internal
  * @template TSymbol
  * @template TExpressionAST
+ * @psalm-immutable
  */
 final class Prefix implements ExpressionType
 {
@@ -26,6 +27,8 @@ final class Prefix implements ExpressionType
 
     /**
      * @psalm-param non-empty-list<UnaryOperator<TSymbol, TExpressionAST>> $operators
+     * @psalm-pure
+     * @psalm-suppress ImpureVariable
      */
     function __construct(array $operators)
     {

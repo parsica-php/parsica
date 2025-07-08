@@ -10,7 +10,6 @@
 
 namespace Parsica\Parsica\Internal;
 
-
 final class EndOfStream extends \Exception
 {
 

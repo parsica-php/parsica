@@ -15,12 +15,14 @@ use Parsica\Parsica\Internal\Assert;
 /**
  * Creates an equality predicate
  *
- * @psalm-return callable(string) : bool
+ * @psalm-return pure-callable(string) : bool
  *
  * @api
+ * @psalm-pure
  */
 function isEqual(string $x): callable
 {
+    /** @psalm-suppress ImpureMethodCall */
     Assert::singleChar($x);
     return fn(string $y): bool => $x === $y;
 }
@@ -28,11 +30,12 @@ function isEqual(string $x): callable
 /**
  * Negates a predicate.
  *
- * @psalm-param callable(string) : bool $predicate
+ * @psalm-param pure-callable(string) : bool $predicate
  *
- * @psalm-return callable(string) : bool
+ * @psalm-return pure-callable(string) : bool
  *
  * @api
+ * @psalm-pure
  */
 function notPred(callable $predicate): callable
 {
@@ -42,12 +45,13 @@ function notPred(callable $predicate): callable
 /**
  * Boolean And predicate.
  *
- * @psalm-param callable(string) : bool $first
- * @psalm-param callable(string) : bool $second
+ * @psalm-param pure-callable(string) : bool $first
+ * @psalm-param pure-callable(string) : bool $second
  *
- * @psalm-return callable(string) : bool
+ * @psalm-return pure-callable(string) : bool
  *
  * @api
+ * @psalm-pure
  */
 function andPred(callable $first, callable $second): callable
 {
@@ -57,12 +61,12 @@ function andPred(callable $first, callable $second): callable
 /**
  * Boolean Or predicate.
  *
- * @psalm-param callable(string) : bool $first
- * @psalm-param callable(string) : bool $second
+ * @psalm-param pure-callable(string) : bool $first
+ * @psalm-param pure-callable(string) : bool $second
  *
- * @psalm-return callable(string) : bool
+ * @psalm-return pure-callable(string) : bool
  * @api
- *
+ * @psalm-pure
  */
 function orPred(callable $first, callable $second): callable
 {
@@ -74,10 +78,11 @@ function orPred(callable $first, callable $second): callable
  *
  * @psalm-param list<int> $chars
  *
- * @psalm-return callable(string) : bool
+ * @psalm-return pure-callable(string) : bool
  * @api
  *
  * @link https://doc.bccnsoft.com/docs/cppreference2018/en/c/string/wide/iswcntrl.html
+ * @psalm-pure
  */
 function isCharCode(array $chars): callable
 {
@@ -87,9 +92,9 @@ function isCharCode(array $chars): callable
 /**
  * Returns true for a space character, and the control characters \t, \n, \r, \f, \v.
  *
- * @psalm-return callable(string) : bool
+ * @psalm-return pure-callable(string) : bool
  * @api
- *
+ * @psalm-pure
  */
 function isSpace(): callable
 {
@@ -99,9 +104,10 @@ function isSpace(): callable
 /**
  * Like 'isSpace', but does not accept newlines and carriage returns.
  *
- * @psalm-return callable(string) : bool
+ * @psalm-return pure-callable(string) : bool
  * @api
  * @see isSpace
+ * @psalm-pure
  */
 function isHSpace(): callable
 {
@@ -111,8 +117,9 @@ function isHSpace(): callable
 /**
  * True for 0-9
  *
- * @psalm-return callable(string) : bool
+ * @psalm-return pure-callable(string) : bool
  * @api
+ * @psalm-pure
  */
 function isDigit(): callable
 {
@@ -122,8 +129,9 @@ function isDigit(): callable
 /**
  * Control character predicate (a non-printing character of the Latin-1 subset of Unicode).
  *
- * @psalm-return callable(string) : bool
+ * @psalm-return pure-callable(string) : bool
  * @api
+ * @psalm-pure
  */
 function isControl(): callable
 {
@@ -133,10 +141,11 @@ function isControl(): callable
 /**
  * Returns true for a space or a tab character
  *
- * @psalm-return callable(string) : bool
+ * @psalm-return pure-callable(string) : bool
  * @api
+ * @psalm-pure
  */
-function isBlank()
+function isBlank() : callable
 {
     return isCharCode([0x9, 0x20]);
 }
@@ -144,10 +153,11 @@ function isBlank()
 /**
  * Returns true for a space character, and \t, \n, \r, \f, \v.
  *
- * @psalm-return callable(string) : bool
+ * @psalm-return pure-callable(string) : bool
  * @api
+ * @psalm-pure
  */
-function isWhitespace()
+function isWhitespace() : callable
 {
     return isCharCode([0x20, 0x9, 0xA, 0xB, 0xC, 0xD]);
 }
@@ -155,10 +165,11 @@ function isWhitespace()
 /**
  * Returns true for an uppercase character A-Z.
  *
- * @psalm-return callable(string) : bool
+ * @psalm-return pure-callable(string) : bool
  * @api
+ * @psalm-pure
  */
-function isUpper()
+function isUpper() : callable
 {
     return isCharCode(range(0x41, 0x5A));
 }
@@ -166,8 +177,9 @@ function isUpper()
 /**
  * Returns true for a lowercase character a-z.
  *
- * @psalm-return callable(string) : bool
+ * @psalm-return pure-callable(string) : bool
  * @api
+ * @psalm-pure
  */
 function isLower()
 {
@@ -177,10 +189,11 @@ function isLower()
 /**
  * Returns true for an uppercase or lowercase character A-Z, a-z.
  *
- * @psalm-return callable(string) : bool
+ * @psalm-return pure-callable(string) : bool
  * @api
+ * @psalm-pure
  */
-function isAlpha()
+function isAlpha() : callable
 {
     return isCharCode(array_merge(range(0x41, 0x5A), range(0x61, 0x7A)));
 }
@@ -188,10 +201,11 @@ function isAlpha()
 /**
  * Returns true for an alpha or numeric character A-Z, a-z, 0-9.
  *
- * @psalm-return callable(string) : bool
+ * @psalm-return pure-callable(string) : bool
  * @api
+ * @psalm-pure
  */
-function isAlphaNum()
+function isAlphaNum() : callable
 {
     return isCharCode(array_merge(range(0x30, 0x39), range(0x41, 0x5A), range(0x61, 0x7A)));
 }
@@ -199,10 +213,11 @@ function isAlphaNum()
 /**
  * Returns true if the given character is a hexadecimal numeric character 0123456789abcdefABCDEF.
  *
- * @psalm-return callable(string) : bool
+ * @psalm-return pure-callable(string) : bool
  * @api
+ * @psalm-pure
  */
-function isHexDigit()
+function isHexDigit() : callable
 {
     return isCharCode(array_merge(range(0x30, 0x39), range(0x41, 0x46), range(0x61, 0x66)));
 }
@@ -210,10 +225,11 @@ function isHexDigit()
 /**
  * Returns true if the given character is a printable ASCII char.
  *
- * @psalm-return callable(string) : bool
+ * @psalm-return pure-callable(string) : bool
  * @api
+ * @psalm-pure
  */
-function isPrintable()
+function isPrintable() : callable
 {
     return isCharCode(range(0x20, 0x7E));
 }
@@ -221,10 +237,11 @@ function isPrintable()
 /**
  * Returns true if the given character is a punctuation character !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
  *
- * @psalm-return callable(string) : bool
+ * @psalm-return pure-callable(string) : bool
  * @api
+ * @psalm-pure
  */
-function isPunctuation()
+function isPunctuation() : callable
 {
     return isCharCode(array_merge(range(0x21, 0x2F), range(0x3A, 0x40), range(0x5B, 0x60), range(0x7B, 0x7E)));
 }

@@ -24,6 +24,7 @@ use function Parsica\Parsica\pure;
  * @internal
  * @template TSymbol
  * @template TExpressionAST
+ * @psalm-immutable
  */
 final class LeftAssoc implements ExpressionType
 {
@@ -33,6 +34,8 @@ final class LeftAssoc implements ExpressionType
     /**
      * @internal
      * @psalm-param non-empty-list<BinaryOperator<TSymbol, TExpressionAST>> $operators
+     * @psalm-pure
+     * @psalm-suppress ImpureVariable
      */
     function __construct(array $operators)
     {
@@ -42,11 +45,12 @@ final class LeftAssoc implements ExpressionType
     /**
      * @psalm-param Parser<TExpressionAST> $previousPrecedenceLevel
      * @psalm-return Parser<TExpressionAST>
+     * @psalm-mutation-free
      */
     public function buildPrecedenceLevel(Parser $previousPrecedenceLevel): Parser
     {
         /**
-         * @psalm-var list<Parser<callable(Parser<TExpressionAST>):Parser<TExpressionAST>>> $operatorParsers
+         * @psalm-var list<Parser<pure-callable(Parser<TExpressionAST>):Parser<TExpressionAST>>> $operatorParsers
          */
         $operatorParsers = [];
         // @todo use folds?

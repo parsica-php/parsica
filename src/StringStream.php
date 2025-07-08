@@ -34,6 +34,7 @@ final class StringStream implements Stream
     /**
      * @inheritDoc
      * @internal
+     * @psalm-mutation-free
      */
     public function take1(): TakeResult
     {
@@ -52,6 +53,7 @@ final class StringStream implements Stream
 
     /**
      * @inheritDoc
+     * @psalm-mutation-free
      */
     public function isEOF(): bool
     {
@@ -60,6 +62,7 @@ final class StringStream implements Stream
 
     /**
      * @inheritDoc
+     * @psalm-mutation-free
      */
     public function takeN(int $n): TakeResult
     {
@@ -82,6 +85,8 @@ final class StringStream implements Stream
     }
 
     /**
+     * @psalm-param pure-callable(string) : bool $predicate
+     * @psalm-mutation-free
      * @inheritDoc
      */
     public function takeWhile(callable $predicate): TakeResult
@@ -109,6 +114,9 @@ final class StringStream implements Stream
         );
     }
 
+    /**
+     * @psalm-mutation-free
+     */
     public function __toString(): string
     {
         return $this->string;
@@ -116,6 +124,7 @@ final class StringStream implements Stream
 
     /**
      * @inheritDoc
+     * @psalm-mutation-free
      */
     public function position(): Position
     {

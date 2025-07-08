@@ -20,6 +20,7 @@ use Parsica\Parsica\Stream;
  * @internal
  *
  * @template T
+ * @psalm-immutable
  */
 final class Succeed implements ParseResult
 {
@@ -34,6 +35,8 @@ final class Succeed implements ParseResult
      * @psalm-param T $output
      *
      * @internal
+     * @psalm-pure
+     * @psalm-suppress ImpureVariable
      */
     public function __construct($output, Stream $remainder)
     {
@@ -43,32 +46,48 @@ final class Succeed implements ParseResult
 
     /**
      * @psalm-return T
+     * @psalm-mutation-free
      */
     public function output()
     {
         return $this->output;
     }
 
+    /**
+     * @psalm-mutation-free
+     */
     public function remainder(): Stream
     {
         return $this->remainder;
     }
 
+    /**
+     * @psalm-mutation-free
+     */
     public function isSuccess(): bool
     {
         return true;
     }
 
+    /**
+     * @psalm-mutation-free
+     */
     public function isFail(): bool
     {
         return !$this->isSuccess();
     }
 
+    /**
+     * @psalm-mutation-free
+     */
     public function expected(): string
     {
         throw new BadMethodCallException("Can't read the expectation of a succeeded ParseResult.");
     }
 
+    /**
+     * @psalm-mutation-free
+     */
     public function got(): Stream
     {
         throw new BadMethodCallException("Can't read the expectation of a succeeded ParseResult.");
@@ -79,6 +98,7 @@ final class Succeed implements ParseResult
      *
      * @psalm-param ParseResult<T> $other
      * @psalm-return ParseResult<T>
+     * @psalm-mutation-free
      */
     public function append(ParseResult $other): ParseResult
     {
@@ -127,9 +147,10 @@ final class Succeed implements ParseResult
      *
      * @template T2
      *
-     * @psalm-param callable(T):T2 $transform
+     * @psalm-param pure-callable(T):T2 $transform
      *
      * @psalm-return ParseResult<T2>
+     * @psalm-mutation-free
      */
     public function map(callable $transform): ParseResult
     {

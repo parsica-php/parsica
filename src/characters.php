@@ -20,10 +20,11 @@ use Parsica\Parsica\Internal\Assert;
  * @psalm-return Parser<string>
  * @api
  * @see charI()
- *
+ * @psalm-pure
  */
 function char(string $c): Parser
 {
+    /** @psalm-suppress ImpureMethodCall */
     Assert::singleChar($c);
     return satisfy(isEqual($c))->label("'$c'");
 }
@@ -40,9 +41,11 @@ function char(string $c): Parser
  * @api
  *
  * @see char()
+ * @psalm-pure
  */
 function charI(string $c): Parser
 {
+    /** @psalm-suppress ImpureMethodCall */
     Assert::singleChar($c);
     $lower = mb_strtolower($c);
     $upper = mb_strtoupper($c);
@@ -56,6 +59,7 @@ function charI(string $c): Parser
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function controlChar(): Parser
 {
@@ -67,6 +71,7 @@ function controlChar(): Parser
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function upperChar(): Parser
 {
@@ -78,6 +83,7 @@ function upperChar(): Parser
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function lowerChar(): Parser
 {
@@ -89,6 +95,7 @@ function lowerChar(): Parser
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function alphaChar(): Parser
 {
@@ -100,6 +107,7 @@ function alphaChar(): Parser
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function alphaNumChar(): Parser
 {
@@ -111,6 +119,7 @@ function alphaNumChar(): Parser
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function printChar(): Parser
 {
@@ -122,6 +131,7 @@ function printChar(): Parser
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function punctuationChar(): Parser
 {
@@ -135,6 +145,7 @@ function punctuationChar(): Parser
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function digitChar(): Parser
 {
@@ -146,6 +157,7 @@ function digitChar(): Parser
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function binDigitChar(): Parser
 {
@@ -158,6 +170,7 @@ function binDigitChar(): Parser
  * @psalm-return Parser<string>
  *
  * @api
+ * @psalm-pure
  */
 function octDigitChar(): Parser
 {
@@ -169,6 +182,7 @@ function octDigitChar(): Parser
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function hexDigitChar(): Parser
 {

@@ -16,6 +16,7 @@ use Parsica\Parsica\Stream;
  * The result of Stream::take*() functions
  *
  * @internal
+ * @psalm-immutable
  */
 final class TakeResult
 {

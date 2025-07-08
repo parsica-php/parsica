@@ -14,7 +14,7 @@ namespace Parsica\Parsica;
  * If the parser is successful, call the $receiver function with the output of the parser. The resulting parser
  * behaves identical to the original one. This combinator is useful for expressing side effects during the parsing
  * process. It can be hooked into existing event publishing libraries by using $receiver as an adapter for those. Other
- * use cases are logging, caching, performing an action whenever a value is matched in a long running input stream, ...
+ * use cases are logging, caching, performing an action whenever a value is matched in a long-running input stream, ...
  *
  * @template T
  * @psalm-param Parser<T> $parser
@@ -24,11 +24,13 @@ namespace Parsica\Parsica;
  */
 function emit(Parser $parser, callable $receiver): Parser
 {
-    return Parser::make("emit", static function (Stream $input) use ($receiver, $parser): ParseResult {
+    /** @psalm-var pure-callable(Stream):ParseResult $parserFunction */
+    $parserFunction = static function (Stream $input) use ($receiver, $parser): ParseResult {
         $result = $parser->run($input);
         if ($result->isSuccess()) {
             $receiver($result->output());
         }
         return $result;
-    });
+    };
+    return Parser::make("emit", $parserFunction);
 }

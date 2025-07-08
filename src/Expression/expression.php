@@ -26,10 +26,13 @@ use function Parsica\Parsica\Internal\FP\foldl;
  * @psalm-param list<ExpressionType> $expressionTable
  *
  * @psalm-return Parser<TExpressionAST>
+ * @psalm-pure
  */
 function expression(Parser $term, array $expressionTable): Parser
 {
-    /** @psalm-var Parser<TExpressionAST> $parser */
+    /**
+     * @psalm-var Parser<TExpressionAST> $parser
+     */
     $parser = foldl(
         $expressionTable,
         fn(Parser $previous, ExpressionType $next) => $next->buildPrecedenceLevel($previous),
@@ -47,10 +50,11 @@ function expression(Parser $term, array $expressionTable): Parser
  * @template TSymbol
  * @template TExpressionAST
  * @psalm-param Parser<TSymbol> $symbol
- * @psalm-param callable(TExpressionAST, TExpressionAST):TExpressionAST $transform
+ * @psalm-param pure-callable(TExpressionAST, TExpressionAST):TExpressionAST $transform
  * @psalm-param string $label
  *
  * @psalm-return BinaryOperator<TSymbol, TExpressionAST>
+ * @psalm-pure
  */
 function binaryOperator(Parser $symbol, callable $transform, string $label = ""): BinaryOperator
 {
@@ -70,6 +74,7 @@ function binaryOperator(Parser $symbol, callable $transform, string $label = "")
  * @psalm-param string $label
  *
  * @return UnaryOperator<TSymbol, TExpressionAST>
+ * @psalm-pure
  */
 function unaryOperator(Parser $symbol, callable $transform, string $label = ""): UnaryOperator
 {
@@ -82,9 +87,11 @@ function unaryOperator(Parser $symbol, callable $transform, string $label = ""):
  * @template TExpressionAST
  * @psalm-param non-empty-list<BinaryOperator<TSymbol, TExpressionAST>> $operators
  * @psalm-return LeftAssoc<TSymbol, TExpressionAST>
+ * @psalm-pure
  */
 function leftAssoc(BinaryOperator ...$operators): LeftAssoc
 {
+    /** @psalm-suppress ImpureMethodCall */
     Assert::nonEmptyList($operators, "LeftAssoc expects at least one Operator");
     return new LeftAssoc($operators);
 }
@@ -95,9 +102,11 @@ function leftAssoc(BinaryOperator ...$operators): LeftAssoc
  * @template TExpressionAST
  * @psalm-param non-empty-list<BinaryOperator<TSymbol,TExpressionAST>> $operators
  * @psalm-return RightAssoc<TSymbol, TExpressionAST>
+ * @psalm-pure
  */
 function rightAssoc(BinaryOperator ...$operators): RightAssoc
 {
+    /** @psalm-suppress ImpureMethodCall */
     Assert::nonEmptyList($operators, "RightAssoc expects at least one Operator");
     return new RightAssoc($operators);
 }
@@ -109,6 +118,7 @@ function rightAssoc(BinaryOperator ...$operators): RightAssoc
  * @template TExpressionAST
  * @psalm-param BinaryOperator<TSymbol, TExpressionAST> $operator
  * @psalm-return NonAssoc<TSymbol, TExpressionAST>
+ * @psalm-pure
  */
 function nonAssoc(BinaryOperator $operator): NonAssoc
 {
@@ -123,9 +133,11 @@ function nonAssoc(BinaryOperator $operator): NonAssoc
  *
  * @psalm-param non-empty-list<UnaryOperator<TSymbol, TExpressionAST>> $operators
  * @psalm-return Prefix<TSymbol, TExpressionAST>
+ * @psalm-pure
  */
 function prefix(UnaryOperator ...$operators): Prefix
 {
+    /** @psalm-suppress ImpureMethodCall */
     Assert::nonEmptyList($operators, "Prefix expects at least one Operator");
     return new Prefix($operators);
 }
@@ -137,9 +149,11 @@ function prefix(UnaryOperator ...$operators): Prefix
  * @template TExpressionAST
  * @psalm-param non-empty-list<UnaryOperator<TSymbol, TExpressionAST>> $operators
  * @psalm-return Postfix<TSymbol, TExpressionAST>
+ * @psalm-pure
  */
 function postfix(UnaryOperator ...$operators): Postfix
 {
+    /** @psalm-suppress ImpureMethodCall */
     Assert::nonEmptyList($operators, "Postfix expects at least one Operator");
     return new Postfix($operators);
 }

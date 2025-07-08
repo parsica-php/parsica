@@ -24,20 +24,22 @@ use Parsica\Parsica\Internal\Succeed;
  * @psalm-param callable(string) : bool $predicate
  *
  * @psalm-return Parser<T>
+ * @psalm-pure
  */
 function satisfy(callable $predicate): Parser
 {
     $label = "satisfy(predicate)";
-    return Parser::make($label, static function (Stream $input) use ($label, $predicate) : ParseResult {
+
+    /** @psalm-var pure-callable(Stream) : ParseResult $parserFunction */
+    $parserFunction = static function (Stream $input) use ($label, $predicate): ParseResult {
         try {
             $t = $input->take1();
         } catch (EndOfStream $e) {
             return new Fail($label, $input);
         }
-        return $predicate($t->chunk())
-            ? new Succeed($t->chunk(), $t->stream())
-            : new Fail($label, $input);
-    });
+        return $predicate($t->chunk()) ? new Succeed($t->chunk(), $t->stream()) : new Fail($label, $input);
+    };
+    return Parser::make($label, $parserFunction);
 }
 
 /**
@@ -45,8 +47,9 @@ function satisfy(callable $predicate): Parser
  *
  * @template T
  *
- * @psalm-param callable(string) : bool $predicate
+ * @psalm-param pure-callable(string) : bool $predicate
  * @psalm-return Parser<null>
+ * @psalm-pure
  */
 function skipWhile(callable $predicate): Parser
 {
@@ -58,9 +61,10 @@ function skipWhile(callable $predicate): Parser
  *
  * @template T
  *
- * @psalm-param callable(string) : bool $predicate
+ * @psalm-param pure-callable(string) : bool $predicate
  *
  * @psalm-return Parser<null>
+ * @psalm-pure
  */
 function skipWhile1(callable $predicate): Parser
 {
@@ -71,17 +75,19 @@ function skipWhile1(callable $predicate): Parser
  * Keep parsing 0 or more characters as long as the predicate holds.
  *
  * @template T
- * @psalm-param callable(string) : bool $predicate
+ * @psalm-param pure-callable(string) : bool $predicate
  * @psalm-return Parser<T>
+ * @psalm-pure
  */
 function takeWhile(callable $predicate): Parser
 {
+    /** @psalm-pure  */
+    $parserFunction = static function (Stream $input) use ($predicate): ParseResult {
+        $t = $input->takeWhile($predicate);
+        return new Succeed($t->chunk(), $t->stream());
+    };
     return Parser::make(
-        "takeWhile(predicate)",
-        static function (Stream $input) use ($predicate): ParseResult {
-            $t = $input->takeWhile($predicate);
-            return new Succeed($t->chunk(), $t->stream());
-        }
+        "takeWhile(predicate)", $parserFunction
     );
 }
 
@@ -91,9 +97,10 @@ function takeWhile(callable $predicate): Parser
  *
  * @template T
  *
- * @psalm-param callable(string) : bool $predicate
+ * @psalm-param pure-callable(string) : bool $predicate
  *
  * @psalm-return Parser<T>
+ * @psalm-pure
  */
 function takeWhile1(callable $predicate): Parser
 {
@@ -122,6 +129,7 @@ function takeWhile1(callable $predicate): Parser
  * @template T
  *
  * @psalm-return Parser<T>
+ * @psalm-pure
  */
 function anySingle(): Parser
 {
@@ -136,6 +144,7 @@ function anySingle(): Parser
  *
  * @TODO This is an alias of anySingle. Should we get rid of one of them?
  * @psalm-return Parser<string>
+ * @psalm-pure
  */
 function anything(): Parser
 {
@@ -149,7 +158,7 @@ function anything(): Parser
  * @psalm-return Parser<string>
  * @api
  * @template T
- *
+ * @psalm-pure
  */
 function anySingleBut(string $x): Parser
 {
@@ -164,10 +173,11 @@ function anySingleBut(string $x): Parser
  * @psalm-return Parser<string>
  * @api
  * @template T
- *
+ * @psalm-pure
  */
 function oneOf(array $chars): Parser
 {
+    /** @psalm-suppress ImpureMethodCall */
     Assert::singleChars($chars);
     return satisfy(fn(string $x) => in_array($x, $chars))->label("one of " . implode('', $chars));
 }
@@ -180,6 +190,7 @@ function oneOf(array $chars): Parser
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function oneOfS(string $chars): Parser
 {
@@ -198,10 +209,11 @@ function oneOfS(string $chars): Parser
  * @psalm-return Parser<string>
  * @api
  * @template T
- *
+ * @psalm-pure
  */
 function noneOf(array $chars): Parser
 {
+    /** @psalm-suppress ImpureMethodCall */
     Assert::singleChars($chars);
     return satisfy(fn(string $x) => !in_array($x, $chars))
         ->label("noneOf(" . implode('', $chars) . ")");
@@ -216,7 +228,7 @@ function noneOf(array $chars): Parser
  * @psalm-return Parser<string>
  * @api
  * @template T
- *
+ * @psalm-pure
  */
 function noneOfS(string $chars): Parser
 {
@@ -231,6 +243,7 @@ function noneOfS(string $chars): Parser
  * @psalm-return Parser<string>
  * @api
  * @template T
+ * @psalm-pure
  */
 function takeRest(): Parser
 {
@@ -245,10 +258,11 @@ function takeRest(): Parser
  * @psalm-return Parser<null>
  *
  * @api
+ * @psalm-pure
  */
 function nothing(): Parser
 {
-    /** @psalm-var callable(Stream):ParseResult<null> $result */
+    /** @psalm-var pure-callable(Stream):ParseResult<null> $result */
     $result = fn(Stream $input) : ParseResult => new Succeed(null, $input);
     $parser = Parser::make("<nothing>", $result);
     return $parser;
@@ -258,6 +272,7 @@ function nothing(): Parser
  * Parse everything; that is, consume the rest of the input until the end.
  *
  * @api
+ * @psalm-pure
  */
 function everything(): Parser
 {
@@ -268,6 +283,7 @@ function everything(): Parser
  * Always succeed, no matter what the input was.
  *
  * @api
+ * @psalm-pure
  */
 function succeed(): Parser
 {
@@ -279,6 +295,7 @@ function succeed(): Parser
  *
  * @return Parser
  * @api
+ * @psalm-pure
  */
 function fail(string $label): Parser
 {
@@ -291,6 +308,7 @@ function fail(string $label): Parser
  * @psalm-return Parser<T>
  * @api
  * @template T
+ * @psalm-pure
  */
 function eof(): Parser
 {

@@ -19,6 +19,7 @@ use function Parsica\Parsica\map;
  * @internal
  * @template TSymbol
  * @template TExpressionAST
+ * @psalm-immutable
  */
 final class NonAssoc implements ExpressionType
 {
@@ -29,6 +30,8 @@ final class NonAssoc implements ExpressionType
 
     /**
      * @psalm-param BinaryOperator<TSymbol, TExpressionAST> $operator
+     * @psalm-pure
+     * @psalm-suppress ImpureVariable
      */
     function __construct(BinaryOperator $operator)
     {

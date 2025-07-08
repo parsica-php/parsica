@@ -18,6 +18,7 @@ namespace Parsica\Parsica;
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function integer(): Parser
 {
@@ -45,6 +46,7 @@ function integer(): Parser
  * @psalm-suppress InvalidReturnType
  * @psalm-suppress InvalidReturnStatement
  * @api
+ * @psalm-pure
  */
 function float(): Parser
 {

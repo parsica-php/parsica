@@ -24,6 +24,7 @@ interface Stream
      * Extract a single token from the stream. Throw if the stream is empty.
      *
      * @throw EndOfStream
+     * @psalm-mutation-free
      */
     public function take1(): TakeResult;
 
@@ -38,6 +39,7 @@ interface Stream
      * and return the chunk along with the rest of the stream.
      *
      * @throw EndOfStream
+     * @psalm-mutation-free
      */
     public function takeN(int $n): TakeResult;
 
@@ -48,17 +50,20 @@ interface Stream
      *
      * @TODO This method isn't strictly necessary but let's see.
      *
-     * @psalm-param callable(string):bool $predicate
+     * @psalm-param pure-callable(string):bool $predicate
+     * @psalm-mutation-free
      */
     public function takeWhile(callable $predicate) : TakeResult;
 
     /**
      * @deprecated We will need to get rid of this again at some point, we can't assume all streams will be strings
+     * @psalm-mutation-free
      */
     public function __toString(): string;
 
     /**
      * Test if the stream is at its end.
+     * @psalm-mutation-free
      */
     public function isEOF(): bool;
 
@@ -66,6 +71,7 @@ interface Stream
      * The position of the parser in the stream.
      *
      * @internal
+     * @psalm-mutation-free
      */
     public function position() : Position;
 }

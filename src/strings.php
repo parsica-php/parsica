@@ -22,10 +22,11 @@ use function Parsica\Parsica\Internal\FP\foldl;
  * @psalm-return Parser<string>
  * @api
  * @see stringI()
- *
+ * @psalm-pure
  */
 function string(string $str): Parser
 {
+    /** @psalm-suppress ImpureMethodCall */
     Assert::nonEmpty($str);
     $len = mb_strlen($str);
     $label = "'$str'";
@@ -45,7 +46,7 @@ function string(string $str): Parser
 }
 
 /**
- * Parse a non-empty string, case-insensitive and case-preserving. On success, it returns the string cased as the
+ * Parse a non-empty string, case-insensitive, and case-preserving. On success, it returns the string cased as the
  * actually parsed input.
  * eg stringI("foobar")->tryString("foObAr") will succeed with "foObAr"
  *
@@ -54,9 +55,11 @@ function string(string $str): Parser
  * @psalm-return Parser<string>
  * @api
  * @see string()
+ * @psalm-pure
  */
 function stringI(string $str): Parser
 {
+    /** @psalm-suppress ImpureMethodCall */
     Assert::nonEmpty($str);
     /** @psalm-var list<string> $split */
     $split = mb_str_split($str);
@@ -64,9 +67,11 @@ function stringI(string $str): Parser
         fn(string $c): Parser => charI($c),
         $split
     );
+
     /** @psalm-var Parser<string> $parser */
     $parser = foldl(
         $chars,
+        /** @psalm-pure */
         fn(Parser $l, Parser $r): Parser => append($l, $r),
         succeed()
     )->label("'$str'");

@@ -33,6 +33,7 @@ use function Parsica\Parsica\{any,
  * JSON parser and utility parsers
  *
  * @TODO fix psalm annotations
+ * @psalm-immutable
  */
 final class JSON
 {

@@ -16,6 +16,7 @@ use Parsica\Parsica\Parser;
  * @internal
  * @template TSymbol
  * @template TExpressionAST
+ * @psalm-immutable
  */
 final class BinaryOperator
 {
@@ -25,7 +26,7 @@ final class BinaryOperator
     private Parser $symbol;
 
     /**
-     * @psalm-var callable(TExpressionAST, TExpressionAST):TExpressionAST
+     * @psalm-var pure-callable(TExpressionAST, TExpressionAST):TExpressionAST
      */
     private $transform;
 
@@ -33,8 +34,10 @@ final class BinaryOperator
 
     /**
      * @psalm-param Parser<TSymbol> $symbol
-     * @psalm-param callable(TExpressionAST, TExpressionAST):TExpressionAST $transform
+     * @psalm-param pure-callable(TExpressionAST, TExpressionAST):TExpressionAST $transform
      * @psalm-param string $label
+     * @psalm-pure
+     * @psalm-suppress ImpureVariable
      */
     function __construct(Parser $symbol, callable $transform, string $label = "")
     {
@@ -45,6 +48,7 @@ final class BinaryOperator
 
     /**
      * @psalm-return Parser<TSymbol>
+     * @psalm-mutation-free
      */
     function symbol(): Parser
     {
@@ -52,13 +56,17 @@ final class BinaryOperator
     }
 
     /**
-     * @psalm-return callable(TExpressionAST, TExpressionAST):TExpressionAST
+     * @psalm-return pure-callable(TExpressionAST, TExpressionAST):TExpressionAST
+     * @psalm-mutation-free
      */
     function transform(): callable
     {
         return $this->transform;
     }
 
+    /**
+     * @psalm-mutation-free
+     */
     function label(): string
     {
         return $this->label;

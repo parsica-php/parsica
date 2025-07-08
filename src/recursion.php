@@ -17,6 +17,7 @@ namespace Parsica\Parsica;
  * @api
  *
  * @template T
+ * @psalm-pure
  */
 function recursive(): Parser
 {

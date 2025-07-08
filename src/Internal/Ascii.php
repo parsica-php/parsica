@@ -12,9 +12,17 @@ namespace Parsica\Parsica\Internal;
 
 /**
  * @internal
+ * @psalm-immutable
  */
 final class Ascii
 {
+    private function __construct()
+    {
+    }
+
+    /**
+     * @psalm-pure
+     */
     public static function printable(string $char): string
     {
         switch (mb_ord($char)) {

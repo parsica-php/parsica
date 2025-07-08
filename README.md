@@ -19,11 +19,9 @@ $result = $parser->tryString("{Hello}");
 echo $result->output(); // Hello
 ```
 
-![Twitter Follow](https://img.shields.io/twitter/follow/parsica_php?style=social)
-
 ## Quality
 
-The code is was entirely built with Test-Driven Development, and type-checked with [Psalm](https://github.com/vimeo/psalm). It is probably bug-free. It is suitable for complex parsing requirements, and could even be used to build a programming language.
+The code is entirely built with Test-Driven Development, and type-checked with [Psalm](https://github.com/vimeo/psalm). It is likely bug-free or very close to it. It is suitable for complex parsing requirements, and could even be used to build a programming language.
 However, it might not be performant enough if you use it at a high scale. 
 
 
@@ -45,4 +43,4 @@ composer run uptodocs
 composer run test
 ```
 
-
+As this library uses pure functional programming, it may be hard to wrap your head around if you're used to object-oriented or imperative styles. Our recommendation is to familiarize yourself with the basics of functional programming, for example by reading an intro to Haskell.  

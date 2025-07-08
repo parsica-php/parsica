@@ -23,6 +23,7 @@ use function Parsica\Parsica\notPred;
  *
  * @template T
  * @internal
+ * @psalm-immutable
  */
 final class Fail implements ParseResult
 {

@@ -25,7 +25,7 @@ use function Parsica\Parsica\Internal\FP\foldl;
  * @api
  *
  * @template T
- *
+ * @psalm-pure
  */
 function identity(Parser $parser): Parser
 {
@@ -41,7 +41,7 @@ function identity(Parser $parser): Parser
  * @api
  *
  * @template T
- *
+ * @psalm-pure
  */
 function pure($output): Parser
 {
@@ -56,6 +56,7 @@ function pure($output): Parser
  * @psalm-return Parser<T|null>
  * @api
  * @template T
+ * @psalm-pure
  */
 function optional(Parser $parser): Parser
 {
@@ -75,7 +76,7 @@ function optional(Parser $parser): Parser
  * @api
  * @template T1
  * @template T2
- *
+ * @psalm-pure
  */
 function bind(Parser $parser, callable $f): Parser
 {
@@ -105,6 +106,7 @@ function bind(Parser $parser, callable $f): Parser
  * @psalm-param Parser<T1> $parser2
  * @psalm-return Parser<T2>
  * @api
+ * @psalm-pure
  */
 function apply(Parser $parser1, Parser $parser2): Parser
 {
@@ -135,7 +137,7 @@ function apply(Parser $parser1, Parser $parser2): Parser
  * @template T2
  * @api
  * @see Parser::sequence()
- *
+ * @psalm-pure
  */
 function sequence(Parser $first, Parser $second): Parser
 {
@@ -151,6 +153,7 @@ function sequence(Parser $first, Parser $second): Parser
  * @psalm-param Parser<T2> $second
  * @psalm-return Parser<T1>
  * @api
+ * @psalm-pure
  */
 function keepFirst(Parser $first, Parser $second): Parser
 {
@@ -170,6 +173,7 @@ function keepFirst(Parser $first, Parser $second): Parser
  * @psalm-param Parser<T2> $second
  * @psalm-return Parser<T2>
  * @api
+ * @psalm-pure
  */
 function keepSecond(Parser $first, Parser $second): Parser
 {
@@ -189,7 +193,7 @@ function keepSecond(Parser $first, Parser $second): Parser
  *
  * @template T1
  * @template T2
- *
+ * @psalm-pure
  */
 function either(Parser $first, Parser $second): Parser
 {
@@ -221,7 +225,7 @@ function either(Parser $first, Parser $second): Parser
  * @psalm-return Parser<T|null>
  * @api
  * @template T
- *
+ * @psalm-pure
  */
 function append(Parser $left, Parser $right): Parser
 {
@@ -241,9 +245,11 @@ function append(Parser $left, Parser $right): Parser
  * @template T
  * @psalm-suppress MixedReturnStatement
  * @psalm-suppress MixedInferredReturnType
+ * @psalm-pure
  */
 function assemble(Parser ...$parsers): Parser
 {
+    /** @psalm-suppress ImpureMethodCall */
     Assert::atLeastOneArg($parsers, "assemble()");
     $first = array_shift($parsers);
     /** @psalm-suppress InvalidArgument */
@@ -256,6 +262,7 @@ function assemble(Parser ...$parsers): Parser
  * @psalm-param list<Parser<mixed>> $parsers
  * @psalm-return Parser<mixed>
  * @api
+ * @psalm-pure
  */
 function collect(Parser ...$parsers): Parser
 {
@@ -279,6 +286,7 @@ function collect(Parser ...$parsers): Parser
  * @psalm-param non-empty-list<Parser<mixed>> $parsers
  * @psalm-return Parser<mixed>
  * @api
+ * @psalm-pure
  */
 function any(Parser ...$parsers): Parser
 {
@@ -305,6 +313,7 @@ function any(Parser ...$parsers): Parser
  * @psalm-param non-empty-list<Parser<mixed>> $parsers
  * @psalm-return Parser<mixed>
  * @api
+ * @psalm-pure
  */
 function choice(Parser ...$parsers): Parser
 {
@@ -319,6 +328,7 @@ function choice(Parser ...$parsers): Parser
  * @psalm-return Parser<T>
  * @template T
  * @psalm-suppress MixedArgumentTypeCoercion
+ * @psalm-pure
  */
 function atLeastOne(Parser $parser): Parser
 {
@@ -342,27 +352,28 @@ function atLeastOne(Parser $parser): Parser
 /**
  * Zero or more repetitions of Parser, with the outputs appended.
  *
- * @deprecated @TODO Untested
+ * @TODO Untested
  *
  * @api
  * @psalm-param Parser<T> $parser
  * @psalm-return Parser<T>
  * @template T
  * @psalm-suppress MixedArgumentTypeCoercion
+ * @psalm-pure
  */
 function zeroOrMore(Parser $parser): Parser
 {
-    return Parser::make(
-        "zero or more " . $parser->getLabel(),
-        static function (Stream $input) use ($parser) : ParseResult {
-            $result = new Succeed(null, $input);
-            $final = $result;
-            while ($result->isSuccess()) {
-                $final = $final->append($result);
-                $result = $parser->continueFrom($result);
-            }
-            return $final;
+    $parserFunction = static function (Stream $input) use ($parser): ParseResult {
+        $result = new Succeed(null, $input);
+        $final = $result;
+        while ($result->isSuccess()) {
+            $final = $final->append($result);
+            $result = $parser->continueFrom($result);
         }
+        return $final;
+    };
+    return Parser::make(
+        "zero or more " . $parser->getLabel(), $parserFunction
     );
 }
 
@@ -375,6 +386,7 @@ function zeroOrMore(Parser $parser): Parser
  *
  * @psalm-return Parser<T>
  * @api
+ * @psalm-pure
  */
 function repeat(int $n, Parser $parser): Parser
 {
@@ -397,6 +409,7 @@ function repeat(int $n, Parser $parser): Parser
  *
  * @psalm-return Parser<list<T>>
  * @api
+ * @psalm-pure
  */
 function repeatList(int $n, Parser $parser): Parser
 {
@@ -421,6 +434,7 @@ function repeatList(int $n, Parser $parser): Parser
          *
          * @psalm-suppress InvalidReturnType
          * @psalm-suppress InvalidReturnStatement
+         * @psalm-pure
          */
         fn(Parser $l, Parser $r): Parser => append($l, $r),
         $parser
@@ -436,6 +450,7 @@ function repeatList(int $n, Parser $parser): Parser
  * @psalm-return Parser<list<T>>
  *
  * @api
+ * @psalm-pure
  */
 function some(Parser $parser): Parser
 {
@@ -458,6 +473,7 @@ function some(Parser $parser): Parser
  * @psalm-return Parser<list<T>>
  *
  * @api
+ * @psalm-pure
  */
 function many(Parser $parser): Parser
 {
@@ -498,6 +514,7 @@ function many(Parser $parser): Parser
  *
  * @psalm-return Parser<TM>
  * @api
+ * @psalm-pure
  */
 function between(Parser $open, Parser $close, Parser $middle): Parser
 {
@@ -519,6 +536,7 @@ function between(Parser $open, Parser $close, Parser $middle): Parser
  * @psalm-return Parser<list<T>>
  *
  * @api
+ * @psalm-pure
  */
 function sepBy(Parser $separator, Parser $parser): Parser
 {
@@ -540,6 +558,7 @@ function sepBy(Parser $separator, Parser $parser): Parser
  * @psalm-suppress MissingClosureReturnType
  *
  * @api
+ * @psalm-pure
  */
 function sepBy1(Parser $separator, Parser $parser): Parser
 {
@@ -563,6 +582,7 @@ function sepBy1(Parser $separator, Parser $parser): Parser
  * @psalm-suppress MissingClosureReturnType
  *
  * @api
+ * @psalm-pure
  */
 function sepBy2(Parser $separator, Parser $parser): Parser
 {
@@ -587,6 +607,7 @@ function sepBy2(Parser $separator, Parser $parser): Parser
  * @see Parser::notFollowedBy()
  *
  * @api
+ * @psalm-pure
  */
 function notFollowedBy(Parser $parser): Parser
 {
@@ -610,6 +631,7 @@ function notFollowedBy(Parser $parser): Parser
  * @psalm-param callable(T1) : T2 $transform
  * @psalm-return Parser<T2>
  * @api
+ * @psalm-pure
  */
 function map(Parser $parser, callable $transform): Parser
 {
@@ -626,6 +648,7 @@ function map(Parser $parser, callable $transform): Parser
  * @psalm-return Parser<T>
  *
  * @api
+ * @psalm-pure
  */
 function lookAhead(Parser $parser): Parser
 {

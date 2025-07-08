@@ -15,6 +15,7 @@ use Parsica\Parsica\Internal\Position;
 
 /**
  * @template T
+ * @psalm-immutable
  */
 interface ParseResult
 {
@@ -22,6 +23,7 @@ interface ParseResult
      * True if the parser was successful.
      *
      * @api
+     * @psalm-mutation-free
      */
     public function isSuccess(): bool;
 
@@ -29,6 +31,7 @@ interface ParseResult
      * True if the parser has failed.
      *
      * @api
+     * @psalm-mutation-free
      */
     public function isFail(): bool;
 
@@ -37,6 +40,7 @@ interface ParseResult
      *
      * @psalm-return T
      * @api
+     * @psalm-mutation-free
      */
     public function output();
 
@@ -44,6 +48,7 @@ interface ParseResult
      * The part of the input that did not get parsed.
      *
      * @api
+     * @psalm-mutation-free
      */
     public function remainder(): Stream;
 
@@ -54,6 +59,7 @@ interface ParseResult
      * @see Parser::label()
      *
      * @api
+     * @psalm-mutation-free
      */
     public function expected(): string;
 
@@ -62,6 +68,7 @@ interface ParseResult
      * so don't use this for processing. A future version might change this behaviour.
      *
      * @api
+     * @psalm-mutation-free
      */
     public function got(): Stream;
 
@@ -74,6 +81,7 @@ interface ParseResult
      * @psalm-return ParseResult<T>
      *
      * @api
+     * @psalm-mutation-free
      */
     public function append(ParseResult $other): ParseResult;
 
@@ -82,11 +90,12 @@ interface ParseResult
      *
      * @template T2
      *
-     * @psalm-param callable(T):T2 $transform
+     * @psalm-param pure-callable(T):T2 $transform
      *
      * @psalm-return ParseResult<T2>
      *
      * @api
+     * @psalm-mutation-free
      */
     public function map(callable $transform): ParseResult;
 
@@ -100,13 +109,18 @@ interface ParseResult
      * @psalm-return ParseResult<T2>
      *
      * @api
+     * @psalm-mutation-free
      */
     public function continueWith(Parser $parser): ParseResult;
 
+    /**
+     * @psalm-mutation-free
+     */
     public function errorMessage() : string;
 
     /**
      * Get the last position of where the parser ended up when producing this result.
+     * @psalm-mutation-free
      */
     public function position(): Position;
 

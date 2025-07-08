@@ -17,8 +17,9 @@ namespace Parsica\Parsica\Internal\FP;
  * @template Ta
  * @template Tb
  * @template Tc
- * @psalm-param callable(Ta, Tb):Tc $f
- * @psalm-return callable(Tb, Ta):Tc
+ * @psalm-param pure-callable(Ta, Tb):Tc $f
+ * @psalm-return pure-callable(Tb, Ta):Tc
+ * @psalm-pure
  */
 function flip(callable $f): callable
 {
@@ -39,12 +40,12 @@ function flip(callable $f): callable
  * @psalm-param callable(TB, TA):TB $function
  * @psalm-param TB $initial
  * @psalm-return TB
- * @psalm-suppress MixedInferredReturnType
- * @psalm-suppress MixedReturnStatement
  *
  * @internal
+ * @psalm-pure
  */
 function foldl(array $input, callable $function, $initial) {
+    /** @psalm-suppress ImpureFunctionCall */
     return array_reduce($input, $function, $initial);
 }
 
@@ -53,11 +54,12 @@ function foldl(array $input, callable $function, $initial) {
  * @template TB
  *
  * @psalm-param list<TA> $input
- * @psalm-param callable(TA, TB):TB $function
+ * @psalm-param pure-callable(TA, TB):TB $function
  * @psalm-param TB $initial
  * @psalm-return TB
  *
  * @internal
+ * @psalm-pure
  */
 function foldr(array $input, callable $function, $initial) {
     while($head = array_pop($input))

@@ -16,6 +16,7 @@ use Parsica\Parsica\Parser;
  * @internal
  * @template TSymbol
  * @template TExpressionAST
+ * @psalm-immutable
  */
 final class UnaryOperator
 {
@@ -35,6 +36,8 @@ final class UnaryOperator
      * @psalm-param Parser<TSymbol> $symbol
      * @psalm-param callable(TExpressionAST):TExpressionAST $transform
      * @psalm-param string          $label
+     * @psalm-pure
+     * @psalm-suppress ImpureVariable
      */
     function __construct(Parser $symbol, callable $transform, string $label = "")
     {

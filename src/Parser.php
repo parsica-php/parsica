@@ -30,7 +30,7 @@ use Parsica\Parsica\Internal\Fail;
 final class Parser
 {
     /**
-     * @psalm-var callable(Stream) : ParseResult<T> $parserF
+     * @psalm-var pure-callable(Stream) : ParseResult<T> $parserF
      */
     private $parserFunction;
 
@@ -40,8 +40,10 @@ final class Parser
     private string $label;
 
     /**
-     * @psalm-param callable(Stream) : ParseResult<T> $parserFunction
+     * @psalm-param pure-callable(Stream) : ParseResult<T> $parserFunction
      * @psalm-param 'non-recursive'|'awaiting-recurse'|'recursion-was-setup' $recursionStatus
+     * @psalm-pure
+     * @psalm-suppress ImpureVariable
      */
     private function __construct(callable $parserFunction, string $recursionStatus, string $label)
     {
@@ -57,6 +59,7 @@ final class Parser
      *
      * @psalm-return Parser<mixed>
      * @api
+     * @psalm-pure
      */
     public static function recursive(): Parser
     {
@@ -78,9 +81,10 @@ final class Parser
      *
      * @template T2
      *
-     * @psalm-param callable(Stream):ParseResult<T2> $parserFunction
+     * @psalm-param pure-callable(Stream):ParseResult<T2> $parserFunction
      *
      * @psalm-return Parser<T2>
+     * @psalm-pure
      */
     public static function make(string $label, callable $parserFunction): Parser
     {
@@ -107,7 +111,7 @@ final class Parser
                 throw new Exception("You can only call recurse() once on a recursive parser.");
             case 'awaiting-recurse':
                 // Replace the placeholder parser from recursive() with a call to the inner parser. This must be dynamic,
-                // because it's possible that the inner parser is also a recursive parser that has not been setup yet.
+                // because it's possible that the inner parser is also a recursive parser that has not been set up yet.
                 $this->parserFunction = fn(Stream $input): ParseResult => $parser->run($input);
                 $this->recursionStatus = 'recursion-was-setup';
                 $this->label = $parser->getLabel();
@@ -122,6 +126,7 @@ final class Parser
      *
      * @psalm-return ParseResult<T>
      * @api
+     * @psalm-mutation-free
      */
     public function run(Stream $input): ParseResult
     {
@@ -135,6 +140,7 @@ final class Parser
      * @psalm-return Parser<T|null>
      * @see optional()
      * @api
+     * @psalm-mutation-free
      */
     public function optional(): Parser
     {
@@ -152,6 +158,7 @@ final class Parser
      *
      * @psalm-return Parser<T>
      * @api
+     * @psalm-mutation-free
      */
     public function or(Parser $other): Parser
     {
@@ -167,6 +174,7 @@ final class Parser
      * @psalm-return Parser<T2>
      * @api
      * @see sequence()
+     * @psalm-mutation-free
      */
     public function followedBy(Parser $second): Parser
     {
@@ -182,6 +190,7 @@ final class Parser
      * @psalm-return Parser<T2>
      * @api
      * @see sequence()
+     * @psalm-mutation-free
      */
     public function sequence(Parser $second): Parser
     {
@@ -197,6 +206,7 @@ final class Parser
      * @psalm-return Parser<T2>
      * @api
      * @see sequence()
+     * @psalm-mutation-free
      */
     public function then(Parser $second): Parser
     {
@@ -214,6 +224,7 @@ final class Parser
      * @psalm-return Parser<T2>
      * @see bind()
      * @api
+     * @psalm-mutation-free
      */
     public function bind(callable $f): Parser
     {
@@ -229,6 +240,7 @@ final class Parser
      *
      * @psalm-return Parser<T2>
      * @api
+     * @psalm-mutation-free
      */
     public function map(callable $transform): Parser
     {
@@ -239,6 +251,7 @@ final class Parser
      * Take the remaining input from the result and parse it.
      *
      * @api
+     * @psalm-mutation-free
      */
     public function continueFrom(ParseResult $result): ParseResult
     {
@@ -251,6 +264,7 @@ final class Parser
      * @psalm-param Parser<T|null> $other
      * @psalm-return Parser<T|null>
      * @api
+     * @psalm-mutation-free
      */
     public function append(Parser $other): Parser
     {
@@ -263,6 +277,7 @@ final class Parser
      * @psalm-param Parser<T|null> $other
      * @psalm-return Parser<T|null>
      * @api
+     * @psalm-mutation-free
      */
     public function and(Parser $other): Parser
     {
@@ -320,6 +335,7 @@ final class Parser
      * @psalm-suppress MixedArgumentTypeCoercion
      *
      * @api
+     * @psalm-mutation-free
      */
     public function apply(Parser $parser): Parser
     {
@@ -330,6 +346,7 @@ final class Parser
      * Sequence two parsers, and return the output of the first one, ignore the second.
      *
      * @api
+     * @psalm-mutation-free
      */
     public function thenIgnore(Parser $other): Parser
     {
@@ -352,7 +369,7 @@ final class Parser
      *
      * @template T2
      * @api
-     *
+     * @psalm-mutation-free
      */
     public function notFollowedBy(Parser $second): Parser
     {
@@ -363,6 +380,7 @@ final class Parser
      * The parser's label.
      *
      * @internal
+     * @psalm-mutation-free
      */
     public function getLabel(): string
     {
@@ -376,6 +394,7 @@ final class Parser
      *
      * @psalm-return Parser<T>
      * @api
+     * @psalm-mutation-free
      */
     public function label(string $label): Parser
     {
@@ -417,7 +436,7 @@ final class Parser
      * @psalm-return Parser<T2>
      *
      * @deprecated @TODO needs test
-     *
+     * @psalm-mutation-free
      */
     public function voidLeft($output): Parser
     {
@@ -440,6 +459,7 @@ final class Parser
      *
      * @api
      * @psalm-return Parser<T>
+     * @psalm-mutation-free
      */
     public function thenEof(): Parser
     {

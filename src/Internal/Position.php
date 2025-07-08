@@ -53,7 +53,6 @@ final class Position
     {
         $column = $this->column;
         $line = $this->line;
-        /** @psalm-var string $char */
         foreach (mb_str_split($parsed, 1) as $char) {
             switch ($char) {
                 case "\n":

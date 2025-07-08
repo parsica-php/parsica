@@ -15,6 +15,7 @@ use Parsica\Parsica\Parser;
 /**
  * @internal
  * @template TExpressionAST
+ * @psalm-immutable
  */
 interface ExpressionType
 {

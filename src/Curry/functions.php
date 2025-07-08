@@ -11,6 +11,13 @@ use Exception;
 use ReflectionClass;
 use ReflectionFunction;
 
+/**
+ * @param pure-callable $callable
+ *
+ * @return pure-callable
+ * @throws Exception
+ * @psalm-pure
+ */
 function curry(callable $callable) : callable
 {
     return _number_of_required_params($callable) === 0
@@ -20,9 +27,10 @@ function curry(callable $callable) : callable
 }
 
 /**
- * @param callable $callable
+ * @psalm-param pure-callable $callable
  *
- * @return callable
+ * @psalm-return pure-callable
+ * @psalm-pure
  */
 function curry_right(callable $callable) : callable
 {
@@ -32,11 +40,12 @@ function curry_right(callable $callable) : callable
 }
 
 /**
- * @param callable $callable
- * @param          $args
- * @param bool     $left
+ * @psalm-param pure-callable $callable
+ * @psalm-param array $args
+ * @psalm-param bool $left
  *
- * @return callable
+ * @return pure-callable
+ * @psalm-pure
  */
 function _curry_array_args(callable $callable, array $args, bool $left = true) : callable
 {
@@ -53,12 +62,13 @@ function _curry_array_args(callable $callable, array $args, bool $left = true) :
 }
 
 /**
- * @param $callable
+ * @psalm-param pure-callable $callable
  * @param array<mixed> $args
  * @param mixed $left
  *
  * @return mixed
  * @internal
+ * @psalm-pure
  */
 function _execute(callable $callable, array $args, bool $left = true)
 {
@@ -90,6 +100,7 @@ function _execute(callable $callable, array $args, bool $left = true)
  *
  * @return array
  * @internal
+ * @psalm-pure
  */
 function _rest(array $args) : array
 {
@@ -97,7 +108,13 @@ function _rest(array $args) : array
 }
 
 /**
+ * @psalm-param pure-callable $callable
+ * @param array    $args
+ *
+ * @return bool
+ * @throws Exception
  * @internal
+ * @psalm-pure
  */
 function _is_fullfilled(callable $callable, array $args) : bool
 {
@@ -109,16 +126,23 @@ function _is_fullfilled(callable $callable, array $args) : bool
 }
 
 /**
+ * @psalm-param pure-callable $callable
  * @internal
+ * @psalm-pure
  */
 function _number_of_required_params(callable $callable) : int
 {
     if (is_array($callable)) {
+        /** @psalm-suppress ImpureMethodCall */
         $refl = new ReflectionClass($callable[0]);
+        /** @psalm-suppress ImpureMethodCall */
         $method = $refl->getMethod($callable[1]);
+        /** @psalm-suppress ImpureMethodCall */
         return $method->getNumberOfRequiredParameters();
     } elseif (is_string($callable) || $callable instanceof Closure) {
+        /** @psalm-suppress ImpureMethodCall */
         $refl = new ReflectionFunction($callable);
+        /** @psalm-suppress ImpureMethodCall */
         return $refl->getNumberOfRequiredParameters();
     }
     throw new Exception("Unexpected other type of callable");
@@ -128,10 +152,11 @@ function _number_of_required_params(callable $callable) : int
  * if the callback is an array(instance, method),
  * it returns an equivalent function for PHP 5.3 compatibility.
  *
- * @param callable $callable
+ * @psalm-param pure-callable $callable
  *
- * @return callable
+ * @psalm-return pure-callable
  * @internal
+ * @psalm-pure
  */
 function _make_function(callable $callable) : callable
 {
@@ -148,6 +173,7 @@ function _make_function(callable $callable) : callable
  *
  * @return list<int|string>
  * @internal
+ * @psalm-pure
  */
 function _placeholder_positions(array $args) : array
 {
@@ -162,10 +188,12 @@ function _placeholder_positions(array $args) : array
 /**
  * Get the last element in an array.
  *
- * @param array $array
+ * @psalm-param array<T> $array
  *
- * @return mixed
+ * @psalm-return null|T
+ * @template T
  * @internal
+ * @psalm-pure
  */
 function _last(array $array)
 {
@@ -178,6 +206,7 @@ function _last(array $array)
  * functions, allowing partial application of any combination of arguments,
  * regardless of their positions. Should be used only for required arguments.
  * When used, optional arguments must be at the end of the argument list.
+ * @psalm-pure
  */
 function __() : Placeholder
 {

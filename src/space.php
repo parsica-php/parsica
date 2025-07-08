@@ -15,6 +15,7 @@ namespace Parsica\Parsica;
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function space(): Parser
 {
@@ -26,6 +27,7 @@ function space(): Parser
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function tab(): Parser
 {
@@ -37,6 +39,7 @@ function tab(): Parser
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function blank(): Parser
 {
@@ -48,6 +51,7 @@ function blank(): Parser
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function whitespace(): Parser
 {
@@ -60,6 +64,7 @@ function whitespace(): Parser
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function newline(): Parser
 {
@@ -71,6 +76,7 @@ function newline(): Parser
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function crlf(): Parser
 {
@@ -82,6 +88,7 @@ function crlf(): Parser
  *
  * @psalm-return Parser<string>
  * @api
+ * @psalm-pure
  */
 function eol(): Parser
 {
@@ -93,6 +100,7 @@ function eol(): Parser
  *
  * @psalm-return Parser<null>
  * @api
+ * @psalm-pure
  */
 function skipSpace(): Parser
 {
@@ -105,6 +113,7 @@ function skipSpace(): Parser
  * @psalm-return Parser<null>
  * @api
  * @see skipSpace
+ * @psalm-pure
  */
 function skipHSpace(): Parser
 {
@@ -116,6 +125,7 @@ function skipHSpace(): Parser
  *
  * @psalm-return Parser<null>
  * @api
+ * @psalm-pure
  */
 function skipSpace1(): Parser
 {
@@ -128,6 +138,7 @@ function skipSpace1(): Parser
  * @psalm-return Parser<null>
  * @api
  * @see skipSpace1
+ * @psalm-pure
  */
 function skipHSpace1(): Parser
 {
