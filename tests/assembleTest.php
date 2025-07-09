@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Parsica\Parsica\PHPUnit\ParserAssertions;
 use function Parsica\Parsica\assemble;
 use function Parsica\Parsica\char;
+use function Parsica\Parsica\pure;
 use function Parsica\Parsica\string;
 
 final class assembleTest extends TestCase
@@ -30,6 +31,15 @@ final class assembleTest extends TestCase
         $this->assertParses("firstsecond", $parser, "firstsecond");
         $this->assertRemainder("firstsecond", $parser, "");
     }
+
+    /** @test */
+    public function assemble_empty_list_always_succeeds()
+    {
+        $parser = assemble();
+        $this->assertParses("someinput", $parser, null);
+        $this->assertRemainder("someinput", $parser, "someinput");
+    }
+
 
     /** @test */
     public function assemble_string_ignore()

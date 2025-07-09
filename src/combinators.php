@@ -260,9 +260,7 @@ function append(Parser $left, Parser $right): Parser
  */
 function assemble(Parser ...$parsers): Parser
 {
-    /** @psalm-suppress ImpureMethodCall */
-    Assert::atLeastOneArg($parsers, "assemble()");
-    $first = array_shift($parsers);
+    $first = succeed();
     /** @psalm-suppress InvalidArgument */
     return array_reduce($parsers, fn(Parser $p1, Parser $p2): Parser => append($p1, $p2), $first);
 }
