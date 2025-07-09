@@ -12,9 +12,9 @@ use ReflectionClass;
 use ReflectionFunction;
 
 /**
- * @param pure-callable $callable
+ * @psalm-param pure-callable $callable
  *
- * @return pure-callable
+ * @psalm-return pure-callable
  * @throws Exception
  * @psalm-pure
  */
@@ -44,7 +44,7 @@ function curry_right(callable $callable) : callable
  * @psalm-param array $args
  * @psalm-param bool $left
  *
- * @return pure-callable
+ * @psalm-return pure-callable
  * @psalm-pure
  */
 function _curry_array_args(callable $callable, array $args, bool $left = true) : callable
