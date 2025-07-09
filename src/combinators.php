@@ -70,7 +70,7 @@ function optional(Parser $parser): Parser
  * This is a monadic bind aka flatmap.
  *
  * @psalm-param Parser<T1> $parser
- * @psalm-param callable(T1) : Parser<T2> $f
+ * @psalm-param pure-callable(T1) : Parser<T2> $f
  *
  * @psalm-return Parser<T2>
  * @api
@@ -80,15 +80,18 @@ function optional(Parser $parser): Parser
  */
 function bind(Parser $parser, callable $f): Parser
 {
-    /** @psalm-var Parser<T2> $finalParser */
-    $finalParser = Parser::make($parser->getLabel(), static function (Stream $input) use ($parser, $f) : ParseResult {
+    /**
+     * @psalm-var pure-callable(Stream) : ParseResult<T2> $parserFunction
+     */
+    $parserFunction = static function (Stream $input) use ($parser, $f): ParseResult {
         $result = $parser->run($input)->map($f);
         if ($result->isFail()) {
             return $result;
         }
         $p2 = $result->output();
         return $result->continueWith($p2);
-    });
+    };
+    $finalParser = Parser::make($parser->getLabel(), $parserFunction);
     return $finalParser;
 }
 

@@ -219,7 +219,7 @@ final class Parser
      *
      * @template T2
      *
-     * @psalm-param callable(T) : Parser<T2> $f
+     * @psalm-param pure-callable(T) : Parser<T2> $f
      *
      * @psalm-return Parser<T2>
      * @see bind()
@@ -236,7 +236,7 @@ final class Parser
      *
      * @template T2
      *
-     * @psalm-param callable(T) : T2 $transform
+     * @psalm-param pure-callable(T) : T2 $transform
      *
      * @psalm-return Parser<T2>
      * @api
