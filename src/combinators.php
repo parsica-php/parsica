@@ -113,8 +113,10 @@ function bind(Parser $parser, callable $f): Parser
  */
 function apply(Parser $parser1, Parser $parser2): Parser
 {
-    /** @psalm-var Parser<T2> $parser */
-    $parser = Parser::make($parser1->getLabel(), static function (Stream $input) use ($parser2, $parser1) : ParseResult {
+    /**
+     * @psalm-var pure-callable(Stream): ParseResult<T2>
+     */
+    $parserFunction = static function (Stream $input) use ($parser2, $parser1): ParseResult {
         $r1 = $parser1->run($input);
         if ($r1->isFail()) {
             return $r1;
@@ -123,7 +125,8 @@ function apply(Parser $parser1, Parser $parser2): Parser
         Assert::isCallable($f, "apply() can only be used when the output of the first parser is a callable with 1 argument. Use currying for functions with more than 1 argument.");
         // @todo assert that the arity of $f == 1
         return $r1->continueWith($parser2)->map($f);
-    });
+    };
+    $parser = Parser::make($parser1->getLabel(), $parserFunction);
     return $parser;
 }
 
@@ -201,7 +204,10 @@ function keepSecond(Parser $first, Parser $second): Parser
 function either(Parser $first, Parser $second): Parser
 {
     $label = $first->getLabel() . " or " . $second->getLabel();
-    return Parser::make($label, static function (Stream $input) use ($second, $first, $label): ParseResult {
+    /**
+     * @psalm-var pure-callable(Stream): ParseResult<T1|T2> $parserFunction
+     */
+    $parserFunction = static function (Stream $input) use ($second, $first, $label): ParseResult {
         // @todo Megaparsec doesn't do automatic rollback, for performance reasons, and requires the user to add try
         //       combinators. We could mimic that behaviour as it is probably more performant
         $r1 = $first->run($input);
@@ -215,7 +221,9 @@ function either(Parser $first, Parser $second): Parser
         }
 
         return new Fail($label, $r2->got());
-    });
+    };
+
+    return Parser::make($label, $parserFunction);
 }
 
 
@@ -335,20 +343,23 @@ function choice(Parser ...$parsers): Parser
  */
 function atLeastOne(Parser $parser): Parser
 {
-    return Parser::make(
-        "at least one " . $parser->getLabel(),
-        static function (Stream $input) use ($parser) : ParseResult {
-            $result = $parser->run($input);
-            if ($result->isFail()) {
-                return $result;
-            }
-            $final = new Succeed(null, $result->remainder());
-            while ($result->isSuccess()) {
-                $final = $final->append($result);
-                $result = $parser->continueFrom($result);
-            }
-            return $final;
+    /**
+     * @psalm-var pure-callable(Stream): ParseResult<T> $parserFunction
+     */
+    $parserFunction = static function (Stream $input) use ($parser): ParseResult {
+        $result = $parser->run($input);
+        if ($result->isFail()) {
+            return $result;
         }
+        $final = new Succeed(null, $result->remainder());
+        while ($result->isSuccess()) {
+            $final = $final->append($result);
+            $result = $parser->continueFrom($result);
+        }
+        return $final;
+    };
+    return Parser::make(
+        "at least one " . $parser->getLabel(), $parserFunction
     );
 }
 
