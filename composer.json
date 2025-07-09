@@ -30,7 +30,7 @@
         "ext-json": "*",
         "mathiasverraes/uptodocs": "dev-main",
         "phpunit/phpunit": "^9.0",
-        "phpbench/phpbench": "^1.0.1",
+        "phpbench/phpbench": "^1.2",
         "psr/event-dispatcher": "^1.0",
         "vimeo/psalm": "^4.30"
     },
