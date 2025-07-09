@@ -26,12 +26,6 @@ class ManyBench
     function __construct()
     {
         $this->data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-
-        $this->takeWhile = takeWhile(fn(string $c): bool => $c === 'a');
-        $this->manySatisfy = many(satisfy(fn(string $c): bool => $c === 'a'));
-        $this->manyChar = many(char('a'));
-        $this->oldManySatisfy = static::oldMany(satisfy(fn(string $c): bool => $c === 'a'));
-        $this->oldManyChar = static::oldMany(char('a'));
     }
 
     /**
@@ -40,7 +34,8 @@ class ManyBench
      */
     public function bench_takeWhile()
     {
-        $result = $this->takeWhile->tryString($this->data);
+        $result = takeWhile(fn(string $c): bool => $c === 'a')
+            ->tryString($this->data);
     }
 
     /**
@@ -49,7 +44,8 @@ class ManyBench
      */
     public function bench_manySatisfy()
     {
-        $result = $this->manySatisfy->tryString($this->data);
+        $result =  many(satisfy(fn(string $c): bool => $c === 'a'))
+            ->tryString($this->data);
     }
 
     /**
@@ -58,7 +54,8 @@ class ManyBench
      */
     public function bench_manyChar()
     {
-        $result = $this->manyChar->tryString($this->data);
+        $result = many(char('a'))
+            ->tryString($this->data);
     }
 
     /**
@@ -67,7 +64,8 @@ class ManyBench
      */
     public function bench_oldManySatisfy()
     {
-        $result = $this->oldManySatisfy->tryString($this->data);
+        $result = static::oldMany(satisfy(fn(string $c): bool => $c === 'a'))
+            ->tryString($this->data);
     }
 
     /**
@@ -76,7 +74,8 @@ class ManyBench
      */
     public function bench_oldManyChar()
     {
-        $result = $this->oldManyChar->tryString($this->data);
+        $result = static::oldMany(char('a'))
+            ->tryString($this->data);
     }
 
     public static function oldMany(Parser $parser)
