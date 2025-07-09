@@ -42,7 +42,12 @@ final class StringStream implements Stream
             throw new EndOfStream("End of stream was reached in " . $this->position->pretty());
         }
 
-        $token = mb_substr($this->string, 0, 1);
+        $ord = \ord($this->string[0]);
+        if ($ord < 128) {
+            $token = $this->string[0];
+        } else {
+            $token = mb_substr($this->string, 0, 1);
+        }
         $position = $this->position->advance($token);
 
         return new TakeResult(
