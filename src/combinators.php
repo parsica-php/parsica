@@ -102,7 +102,7 @@ function bind(Parser $parser, callable $f): Parser
  *
  * @template T1
  * @template T2
- * @psalm-param Parser<callable(T1):T2> $parser1
+ * @psalm-param Parser<pure-callable(T1):T2> $parser1
  * @psalm-param Parser<T1> $parser2
  * @psalm-return Parser<T2>
  * @api
@@ -363,6 +363,7 @@ function atLeastOne(Parser $parser): Parser
  */
 function zeroOrMore(Parser $parser): Parser
 {
+    /** @var pure-callable(Stream):ParseResult<T> $parserFunction */
     $parserFunction = static function (Stream $input) use ($parser): ParseResult {
         $result = new Succeed(null, $input);
         $final = $result;
@@ -628,7 +629,7 @@ function notFollowedBy(Parser $parser): Parser
  *
  * @template T1
  * @template T2
- * @psalm-param callable(T1) : T2 $transform
+ * @psalm-param pure-callable(T1) : T2 $transform
  * @psalm-return Parser<T2>
  * @api
  * @psalm-pure

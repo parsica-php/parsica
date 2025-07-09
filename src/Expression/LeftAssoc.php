@@ -68,16 +68,18 @@ final class LeftAssoc implements ExpressionType
             ),
 
             /**
-             * @psalm-param array{0: TExpressionAST, 1: list<callable(TExpressionAST):TExpressionAST>} $o
+             * @psalm-param array{0: TExpressionAST, 1: list<pure-callable(TExpressionAST):TExpressionAST>} $o
              * @psalm-return TExpressionAST
+             * @psalm-pure
              */
             fn(array $o) => foldl(
                 $o[1],
 
                 /**
                  * @psalm-param TExpressionAST $acc
-                 * @psalm-param callable(TExpressionAST):TExpressionAST $appl
+                 * @psalm-param pure-callable(TExpressionAST):TExpressionAST $appl
                  * @psalm-return TExpressionAST
+                 * @psalm-pure
                  */
                 fn($acc, callable $appl)  => $appl($acc),
                 $o[0]

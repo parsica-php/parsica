@@ -55,6 +55,8 @@ final class NonAssoc implements ExpressionType
                 /**
                  * @psalm-param array{0: TExpressionAST, 1: TSymbol, 2: TExpressionAST} $o
                  * @psalm-return TExpressionAST
+                 * @psalm-pure
+                 * @psalm-suppress ImpureVariable
                  */
                 fn(array $o) => $this->operator->transform()($o[0], $o[2])),
             $previousPrecedenceLevel
