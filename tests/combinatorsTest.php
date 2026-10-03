@@ -11,6 +11,7 @@
 namespace Tests\Parsica\Parsica;
 
 use InvalidArgumentException;
+use Parsica\Parsica\Parser;
 use PHPUnit\Framework\TestCase;
 use Parsica\Parsica\PHPUnit\ParserAssertions;
 use function Parsica\Parsica\{alphaChar,
@@ -37,16 +38,19 @@ use function Parsica\Parsica\{alphaChar,
     oneOfS,
     optional,
     punctuationChar,
+    pure,
     repeat,
     repeatList,
     sepBy,
     sepBy1,
     sequence,
     skipSpace,
+    skipSpace1,
     string,
     stringI,
     takeRest,
-    whitespace};
+    whitespace,
+    zeroOrMore};
 
 final class combinatorsTest extends TestCase
 {
@@ -250,6 +254,65 @@ final class combinatorsTest extends TestCase
         $this->assertParses("aaaaa", $parser, "aaaaa");
         $this->assertParses("aaabb", $parser, "aaa");
         $this->assertParseFails("bb", $parser);
+    }
+
+    /** @test */
+    public function zeroOrMore()
+    {
+        $parser = zeroOrMore(char('a'));
+        $this->assertParses("", $parser, null);
+        $this->assertParses("b", $parser, null);
+        $this->assertRemainder("b", $parser, "b");
+        $this->assertParses("aaa", $parser, "aaa");
+        $this->assertParses("aaab", $parser, "aaa");
+        $this->assertRemainder("aaab", $parser, "b");
+    }
+
+    /**
+     * @test
+     * @dataProvider nonConsumingRepetitions
+     */
+    public function repetition_rejects_parsers_that_succeed_without_consuming_input(Parser $parser, string $input, string $combinator)
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("$combinator() cannot repeat a parser that succeeds without consuming input.");
+        $parser->tryString($input);
+    }
+
+    public function nonConsumingRepetitions(): array
+    {
+        $examples = [];
+        foreach (['many', 'zeroOrMore', 'atLeastOne'] as $combinator) {
+            $repeat = "Parsica\\Parsica\\$combinator";
+            foreach ([
+                'optional without a match' => [optional(char('a')), "b"],
+                'optional after a match' => [optional(char('a')), "aaab"],
+                'optional at EOF' => [optional(char('a')), ""],
+                'optional after reaching EOF' => [optional(char('a')), "aaa"],
+                'skipSpace without a match' => [skipSpace(), "b"],
+                'skipSpace after a match' => [skipSpace(), " \t\nb"],
+                'skipSpace at EOF' => [skipSpace(), ""],
+                'skipSpace after reaching EOF' => [skipSpace(), " \t\n"],
+                'pure' => [pure('value'), "b"],
+                'lookAhead' => [lookAhead(char('a')), "a"],
+            ] as $name => [$parser, $input]) {
+                $examples["$combinator: $name"] = [$repeat($parser), $input, $combinator];
+            }
+        }
+        return $examples;
+    }
+
+    /** @test */
+    public function repetition_can_consume_input_without_output()
+    {
+        foreach ([
+            [many(skipSpace1()), [null]],
+            [zeroOrMore(skipSpace1()), null],
+            [atLeastOne(skipSpace1()), null],
+        ] as [$parser, $output]) {
+            $this->assertParses(" \t\nb", $parser, $output);
+            $this->assertRemainder(" \t\nb", $parser, "b");
+        }
     }
 
     /** @test */
