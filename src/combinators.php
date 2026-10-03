@@ -332,6 +332,8 @@ function choice(Parser ...$parsers): Parser
 /**
  * One or more repetitions of Parser, with the outputs appended.
  *
+ * Throws an InvalidArgumentException at parse time if $parser succeeds without consuming input.
+ *
  * @api
  * @psalm-param Parser<T> $parser
  * @psalm-return Parser<T>
@@ -351,6 +353,10 @@ function atLeastOne(Parser $parser): Parser
         }
         $final = new Succeed(null, $result->remainder());
         while ($result->isSuccess()) {
+            if ($result->remainder() == $input) {
+                throw new InvalidArgumentException("atLeastOne() cannot repeat a parser that succeeds without consuming input.");
+            }
+            $input = $result->remainder();
             $final = $final->append($result);
             $result = $parser->continueFrom($result);
         }
@@ -364,7 +370,7 @@ function atLeastOne(Parser $parser): Parser
 /**
  * Zero or more repetitions of Parser, with the outputs appended.
  *
- * @TODO Untested
+ * Throws an InvalidArgumentException at parse time if $parser succeeds without consuming input.
  *
  * @api
  * @psalm-param Parser<T> $parser
@@ -377,9 +383,13 @@ function zeroOrMore(Parser $parser): Parser
 {
     /** @var pure-callable(Stream):ParseResult<T> $parserFunction */
     $parserFunction = static function (Stream $input) use ($parser): ParseResult {
-        $result = new Succeed(null, $input);
-        $final = $result;
+        $result = $parser->run($input);
+        $final = new Succeed(null, $input);
         while ($result->isSuccess()) {
+            if ($result->remainder() == $input) {
+                throw new InvalidArgumentException("zeroOrMore() cannot repeat a parser that succeeds without consuming input.");
+            }
+            $input = $result->remainder();
             $final = $final->append($result);
             $result = $parser->continueFrom($result);
         }
@@ -480,6 +490,8 @@ function some(Parser $parser): Parser
 /**
  * Parse something zero or more times, and output an array of the successful outputs.
  *
+ * Throws an InvalidArgumentException at parse time if $parser succeeds without consuming input.
+ *
  * @template T
  *
  * @psalm-param Parser<T> $parser
@@ -500,6 +512,10 @@ function many(Parser $parser): Parser
 
                 if ($lastResult->isFail()) {
                     break;
+                }
+
+                if ($lastResult->remainder() == $remainder) {
+                    throw new InvalidArgumentException("many() cannot repeat a parser that succeeds without consuming input.");
                 }
 
                 $remainder = $lastResult->remainder();
